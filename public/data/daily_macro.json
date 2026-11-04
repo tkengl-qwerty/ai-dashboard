@@ -135,6 +135,7 @@
       ],
       "spreads": {
         "twoTenSpread": 30.0,
+        "fiveTenSpread": 19.0,
         "threeMonthTenSpread": 80.0,
         "fiveThirtySpread": 55.0,
         "isInverted": false

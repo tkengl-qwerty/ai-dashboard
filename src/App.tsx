@@ -144,6 +144,7 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
       ],
       spreads: {
         twoTenSpread: 30.0,
+        fiveTenSpread: 19.0,
         threeMonthTenSpread: 80.0,
         fiveThirtySpread: 55.0,
         isInverted: false
@@ -282,8 +283,8 @@ export default function App() {
   const us10Y = data.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.93;
 
   return (
-    <div className="min-h-screen bg-[#080b11] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
-      {/* 1. Bloomberg Style Header with Global Session Clocks */}
+    <div className="min-h-screen bg-[#0e141d] text-slate-100 flex flex-col font-sans selection:bg-blue-500 selection:text-white">
+      {/* 1. Metal & Blue Header with Global Session Clocks */}
       <Header
         metadata={data.metadata}
         onRefresh={fetchDailyData}
@@ -299,14 +300,14 @@ export default function App() {
 
       {/* Error alert toast if remote fetch fails, indicating fallback is active */}
       {fetchError && (
-        <div className="bg-amber-950/40 border-b border-amber-800/60 px-4 py-1.5 text-xs text-amber-300 font-mono flex items-center justify-between">
+        <div className="bg-blue-950/50 border-b border-blue-800/60 px-4 py-1.5 text-xs text-sky-300 font-mono flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+            <AlertCircle className="w-3.5 h-3.5 text-sky-400" />
             <span>Serving verified snapshot data · Offline/CDN fallback active ({fetchError})</span>
           </div>
           <button
             onClick={fetchDailyData}
-            className="text-amber-200 hover:text-white underline cursor-pointer"
+            className="text-sky-200 hover:text-white underline cursor-pointer"
           >
             Retry
           </button>
@@ -328,15 +329,15 @@ export default function App() {
       </main>
 
       {/* 4. Terminal Footer */}
-      <footer className="border-t border-slate-900 bg-[#070a10] px-4 py-3 mt-8 text-[11px] font-mono text-slate-500">
+      <footer className="border-t border-slate-800 bg-gradient-to-r from-[#111824] via-[#151f2e] to-[#111824] px-4 py-3 mt-8 text-[11px] font-mono text-slate-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <div>
-            <span className="text-slate-400 font-semibold">GLOBAL MACRO & INDONESIA TERMINAL</span>
-            <span className="mx-2 text-slate-700">·</span>
-            <span>Static snapshot updated daily at 05:00 AM SGT (21:00 UTC)</span>
+            <span className="text-slate-200 font-semibold uppercase">AI Macro Testbed</span>
+            <span className="mx-2 text-slate-600">·</span>
+            <span>Daily Market Intelligence refreshed at 05:00 AM SGT (21:00 UTC)</span>
           </div>
-          <div className="text-slate-600">
-            Porkbun Static Hosting · Deployed via GitHub Push
+          <div className="text-slate-400">
+            <span>Global Macro & Indonesia Fixed Income / FX</span>
           </div>
         </div>
       </footer>

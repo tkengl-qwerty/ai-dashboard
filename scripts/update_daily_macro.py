@@ -78,15 +78,17 @@ def fetch_us_treasury_yield_curve(existing_curve: dict) -> dict:
             y5 = yield_by_label.get("5Y", 4.74)
             y30 = yield_by_label.get("30Y", 5.29)
             two_ten = round((y10 - y2) * 100, 1)
+            five_ten = round((y10 - y5) * 100, 1)
             three_m_ten = round((y10 - y3m) * 100, 1)
             five_thirty = round((y30 - y5) * 100, 1)
             return {
                 "tenors": tenors,
                 "spreads": {
                     "twoTenSpread": two_ten,
+                    "fiveTenSpread": five_ten,
                     "threeMonthTenSpread": three_m_ten,
                     "fiveThirtySpread": five_thirty,
-                    "isInverted": two_ten < 0 or three_m_ten < 0,
+                    "isInverted": two_ten < 0 or five_ten < 0,
                 },
             }
     except Exception as e:

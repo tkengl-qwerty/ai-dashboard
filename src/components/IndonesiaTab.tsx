@@ -15,7 +15,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
   fxAndNdf,
   us10YYield,
 }) => {
-  const indo10Y = bonds.indoGB.find(b => b.tenor.includes('10Y'));
+  const indo10Y = bonds.indoGB.find((b) => b.tenor.includes('10Y'));
   const sovereignSpread = Math.round(((indo10Y?.yield ?? 7.71) - us10YYield) * 100);
   const indo10YChg = indo10Y?.changeBps ?? 0;
 
@@ -23,36 +23,39 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
     <div className="space-y-4">
       {/* Top Metric Bar for Quick Indonesian Macro Snapshot */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-        <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
-          <div className="text-[10px] text-slate-500 font-mono uppercase">BI-RATE BENCHMARK</div>
-          <div className="text-sm sm:text-base font-bold text-amber-300 font-mono tabular-nums mt-0.5">
+        <div className="bg-[#131b27] border border-slate-700/80 p-2.5 rounded-xs shadow-sm">
+          <div className="text-[10px] text-slate-400 font-mono uppercase">BI-RATE BENCHMARK</div>
+          <div className="text-sm sm:text-base font-bold text-sky-300 font-mono tabular-nums mt-0.5">
             {bonds.biRate.toFixed(2)}%
           </div>
           <div className="text-[10px] text-slate-400 font-mono">Bank Indonesia Policy</div>
         </div>
 
-        <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
-          <div className="text-[10px] text-slate-500 font-mono uppercase">USD/IDR SPOT</div>
+        <div className="bg-[#131b27] border border-slate-700/80 p-2.5 rounded-xs shadow-sm">
+          <div className="text-[10px] text-slate-400 font-mono uppercase">USD/IDR SPOT</div>
           <div className="text-sm sm:text-base font-bold text-slate-100 font-mono tabular-nums mt-0.5">
             {fxAndNdf.spotRate.toLocaleString()}
           </div>
           <div className={`text-[10px] font-mono flex items-center gap-0.5 ${fxAndNdf.spotChange <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
             {fxAndNdf.spotChange <= 0 ? <ArrowDownRight className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
-            <span>{fxAndNdf.spotChange > 0 ? `+${fxAndNdf.spotChange}` : fxAndNdf.spotChange} ({fxAndNdf.spotChangePct > 0 ? `+${fxAndNdf.spotChangePct.toFixed(2)}%` : `${fxAndNdf.spotChangePct.toFixed(2)}%`})</span>
+            <span>
+              {fxAndNdf.spotChange > 0 ? `+${fxAndNdf.spotChange}` : fxAndNdf.spotChange} (
+              {fxAndNdf.spotChangePct > 0 ? `+${fxAndNdf.spotChangePct.toFixed(2)}%` : `${fxAndNdf.spotChangePct.toFixed(2)}%`})
+            </span>
           </div>
         </div>
 
-        <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
-          <div className="text-[10px] text-slate-500 font-mono uppercase">USD/IDR JISDOR</div>
+        <div className="bg-[#131b27] border border-slate-700/80 p-2.5 rounded-xs shadow-sm">
+          <div className="text-[10px] text-slate-400 font-mono uppercase">USD/IDR JISDOR</div>
           <div className="text-sm sm:text-base font-bold text-slate-100 font-mono tabular-nums mt-0.5">
             {fxAndNdf.jisdorRate.toLocaleString()}
           </div>
           <div className="text-[10px] text-slate-400 font-mono">Bank Indonesia Fixing</div>
         </div>
 
-        <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
-          <div className="text-[10px] text-slate-500 font-mono uppercase">10Y INDOGB YIELD</div>
-          <div className="text-sm sm:text-base font-bold text-amber-400 font-mono tabular-nums mt-0.5">
+        <div className="bg-[#131b27] border border-slate-700/80 p-2.5 rounded-xs shadow-sm">
+          <div className="text-[10px] text-slate-400 font-mono uppercase">10Y INDOGB YIELD</div>
+          <div className="text-sm sm:text-base font-bold text-sky-300 font-mono tabular-nums mt-0.5">
             {(indo10Y?.yield ?? 7.71).toFixed(2)}%
           </div>
           <div className={`text-[10px] font-mono ${indo10YChg <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
@@ -60,22 +63,24 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
           </div>
         </div>
 
-        <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
-          <div className="text-[10px] text-slate-500 font-mono uppercase">10Y INDO-US SPREAD</div>
-          <div className="text-sm sm:text-base font-bold text-cyan-400 font-mono tabular-nums mt-0.5">
+        <div className="bg-[#131b27] border border-slate-700/80 p-2.5 rounded-xs shadow-sm">
+          <div className="text-[10px] text-slate-400 font-mono uppercase">10Y INDO-US SPREAD</div>
+          <div className="text-sm sm:text-base font-bold text-blue-400 font-mono tabular-nums mt-0.5">
             +{sovereignSpread} bps
           </div>
           <div className="text-[10px] text-slate-400 font-mono">vs UST 10Y ({us10YYield.toFixed(2)}%)</div>
         </div>
 
-        <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
-          <div className="text-[10px] text-slate-500 font-mono uppercase">IHSG (IDX COMPOSITE)</div>
+        <div className="bg-[#131b27] border border-slate-700/80 p-2.5 rounded-xs shadow-sm">
+          <div className="text-[10px] text-slate-400 font-mono uppercase">IHSG (IDX COMPOSITE)</div>
           <div className="text-sm sm:text-base font-bold text-slate-100 font-mono tabular-nums mt-0.5">
             {fxAndNdf.ihsgIndex.level.toLocaleString()}
           </div>
           <div className={`text-[10px] font-mono flex items-center gap-0.5 ${fxAndNdf.ihsgIndex.changePct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
             {fxAndNdf.ihsgIndex.changePct >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-            <span>{fxAndNdf.ihsgIndex.changePct >= 0 ? `+${fxAndNdf.ihsgIndex.changePct.toFixed(2)}%` : `${fxAndNdf.ihsgIndex.changePct.toFixed(2)}%`}</span>
+            <span>
+              {fxAndNdf.ihsgIndex.changePct >= 0 ? `+${fxAndNdf.ihsgIndex.changePct.toFixed(2)}%` : `${fxAndNdf.ihsgIndex.changePct.toFixed(2)}%`}
+            </span>
           </div>
         </div>
       </div>
@@ -85,10 +90,10 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
         {/* Left Column: Macro Commentary & Noteworthy News (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
           {/* Executive Market Briefing */}
-          <div className="bg-[#0b0f19] border border-slate-800 rounded-xs p-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+          <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-700/80 mb-3">
               <div className="flex items-center gap-2">
-                <Landmark className="w-4 h-4 text-amber-400" />
+                <Landmark className="w-4 h-4 text-blue-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
                   {commentary.title}
                 </h3>
@@ -97,7 +102,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
             </div>
 
             {/* Executive Summary */}
-            <div className="prose prose-invert max-w-none text-xs text-slate-300 leading-relaxed font-sans mb-4 bg-slate-950/40 p-3 border-l-2 border-amber-500/80 rounded-r-xs">
+            <div className="prose prose-invert max-w-none text-xs text-slate-200 leading-relaxed font-sans mb-4 bg-[#0e141d] p-3 border-l-2 border-blue-500 rounded-r-xs">
               <p>{commentary.executiveSummary}</p>
             </div>
 
@@ -107,9 +112,9 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
                 CORE MACROECONOMIC PILLARS:
               </div>
               {commentary.macroPillars.map((pillar, idx) => (
-                <div key={idx} className="bg-slate-900/40 border border-slate-800/80 p-2.5 rounded-xs">
-                  <div className="text-xs font-semibold text-amber-300 mb-1 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <div key={idx} className="bg-[#182232] border border-slate-700/70 p-2.5 rounded-xs">
+                  <div className="text-xs font-semibold text-sky-300 mb-1 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
                     <span>{pillar.heading}</span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-normal font-sans">
@@ -121,28 +126,28 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
           </div>
 
           {/* Noteworthy Indonesian News & Market Disclosures */}
-          <div className="bg-[#0b0f19] border border-slate-800 rounded-xs p-4">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-800 mb-2">
+          <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-700/80 mb-2">
               <div className="flex items-center gap-2">
-                <Newspaper className="w-4 h-4 text-cyan-400" />
+                <Newspaper className="w-4 h-4 text-sky-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
                   NOTEWORTHY INDONESIA DISCLOSURES & MARKET DEVELOPMENTS
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-500">BI & JAKARTA EXCHANGES</span>
+              <span className="text-[10px] font-mono text-slate-400">BI & JAKARTA EXCHANGES</span>
             </div>
 
-            <div className="divide-y divide-slate-800/50">
+            <div className="divide-y divide-slate-700/50">
               {commentary.noteworthyHeadlines.map((item, idx) => (
-                <div key={idx} className="py-2.5 hover:bg-slate-900/40 rounded-xs px-1 transition-colors">
+                <div key={idx} className="py-2.5 hover:bg-[#192434]/60 rounded-xs px-1.5 transition-colors">
                   <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 mb-1">
-                    <span className="text-amber-400 font-bold">SOURCE: {item.source}</span>
+                    <span className="text-sky-400 font-bold">SOURCE: {item.source}</span>
                   </div>
-                  <h4 className="text-xs font-semibold text-slate-200 leading-snug">
+                  <h4 className="text-xs font-semibold text-slate-100 leading-snug">
                     {item.title}
                   </h4>
                   <p className="text-[11px] text-slate-400 mt-1 font-mono">
-                    <span className="text-slate-500">Market Significance: </span>
+                    <span className="text-slate-400">Market Significance: </span>
                     <span className="text-slate-300">{item.significance}</span>
                   </p>
                 </div>
@@ -154,21 +159,21 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
         {/* Right Column: Debt & FX/NDF Telemetry (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           {/* IndoGB Government Bond Yields */}
-          <div className="bg-[#0b0f19] border border-slate-800 rounded-xs p-4">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-800 mb-2">
+          <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-700/80 mb-2">
               <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-amber-400" />
+                <Layers className="w-4 h-4 text-blue-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
                   INDOGB (GOVERNMENT BENCHMARKS)
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-500">PHEI / DJPPR</span>
+              <span className="text-[10px] font-mono text-slate-400">PHEI / DJPPR</span>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
-                  <tr className="border-b border-slate-800 text-[10px] text-slate-500 uppercase">
+                  <tr className="border-b border-slate-700/80 text-[10px] text-slate-400 uppercase">
                     <th className="py-1 px-1.5">Tenor</th>
                     <th className="py-1 px-1.5">Series</th>
                     <th className="py-1 px-1.5 text-right">Yield</th>
@@ -176,19 +181,19 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
                     <th className="py-1 px-1.5 text-right">Chg</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/40">
+                <tbody className="divide-y divide-slate-700/40">
                   {bonds.indoGB.map((bond) => (
-                    <tr key={bond.code} className="hover:bg-slate-900/50">
+                    <tr key={bond.code} className="hover:bg-[#192434]/60">
                       <td className="py-1.5 px-1.5 font-bold text-slate-200">{bond.tenor}</td>
                       <td className="py-1.5 px-1.5 text-slate-400">{bond.code}</td>
-                      <td className="py-1.5 px-1.5 text-right font-bold text-amber-300 tabular-nums">
+                      <td className="py-1.5 px-1.5 text-right font-bold text-sky-300 tabular-nums">
                         {bond.yield.toFixed(2)}%
                       </td>
                       <td className="py-1.5 px-1.5 text-right text-slate-400 tabular-nums">
                         {bond.coupon.toFixed(3)}%
                       </td>
-                      <td className="py-1.5 px-1.5 text-right font-semibold text-emerald-400 tabular-nums">
-                        {bond.changeBps} bps
+                      <td className={`py-1.5 px-1.5 text-right font-semibold tabular-nums ${bond.changeBps <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {bond.changeBps > 0 ? `+${bond.changeBps}` : bond.changeBps} bps
                       </td>
                     </tr>
                   ))}
@@ -196,22 +201,22 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
               </table>
             </div>
 
-            <div className="mt-3 p-2 bg-slate-950/60 border border-slate-800/80 rounded-xs flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-400 text-[11px]">10Y Sovereign Spread over US:</span>
-              <span className="font-bold text-cyan-300">+{bonds.sovereignSpread10Y} bps</span>
+            <div className="mt-3 p-2 bg-[#0e141d] border border-slate-700/80 rounded-xs flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-300 text-[11px]">10Y Sovereign Spread over US:</span>
+              <span className="font-bold text-sky-300">+{sovereignSpread} bps</span>
             </div>
           </div>
 
           {/* SRBI (Sekuritas Rupiah Bank Indonesia) Auctions */}
-          <div className="bg-[#0b0f19] border border-slate-800 rounded-xs p-4">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-800 mb-2">
+          <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-700/80 mb-2">
               <div className="flex items-center gap-2">
-                <Landmark className="w-4 h-4 text-cyan-400" />
+                <Landmark className="w-4 h-4 text-sky-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
                   SRBI AUCTION YIELDS (CENTRAL BANK)
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-500">BANK INDONESIA</span>
+              <span className="text-[10px] font-mono text-slate-400">BANK INDONESIA</span>
             </div>
 
             <p className="text-[11px] text-slate-400 font-mono mb-2">
@@ -221,21 +226,21 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
-                  <tr className="border-b border-slate-800 text-[10px] text-slate-500 uppercase">
+                  <tr className="border-b border-slate-700/80 text-[10px] text-slate-400 uppercase">
                     <th className="py-1 px-1.5">Tenor</th>
                     <th className="py-1 px-1.5">Auction</th>
                     <th className="py-1 px-1.5 text-right">Cut-Off Yield</th>
                     <th className="py-1 px-1.5 text-right">Awarded</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/40">
+                <tbody className="divide-y divide-slate-700/40">
                   {bonds.srbi.map((srbi) => (
-                    <tr key={srbi.tenor} className="hover:bg-slate-900/50">
+                    <tr key={srbi.tenor} className="hover:bg-[#192434]/60">
                       <td className="py-1.5 px-1.5 font-bold text-slate-200">
-                        {srbi.tenor} <span className="text-[10px] text-slate-500">({srbi.tenorDays}d)</span>
+                        {srbi.tenor} <span className="text-[10px] text-slate-400">({srbi.tenorDays}d)</span>
                       </td>
                       <td className="py-1.5 px-1.5 text-slate-400">{srbi.auctionDate}</td>
-                      <td className="py-1.5 px-1.5 text-right font-bold text-amber-300 tabular-nums">
+                      <td className="py-1.5 px-1.5 text-right font-bold text-sky-300 tabular-nums">
                         {srbi.cutOffYield.toFixed(2)}%
                       </td>
                       <td className="py-1.5 px-1.5 text-right text-slate-300 tabular-nums">
@@ -247,62 +252,62 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
               </table>
             </div>
 
-            <div className="mt-2 text-[10px] text-slate-500 font-mono">
+            <div className="mt-2 text-[10px] text-slate-400 font-mono">
               * SRBI auctions conducted weekly via Bank Indonesia open market operations
             </div>
           </div>
 
           {/* USD/IDR FX & NDF Derivatives */}
-          <div className="bg-[#0b0f19] border border-slate-800 rounded-xs p-4">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-800 mb-2">
+          <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-700/80 mb-2">
               <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-emerald-400" />
+                <DollarSign className="w-4 h-4 text-blue-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
                   USD/IDR FX & NDF DERIVATIVES
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-500">SPOT vs OFFSHORE</span>
+              <span className="text-[10px] font-mono text-slate-400">SPOT vs OFFSHORE</span>
             </div>
 
             <div className="space-y-2 font-mono text-xs">
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">USD/IDR Spot Rate:</span>
+              <div className="flex items-center justify-between py-1 border-b border-slate-700/60">
+                <span className="text-slate-300">USD/IDR Spot Rate:</span>
                 <span className="font-bold text-slate-100 tabular-nums">
                   {fxAndNdf.spotRate.toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">BI JISDOR Fixing:</span>
+              <div className="flex items-center justify-between py-1 border-b border-slate-700/60">
+                <span className="text-slate-300">BI JISDOR Fixing:</span>
                 <span className="font-bold text-slate-200 tabular-nums">
                   {fxAndNdf.jisdorRate.toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">1-Month Offshore NDF:</span>
-                <span className="font-bold text-amber-300 tabular-nums">
+              <div className="flex items-center justify-between py-1 border-b border-slate-700/60">
+                <span className="text-slate-300">1-Month Offshore NDF:</span>
+                <span className="font-bold text-sky-300 tabular-nums">
                   {fxAndNdf.ndf1M.toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">3-Month Offshore NDF:</span>
-                <span className="font-bold text-amber-300 tabular-nums">
+              <div className="flex items-center justify-between py-1 border-b border-slate-700/60">
+                <span className="text-slate-300">3-Month Offshore NDF:</span>
+                <span className="font-bold text-sky-300 tabular-nums">
                   {fxAndNdf.ndf3M.toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">1M NDF vs Spot Basis:</span>
-                <span className="font-bold text-cyan-300 tabular-nums">
+              <div className="flex items-center justify-between py-1 border-b border-slate-700/60">
+                <span className="text-slate-300">1M NDF vs Spot Basis:</span>
+                <span className="font-bold text-blue-300 tabular-nums">
                   +{fxAndNdf.ndfSpread1M} IDR ({fxAndNdf.annualizedBasis1M}% p.a.)
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1">
-                <span className="text-slate-400">Foreign Net Equity Flow:</span>
-                <span className="font-bold text-emerald-400 tabular-nums">
+                <span className="text-slate-300">Foreign Net Equity Flow:</span>
+                <span className={`font-bold tabular-nums ${fxAndNdf.foreignFlowsDaily.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}`}>
                   {fxAndNdf.foreignFlowsDaily}
                 </span>
               </div>

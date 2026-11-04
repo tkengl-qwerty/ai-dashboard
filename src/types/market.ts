@@ -30,6 +30,7 @@ export interface YieldCurveData {
   tenors: YieldCurveTenor[];
   spreads: {
     twoTenSpread: number;
+    fiveTenSpread?: number;
     threeMonthTenSpread: number;
     fiveThirtySpread: number;
     isInverted: boolean;

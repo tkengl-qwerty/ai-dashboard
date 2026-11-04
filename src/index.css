@@ -3,7 +3,7 @@
 @layer base {
   body {
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #080b11;
+    background-color: #0e141d;
     color: #e2e8f0;
     overflow-x: hidden;
   }
@@ -18,18 +18,18 @@
   }
 }
 
-/* Custom Bloomberg-style sleek dark scrollbar */
+/* Custom Metal & Blue sleek scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0d14;
+  background: #0e141d;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1f293d;
+  background: #273549;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #3b82f6;
 }
