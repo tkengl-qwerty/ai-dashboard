@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "lastUpdated": "2026-11-04T05:00:00+08:00",
+    "lastUpdatedSGT": "04 Nov 2026, 05:00 AM SGT",
+    "nextRefreshSGT": "05 Nov 2026, 05:00 AM SGT",
+    "edition": "Daily Macro Close & Pre-Asia Open",
+    "timezone": "Asia/Singapore (UTC+8)"
+  },
+  "globalMacro": {
+    "topNews": [
+      {
+        "id": "gn-01",
+        "headline": "Fed Signals Data-Dependent Neutral Rate Calibration Amid Resilient Labor Market",
+        "source": "Bloomberg",
+        "timeAgo": "3h ago",
+        "category": "Fed Policy",
+        "summary": "Federal Reserve officials emphasized a calibrated pace of rate adjustments, noting that firm nonfarm payroll data and sticky services CPI reduce urgency for outsized easing steps.",
+        "macroTakeaway": "Rates repricing favors higher terminal rate floor; short-end yields stabilize while 2Y/10Y curve continues modest bull-steepening bias.",
+        "impact": "Hawkish",
+        "url": "https://www.bloomberg.com"
+      },
+      {
+        "id": "gn-02",
+        "headline": "Core PCE Inflation Moderates to 2.6% YoY, Matching Fed Projections",
+        "source": "Reuters",
+        "timeAgo": "5h ago",
+        "category": "Inflation",
+        "summary": "The US Commerce Department's personal consumption expenditures price index rose 0.2% month-on-month, reinforcing expectations that disinflation remains intact despite resilient consumer spending.",
+        "macroTakeaway": "Affirms baseline scenario of 25bps rate reductions without tipping monetary policy into restrictive over-tightening.",
+        "impact": "Dovish",
+        "url": "https://www.reuters.com"
+      },
+      {
+        "id": "gn-03",
+        "headline": "US Treasury Announces $125 Billion Quarterly Refunding With Steady Coupon Sizes",
+        "source": "Financial Times",
+        "timeAgo": "6h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Treasury Department announced quarterly debt issuance of $125B across 3Y, 10Y, and 30Y auctions, signaling auction sizes will remain unchanged for at least the next few quarters.",
+        "macroTakeaway": "Relieves immediate duration supply indigestion fears on the long-end, compressing term premium volatility.",
+        "impact": "Neutral",
+        "url": "https://www.ft.com"
+      },
+      {
+        "id": "gn-04",
+        "headline": "S&P Global US Manufacturing PMI Rebounds Toward 50 Threshold as New Orders Stabilize",
+        "source": "CNBC",
+        "timeAgo": "7h ago",
+        "category": "Labor",
+        "summary": "Purchasing managers index ticked up to 49.8 from 48.5, driven by improved domestic export orders and stabilizing industrial input costs.",
+        "macroTakeaway": "Soft-landing narrative solidifies; cyclical equity sectors find renewed footing against rate-sensitive tech.",
+        "impact": "Risk-On",
+        "url": "https://www.cnbc.com"
+      },
+      {
+        "id": "gn-05",
+        "headline": "Crude Oil Consolidates Around $71 as Middle East Risk Premium Offsets Chinese Demand Lull",
+        "source": "MarketWatch",
+        "timeAgo": "8h ago",
+        "category": "Trade",
+        "summary": "WTI futures held near $71.50/bbl with OPEC+ reaffirming phased production rollbacks while maritime transit security through the Bab el-Mandeb strait remains contested.",
+        "macroTakeaway": "Limits headline inflation upside risks, providing breathing room for emerging market net energy importers.",
+        "impact": "Neutral",
+        "url": "https://www.marketwatch.com"
+      },
+      {
+        "id": "gn-06",
+        "headline": "Gold Climbs Above $2,740 as Central Bank Purchases and Geopolitical Hedging Accelerate",
+        "source": "Reuters",
+        "timeAgo": "9h ago",
+        "category": "Inflation",
+        "summary": "Spot bullion gained 0.5% with official sector reserves accumulation in developing economies continuing to underpin structural gold demand regardless of real yield fluctuations.",
+        "macroTakeaway": "Physical de-dollarization flows maintain structural support; safe-haven bid remains sticky.",
+        "impact": "Risk-Off",
+        "url": "https://www.reuters.com"
+      },
+      {
+        "id": "gn-07",
+        "headline": "European Central Bank Debates Acceleration of Easing as German Industrial Production Lags",
+        "source": "Financial Times",
+        "timeAgo": "10h ago",
+        "category": "Fed Policy",
+        "summary": "Dovish Governing Council members advocate for front-loaded deposit rate cuts as eurozone composite PMI indicators highlight diverging momentum against the US economy.",
+        "macroTakeaway": "EUR/USD upside capped below 1.0900 as US-Eurozone growth and interest rate differential widens.",
+        "impact": "Dovish",
+        "url": "https://www.ft.com"
+      },
+      {
+        "id": "gn-08",
+        "headline": "Bank of Japan Affirms Gradual Normalization Path While Monitoring FX Volatility",
+        "source": "Nikkei Asia",
+        "timeAgo": "11h ago",
+        "category": "Fed Policy",
+        "summary": "Governor Ueda reaffirmed that real interest rates remain deeply negative, leaving scope for further incremental policy rate hikes if wage transmission continues.",
+        "macroTakeaway": "JPY carry trade unwinds remain a tactical risk; USD/JPY resistance holds firm below 154.00.",
+        "impact": "Hawkish",
+        "url": "https://asia.nikkei.com"
+      },
+      {
+        "id": "gn-09",
+        "headline": "Global Semiconductor Capex Projections Revised Upward on AI Infrastructure Buildout",
+        "source": "Bloomberg",
+        "timeAgo": "12h ago",
+        "category": "Trade",
+        "summary": "Hyperscale cloud providers reiterated elevated multi-year capex budgets, bolstering tech hardware supply chains across Taiwan, Korea, and Southeast Asia.",
+        "macroTakeaway": "Structural productivity investment cushions global corporate earnings against restrictive financial conditions.",
+        "impact": "Risk-On",
+        "url": "https://www.bloomberg.com"
+      },
+      {
+        "id": "gn-10",
+        "headline": "US Commercial Paper Rates Tighten as Money Market Fund Assets Breach Record $6.5 Trillion",
+        "source": "Wall Street Journal",
+        "timeAgo": "13h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Short-term funding spreads compressed further as cash allocations into institutional liquidity funds hit fresh all-time peaks ahead of upcoming policy meetings.",
+        "macroTakeaway": "Immense dry-powder liquidity stands ready to deploy into duration assets upon clear rate-cut confirmation.",
+        "impact": "Neutral",
+        "url": "https://www.wsj.com"
+      }
+    ],
+    "yieldCurve": {
+      "tenors": [
+        { "label": "1M", "years": 0.08, "yield": 5.38, "changeBps": 1.0, "priorClose": 5.37 },
+        { "label": "3M", "years": 0.25, "yield": 5.24, "changeBps": -1.0, "priorClose": 5.25 },
+        { "label": "6M", "years": 0.5, "yield": 5.06, "changeBps": -2.0, "priorClose": 5.08 },
+        { "label": "1Y", "years": 1.0, "yield": 4.62, "changeBps": -3.0, "priorClose": 4.65 },
+        { "label": "2Y", "years": 2.0, "yield": 4.18, "changeBps": -4.0, "priorClose": 4.22 },
+        { "label": "3Y", "years": 3.0, "yield": 4.07, "changeBps": -3.0, "priorClose": 4.10 },
+        { "label": "5Y", "years": 5.0, "yield": 4.02, "changeBps": -4.0, "priorClose": 4.06 },
+        { "label": "7Y", "years": 7.0, "yield": 4.11, "changeBps": -4.0, "priorClose": 4.15 },
+        { "label": "10Y", "years": 10.0, "yield": 4.24, "changeBps": -3.0, "priorClose": 4.27 },
+        { "label": "20Y", "years": 20.0, "yield": 4.54, "changeBps": -2.0, "priorClose": 4.56 },
+        { "label": "30Y", "years": 30.0, "yield": 4.47, "changeBps": -2.0, "priorClose": 4.49 }
+      ],
+      "spreads": {
+        "twoTenSpread": 6.0,
+        "threeMonthTenSpread": -100.0,
+        "fiveThirtySpread": 45.0,
+        "isInverted": false
+      }
+    },
+    "futures": [
+      { "symbol": "ES=F", "name": "S&P 500 E-mini", "price": 5842.50, "change": 18.25, "changePct": 0.31 },
+      { "symbol": "NQ=F", "name": "Nasdaq 100 E-mini", "price": 20410.25, "change": 92.50, "changePct": 0.45 },
+      { "symbol": "YM=F", "name": "Dow Jones Mini", "price": 42680.00, "change": 68.00, "changePct": 0.16 },
+      { "symbol": "RTY=F", "name": "Russell 2000 Mini", "price": 2234.80, "change": 8.40, "changePct": 0.38 },
+      { "symbol": "DX=F", "name": "US Dollar Index", "price": 104.15, "change": -0.22, "changePct": -0.21 }
+    ],
+    "fxRates": [
+      { "pair": "EUR/USD", "name": "Euro / US Dollar", "rate": 1.0842, "change": 0.0024, "changePct": 0.22 },
+      { "pair": "USD/JPY", "name": "US Dollar / Japanese Yen", "rate": 152.85, "change": -0.45, "changePct": -0.29 },
+      { "pair": "GBP/USD", "name": "British Pound / US Dollar", "rate": 1.2985, "change": 0.0031, "changePct": 0.24 },
+      { "pair": "USD/CNH", "name": "US Dollar / Offshore Yuan", "rate": 7.1265, "change": -0.0110, "changePct": -0.15 },
+      { "pair": "AUD/USD", "name": "Australian Dollar / USD", "rate": 0.6588, "change": 0.0035, "changePct": 0.53 },
+      { "pair": "USD/SGD", "name": "US Dollar / Singapore Dollar", "rate": 1.3210, "change": -0.0028, "changePct": -0.21 }
+    ],
+    "commodities": [
+      { "symbol": "CL=F", "name": "WTI Crude Oil", "price": 71.45, "unit": "$/bbl", "change": 1.25, "changePct": 1.78 },
+      { "symbol": "BZ=F", "name": "Brent Crude", "price": 75.12, "unit": "$/bbl", "change": 1.18, "changePct": 1.60 },
+      { "symbol": "GC=F", "name": "Gold Futures", "price": 2746.80, "unit": "$/t.oz", "change": 14.20, "changePct": 0.52 },
+      { "symbol": "SI=F", "name": "Silver Futures", "price": 32.65, "unit": "$/t.oz", "change": 0.42, "changePct": 1.30 },
+      { "symbol": "HG=F", "name": "Copper Futures", "price": 4.38, "unit": "$/lb", "change": 0.04, "changePct": 0.92 }
+    ]
+  },
+  "indonesia": {
+    "commentary": {
+      "title": "Bank Indonesia Macro Commentary & Fixed Income Outlook",
+      "date": "04 Nov 2026",
+      "executiveSummary": "Bank Indonesia (BI) maintained its benchmark BI-Rate at 6.00% alongside the Deposit Facility rate at 5.25% and Lending Facility rate at 6.75%. The decision remains anchored on strengthening Rupiah exchange rate stabilization amid volatile global financial dynamics while maintaining headline inflation within the target corridor of 2.5% ± 1%. Domestic CPI printed at 1.71% yoy, driven by benign volatile food prices and stable energy subsidies. Central bank liquidity absorption continues through pro-market instruments, with Sekuritas Rupiah Bank Indonesia (SRBI) outstanding balances exceeding IDR 920 Trillion, maintaining an attractive ~280bps spread over equivalent US Treasury tenors.",
+      "macroPillars": [
+        {
+          "heading": "Monetary & Liquidity Operations",
+          "analysis": "BI continues proactive sterilisation via SRBI auctions to absorb surplus banking liquidity and attract offshore portfolio money. Foreign ownership in SRBI has reached approximately 27%, supporting onshore FX reserve buffers at $149.9 Billion."
+        },
+        {
+          "heading": "Fiscal Execution & Sovereign Debt (SBN)",
+          "analysis": "The Ministry of Finance reported fiscal deficit trajectory tracking comfortably below 2.8% of GDP. Primary SBN debt auctions continue to see strong domestic institutional demand from pension funds and insurance companies, mitigating secondary market yield spikes."
+        },
+        {
+          "heading": "Currency Dynamics & Trade Balance",
+          "analysis": "Indonesia extended its trade surplus run into the 53rd consecutive month at $3.23 Billion, supported by resilient manufactured exports and base metals, offsetting soft thermal coal volumes."
+        }
+      ],
+      "biPolicyPosture": "Neutral to Vigilant (Focus on FX Stabilization)",
+      "noteworthyHeadlines": [
+        {
+          "title": "Bank Indonesia Foreign Exchange Reserves Rise to $149.9 Billion Equivalent to 6.5 Months Imports",
+          "source": "Bank Indonesia Press Release",
+          "significance": "Provides formidable buffer against sudden capital outflow pressures and external debt service."
+        },
+        {
+          "title": "Finance Ministry SBN Auction Bid-to-Cover Ratio Hits 2.8x Led by Benchmark 10Y FR0100",
+          "source": "DJPPR Ministry of Finance",
+          "significance": "Indicates deep domestic institutional appetite and orderly government bond supply absorption."
+        },
+        {
+          "title": "Indonesia Trade Balance Posts $3.23 Billion Surplus as Non-Oil & Gas Exports Rebound",
+          "source": "BPS Statistics Indonesia",
+          "significance": "Underpins structural current account stability, easing depreciation pressure on the Rupiah."
+        },
+        {
+          "title": "Jakarta Composite Index (IHSG) Crosses 7,490 on Foreign Inflows into Big-Cap Financials",
+          "source": "Indonesia Stock Exchange (IDX)",
+          "significance": "Foreign portfolio flows turned net positive for the 4th consecutive session."
+        }
+      ]
+    },
+    "bonds": {
+      "indoGB": [
+        { "tenor": "5Y", "code": "FR0101", "yield": 6.42, "changeBps": -2.5, "coupon": 6.875 },
+        { "tenor": "10Y (Benchmark)", "code": "FR0100", "yield": 6.68, "changeBps": -3.0, "coupon": 6.625 },
+        { "tenor": "15Y", "code": "FR0098", "yield": 6.84, "changeBps": -1.5, "coupon": 7.125 },
+        { "tenor": "20Y", "code": "FR0097", "yield": 6.95, "changeBps": -2.0, "coupon": 7.125 }
+      ],
+      "srbi": [
+        { "tenor": "6M", "tenorDays": 182, "auctionDate": "01 Nov 2026", "cutOffYield": 6.85, "awardedVolumeIDR": "IDR 7.42 T" },
+        { "tenor": "9M", "tenorDays": 273, "auctionDate": "01 Nov 2026", "cutOffYield": 6.98, "awardedVolumeIDR": "IDR 9.15 T" },
+        { "tenor": "12M", "tenorDays": 364, "auctionDate": "01 Nov 2026", "cutOffYield": 7.08, "awardedVolumeIDR": "IDR 12.80 T" }
+      ],
+      "sovereignSpread10Y": 244,
+      "biRate": 6.00,
+      "cpiInflationYoY": 1.71
+    },
+    "fxAndNdf": {
+      "spotRate": 15645,
+      "spotChange": -35,
+      "spotChangePct": -0.22,
+      "jisdorRate": 15658,
+      "ndf1M": 15695,
+      "ndf3M": 15780,
+      "ndfSpread1M": 50,
+      "annualizedBasis1M": 3.83,
+      "ihsgIndex": {
+        "level": 7495.20,
+        "change": 42.15,
+        "changePct": 0.57
+      },
+      "foreignFlowsDaily": "+IDR 842.5 Billion",
+      "foreignFlowsYTD": "+IDR 39.8 Trillion"
+    }
+  }
+}

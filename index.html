@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Global Macro & Indonesia Market Terminal</title>
+    <meta name="description" content="Daily macroeconomic intelligence terminal featuring US Treasury yield curves, global futures, FX, commodities, and Indonesian domestic bond and NDF markets." />
+    <meta property="og:title" content="Global Macro & Indonesia Market Terminal" />
+    <meta property="og:description" content="Daily macroeconomic intelligence terminal featuring US Treasury yield curves, global futures, FX, commodities, and Indonesian domestic bond and NDF markets." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <script>
+      // Suppress unsolicited browser extension / MetaMask injection errors in preview iframe
+      window.addEventListener('error', function (event) {
+        var msg = String(event.message || '');
+        var src = String(event.filename || '');
+        if (msg.indexOf('MetaMask') !== -1 || src.indexOf('chrome-extension://') !== -1) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function (event) {
+        var reason = String((event.reason && (event.reason.message || event.reason.stack || event.reason)) || '');
+        if (reason.indexOf('MetaMask') !== -1 || reason.indexOf('chrome-extension://') !== -1) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+        }
+      }, true);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

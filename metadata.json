@@ -1,0 +1,6 @@
+{
+  "name": "Global Macro & Indonesia Market Terminal",
+  "description": "Daily macroeconomic intelligence terminal featuring US Treasury yield curves, global futures, FX, commodities, and Indonesian domestic bond and NDF markets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
