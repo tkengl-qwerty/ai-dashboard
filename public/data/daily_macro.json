@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-04T05:00:00+08:00",
-    "lastUpdatedSGT": "04 Nov 2026, 05:00 AM SGT",
+    "lastUpdated": "2026-11-04T21:12:16.860389+08:00",
+    "lastUpdatedSGT": "04 Nov 2026, 09:12 PM SGT",
     "nextRefreshSGT": "05 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
@@ -121,17 +121,83 @@
     ],
     "yieldCurve": {
       "tenors": [
-        { "label": "1M", "years": 0.08, "yield": 5.38, "changeBps": 1.0, "priorClose": 5.37 },
-        { "label": "3M", "years": 0.25, "yield": 5.24, "changeBps": -1.0, "priorClose": 5.25 },
-        { "label": "6M", "years": 0.5, "yield": 5.06, "changeBps": -2.0, "priorClose": 5.08 },
-        { "label": "1Y", "years": 1.0, "yield": 4.62, "changeBps": -3.0, "priorClose": 4.65 },
-        { "label": "2Y", "years": 2.0, "yield": 4.18, "changeBps": -4.0, "priorClose": 4.22 },
-        { "label": "3Y", "years": 3.0, "yield": 4.07, "changeBps": -3.0, "priorClose": 4.10 },
-        { "label": "5Y", "years": 5.0, "yield": 4.02, "changeBps": -4.0, "priorClose": 4.06 },
-        { "label": "7Y", "years": 7.0, "yield": 4.11, "changeBps": -4.0, "priorClose": 4.15 },
-        { "label": "10Y", "years": 10.0, "yield": 4.24, "changeBps": -3.0, "priorClose": 4.27 },
-        { "label": "20Y", "years": 20.0, "yield": 4.54, "changeBps": -2.0, "priorClose": 4.56 },
-        { "label": "30Y", "years": 30.0, "yield": 4.47, "changeBps": -2.0, "priorClose": 4.49 }
+        {
+          "label": "1M",
+          "years": 0.08,
+          "yield": 5.38,
+          "changeBps": 1.0,
+          "priorClose": 5.37
+        },
+        {
+          "label": "3M",
+          "years": 0.25,
+          "yield": 5.24,
+          "changeBps": -1.0,
+          "priorClose": 5.25
+        },
+        {
+          "label": "6M",
+          "years": 0.5,
+          "yield": 5.06,
+          "changeBps": -2.0,
+          "priorClose": 5.08
+        },
+        {
+          "label": "1Y",
+          "years": 1.0,
+          "yield": 4.62,
+          "changeBps": -3.0,
+          "priorClose": 4.65
+        },
+        {
+          "label": "2Y",
+          "years": 2.0,
+          "yield": 4.18,
+          "changeBps": -4.0,
+          "priorClose": 4.22
+        },
+        {
+          "label": "3Y",
+          "years": 3.0,
+          "yield": 4.07,
+          "changeBps": -3.0,
+          "priorClose": 4.1
+        },
+        {
+          "label": "5Y",
+          "years": 5.0,
+          "yield": 4.02,
+          "changeBps": -4.0,
+          "priorClose": 4.06
+        },
+        {
+          "label": "7Y",
+          "years": 7.0,
+          "yield": 4.11,
+          "changeBps": -4.0,
+          "priorClose": 4.15
+        },
+        {
+          "label": "10Y",
+          "years": 10.0,
+          "yield": 4.24,
+          "changeBps": -3.0,
+          "priorClose": 4.27
+        },
+        {
+          "label": "20Y",
+          "years": 20.0,
+          "yield": 4.54,
+          "changeBps": -2.0,
+          "priorClose": 4.56
+        },
+        {
+          "label": "30Y",
+          "years": 30.0,
+          "yield": 4.47,
+          "changeBps": -2.0,
+          "priorClose": 4.49
+        }
       ],
       "spreads": {
         "twoTenSpread": 6.0,
@@ -141,26 +207,113 @@
       }
     },
     "futures": [
-      { "symbol": "ES=F", "name": "S&P 500 E-mini", "price": 5842.50, "change": 18.25, "changePct": 0.31 },
-      { "symbol": "NQ=F", "name": "Nasdaq 100 E-mini", "price": 20410.25, "change": 92.50, "changePct": 0.45 },
-      { "symbol": "YM=F", "name": "Dow Jones Mini", "price": 42680.00, "change": 68.00, "changePct": 0.16 },
-      { "symbol": "RTY=F", "name": "Russell 2000 Mini", "price": 2234.80, "change": 8.40, "changePct": 0.38 },
-      { "symbol": "DX=F", "name": "US Dollar Index", "price": 104.15, "change": -0.22, "changePct": -0.21 }
+      {
+        "symbol": "ES=F",
+        "name": "S&P 500 E-mini",
+        "price": 7656.75,
+        "change": 60.0,
+        "changePct": 0.79
+      },
+      {
+        "symbol": "NQ=F",
+        "name": "Nasdaq 100 E-mini",
+        "price": 28299.75,
+        "change": -6.0,
+        "changePct": -0.02
+      },
+      {
+        "symbol": "YM=F",
+        "name": "Dow Jones Mini",
+        "price": 52801.0,
+        "change": 906.0,
+        "changePct": 1.75
+      },
+      {
+        "symbol": "RTY=F",
+        "name": "Russell 2000 Mini",
+        "price": 2867.1,
+        "change": 42.1,
+        "changePct": 1.49
+      }
     ],
     "fxRates": [
-      { "pair": "EUR/USD", "name": "Euro / US Dollar", "rate": 1.0842, "change": 0.0024, "changePct": 0.22 },
-      { "pair": "USD/JPY", "name": "US Dollar / Japanese Yen", "rate": 152.85, "change": -0.45, "changePct": -0.29 },
-      { "pair": "GBP/USD", "name": "British Pound / US Dollar", "rate": 1.2985, "change": 0.0031, "changePct": 0.24 },
-      { "pair": "USD/CNH", "name": "US Dollar / Offshore Yuan", "rate": 7.1265, "change": -0.0110, "changePct": -0.15 },
-      { "pair": "AUD/USD", "name": "Australian Dollar / USD", "rate": 0.6588, "change": 0.0035, "changePct": 0.53 },
-      { "pair": "USD/SGD", "name": "US Dollar / Singapore Dollar", "rate": 1.3210, "change": -0.0028, "changePct": -0.21 }
+      {
+        "pair": "EUR/USD",
+        "name": "Euro / US Dollar",
+        "rate": 1.1274,
+        "change": 0.0082,
+        "changePct": 0.73
+      },
+      {
+        "pair": "USD/JPY",
+        "name": "US Dollar / Japanese Yen",
+        "rate": 158.21,
+        "change": 0.3,
+        "changePct": 0.19
+      },
+      {
+        "pair": "GBP/USD",
+        "name": "British Pound / US Dollar",
+        "rate": 1.3502,
+        "change": 0.0092,
+        "changePct": 0.69
+      },
+      {
+        "pair": "AUD/USD",
+        "name": "Australian Dollar / USD",
+        "rate": 0.7018,
+        "change": 0.0018,
+        "changePct": 0.26
+      },
+      {
+        "pair": "USD/SGD",
+        "name": "US Dollar / Singapore Dollar",
+        "rate": 1.2776,
+        "change": -0.0015,
+        "changePct": -0.12
+      }
     ],
     "commodities": [
-      { "symbol": "CL=F", "name": "WTI Crude Oil", "price": 71.45, "unit": "$/bbl", "change": 1.25, "changePct": 1.78 },
-      { "symbol": "BZ=F", "name": "Brent Crude", "price": 75.12, "unit": "$/bbl", "change": 1.18, "changePct": 1.60 },
-      { "symbol": "GC=F", "name": "Gold Futures", "price": 2746.80, "unit": "$/t.oz", "change": 14.20, "changePct": 0.52 },
-      { "symbol": "SI=F", "name": "Silver Futures", "price": 32.65, "unit": "$/t.oz", "change": 0.42, "changePct": 1.30 },
-      { "symbol": "HG=F", "name": "Copper Futures", "price": 4.38, "unit": "$/lb", "change": 0.04, "changePct": 0.92 }
+      {
+        "symbol": "CL=F",
+        "name": "WTI Crude Oil",
+        "price": 94.12,
+        "unit": "$/bbl",
+        "change": -1.97,
+        "changePct": -2.05
+      },
+      {
+        "symbol": "BZ=F",
+        "name": "Brent Crude",
+        "price": 101.48,
+        "unit": "$/bbl",
+        "change": -2.12,
+        "changePct": -2.05
+      },
+      {
+        "symbol": "GC=F",
+        "name": "Gold Futures",
+        "price": 4058.4,
+        "unit": "$/t.oz",
+        "change": 118.0,
+        "changePct": 2.99
+      },
+      {
+        "symbol": "SI=F",
+        "name": "Silver Futures",
+        "price": 52.21,
+        "unit": "$/t.oz",
+        "change": 2.62,
+        "changePct": 5.29
+      },
+      {
+        "symbol": "HG=F",
+        "name": "Copper Futures",
+        "price": 6.43,
+        "unit": "$/lb",
+        "change": 0.05,
+        "changePct": 0.84
+      }
     ]
   },
   "indonesia": {
@@ -208,33 +361,75 @@
     },
     "bonds": {
       "indoGB": [
-        { "tenor": "5Y", "code": "FR0101", "yield": 6.42, "changeBps": -2.5, "coupon": 6.875 },
-        { "tenor": "10Y (Benchmark)", "code": "FR0100", "yield": 6.68, "changeBps": -3.0, "coupon": 6.625 },
-        { "tenor": "15Y", "code": "FR0098", "yield": 6.84, "changeBps": -1.5, "coupon": 7.125 },
-        { "tenor": "20Y", "code": "FR0097", "yield": 6.95, "changeBps": -2.0, "coupon": 7.125 }
+        {
+          "tenor": "5Y",
+          "code": "FR0101",
+          "yield": 6.42,
+          "changeBps": -2.5,
+          "coupon": 6.875
+        },
+        {
+          "tenor": "10Y (Benchmark)",
+          "code": "FR0100",
+          "yield": 6.68,
+          "changeBps": -3.0,
+          "coupon": 6.625
+        },
+        {
+          "tenor": "15Y",
+          "code": "FR0098",
+          "yield": 6.84,
+          "changeBps": -1.5,
+          "coupon": 7.125
+        },
+        {
+          "tenor": "20Y",
+          "code": "FR0097",
+          "yield": 6.95,
+          "changeBps": -2.0,
+          "coupon": 7.125
+        }
       ],
       "srbi": [
-        { "tenor": "6M", "tenorDays": 182, "auctionDate": "01 Nov 2026", "cutOffYield": 6.85, "awardedVolumeIDR": "IDR 7.42 T" },
-        { "tenor": "9M", "tenorDays": 273, "auctionDate": "01 Nov 2026", "cutOffYield": 6.98, "awardedVolumeIDR": "IDR 9.15 T" },
-        { "tenor": "12M", "tenorDays": 364, "auctionDate": "01 Nov 2026", "cutOffYield": 7.08, "awardedVolumeIDR": "IDR 12.80 T" }
+        {
+          "tenor": "6M",
+          "tenorDays": 182,
+          "auctionDate": "01 Nov 2026",
+          "cutOffYield": 6.85,
+          "awardedVolumeIDR": "IDR 7.42 T"
+        },
+        {
+          "tenor": "9M",
+          "tenorDays": 273,
+          "auctionDate": "01 Nov 2026",
+          "cutOffYield": 6.98,
+          "awardedVolumeIDR": "IDR 9.15 T"
+        },
+        {
+          "tenor": "12M",
+          "tenorDays": 364,
+          "auctionDate": "01 Nov 2026",
+          "cutOffYield": 7.08,
+          "awardedVolumeIDR": "IDR 12.80 T"
+        }
       ],
       "sovereignSpread10Y": 244,
-      "biRate": 6.00,
+      "biRate": 6.0,
       "cpiInflationYoY": 1.71
     },
     "fxAndNdf": {
-      "spotRate": 15645,
-      "spotChange": -35,
-      "spotChangePct": -0.22,
+      "spotRate": 18155,
+      "spotChange": 683,
+      "spotChangePct": 3.91,
       "jisdorRate": 15658,
       "ndf1M": 15695,
       "ndf3M": 15780,
       "ndfSpread1M": 50,
       "annualizedBasis1M": 3.83,
       "ihsgIndex": {
-        "level": 7495.20,
-        "change": 42.15,
-        "changePct": 0.57
+        "level": 4919.77,
+        "change": 15.48,
+        "changePct": 0.32
       },
       "foreignFlowsDaily": "+IDR 842.5 Billion",
       "foreignFlowsYTD": "+IDR 39.8 Trillion"
