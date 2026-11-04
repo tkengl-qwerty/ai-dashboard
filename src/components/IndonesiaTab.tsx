@@ -15,7 +15,9 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
   fxAndNdf,
   us10YYield,
 }) => {
-  const sovereignSpread = Math.round((bonds.indoGB.find(b => b.tenor.includes('10Y'))?.yield ?? 6.68) * 100 - us10YYield * 100);
+  const indo10Y = bonds.indoGB.find(b => b.tenor.includes('10Y'));
+  const sovereignSpread = Math.round(((indo10Y?.yield ?? 7.71) - us10YYield) * 100);
+  const indo10YChg = indo10Y?.changeBps ?? 0;
 
   return (
     <div className="space-y-4">
@@ -26,7 +28,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
           <div className="text-sm sm:text-base font-bold text-amber-300 font-mono tabular-nums mt-0.5">
             {bonds.biRate.toFixed(2)}%
           </div>
-          <div className="text-[10px] text-slate-400 font-mono">Held Steady by BI</div>
+          <div className="text-[10px] text-slate-400 font-mono">Bank Indonesia Policy</div>
         </div>
 
         <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
@@ -36,7 +38,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
           </div>
           <div className={`text-[10px] font-mono flex items-center gap-0.5 ${fxAndNdf.spotChange <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
             {fxAndNdf.spotChange <= 0 ? <ArrowDownRight className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
-            <span>{fxAndNdf.spotChange} ({fxAndNdf.spotChangePct.toFixed(2)}%)</span>
+            <span>{fxAndNdf.spotChange > 0 ? `+${fxAndNdf.spotChange}` : fxAndNdf.spotChange} ({fxAndNdf.spotChangePct > 0 ? `+${fxAndNdf.spotChangePct.toFixed(2)}%` : `${fxAndNdf.spotChangePct.toFixed(2)}%`})</span>
           </div>
         </div>
 
@@ -51,9 +53,11 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
         <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
           <div className="text-[10px] text-slate-500 font-mono uppercase">10Y INDOGB YIELD</div>
           <div className="text-sm sm:text-base font-bold text-amber-400 font-mono tabular-nums mt-0.5">
-            {bonds.indoGB.find(b => b.tenor.includes('10Y'))?.yield.toFixed(2)}%
+            {(indo10Y?.yield ?? 7.71).toFixed(2)}%
           </div>
-          <div className="text-[10px] text-emerald-400 font-mono">-3.0 bps Day Chg</div>
+          <div className={`text-[10px] font-mono ${indo10YChg <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            {indo10YChg > 0 ? `+${indo10YChg.toFixed(1)}` : indo10YChg.toFixed(1)} bps Day Chg
+          </div>
         </div>
 
         <div className="bg-[#0b0f19] border border-slate-800 p-2.5 rounded-xs">
@@ -69,9 +73,9 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
           <div className="text-sm sm:text-base font-bold text-slate-100 font-mono tabular-nums mt-0.5">
             {fxAndNdf.ihsgIndex.level.toLocaleString()}
           </div>
-          <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-0.5">
-            <ArrowUpRight className="w-3 h-3" />
-            <span>+{fxAndNdf.ihsgIndex.changePct.toFixed(2)}%</span>
+          <div className={`text-[10px] font-mono flex items-center gap-0.5 ${fxAndNdf.ihsgIndex.changePct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            {fxAndNdf.ihsgIndex.changePct >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+            <span>{fxAndNdf.ihsgIndex.changePct >= 0 ? `+${fxAndNdf.ihsgIndex.changePct.toFixed(2)}%` : `${fxAndNdf.ihsgIndex.changePct.toFixed(2)}%`}</span>
           </div>
         </div>
       </div>

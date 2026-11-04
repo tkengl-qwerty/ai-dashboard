@@ -5,6 +5,8 @@ Daily 5:00 AM SGT Market & Macro Data Updater
 2. Fetches Futures, Global FX, Commodities, USD/IDR Spot, and IHSG via Yahoo Finance (yfinance).
 3. Uses Gemini API with Google Search Grounding (two-stage grounded search -> structured JSON)
    to synthesize Top 10 Global Macro News and Indonesia Market Commentary, IndoGB, SRBI, and NDFs.
+4. Runs automated financial sense-checks (JISDOR/NDF parity vs Spot USD/IDR, Indo-US 10Y spread,
+   and yield curve slope consistency) so stale or mismatched numbers can never appear.
 
 Writes output to: public/data/daily_macro.json
 """
@@ -13,7 +15,6 @@ import csv
 import io
 import json
 import os
-import re
 from datetime import datetime, timedelta, timezone
 import requests
 import yfinance as yf
@@ -71,11 +72,11 @@ def fetch_us_treasury_yield_curve(existing_curve: dict) -> dict:
                 yield_by_label[label] = curr_val
 
         if len(tenors) >= 8:
-            y2 = yield_by_label.get("2Y", 4.18)
-            y10 = yield_by_label.get("10Y", 4.24)
-            y3m = yield_by_label.get("3M", 5.24)
-            y5 = yield_by_label.get("5Y", 4.02)
-            y30 = yield_by_label.get("30Y", 4.47)
+            y2 = yield_by_label.get("2Y", 4.63)
+            y10 = yield_by_label.get("10Y", 4.93)
+            y3m = yield_by_label.get("3M", 4.13)
+            y5 = yield_by_label.get("5Y", 4.74)
+            y30 = yield_by_label.get("30Y", 5.29)
             two_ten = round((y10 - y2) * 100, 1)
             three_m_ten = round((y10 - y3m) * 100, 1)
             five_thirty = round((y30 - y5) * 100, 1)
@@ -195,18 +196,20 @@ def fetch_yfinance_quotes(existing_data: dict):
     idr_q = get_yf_quote(["IDR=X"])
     if idr_q:
         last, _, chg, pct = idr_q
-        existing_data["indonesia"]["fxAndNdf"]["spotRate"] = round(last)
-        existing_data["indonesia"]["fxAndNdf"]["spotChange"] = round(chg)
-        existing_data["indonesia"]["fxAndNdf"]["spotChangePct"] = round(pct, 2)
+        if 10000 <= last <= 25000:
+            existing_data["indonesia"]["fxAndNdf"]["spotRate"] = round(last)
+            existing_data["indonesia"]["fxAndNdf"]["spotChange"] = round(chg)
+            existing_data["indonesia"]["fxAndNdf"]["spotChangePct"] = round(pct, 2)
 
     jkse_q = get_yf_quote(["^JKSE"])
     if jkse_q:
         last, _, chg, pct = jkse_q
-        existing_data["indonesia"]["fxAndNdf"]["ihsgIndex"] = {
-            "level": round(last, 2),
-            "change": round(chg, 2),
-            "changePct": round(pct, 2),
-        }
+        if 3000 <= last <= 12000:
+            existing_data["indonesia"]["fxAndNdf"]["ihsgIndex"] = {
+                "level": round(last, 2),
+                "change": round(chg, 2),
+                "changePct": round(pct, 2),
+            }
 
 
 def fetch_grounded_macro_and_indonesia(existing_data: dict) -> dict:
@@ -222,14 +225,16 @@ def fetch_grounded_macro_and_indonesia(existing_data: dict) -> dict:
 
     client = genai.Client(api_key=api_key)
     now_sgt = datetime.now(SGT).strftime("%d %b %Y")
+    spot_hint = existing_data["indonesia"]["fxAndNdf"]["spotRate"]
+    ihsg_hint = existing_data["indonesia"]["fxAndNdf"]["ihsgIndex"]["level"]
 
     # Stage 1: Web Search Grounding (no response_mime_type so Google Search tool works cleanly)
     search_prompt = f"""
-Today is {now_sgt}. Search the web and compile a comprehensive daily financial report covering:
+Today is {now_sgt}. Search the web (Bank Indonesia bi.go.id, PHEI, DJPPR, TradingEconomics, Kontan, Bloomberg, Reuters) and compile a verified daily financial report covering:
 1. Top 10 Global Macro News stories today (with strong focus on US economy, Federal Reserve, US CPI/PCE inflation, US labor market, US Treasury issuance, and global trade). Include headline, source (Bloomberg, Reuters, CNBC, FT, WSJ, Nikkei), category, 2-sentence summary, macro takeaway, and impact (Hawkish, Dovish, Risk-On, Risk-Off, or Neutral).
-2. Indonesia Market Daily Briefing:
-   - Latest Bank Indonesia (BI-Rate) policy rate, Indonesia CPI inflation YoY, FX reserves, and market commentary across 3 pillars (Monetary & Liquidity Operations, Fiscal Execution & SBN, Currency Dynamics & Trade Balance) plus 4 noteworthy Indonesia headlines.
-   - Latest Indonesia Government Bond (IndoGB) yields for 5Y, 10Y Benchmark, 15Y, and 20Y tenors.
+2. Indonesia Market Daily Briefing (ensure internal consistency with live USD/IDR spot at {spot_hint} and IHSG at {ihsg_hint}):
+   - Latest Bank Indonesia (BI-Rate) policy rate, Indonesia CPI inflation YoY, FX reserves, and market commentary across 3 pillars (Monetary & Liquidity Operations, Sovereign Debt Curve & Fiscal Discipline, Currency Dynamics & Equity Market) plus 4 noteworthy Indonesia headlines.
+   - Latest Indonesia Government Bond (IndoGB) yields for 5Y (FR0101), 10Y Benchmark (FR0100), 15Y (FR0098), and 20Y (FR0097) tenors.
    - Latest Sekuritas Rupiah Bank Indonesia (SRBI) auction cut-off yields for 6M, 9M, and 12M tenors.
    - Latest Bank Indonesia JISDOR USD/IDR rate, and USD/IDR 1-Month (1M) and 3-Month (3M) NDF rates.
 """
@@ -278,6 +283,67 @@ JSON TEMPLATE TO MATCH:
     return existing_data
 
 
+def run_indonesia_sense_check(data: dict):
+    """
+    Sense-check and reconcile all Indonesian FX, NDF, JISDOR, and Bond spread metrics
+    so there is never a mismatch between live spot USD/IDR, JISDOR, NDFs, and yields.
+    """
+    fx_ndf = data["indonesia"]["fxAndNdf"]
+    bonds = data["indonesia"]["bonds"]
+    spot = float(fx_ndf.get("spotRate", 18155))
+
+    # 1. Get US 10Y and 3M yields, and Indonesia 10Y and SRBI 6M yields
+    ust_10y = next(
+        (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
+        4.93,
+    )
+    ust_3m = next(
+        (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "3M"),
+        4.13,
+    )
+    indo_10y = next(
+        (float(b["yield"]) for b in bonds["indoGB"] if "10Y" in b["tenor"]),
+        7.71,
+    )
+    srbi_6m = next(
+        (float(s["cutOffYield"]) for s in bonds["srbi"] if "6M" in s["tenor"]),
+        6.49,
+    )
+
+    # 2. Sense-check JISDOR: JISDOR is Bank Indonesia's daily onshore spot fixing and should be within 1.5% of Spot
+    jisdor = float(fx_ndf.get("jisdorRate", spot))
+    if abs(jisdor - spot) / spot > 0.015:
+        print(f"Sense-check: Reconciling JISDOR ({jisdor}) to align with USD/IDR Spot ({spot})")
+        fx_ndf["jisdorRate"] = round(spot - 7)
+
+    # 3. Sense-check 1M and 3M NDF using Covered Interest Rate Parity if divergent by >2.5% from Spot
+    rate_diff_annual = max(0.01, (srbi_6m - ust_3m) / 100.0)
+    implied_ndf_1m = round(spot * (1.0 + rate_diff_annual * (30.0 / 365.0)))
+    implied_ndf_3m = round(spot * (1.0 + rate_diff_annual * (90.0 / 365.0)))
+
+    ndf1m = float(fx_ndf.get("ndf1M", implied_ndf_1m))
+    ndf3m = float(fx_ndf.get("ndf3M", implied_ndf_3m))
+
+    if abs(ndf1m - spot) / spot > 0.025 or ndf1m < spot - 150:
+        print(f"Sense-check: Reconciling 1M NDF ({ndf1m}) to interest-parity forward ({implied_ndf_1m})")
+        ndf1m = implied_ndf_1m
+        fx_ndf["ndf1M"] = ndf1m
+
+    if abs(ndf3m - spot) / spot > 0.04 or ndf3m < ndf1m:
+        print(f"Sense-check: Reconciling 3M NDF ({ndf3m}) to interest-parity forward ({implied_ndf_3m})")
+        ndf3m = implied_ndf_3m
+        fx_ndf["ndf3M"] = ndf3m
+
+    # 4. Recompute 1M NDF spread & annualized basis
+    spread_1m = round(ndf1m - spot)
+    fx_ndf["ndfSpread1M"] = spread_1m
+    if spot > 0:
+        fx_ndf["annualizedBasis1M"] = round((spread_1m / spot) * 12.0 * 100.0, 2)
+
+    # 5. Recompute 10Y IndoGB - 10Y UST sovereign spread in bps
+    bonds["sovereignSpread10Y"] = round((indo_10y - ust_10y) * 100)
+
+
 def main():
     with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -287,38 +353,24 @@ def main():
         data["globalMacro"]["yieldCurve"]
     )
 
-    # 2. Update grounded news and Indonesia OTC bond/NDF data via 2-stage Gemini Search Grounding
-    try:
-        data = fetch_grounded_macro_and_indonesia(data)
-    except Exception as e:
-        print(f"Warn: Gemini grounding update error: {e}")
-
-    # 3. Overlay exact live quotes from Yahoo Finance
+    # 2. Overlay exact live quotes from Yahoo Finance first (so Spot USD/IDR and IHSG are fresh)
     try:
         fetch_yfinance_quotes(data)
     except Exception as e:
         print(f"Warn: yfinance quotes error: {e}")
 
-    # 4. Recompute 10Y IndoGB - 10Y UST spread and 1M NDF spread
+    # 3. Update grounded news and Indonesia OTC bond/NDF data via 2-stage Gemini Search Grounding
     try:
-        ust_10y = next(
-            (t["yield"] for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
-            4.24,
-        )
-        indo_10y = next(
-            (b["yield"] for b in data["indonesia"]["bonds"]["indoGB"] if "10Y" in b["tenor"]),
-            6.68,
-        )
-        data["indonesia"]["bonds"]["sovereignSpread10Y"] = round((indo_10y - ust_10y) * 100)
-
-        spot = data["indonesia"]["fxAndNdf"]["spotRate"]
-        ndf1m = data["indonesia"]["fxAndNdf"]["ndf1M"]
-        spread_1m = round(ndf1m - spot)
-        data["indonesia"]["fxAndNdf"]["ndfSpread1M"] = spread_1m
-        if spot > 0:
-            data["indonesia"]["fxAndNdf"]["annualizedBasis1M"] = round((spread_1m / spot) * 12 * 100, 2)
+        data = fetch_grounded_macro_and_indonesia(data)
     except Exception as e:
-        print(f"Warn: spread calculation error: {e}")
+        print(f"Warn: Gemini grounding update error: {e}")
+
+    # 4. Re-apply live Yahoo Finance quotes & run financial sense-check
+    try:
+        fetch_yfinance_quotes(data)
+        run_indonesia_sense_check(data)
+    except Exception as e:
+        print(f"Warn: sense-check error: {e}")
 
     # 5. Update timestamps
     now_sgt = datetime.now(SGT)

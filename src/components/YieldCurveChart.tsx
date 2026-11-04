@@ -86,11 +86,17 @@ export const YieldCurveChart: React.FC<YieldCurveChartProps> = ({ data }) => {
           {/* 3M/10Y Spread */}
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-xs">
             <span className="text-slate-500 text-[10px]">3M/10Y:</span>
-            <span className="font-bold tabular-nums text-rose-400">
-              {data.spreads.threeMonthTenSpread.toFixed(1)} bps
+            <span className={`font-bold tabular-nums ${data.spreads.threeMonthTenSpread >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              {data.spreads.threeMonthTenSpread > 0 ? `+${data.spreads.threeMonthTenSpread.toFixed(1)}` : data.spreads.threeMonthTenSpread.toFixed(1)} bps
             </span>
-            <span className="text-[9px] px-1 py-0.2 bg-rose-950/60 text-rose-300 border border-rose-800/60 rounded-xs font-semibold">
-              INVERTED
+            <span
+              className={`text-[9px] px-1 py-0.2 border rounded-xs font-semibold ${
+                data.spreads.isInverted
+                  ? 'bg-rose-950/60 text-rose-300 border-rose-800/60'
+                  : 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
+              }`}
+            >
+              {data.spreads.isInverted ? 'INVERTED' : 'NORMAL'}
             </span>
           </div>
         </div>
