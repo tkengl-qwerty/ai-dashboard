@@ -14,10 +14,14 @@ permissions:
 
 jobs:
   refresh-and-build:
+    # Prevent loop when the action itself commits daily_macro.json
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -27,7 +31,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           pip install --upgrade pip
-          pip install yfinance google-genai
+          pip install yfinance google-genai requests
 
       - name: Run 5:00 AM SGT Macro & Indonesia Data Fetcher
         env:
@@ -43,7 +47,8 @@ jobs:
           if git diff --staged --quiet; then
             echo "No JSON changes to commit to main."
           else
-            git commit -m "chore(data): daily 05:00 AM SGT market refresh [$(date -u +'%Y-%m-%d')]"
+            git commit -m "chore(data): daily 05:00 AM SGT market refresh [$(date -u +'%Y-%m-%d')] [skip ci]"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
 
@@ -54,7 +59,7 @@ jobs:
 
       - name: Install Node Dependencies & Build Static Site
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
       - name: Publish Built Static Site (dist/) to porkbun-deploy branch
