@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-04T21:12:16.860389+08:00",
-    "lastUpdatedSGT": "04 Nov 2026, 09:12 PM SGT",
+    "lastUpdated": "2026-11-04T21:28:54.704568+08:00",
+    "lastUpdatedSGT": "04 Nov 2026, 09:28 PM SGT",
     "nextRefreshSGT": "05 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
@@ -210,109 +210,109 @@
       {
         "symbol": "ES=F",
         "name": "S&P 500 E-mini",
-        "price": 7656.75,
-        "change": 60.0,
-        "changePct": 0.79
+        "price": 7665.25,
+        "change": 68.5,
+        "changePct": 0.9
       },
       {
         "symbol": "NQ=F",
         "name": "Nasdaq 100 E-mini",
-        "price": 28299.75,
-        "change": -6.0,
-        "changePct": -0.02
+        "price": 28360.5,
+        "change": 54.75,
+        "changePct": 0.19
       },
       {
         "symbol": "YM=F",
         "name": "Dow Jones Mini",
-        "price": 52801.0,
-        "change": 906.0,
-        "changePct": 1.75
+        "price": 52839.0,
+        "change": 944.0,
+        "changePct": 1.82
       },
       {
         "symbol": "RTY=F",
         "name": "Russell 2000 Mini",
-        "price": 2867.1,
-        "change": 42.1,
-        "changePct": 1.49
+        "price": 2870.0,
+        "change": 45.0,
+        "changePct": 1.59
       }
     ],
     "fxRates": [
       {
         "pair": "EUR/USD",
         "name": "Euro / US Dollar",
-        "rate": 1.1274,
-        "change": 0.0082,
-        "changePct": 0.73
+        "rate": 1.127,
+        "change": 0.0078,
+        "changePct": 0.7
       },
       {
         "pair": "USD/JPY",
         "name": "US Dollar / Japanese Yen",
-        "rate": 158.21,
-        "change": 0.3,
-        "changePct": 0.19
+        "rate": 158.29,
+        "change": 0.38,
+        "changePct": 0.24
       },
       {
         "pair": "GBP/USD",
         "name": "British Pound / US Dollar",
-        "rate": 1.3502,
-        "change": 0.0092,
-        "changePct": 0.69
+        "rate": 1.3495,
+        "change": 0.0085,
+        "changePct": 0.64
       },
       {
         "pair": "AUD/USD",
         "name": "Australian Dollar / USD",
-        "rate": 0.7018,
-        "change": 0.0018,
-        "changePct": 0.26
+        "rate": 0.702,
+        "change": 0.002,
+        "changePct": 0.29
       },
       {
         "pair": "USD/SGD",
         "name": "US Dollar / Singapore Dollar",
-        "rate": 1.2776,
+        "rate": 1.2777,
         "change": -0.0015,
-        "changePct": -0.12
+        "changePct": -0.11
       }
     ],
     "commodities": [
       {
         "symbol": "CL=F",
         "name": "WTI Crude Oil",
-        "price": 94.12,
+        "price": 94.36,
         "unit": "$/bbl",
-        "change": -1.97,
-        "changePct": -2.05
+        "change": -1.73,
+        "changePct": -1.8
       },
       {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "price": 101.48,
+        "price": 101.72,
         "unit": "$/bbl",
-        "change": -2.12,
-        "changePct": -2.05
+        "change": -1.88,
+        "changePct": -1.81
       },
       {
         "symbol": "GC=F",
         "name": "Gold Futures",
-        "price": 4058.4,
+        "price": 4048.0,
         "unit": "$/t.oz",
-        "change": 118.0,
-        "changePct": 2.99
+        "change": 107.6,
+        "changePct": 2.73
       },
       {
         "symbol": "SI=F",
         "name": "Silver Futures",
-        "price": 52.21,
+        "price": 51.76,
         "unit": "$/t.oz",
-        "change": 2.62,
-        "changePct": 5.29
+        "change": 2.17,
+        "changePct": 4.37
       },
       {
         "symbol": "HG=F",
         "name": "Copper Futures",
-        "price": 6.43,
+        "price": 6.4,
         "unit": "$/lb",
-        "change": 0.05,
-        "changePct": 0.84
+        "change": 0.02,
+        "changePct": 0.34
       }
     ]
   },
