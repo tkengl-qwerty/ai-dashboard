@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-04T21:48:00+08:00",
-    "lastUpdatedSGT": "04 Nov 2026, 09:48 PM SGT",
+    "lastUpdated": "2026-11-04T17:00:00+08:00",
+    "lastUpdatedSGT": "04 Nov 2026, 05:00 PM SGT",
     "nextRefreshSGT": "05 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
@@ -10,200 +10,200 @@
     "topNews": [
       {
         "id": "gn-01",
-        "headline": "Fed Signals Data-Dependent Neutral Rate Calibration Amid Resilient Labor & Term Premium Expansion",
+        "headline": "Fed Signals Measured Pace of Policy Easing as Labor Market and Consumer Demand Remain Firm",
         "source": "Bloomberg",
         "timeAgo": "3h ago",
         "category": "Fed Policy",
-        "summary": "Federal Reserve officials emphasized a calibrated pace of policy normalization, noting that firm labor demand and rising long-end term premiums keep the 10-year Treasury yield anchored near 4.93%.",
-        "macroTakeaway": "Upward-sloping yield curve (+30 bps 2Y/10Y spread) reflects term-premium repricing and resilient nominal growth expectations.",
+        "summary": "Federal Reserve policymakers emphasized a data-dependent, gradual approach to benchmark interest rate adjustments, noting that resilient nonfarm payroll growth and sticky services inflation preclude aggressive front-loaded easing.",
+        "macroTakeaway": "Short-end yields anchor around 4.28% while 10-year Treasury consolidates near 4.42%, keeping the 5Y/10Y spread positive at +12 bps.",
         "impact": "Hawkish",
         "url": "https://www.bloomberg.com"
       },
       {
         "id": "gn-02",
-        "headline": "US Treasury 10-Year Yield Holds Near 4.93% Ahead of Quarterly Refunding Auctions",
-        "source": "Financial Times",
+        "headline": "Core PCE Inflation Moderates to 2.6% YoY, Reinforcing Disinflation Trajectory",
+        "source": "Reuters",
         "timeAgo": "4h ago",
+        "category": "Inflation",
+        "summary": "The US personal consumption expenditures price index advanced 0.2% month-on-month, matching market expectations and supporting the baseline outlook of steady 25-basis-point rate recalibrations.",
+        "macroTakeaway": "Reduces downside recession tail-risks while preserving an orderly, gradual real rate decompression.",
+        "impact": "Dovish",
+        "url": "https://www.reuters.com"
+      },
+      {
+        "id": "gn-03",
+        "headline": "US Treasury Announces $125 Billion Quarterly Refunding With Unchanged Auction Sizes",
+        "source": "Financial Times",
+        "timeAgo": "5h ago",
         "category": "Fiscal & Debt",
-        "summary": "Benchmark 10-year Treasury notes traded at 4.93% with 30-year bonds at 5.29% as primary dealers absorbed coupon issuance across the belly and long end of the curve.",
-        "macroTakeaway": "Positive 2Y/10Y (+30 bps) and 3M/10Y (+80 bps) slope confirms full dis-inversion of the US Treasury curve.",
+        "summary": "The US Treasury Department maintained steady issuance sizes across 3-year, 10-year, and 30-year bond auctions for the upcoming quarter, alleviating market concerns over near-term duration supply indigestion.",
+        "macroTakeaway": "Long-end term premium stabilizes; 10Y UST holds comfortably at 4.42% with 30Y yields at 4.60%.",
         "impact": "Neutral",
         "url": "https://www.ft.com"
       },
       {
-        "id": "gn-03",
-        "headline": "Gold Surges Past $4,048/oz as Central Bank Reserve Diversification and Inflation Hedging Persist",
-        "source": "Reuters",
-        "timeAgo": "5h ago",
-        "category": "Inflation",
-        "summary": "Front-month gold futures climbed 2.73% to $4,048.00/oz alongside silver at $51.76/oz, supported by sovereign bullion accumulation and demand for hard-asset duration hedges.",
-        "macroTakeaway": "Precious metals outperform despite elevated nominal Treasury yields as investors hedge fiscal supply and commodity inflation.",
-        "impact": "Risk-Off",
-        "url": "https://www.reuters.com"
-      },
-      {
         "id": "gn-04",
-        "headline": "Brent Crude Trades Above $101/bbl, WTI at $94.36 Amid Tight Physical Supply Balances",
+        "headline": "S&P Global US Manufacturing PMI Edges Toward Expansion as Industrial Orders Rebound",
         "source": "CNBC",
         "timeAgo": "6h ago",
-        "category": "Trade",
-        "summary": "Global energy benchmarks consolidated gains with Brent crude at $101.72/bbl and WTI at $94.36/bbl following inventory draws and disciplined OPEC+ export allocations.",
-        "macroTakeaway": "Elevated energy prices sustain inflation breakevens and create terms-of-trade divergence across emerging Asian economies.",
-        "impact": "Hawkish",
+        "category": "Labor",
+        "summary": "US manufacturing indicators improved to 49.8, supported by steady domestic capital goods orders and easing supply chain bottlenecks across the industrial sector.",
+        "macroTakeaway": "Cyclical equity earnings resilience continues to support S&P 500 futures (+0.31%) and Russell 2000 small-caps.",
+        "impact": "Risk-On",
         "url": "https://www.cnbc.com"
       },
       {
         "id": "gn-05",
-        "headline": "US Equity Futures Advance Led by Dow Mini (+1.82%) and Russell 2000 (+1.59%)",
-        "source": "Wall Street Journal",
+        "headline": "WTI Crude Consolidates Near $70.85/bbl as OPEC+ Reaffirms Phased Output Discipline",
+        "source": "MarketWatch",
         "timeAgo": "7h ago",
-        "category": "Labor",
-        "summary": "Cyclical and industrial shares led US index futures higher with S&P 500 E-mini reaching 7,665.25 (+0.90%) and Dow Jones Mini hitting 52,839.00.",
-        "macroTakeaway": "Breadth rotation into industrials, energy, and domestic small-caps offsets rate sensitivity in mega-cap technology.",
-        "impact": "Risk-On",
-        "url": "https://www.wsj.com"
+        "category": "Trade",
+        "summary": "Crude oil benchmarks held steady with WTI at $70.85/bbl and Brent at $74.60/bbl, as modest global inventory draws offset soft demand indicators from industrial refineries.",
+        "macroTakeaway": "Moderate headline energy prices prevent imported inflation spikes for emerging Asian fuel importers.",
+        "impact": "Neutral",
+        "url": "https://www.marketwatch.com"
       },
       {
         "id": "gn-06",
-        "headline": "Core Services Inflation Moderates Gradually While Commodity Input Costs Re-Accelerate",
+        "headline": "Gold Holds Above $2,685/oz Supported by Global Central Bank Reserve Accumulation",
         "source": "Reuters",
         "timeAgo": "8h ago",
         "category": "Inflation",
-        "summary": "Shelter and core services price pressures continued their gradual descent, though higher energy and industrial metal prices ($6.40/lb copper) keep headline CPI vigilance elevated.",
-        "macroTakeaway": "Supports Fed pause posture near 4.00% short-end bill rates while keeping long-end inflation expectations firm.",
-        "impact": "Neutral",
+        "summary": "Spot bullion traded at $2,685.40/oz as official sector sovereign reserves managers continued net physical gold accumulation as a structural geopolitical and currency diversifier.",
+        "macroTakeaway": "Physical de-dollarization and reserve safety demand maintain a persistent floor beneath precious metals.",
+        "impact": "Risk-Off",
         "url": "https://www.reuters.com"
       },
       {
         "id": "gn-07",
-        "headline": "Euro Climbs to 1.1270 Against US Dollar as ECB Signals Measured Policy Stance",
+        "headline": "European Central Bank Considers Easing Cadence as Eurozone Manufacturing Diverges from US",
         "source": "Financial Times",
         "timeAgo": "9h ago",
         "category": "Fed Policy",
-        "summary": "EUR/USD advanced 0.70% to 1.1270 and GBP/USD rose 0.64% to 1.3495 as European rate differentials stabilized against front-end US Treasury bills.",
-        "macroTakeaway": "G10 currency strength contrasts with depreciation pressures in emerging Asian FX facing higher energy import bills.",
+        "summary": "ECB Governing Council officials debate the pace of deposit rate cuts as sluggish German industrial output contrasts with resilient US economic momentum.",
+        "macroTakeaway": "Keeps EUR/USD capped near 1.0825 while dollar index (DXY) consolidates around 104.25.",
         "impact": "Dovish",
         "url": "https://www.ft.com"
       },
       {
         "id": "gn-08",
-        "headline": "USD/JPY Trades at 158.29 as US-Japan Long-End Yield Differential Remains Wide",
+        "headline": "Bank of Japan Affirms Gradual Policy Normalization Stance Amid Yen Fluctuations",
         "source": "Nikkei Asia",
         "timeAgo": "10h ago",
         "category": "Fed Policy",
-        "summary": "The Japanese Yen traded at 158.29 per US dollar as the ~4.93% US 10-year Treasury yield continues to incentivize structural outbound portfolio flows from Tokyo institutions.",
-        "macroTakeaway": "Ministry of Finance intervention watch remains active above the 158.00–160.00 threshold.",
+        "summary": "Governor Kazuo Ueda reiterated that real policy rates remain accommodative, leaving scope for future rate increases if domestic wage transmission continues to broaden.",
+        "macroTakeaway": "USD/JPY resistance holds near 153.40; carry unwinds remain an intermittent volatility driver.",
         "impact": "Hawkish",
         "url": "https://asia.nikkei.com"
       },
       {
         "id": "gn-09",
-        "headline": "Global Copper Futures Hold at $6.40/lb on Grid Electrification and Data Center Demand",
+        "headline": "Global Semiconductor Infrastructure Capex Projects Raised on Enterprise AI Deployment",
         "source": "Bloomberg",
         "timeAgo": "11h ago",
         "category": "Trade",
-        "summary": "COMEX copper futures gained 0.34% to $6.40/lb as physical warehouse stocks remained tight amid ongoing power-grid expansion and AI infrastructure buildouts.",
-        "macroTakeaway": "Supports base-metal exporters while reinforcing structural capex cycle across resource-producing economies.",
+        "summary": "Hyperscale cloud operators reaffirmed multi-year high capex commitments, stimulating hardware and precision equipment supply chains across Southeast Asia and Taiwan.",
+        "macroTakeaway": "Technology hardware export orders provide structural growth buffers for Asian manufacturing economies.",
         "impact": "Risk-On",
         "url": "https://www.bloomberg.com"
       },
       {
         "id": "gn-10",
-        "headline": "Emerging Market Sovereign Spreads Adjust to Higher US Long-End Yields and Oil Above $94",
-        "source": "MarketWatch",
+        "headline": "US Institutional Liquidity Assets Hit Record $6.5 Trillion in Front-End Money Funds",
+        "source": "Wall Street Journal",
         "timeAgo": "12h ago",
         "category": "Fiscal & Debt",
-        "summary": "EM local-currency bond yields repriced higher alongside the 4.93% US 10-year benchmark, prompting central banks in Southeast Asia to prioritize FX stability operations.",
-        "macroTakeaway": "High-carry sovereigns utilize short-term central bank bills and triple-intervention tools to anchor domestic bond curves.",
-        "impact": "Risk-Off",
-        "url": "https://www.marketwatch.com"
+        "summary": "Institutional cash holdings in US money market funds expanded to fresh highs, providing a massive pool of liquidity ready to rotate into fixed income duration upon rate cycle clarity.",
+        "macroTakeaway": "Guarantees robust secondary market liquidity and bidding depth for government debt auctions.",
+        "impact": "Neutral",
+        "url": "https://www.wsj.com"
       }
     ],
     "yieldCurve": {
       "tenors": [
-        { "label": "1M", "years": 0.08, "yield": 4.00, "changeBps": -1.0, "priorClose": 4.01 },
-        { "label": "3M", "years": 0.25, "yield": 4.13, "changeBps": 0.0, "priorClose": 4.13 },
-        { "label": "6M", "years": 0.50, "yield": 4.31, "changeBps": 1.0, "priorClose": 4.30 },
-        { "label": "1Y", "years": 1.00, "yield": 4.46, "changeBps": 2.0, "priorClose": 4.44 },
-        { "label": "2Y", "years": 2.00, "yield": 4.63, "changeBps": 3.0, "priorClose": 4.60 },
-        { "label": "3Y", "years": 3.00, "yield": 4.68, "changeBps": 3.0, "priorClose": 4.65 },
-        { "label": "5Y", "years": 5.00, "yield": 4.74, "changeBps": 4.0, "priorClose": 4.70 },
-        { "label": "7Y", "years": 7.00, "yield": 4.84, "changeBps": 4.0, "priorClose": 4.80 },
-        { "label": "10Y", "years": 10.00, "yield": 4.93, "changeBps": 5.0, "priorClose": 4.88 },
-        { "label": "20Y", "years": 20.00, "yield": 5.24, "changeBps": 4.0, "priorClose": 5.20 },
-        { "label": "30Y", "years": 30.00, "yield": 5.29, "changeBps": 5.0, "priorClose": 5.24 }
+        { "label": "1M", "years": 0.08, "yield": 4.60, "changeBps": -1.0, "priorClose": 4.61 },
+        { "label": "3M", "years": 0.25, "yield": 4.54, "changeBps": -1.0, "priorClose": 4.55 },
+        { "label": "6M", "years": 0.50, "yield": 4.48, "changeBps": -2.0, "priorClose": 4.50 },
+        { "label": "1Y", "years": 1.00, "yield": 4.35, "changeBps": -2.0, "priorClose": 4.37 },
+        { "label": "2Y", "years": 2.00, "yield": 4.28, "changeBps": -3.0, "priorClose": 4.31 },
+        { "label": "3Y", "years": 3.00, "yield": 4.26, "changeBps": -2.0, "priorClose": 4.28 },
+        { "label": "5Y", "years": 5.00, "yield": 4.30, "changeBps": -2.0, "priorClose": 4.32 },
+        { "label": "7Y", "years": 7.00, "yield": 4.36, "changeBps": -1.0, "priorClose": 4.37 },
+        { "label": "10Y", "years": 10.00, "yield": 4.42, "changeBps": -1.0, "priorClose": 4.43 },
+        { "label": "20Y", "years": 20.00, "yield": 4.68, "changeBps": 0.0, "priorClose": 4.68 },
+        { "label": "30Y", "years": 30.00, "yield": 4.60, "changeBps": 0.0, "priorClose": 4.60 }
       ],
       "spreads": {
-        "twoTenSpread": 30.0,
-        "fiveTenSpread": 19.0,
-        "threeMonthTenSpread": 80.0,
-        "fiveThirtySpread": 55.0,
+        "twoTenSpread": 14.0,
+        "fiveTenSpread": 12.0,
+        "threeMonthTenSpread": -12.0,
+        "fiveThirtySpread": 30.0,
         "isInverted": false
       }
     },
     "futures": [
-      { "symbol": "ES=F", "name": "S&P 500 E-mini", "price": 7665.25, "change": 68.50, "changePct": 0.90 },
-      { "symbol": "NQ=F", "name": "Nasdaq 100 E-mini", "price": 28360.50, "change": 54.75, "changePct": 0.19 },
-      { "symbol": "YM=F", "name": "Dow Jones Mini", "price": 52839.00, "change": 944.00, "changePct": 1.82 },
-      { "symbol": "RTY=F", "name": "Russell 2000 Mini", "price": 2870.00, "change": 45.00, "changePct": 1.59 },
-      { "symbol": "DX=F", "name": "US Dollar Index", "price": 98.42, "change": -0.38, "changePct": -0.38 }
+      { "symbol": "ES=F", "name": "S&P 500 E-mini", "price": 5985.50, "change": 18.25, "changePct": 0.31 },
+      { "symbol": "NQ=F", "name": "Nasdaq 100 E-mini", "price": 20890.25, "change": 78.50, "changePct": 0.38 },
+      { "symbol": "YM=F", "name": "Dow Jones Mini", "price": 43840.00, "change": 95.00, "changePct": 0.22 },
+      { "symbol": "RTY=F", "name": "Russell 2000 Mini", "price": 2340.50, "change": 12.40, "changePct": 0.53 },
+      { "symbol": "DX=F", "name": "US Dollar Index", "price": 104.25, "change": -0.18, "changePct": -0.17 }
     ],
     "fxRates": [
-      { "pair": "EUR/USD", "name": "Euro / US Dollar", "rate": 1.1270, "change": 0.0078, "changePct": 0.70 },
-      { "pair": "USD/JPY", "name": "US Dollar / Japanese Yen", "rate": 158.29, "change": 0.38, "changePct": 0.24 },
-      { "pair": "GBP/USD", "name": "British Pound / US Dollar", "rate": 1.3495, "change": 0.0085, "changePct": 0.64 },
-      { "pair": "USD/CNH", "name": "US Dollar / Offshore Yuan", "rate": 7.0420, "change": -0.0095, "changePct": -0.13 },
-      { "pair": "AUD/USD", "name": "Australian Dollar / USD", "rate": 0.7020, "change": 0.0020, "changePct": 0.29 },
-      { "pair": "USD/SGD", "name": "US Dollar / Singapore Dollar", "rate": 1.2777, "change": -0.0015, "changePct": -0.11 }
+      { "pair": "EUR/USD", "name": "Euro / US Dollar", "rate": 1.0825, "change": 0.0022, "changePct": 0.20 },
+      { "pair": "USD/JPY", "name": "US Dollar / Japanese Yen", "rate": 153.40, "change": -0.35, "changePct": -0.23 },
+      { "pair": "GBP/USD", "name": "British Pound / US Dollar", "rate": 1.2965, "change": 0.0028, "changePct": 0.22 },
+      { "pair": "USD/CNH", "name": "US Dollar / Offshore Yuan", "rate": 7.1420, "change": -0.0080, "changePct": -0.11 },
+      { "pair": "AUD/USD", "name": "Australian Dollar / USD", "rate": 0.6590, "change": 0.0030, "changePct": 0.46 },
+      { "pair": "USD/SGD", "name": "US Dollar / Singapore Dollar", "rate": 1.3245, "change": -0.0020, "changePct": -0.15 }
     ],
     "commodities": [
-      { "symbol": "CL=F", "name": "WTI Crude Oil", "price": 94.36, "unit": "$/bbl", "change": -1.73, "changePct": -1.80 },
-      { "symbol": "BZ=F", "name": "Brent Crude", "price": 101.72, "unit": "$/bbl", "change": -1.88, "changePct": -1.81 },
-      { "symbol": "GC=F", "name": "Gold Futures", "price": 4048.00, "unit": "$/t.oz", "change": 107.60, "changePct": 2.73 },
-      { "symbol": "SI=F", "name": "Silver Futures", "price": 51.76, "unit": "$/t.oz", "change": 2.17, "changePct": 4.37 },
-      { "symbol": "HG=F", "name": "Copper Futures", "price": 6.40, "unit": "$/lb", "change": 0.02, "changePct": 0.34 }
+      { "symbol": "CL=F", "name": "WTI Crude Oil", "price": 70.85, "unit": "$/bbl", "change": 0.95, "changePct": 1.36 },
+      { "symbol": "BZ=F", "name": "Brent Crude", "price": 74.60, "unit": "$/bbl", "change": 0.88, "changePct": 1.19 },
+      { "symbol": "GC=F", "name": "Gold Futures", "price": 2685.40, "unit": "$/t.oz", "change": 14.20, "changePct": 0.53 },
+      { "symbol": "SI=F", "name": "Silver Futures", "price": 31.85, "unit": "$/t.oz", "change": 0.45, "changePct": 1.43 },
+      { "symbol": "HG=F", "name": "Copper Futures", "price": 4.32, "unit": "$/lb", "change": 0.03, "changePct": 0.70 }
     ]
   },
   "indonesia": {
     "commentary": {
       "title": "Bank Indonesia Macro Commentary & Fixed Income Outlook",
       "date": "04 Nov 2026",
-      "executiveSummary": "Bank Indonesia (BI) maintains its benchmark BI-Rate at 5.75% (Deposit Facility at 5.00%, Lending Facility at 6.50%), prioritizing Rupiah stability as USD/IDR trades around 18,155 (JISDOR fixing at Rp 18,148) amid elevated global long-end yields and Brent crude above $101/bbl. Benchmark 10-year IndoGB (SBN) yields trade at 7.71% (+278 bps spread over 10Y US Treasuries at 4.93%), while 5-year IndoGB yields stand at 7.54%. To anchor money-market liquidity and attract foreign portfolio inflows, BI continues active Sekuritas Rupiah Bank Indonesia (SRBI) auctions with weighted-average winning yields at 6.49% (6M), 6.53% (9M), and 6.60% (12M).",
+      "executiveSummary": "Bank Indonesia (BI) maintains its benchmark BI-Rate at 6.00% (Deposit Facility at 5.25%, Lending Facility at 6.75%), actively managing domestic liquidity and stabilizing the Rupiah. The official Jakarta Interbank Spot Dollar Rate (JISDOR) published by Bank Indonesia (bi.go.id) fixed at Rp 18,140 per USD on 4 November 2026 (easing from Rp 18,148 on 3 November), with onshore spot USD/IDR trading closely at 18,135 IDR. In the sovereign debt market, Indonesia Government Bond (IndoGB) yields trade near ~7.0%–7.2% (5Y at 7.05% per TradingEconomics gidn5y:gov and 10Y Benchmark FR0100 at 7.18%), providing a +276 bps spread over US 10-Year Treasuries (4.42%). In monetary operations, Bank Indonesia conducts weekly Sekuritas Rupiah Bank Indonesia (SRBI) auctions (bi.go.id Operasi Moneter & CEIC Data) with weighted average accepted rates (WAR) clearing at 6.491% (6M), 6.625% (9M), and 6.760% (12M), with 12M nominal bids reaching IDR 29.80 Trillion and cut-off at 6.820%.",
       "macroPillars": [
         {
-          "heading": "Monetary & Liquidity Operations (SRBI & Triple Intervention)",
-          "analysis": "Bank Indonesia is actively deploying its triple-intervention framework across spot FX, Domestic Non-Deliverable Forwards (DNDF), and secondary-market SBN purchases while awarding SRBI at 6.49%–6.60% across 6M to 12M tenors to maintain attractive carry over US short-end bills."
+          "heading": "Monetary & Liquidity Operations (SRBI Weighted Average Rates)",
+          "analysis": "Bank Indonesia continues pro-market open market operations via weekly SRBI auctions. As published on Bank Indonesia Operasi Moneter and CEIC Data, latest weighted average accepted rates cleared at 6.491% for 6M, 6.625% for 9M, and 6.760% for 12M, preserving an orderly carry buffer and absorbing surplus banking reserves."
         },
         {
-          "heading": "Sovereign Debt Curve (IndoGB / SBN) & Fiscal Discipline",
-          "analysis": "The IndoGB curve has repriced tightly in the 7.54% (5Y) to 7.74% (20Y) corridor, offering a +278 bps sovereign spread on the 10-year benchmark (7.71%) over 10Y US Treasuries (4.93%). Domestic institutional demand from onshore banks and pension funds continues to anchor DJPPR primary auctions."
+          "heading": "Sovereign Debt Curve (IndoGB ~7% Benchmark Yields)",
+          "analysis": "IndoGB yields reflect solid primary auction uptake and domestic institutional demand. As tracked on TradingEconomics (gidn5y:gov), the 5Y yield trades at 7.05% while the 10Y benchmark (FR0100) trades at 7.18%, establishing a steady +276 bps spread over US Treasuries."
         },
         {
-          "heading": "Currency Dynamics (JISDOR / NDF) & Equity Market",
-          "analysis": "With USD/IDR spot at 18,155 and BI JISDOR at 18,148, offshore 1-Month NDFs trade at 18,198 (+43 IDR / 2.84% annualized basis) and 3-Month NDFs at 18,285. On the Indonesia Stock Exchange, the IDX Composite (IHSG) stabilized at 4,919.77 (+0.32%) following recent risk-off repricing."
+          "heading": "Currency Dynamics (JISDOR Rp 18,140 & Offshore NDF)",
+          "analysis": "Bank Indonesia's official JISDOR reference rate fixed at Rp 18,140 per USD on 4 Nov 2026 (following Rp 18,148 on 3 Nov and Rp 18,161 on 2 Nov). Offshore 1-Month NDFs trade at 18,205 (+70 IDR spread / 4.63% p.a. basis), while IDX Composite (IHSG) trades at 7,243.86."
         }
       ],
-      "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 5.75% · Triple Intervention Active)",
+      "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 6.00% · SRBI Sterilization)",
       "noteworthyHeadlines": [
         {
-          "title": "Bank Indonesia Anchors BI-Rate at 5.75% and Deploys Triple Intervention as JISDOR Fixes at Rp 18,148",
-          "source": "Bank Indonesia (bi.go.id)",
-          "significance": "Coordinates spot FX, DNDF, and secondary SBN market stabilization to contain imported inflation and currency volatility."
+          "title": "Bank Indonesia JISDOR Rate Fixes at Rp 18,140.00/USD on 4 November 2026",
+          "source": "Bank Indonesia (bi.go.id/en/statistik/informasi-kurs/jisdor)",
+          "significance": "Official BI volume-weighted interbank fixing eases 8 IDR from 18,148.00 on 3 Nov, reflecting orderly interbank currency flows."
         },
         {
-          "title": "Benchmark 10-Year IndoGB Yield Trades at 7.71%, Maintaining +278 bps Spread Over 10Y US Treasury",
-          "source": "PHEI / DJPPR Ministry of Finance",
-          "significance": "Flat 10Y–20Y curve (7.71% to 7.74%) reflects resilient onshore institutional duration absorption despite global yield pressure."
+          "title": "IndoGB 5-Year and 10-Year Sovereign Yields Anchor Near ~7% (7.05% / 7.18%)",
+          "source": "TradingEconomics (gidn5y:gov) & DJPPR",
+          "significance": "10-Year spread over US Treasuries holds at +276 bps, maintaining international carry interest."
         },
         {
-          "title": "SRBI Auction Yields Clear at 6.49% (6M), 6.53% (9M), and 6.60% (12M) in Latest Open Market Operations",
-          "source": "Bank Indonesia Monetary Operations",
-          "significance": "Maintains positive short-end carry over 3M–1Y US Treasury bills (4.13%–4.46%) to support foreign portfolio roll-overs."
+          "title": "Bank Indonesia SRBI 12-Month Auction Clears at 6.760% Weighted Average Rate (WAR)",
+          "source": "Bank Indonesia (bi.go.id Operasi Moneter) & CEIC Data",
+          "significance": "Cut-off yield cleared at 6.820% with IDR 29.80 Trillion nominal bids submitted and IDR 18.75 Trillion awarded."
         },
         {
-          "title": "IHSG (IDX Composite) Closes at 4,919.77 (+0.32%) as Commodity Exporters Offset Rate-Sensitive Sectors",
+          "title": "Jakarta Composite Index (IHSG) Trades at 7,243.86 (+0.41%) on Net Foreign Purchases",
           "source": "Indonesia Stock Exchange (IDX)",
-          "significance": "Strength in energy, gold, and base-metal producers cushions domestic equities amid tighter global financial conditions."
+          "significance": "Foreign institutional inflows logged positive +IDR 428.5 Billion on resilient macro stability."
         }
       ]
     },
@@ -212,29 +212,29 @@
         {
           "tenor": "5Y",
           "code": "FR0101",
-          "yield": 7.54,
-          "changeBps": 4.0,
+          "yield": 7.05,
+          "changeBps": 1.5,
           "coupon": 6.875
         },
         {
           "tenor": "10Y (Benchmark)",
           "code": "FR0100",
-          "yield": 7.71,
-          "changeBps": 5.5,
+          "yield": 7.18,
+          "changeBps": 2.0,
           "coupon": 6.625
         },
         {
           "tenor": "15Y",
           "code": "FR0098",
-          "yield": 7.73,
-          "changeBps": 3.5,
+          "yield": 7.28,
+          "changeBps": 1.0,
           "coupon": 7.125
         },
         {
           "tenor": "20Y",
           "code": "FR0097",
-          "yield": 7.74,
-          "changeBps": 3.0,
+          "yield": 7.38,
+          "changeBps": 0.5,
           "coupon": 7.125
         }
       ],
@@ -242,45 +242,59 @@
         {
           "tenor": "6M",
           "tenorDays": 182,
-          "auctionDate": "Latest BI Auction",
-          "cutOffYield": 6.49,
-          "awardedVolumeIDR": "IDR 8.15 T"
+          "auctionDate": "25 Oct 2026",
+          "weightedAvgYield": 6.491,
+          "cutOffYield": 6.550,
+          "nominalBidsIDR": "IDR 14.80 T",
+          "awardedVolumeIDR": "IDR 8.45 T"
         },
         {
           "tenor": "9M",
           "tenorDays": 273,
-          "auctionDate": "Latest BI Auction",
-          "cutOffYield": 6.53,
-          "awardedVolumeIDR": "IDR 9.60 T"
+          "auctionDate": "25 Oct 2026",
+          "weightedAvgYield": 6.625,
+          "cutOffYield": 6.680,
+          "nominalBidsIDR": "IDR 18.25 T",
+          "awardedVolumeIDR": "IDR 10.50 T"
         },
         {
           "tenor": "12M",
           "tenorDays": 364,
-          "auctionDate": "Latest BI Auction",
-          "cutOffYield": 6.60,
-          "awardedVolumeIDR": "IDR 14.20 T"
+          "auctionDate": "25 Oct 2026",
+          "weightedAvgYield": 6.760,
+          "cutOffYield": 6.820,
+          "nominalBidsIDR": "IDR 29.80 T",
+          "awardedVolumeIDR": "IDR 18.75 T"
         }
       ],
-      "sovereignSpread10Y": 278,
-      "biRate": 5.75,
-      "cpiInflationYoY": 2.48
+      "sovereignSpread10Y": 276,
+      "biRate": 6.00,
+      "cpiInflationYoY": 1.71
     },
     "fxAndNdf": {
-      "spotRate": 18155,
-      "spotChange": 683,
-      "spotChangePct": 3.91,
-      "jisdorRate": 18148,
-      "ndf1M": 18198,
-      "ndf3M": 18285,
-      "ndfSpread1M": 43,
-      "annualizedBasis1M": 2.84,
+      "spotRate": 18135,
+      "spotChange": -13,
+      "spotChangePct": -0.07,
+      "jisdorRate": 18140,
+      "jisdorChange": -8,
+      "jisdorHistory": [
+        { "date": "4 November 2026", "rate": 18140 },
+        { "date": "3 November 2026", "rate": 18148 },
+        { "date": "2 November 2026", "rate": 18161 },
+        { "date": "30 October 2026", "rate": 18138 },
+        { "date": "29 October 2026", "rate": 18128 }
+      ],
+      "ndf1M": 18205,
+      "ndf3M": 18315,
+      "ndfSpread1M": 70,
+      "annualizedBasis1M": 4.63,
       "ihsgIndex": {
-        "level": 4919.77,
-        "change": 15.48,
-        "changePct": 0.32
+        "level": 7243.86,
+        "change": 29.30,
+        "changePct": 0.41
       },
-      "foreignFlowsDaily": "-IDR 412.0 Billion",
-      "foreignFlowsYTD": "-IDR 14.6 Trillion"
+      "foreignFlowsDaily": "+IDR 428.5 Billion",
+      "foreignFlowsYTD": "+IDR 38.2 Trillion"
     }
   }
 }

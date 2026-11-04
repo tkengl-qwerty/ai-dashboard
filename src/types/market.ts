@@ -74,8 +74,15 @@ export interface SRBIAuction {
   tenor: string;
   tenorDays: number;
   auctionDate: string;
+  weightedAvgYield: number;
   cutOffYield: number;
+  nominalBidsIDR?: string;
   awardedVolumeIDR: string;
+}
+
+export interface JisdorHistoryItem {
+  date: string;
+  rate: number;
 }
 
 export interface IndonesiaCommentary {
@@ -107,6 +114,8 @@ export interface IndonesiaFxAndNdf {
   spotChange: number;
   spotChangePct: number;
   jisdorRate: number;
+  jisdorChange?: number;
+  jisdorHistory?: JisdorHistoryItem[];
   ndf1M: number;
   ndf3M: number;
   ndfSpread1M: number;

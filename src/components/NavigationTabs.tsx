@@ -13,13 +13,13 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
   onTabChange,
   data,
 }) => {
-  const ust10y = data.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.93;
-  const spFuture = data.globalMacro.futures.find((f) => f.symbol === 'ES=F')?.changePct ?? 0.90;
-  const dxy = data.globalMacro.futures.find((f) => f.symbol === 'DX=F')?.price ?? 98.42;
+  const ust10y = data.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.42;
+  const spFuture = data.globalMacro.futures.find((f) => f.symbol === 'ES=F')?.changePct ?? 0.31;
+  const dxy = data.globalMacro.futures.find((f) => f.symbol === 'DX=F')?.price ?? 104.25;
 
-  const indo10y = data.indonesia.bonds.indoGB.find((b) => b.tenor.includes('10Y'))?.yield ?? 7.71;
-  const srbi12m = data.indonesia.bonds.srbi.find((s) => s.tenor === '12M')?.cutOffYield ?? 6.60;
-  const spotIdr = data.indonesia.fxAndNdf.spotRate ?? 18155;
+  const indo10y = data.indonesia.bonds.indoGB.find((b) => b.tenor.includes('10Y'))?.yield ?? 7.18;
+  const srbi12m = data.indonesia.bonds.srbi.find((s) => s.tenor === '12M')?.weightedAvgYield ?? data.indonesia.bonds.srbi.find((s) => s.tenor === '12M')?.cutOffYield ?? 6.76;
+  const spotIdr = data.indonesia.fxAndNdf.spotRate ?? 18135;
 
   return (
     <div className="bg-[#121a26] border-b border-slate-700/80 px-4">
