@@ -28,14 +28,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Python Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install yfinance google-genai requests
-
       - name: Run 5:00 AM SGT Macro & Indonesia Data Fetcher
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python scripts/update_daily_macro.py
 

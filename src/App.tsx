@@ -285,12 +285,31 @@ export default function App() {
     setIsLoading(true);
     setFetchError(null);
     try {
-      const res = await fetch(`/data/daily_macro.json?t=${Date.now()}`);
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: Failed to load daily dataset`);
+      const bust = Date.now();
+      const localPromise = fetch(`/data/daily_macro.json?t=${bust}`, { cache: 'no-store' })
+        .then((r) => (r.ok ? (r.json() as Promise<DailyMacroSnapshot>) : null))
+        .catch(() => null);
+
+      const remotePromise = fetch(
+        `https://raw.githubusercontent.com/tkengl-qwerty/ai-dashboard/porkbun-deploy/data/daily_macro.json?t=${bust}`,
+        { cache: 'no-store' }
+      )
+        .then((r) => (r.ok ? (r.json() as Promise<DailyMacroSnapshot>) : null))
+        .catch(() => null);
+
+      const [localJson, remoteJson] = await Promise.all([localPromise, remotePromise]);
+
+      if (!localJson && !remoteJson) {
+        throw new Error('Failed to load daily dataset from local or remote source');
       }
-      const json: DailyMacroSnapshot = await res.json();
-      setData(json);
+
+      if (localJson && remoteJson) {
+        const localTime = Date.parse(localJson.metadata?.lastUpdated || '') || 0;
+        const remoteTime = Date.parse(remoteJson.metadata?.lastUpdated || '') || 0;
+        setData(remoteTime > localTime ? remoteJson : localJson);
+      } else {
+        setData((remoteJson || localJson) as DailyMacroSnapshot);
+      }
     } catch (err: unknown) {
       console.warn("Using embedded default snapshot fallback:", err);
       setFetchError(err instanceof Error ? err.message : "Error loading remote data");
