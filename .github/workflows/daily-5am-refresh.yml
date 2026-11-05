@@ -45,8 +45,26 @@ jobs:
           node-version: '22'
 
       - name: Install Node Dependencies & Build Static Site
+        env:
+          GH_WORKFLOW_TOKEN: ${{ secrets.GH_WORKFLOW_TOKEN }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'chicken12' }}
         run: |
           npm install --legacy-peer-deps
+          if [ -n "$GH_WORKFLOW_TOKEN" ]; then
+            export VITE_ENCRYPTED_GH_TOKEN=$(node -e '
+              const crypto = require("crypto");
+              const token = process.env.GH_WORKFLOW_TOKEN.trim();
+              const password = process.env.ADMIN_PASSWORD || "chicken12";
+              const salt = crypto.randomBytes(16);
+              const iv = crypto.randomBytes(12);
+              const key = crypto.pbkdf2Sync(password, salt, 100000, 32, "sha256");
+              const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+              const enc = Buffer.concat([cipher.update(token, "utf8"), cipher.final()]);
+              const tag = cipher.getAuthTag();
+              const combined = Buffer.concat([salt, iv, enc, tag]);
+              process.stdout.write(combined.toString("base64"));
+            ')
+          fi
           npm run build
 
       - name: Publish Built Static Site (dist/) to porkbun-deploy branch

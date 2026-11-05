@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MarketMetadata } from '../types/market';
-import { RefreshCw, Calendar } from 'lucide-react';
+import { RefreshCw, Calendar, Lock } from 'lucide-react';
+import { AdminRefreshModal } from './AdminRefreshModal';
 
 interface HeaderProps {
   metadata: MarketMetadata;
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -69,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }
         </div>
 
         {/* Global Market Clocks */}
-        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs font-mono">
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#1a2436] border border-slate-700/90 rounded-xs">
             <span className="text-slate-400 text-[10px]">SGT</span>
             <span className="text-sky-400 font-semibold">{sgtString}</span>
@@ -85,15 +87,25 @@ export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }
             <span className="text-slate-200">{londonString}</span>
           </div>
 
-          {/* Refresh Action */}
+          {/* Reload Snapshot Action */}
           <button
             onClick={onRefresh}
             disabled={isLoading}
             title="Reload snapshot data"
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-[#1c2739] hover:bg-blue-900/50 active:bg-slate-900 border border-slate-600/80 hover:border-blue-500/70 text-slate-200 hover:text-sky-300 transition-colors rounded-xs cursor-pointer text-xs"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-[#1c2739] hover:bg-blue-900/50 active:bg-slate-900 border border-slate-600/80 hover:border-blue-500/70 text-slate-200 hover:text-sky-300 transition-colors rounded-xs cursor-pointer text-xs whitespace-nowrap shrink-0"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-sky-400' : ''}`} />
             <span>Reload</span>
+          </button>
+
+          {/* Owner Password-Protected GitHub Action Refresh Trigger */}
+          <button
+            onClick={() => setIsAdminModalOpen(true)}
+            title="Owner Password-Protected Refresh (Triggers GitHub Action)"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-950/60 hover:bg-blue-900/70 active:bg-slate-900 border border-blue-700/70 hover:border-sky-400/80 text-sky-300 hover:text-white transition-colors rounded-xs cursor-pointer text-xs whitespace-nowrap shrink-0"
+          >
+            <Lock className="w-3.5 h-3.5 text-blue-400" />
+            <span>Admin Refresh</span>
           </button>
         </div>
       </div>
@@ -115,6 +127,13 @@ export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }
           <span>{metadata.edition}</span>
         </div>
       </div>
+
+      {/* Password-Protected GitHub Action Refresh Modal */}
+      <AdminRefreshModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
+        onRefreshData={onRefresh}
+      />
     </header>
   );
 };
