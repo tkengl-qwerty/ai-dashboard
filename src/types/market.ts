@@ -98,6 +98,8 @@ export interface IndonesiaCommentary {
     title: string;
     source: string;
     significance: string;
+    url?: string;
+    timeAgo?: string;
   }>;
 }
 

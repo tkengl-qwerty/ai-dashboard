@@ -232,13 +232,14 @@ def fetch_grounded_macro_and_indonesia(existing_data: dict) -> dict:
 
     # Stage 1: Web Search Grounding (no response_mime_type so Google Search tool works cleanly)
     search_prompt = f"""
-Today is {now_sgt}. Search the web (Bank Indonesia bi.go.id, TradingEconomics, DJPPR Ministry of Finance, PHEI, Kontan, Bloomberg, Reuters) and compile a verified daily financial report covering:
-1. Top 10 Global Macro News stories today (with strong focus on US economy, Federal Reserve, US CPI/PCE inflation, US labor market, US Treasury issuance, and global trade). Include headline, source (Bloomberg, Reuters, CNBC, FT, WSJ, Nikkei), category, 2-sentence summary, macro takeaway, and impact (Hawkish, Dovish, Risk-On, Risk-Off, or Neutral).
-2. Indonesia Market Daily Briefing (ensure internal consistency with live USD/IDR spot at {spot_hint} and IHSG at {ihsg_hint}):
-   - Latest Bank Indonesia (BI-Rate) policy rate, Indonesia CPI inflation YoY, FX reserves, and market commentary across 3 pillars (Monetary & Liquidity Operations, Sovereign Debt Curve & Fiscal Discipline, Currency Dynamics & Equity Market) plus 4 noteworthy Indonesia headlines.
+Today is {now_sgt}. Search the web (Bloomberg, Reuters, CNBC, CNN, Financial Times, Bank Indonesia bi.go.id, Jakarta Globe, Antara News, Setkab, CEIC Data, TradingEconomics) and compile a verified daily financial report covering:
+1. Top 10 Global Macro News stories strictly within the LAST 12 HOURS, ordered with the most recent at the top (e.g. 1h ago, 2h ago, 3h ago...). Focus heavily on US economy, Federal Reserve, US CPI/PCE inflation, US labor market, US Treasury issuance, and global trade. Include exact headline, verified news source (Bloomberg, Reuters, CNBC, CNN, FT), recency timeAgo, category, 2-sentence summary, macro takeaway, impact (Hawkish, Dovish, Risk-On, Risk-Off, or Neutral), and a direct clickable URL link to the news article.
+2. Indonesia Market Daily Briefing within the LAST 16 HOURS (ensure internal consistency with live USD/IDR spot at {spot_hint} and IHSG at {ihsg_hint}):
+   - Latest Bank Indonesia (BI-Rate) policy rate, Indonesia CPI inflation YoY, FX reserves, and market commentary across 3 pillars (Monetary & Liquidity Operations, Sovereign Debt Curve & Fiscal Discipline, Currency Dynamics & Equity Market).
+   - 5 Noteworthy Indonesia Headlines strictly within the LAST 16 HOURS, ordered by recency with headline, verified source (Jakarta Globe, Antara, Setkab, BPS, Bank Indonesia), timeAgo, market significance, and direct article URL.
    - Latest Indonesia Government Bond (IndoGB) yields for 5Y (FR0101) and 10Y Benchmark (FR0100) tenors (source: TradingEconomics gidn5y:gov around ~7.0%–7.2%), 15Y (FR0098), and 20Y (FR0097).
-   - Latest Sekuritas Rupiah Bank Indonesia (SRBI) auction Weighted Average Rates (WAR) and cut-off yields for 6M, 9M, and 12M tenors from Bank Indonesia open market operations.
-   - Latest Bank Indonesia JISDOR USD/IDR fixing (from bi.go.id/en/statistik/informasi-kurs/jisdor), and USD/IDR 1-Month (1M) and 3-Month (3M) NDF rates.
+   - Latest Sekuritas Rupiah Bank Indonesia (SRBI) auction Weighted Average Accepted Rates (WAR), nominal bids, and cut-off yields for 6M, 9M, and 12M tenors from Bank Indonesia (bi.go.id Operasi Moneter) and CEIC Data.
+   - Latest Bank Indonesia JISDOR USD/IDR fixing (from bi.go.id/en/statistik/informasi-kurs/jisdor), 5-day fixing history, and USD/IDR 1-Month (1M) and 3-Month (3M) NDF rates.
 """
     grounded_resp = client.models.generate_content(
         model="gemini-2.5-flash",
@@ -297,11 +298,11 @@ def run_indonesia_sense_check(data: dict):
     # 1. Get US 10Y and 3M yields, and Indonesia 10Y and SRBI 6M yields
     ust_10y = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
-        4.42,
+        4.90,
     )
     ust_3m = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "3M"),
-        4.35,
+        4.21,
     )
     indo_10y = next(
         (float(b["yield"]) for b in bonds["indoGB"] if "10Y" in b["tenor"]),

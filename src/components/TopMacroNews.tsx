@@ -45,7 +45,7 @@ export const TopMacroNews: React.FC<TopMacroNewsProps> = ({ news }) => {
             </h3>
           </div>
           <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-            Curated daily macro brief · US Economy, Federal Reserve, & Global Transmissions
+            Curated within last 12 hours from Bloomberg, Reuters, CNBC, & CNN · Ordered by recency
           </p>
         </div>
 
@@ -92,11 +92,27 @@ export const TopMacroNews: React.FC<TopMacroNewsProps> = ({ news }) => {
                   <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono mb-1">
                     <span className="font-bold text-sky-400">#{index + 1}</span>
                     <span aria-hidden="true" className="text-slate-600">·</span>
-                    <span className="text-slate-300 font-medium">{item.source}</span>
+                    <span className="text-slate-200 font-medium">{item.source}</span>
                     <span aria-hidden="true" className="text-slate-600">·</span>
                     <span>{item.category}</span>
                     <span aria-hidden="true" className="text-slate-600">·</span>
-                    <span className="text-slate-400">{item.timeAgo}</span>
+                    <span className="text-sky-300 font-semibold">{item.timeAgo}</span>
+                    {item.url && (
+                      <>
+                        <span aria-hidden="true" className="text-slate-600">·</span>
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-sky-400 hover:text-sky-300 flex items-center gap-0.5 underline text-[10px]"
+                          title="Open original news report"
+                        >
+                          <span>Article</span>
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </a>
+                      </>
+                    )}
                   </div>
 
                   {/* Headline */}

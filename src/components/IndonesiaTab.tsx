@@ -181,21 +181,58 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
               <div className="flex items-center gap-2">
                 <Newspaper className="w-4 h-4 text-sky-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
-                  NOTEWORTHY INDONESIA DISCLOSURES & MARKET DEVELOPMENTS
+                  NOTEWORTHY INDONESIA DISCLOSURES & DEVELOPMENTS
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">BI & JAKARTA EXCHANGES</span>
+              <span className="text-[10px] font-mono text-sky-300 bg-sky-950/60 px-2 py-0.5 border border-sky-800/60 rounded-xs font-semibold">
+                LAST 16 HOURS
+              </span>
             </div>
 
             <div className="divide-y divide-slate-700/50">
               {commentary.noteworthyHeadlines.map((item, idx) => (
                 <div key={idx} className="py-2.5 hover:bg-[#192434]/60 rounded-xs px-1.5 transition-colors">
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 mb-1">
-                    <span className="text-sky-400 font-bold">SOURCE: {item.source}</span>
+                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sky-400 font-bold">#{idx + 1}</span>
+                      <span aria-hidden="true" className="text-slate-600">·</span>
+                      <span className="text-slate-200 font-medium">SOURCE: {item.source}</span>
+                      {item.timeAgo && (
+                        <>
+                          <span aria-hidden="true" className="text-slate-600">·</span>
+                          <span className="text-slate-400">{item.timeAgo}</span>
+                        </>
+                      )}
+                    </div>
+                    {item.url && (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sky-400 hover:text-sky-300 flex items-center gap-0.5 text-[10px] underline"
+                        title="Read full article"
+                      >
+                        <span>Read</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                    )}
                   </div>
+
                   <h4 className="text-xs font-semibold text-slate-100 leading-snug">
-                    {item.title}
+                    {item.url ? (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-sky-300 transition-colors inline-flex items-baseline gap-1"
+                      >
+                        <span>{item.title}</span>
+                      </a>
+                    ) : (
+                      item.title
+                    )}
                   </h4>
+
                   <p className="text-[11px] text-slate-400 mt-1 font-mono">
                     <span className="text-slate-400">Market Significance: </span>
                     <span className="text-slate-300">{item.significance}</span>

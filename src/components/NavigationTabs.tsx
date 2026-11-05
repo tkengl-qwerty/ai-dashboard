@@ -13,9 +13,9 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
   onTabChange,
   data,
 }) => {
-  const ust10y = data.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.42;
-  const spFuture = data.globalMacro.futures.find((f) => f.symbol === 'ES=F')?.changePct ?? 0.31;
-  const dxy = data.globalMacro.futures.find((f) => f.symbol === 'DX=F')?.price ?? 104.25;
+  const ust10y = data.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.90;
+  const spFuture = data.globalMacro.futures.find((f) => f.symbol === 'ES=F')?.changePct ?? 1.58;
+  const dxy = data.globalMacro.futures.find((f) => f.symbol === 'DX=F')?.price ?? 101.38;
 
   const indo10y = data.indonesia.bonds.indoGB.find((b) => b.tenor.includes('10Y'))?.yield ?? 7.18;
   const srbi12m = data.indonesia.bonds.srbi.find((s) => s.tenor === '12M')?.weightedAvgYield ?? data.indonesia.bonds.srbi.find((s) => s.tenor === '12M')?.cutOffYield ?? 6.76;
