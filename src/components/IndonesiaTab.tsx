@@ -218,7 +218,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
                     )}
                   </div>
 
-                  <h4 className="text-xs font-semibold text-slate-100 leading-snug">
+                  <h4 className="text-xs sm:text-[13px] font-semibold text-slate-100 leading-snug mb-1">
                     {item.url ? (
                       <a
                         href={item.url}
@@ -226,10 +226,10 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
                         rel="noopener noreferrer"
                         className="hover:text-sky-300 transition-colors inline-flex items-baseline gap-1"
                       >
-                        <span>{item.title}</span>
+                        <span>{item.title || item.headline}</span>
                       </a>
                     ) : (
-                      item.title
+                      <span>{item.title || item.headline}</span>
                     )}
                   </h4>
 

@@ -275,8 +275,59 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
   }
 };
 
+function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
+  const headlines = snap.indonesia?.commentary?.noteworthyHeadlines || [];
+  const usedSigs = new Set<string>();
+  const spot = snap.indonesia?.fxAndNdf?.spotRate ?? 18075;
+  const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18094;
+  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 4919.77;
+  const ihsgPct = snap.indonesia?.fxAndNdf?.ihsgIndex?.changePct ?? 0.32;
+
+  const normalizedHeadlines = headlines.map((item, idx) => {
+    const rawTitle = (item.title || item.headline || 'Indonesia Market Disclosure').replace(
+      /\s+-\s+[^-]+$/,
+      ''
+    );
+    let sig = item.significance || '';
+    if (!sig || usedSigs.has(sig)) {
+      const low = rawTitle.toLowerCase();
+      if (low.includes('demutualization') || low.includes('danantara')) {
+        sig =
+          "Advances structural reform of Indonesia's exchange governance alongside Danantara sovereign wealth initiatives, deepening long-term institutional participation.";
+      } else if (low.includes('short selling') || low.includes('msci')) {
+        sig =
+          'Enhances IDX market microstructure and two-way price discovery ahead of MSCI index rebalancings, supporting foreign institutional turnover.';
+      } else if (low.includes('retail') || low.includes('red')) {
+        sig = `Highlights divergence between institutional block buying and domestic retail positioning as IDX Composite trades at ${ihsg.toLocaleString()} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%).`;
+      } else if (low.includes('5,000') || low.includes('5,030') || low.includes('surge') || low.includes('higher')) {
+        sig = `Broad-based buying across banking and cyclical heavyweights propels Jakarta equities, supported by steady USD/IDR at ${spot.toLocaleString()} and JISDOR at Rp ${jisdor.toLocaleString()}.`;
+      } else {
+        sig = `Reported by ${item.source}; shapes onshore institutional allocation across Jakarta equities and Rupiah fixed-income markets (#${idx + 1}).`;
+      }
+    }
+    usedSigs.add(sig);
+    return {
+      ...item,
+      title: rawTitle,
+      headline: rawTitle,
+      significance: sig,
+    };
+  });
+
+  return {
+    ...snap,
+    indonesia: {
+      ...snap.indonesia,
+      commentary: {
+        ...snap.indonesia.commentary,
+        noteworthyHeadlines: normalizedHeadlines,
+      },
+    },
+  };
+}
+
 export default function App() {
-  const [data, setData] = useState<DailyMacroSnapshot>(DEFAULT_SNAPSHOT);
+  const [data, setData] = useState<DailyMacroSnapshot>(() => normalizeSnapshot(DEFAULT_SNAPSHOT));
   const [activeTab, setActiveTab] = useState<'global' | 'indonesia'>('global');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -306,9 +357,10 @@ export default function App() {
       if (localJson && remoteJson) {
         const localTime = Date.parse(localJson.metadata?.lastUpdated || '') || 0;
         const remoteTime = Date.parse(remoteJson.metadata?.lastUpdated || '') || 0;
-        setData(remoteTime > localTime ? remoteJson : localJson);
+        const chosen = remoteTime > localTime ? remoteJson : localJson;
+        setData(normalizeSnapshot(chosen));
       } else {
-        setData((remoteJson || localJson) as DailyMacroSnapshot);
+        setData(normalizeSnapshot((remoteJson || localJson) as DailyMacroSnapshot));
       }
     } catch (err: unknown) {
       console.warn("Using embedded default snapshot fallback:", err);

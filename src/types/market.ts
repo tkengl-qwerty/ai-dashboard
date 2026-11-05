@@ -96,6 +96,7 @@ export interface IndonesiaCommentary {
   biPolicyPosture: string;
   noteworthyHeadlines: Array<{
     title: string;
+    headline?: string;
     source: string;
     significance: string;
     url?: string;

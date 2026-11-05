@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-06T00:03:03.783488+08:00",
-    "lastUpdatedSGT": "06 Nov 2026, 12:03 AM SGT",
+    "lastUpdated": "2026-11-06T07:29:23.451456+08:00",
+    "lastUpdatedSGT": "06 Nov 2026, 07:29 AM SGT",
     "nextRefreshSGT": "07 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
@@ -10,113 +10,113 @@
     "topNews": [
       {
         "id": "gn-01",
-        "headline": "The Case for a Year-End US Stocks Rally",
-        "source": "Bloomberg",
-        "timeAgo": "16m ago",
+        "headline": "Phones 'explode' on Wall Street as 'steamroller' shows up for the AI trade",
+        "source": "Reuters",
+        "timeAgo": "25m ago",
         "category": "Fiscal & Debt",
-        "summary": "Bloomberg reports: The Case for a Year-End US Stocks Rally. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Supports broad risk appetite across global equity index futures and emerging market capital flows.",
-        "impact": "Risk-On",
-        "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPRHdTQ0taSHlQdXZOMEM5RFpyS1BsNGc5em9NOWduOUhPYlZreXdVZlFNRnpITVBCSlRVa1NWLUp3NHA4SW1RcFVydXVLdURBdTVPMFd5d1lJcHRrTENIblpJTkVoYzNiVnVodUxOaEtiTUlDeEVwbkk2REhHMDJqY2ZaS01vY2dPT0ZsRHpRSFFPdWtxM1E5MA?oc=5"
+        "summary": "Reuters coverage on \"Phones 'explode' on Wall Street as 'steamroller' shows up for the AI trade\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.84%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOWjhqRms1YmpjV2l6LW1FMTllNnp5R3BoZzc3TExxXzJUVGk1RmNCbkQ0d3pGN05WSHBsX0RldGJ4UWxoWjd4VmpLT1RabTJQNDA5cmV5QXV4RG1ITHVBQUsxNEJla1pnWXJIYWhHTE9waEZCaUpud0dQX3lQVzZmUTlEalJLX29nSTBrcVFrLUdaSVU2cDRDNUFfbE03ZEZqcHhCbEN0My1zZmJYaXVtOWpYdUpEVDhL?oc=5"
       },
       {
         "id": "gn-02",
-        "headline": "Wall St slumps as sharp tech losses put Nasdaq on course for correction",
-        "source": "Reuters",
-        "timeAgo": "39m ago",
+        "headline": "Asian Stocks Brace for Selloff as AI Rout Deepens: Markets Wrap",
+        "source": "Bloomberg",
+        "timeAgo": "1h ago",
         "category": "Fiscal & Debt",
-        "summary": "Reuters reports: Wall St slumps as sharp tech losses put Nasdaq on course for correction. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Elevates near-term volatility and rotates institutional positioning toward defensive quality and liquid duration.",
+        "summary": "Bloomberg coverage on \"Asian Stocks Brace for Selloff as AI Rout Deepens: Markets Wrap\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.84%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOX2RxUlFvNmxoUFFUd2pmeUk3MTJoSkNvTkxwOS1TUlNFd1hDZkNZZ0huMHIxQXhDeWtpWVdVcmJGcDQwdVcwMFJTaHg2Q040OTBCZm5Ja2doTnpQcTh1OFFSdDNucHFXVzFRR2EyTEJfa3BRWDFUY19lcFNNXzRmR2F2UEw4dlVOUW1xSnFqNmI1Wmtr?oc=5"
+      },
+      {
+        "id": "gn-03",
+        "headline": "Argentina Bonds Drop as Market Flags Intervention in Peso Debt",
+        "source": "Bloomberg",
+        "timeAgo": "1h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Bloomberg coverage on \"Argentina Bonds Drop as Market Flags Intervention in Peso Debt\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.47%).",
+        "impact": "Risk-Off",
+        "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNVC1FdzU0cDRIWEl3TXpfZ0wwdGNSVmhfekpJdGotTEIwQWxVVHBmc3BpR2l2OHpJdExYMy1GdlBsWFJQOHkzUEMzQ0xDb0pGX2kxNGJLZGFlNE42U2tjVEk3Tnl3X3JCZ3g3UWRoS2FrVVVsYjctdk81ZVdWdGFjT3JLRFdLZVVlNkhZa2h4NDc1Ml83di1KQ1BLSklHWE95bU5nRHhoTHQyNzQ0VjQ5c0lKRQ?oc=5"
+      },
+      {
+        "id": "gn-04",
+        "headline": "Nasdaq drops into correction territory — here’s what typically happens next",
+        "source": "CNBC",
+        "timeAgo": "1h ago",
+        "category": "Fiscal & Debt",
+        "summary": "CNBC coverage on \"Nasdaq drops into correction territory — here’s what typically happens next\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.47%).",
+        "impact": "Risk-Off",
+        "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNSVRKV21sTjh2QThiTW10d21uVG1JbkEwZEY0aFAyUE9hbEtLTGxfcmF6bkp3Z3diRTk3TEw1emRLUFJkazdGdlN1UzFMTGxTWlNxNklsSDRBMWtjZGEzU1BjNGVVY29CdkRVQ3hXRkRidWppMmhqcEVPTjFRSXg1eXNOSXlxWWZ5bm1udF82ZkYxQWdJcW5oTjBDM1BNeUxSVHp0Tk5jNHNhb3dxS0HSAbMBQVVfeXFMTjN3TGI1ZmhDSmVMNlIyenNyTTQwcGZrTFpjWDRSanF3ZWhWQXB2RWpTdXFNYnE5enA0b1hocHVUU3NBNVdYRGNrRDhpcEt2Y3c5RWhjWk5MRHQ1c2FSaW9Zejd6eWpBMncwV1hpOGhSQ1lRWTRsenRoZzMyNXRnQm9sdlFYbDVGSTFFSThPRWhRc052VEk4VzdDYVdoTVdOYUVXRkp6aDA5aHFrVFRBNDlJdjQ?oc=5"
+      },
+      {
+        "id": "gn-05",
+        "headline": "US Stock Futures Diverge as Chip Selloff Extends Into Second Day",
+        "source": "Bloomberg",
+        "timeAgo": "1h ago",
+        "category": "Geopolitics",
+        "summary": "Bloomberg coverage on \"US Stock Futures Diverge as Chip Selloff Extends Into Second Day\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.84%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPSGhDSzhCYkhQQlg2TDJ4OHFfREQ1bEFUWjlmUlYwLXNSS3dCbjh1YWJ3d21xcEJabjhkMWZyR05XQUItd2pFaEtzNDBrOFZ0eVhrb0xId2J6R2NSbjRFbUlKQ2ZTZWEwYzhZX2swQk5jOVV2LXptLXZab0tUVUNkZHliVFVJYnNreTBDTkw0b25fa3c4NFBZOThFQUYyOTN3MmprcURGSFZyNGswU3BxS0k0UC1aQQ?oc=5"
+      },
+      {
+        "id": "gn-06",
+        "headline": "Nasdaq posts biggest daily drop in 19 months on fears of AI regulations",
+        "source": "Reuters",
+        "timeAgo": "1h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Reuters coverage on \"Nasdaq posts biggest daily drop in 19 months on fears of AI regulations\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.47%).",
         "impact": "Risk-Off",
         "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxObTdYYmZaZmRqRUt0TDhBbERraDF2VlpSTDJ4M1NyZ2dRRkNUUVJ0OVFHdzJyc01uNDZOV2YzZFprbU90aUNzTEtYTEdNWU5Jc19VVVlHc24tNkZ2VFhqOWg3b0swVDFnY2hHaGxuNVZXVkE5S09xZXV2eGRQb1kwdWFEZWxpeGMybDZRcGtyWW52Q1JfaHY4MVo1YmJfRW9KZmNsdVJqS24zeGRZVUpaV3VB?oc=5"
       },
       {
-        "id": "gn-03",
-        "headline": "Qualcomm slides 9% after earnings, leading postelection chip stock sell-off",
-        "source": "CNBC",
-        "timeAgo": "44m ago",
-        "category": "Geopolitics",
-        "summary": "CNBC reports: Qualcomm slides 9% after earnings, leading postelection chip stock sell-off. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Elevates near-term volatility and rotates institutional positioning toward defensive quality and liquid duration.",
-        "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOUGR6VGxMQVNKdUF0R21NRjNRYzB1MlJMRzZFVVViM0tLZXpMM3BOc210T2FGZ0RMcEVWOTRXeGx3dHJNd2JlOHh4Z05BREdvSmVGdjdHWlptek45UEc1UGU1eDFYdVdRczVheTJCcE93S2E4d0dULWI0NUtVXzNiQtIBhgFBVV95cUxPU1pQS0l2NFdxYnpCWkV0d1lrSzFVQU45NVJWOEhlQTZfdTFoaVVwbUNsMXBNZVJ5aFAtMFRhbUhIZ0VNbG16YklqODNsekdieHY4M2ZGNzlXemtZTHYxOHYyM096QWVyVkllTFhjTHZUYmpWeEpMUEJBaHdTbXBTTkp2VG5TUQ?oc=5"
-      },
-      {
-        "id": "gn-04",
-        "headline": "European Stocks Hit Fresh Record as AI Unwind Boosts Region",
-        "source": "Bloomberg",
-        "timeAgo": "51m ago",
-        "category": "Fiscal & Debt",
-        "summary": "Bloomberg reports: European Stocks Hit Fresh Record as AI Unwind Boosts Region. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Supports broad risk appetite across global equity index futures and emerging market capital flows.",
-        "impact": "Risk-On",
-        "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPVzFiYlFwTTJucFd6WUNDQmZzRVVFWXZhbFBHNjhpTjhWSS0xeHNqRnFOd3pXbFBueFNWMHZOeE5VdmtVM2VvenlKQkxVTjRyYW5GUGdmR0g3YTBFOWpid2lHeGVSdHlMR2hjTnptR0RobGtNR2pMZDlrckZUM2NSQko2cE1PMDdoN2VCaVdldFZTXzN4VHFOMFhXQ0o3Mk5ONHNGOW9seGpoX0FCT2Vj?oc=5"
-      },
-      {
-        "id": "gn-05",
-        "headline": "Brazil stocks have taken a beating. Here's why I see opportunity",
-        "source": "CNBC",
-        "timeAgo": "1h ago",
-        "category": "Fiscal & Debt",
-        "summary": "CNBC reports: Brazil stocks have taken a beating. Here's why I see opportunity. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Supports broad risk appetite across global equity index futures and emerging market capital flows.",
-        "impact": "Risk-On",
-        "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQallVeVg2ZWdQcGtaRF9pTkhvd3M5RmZQMmdqNHNQcy1ZLVpfVUlzekFjU1pmLV95VFBsdk5jNzJMYlBvaFJ0WUpMc3ZGTURkbDNTaVRwRmVRTjBUWE1JOElVNWFCbnd1X1k1aTZLNGV2UXhZTmNPMElTYjlRWE4wWU51cUZTdGljMFVoejNkZkhDc19ZRlFXRW5XNnBfOE5H?oc=5"
-      },
-      {
-        "id": "gn-06",
-        "headline": "Alphabet’s Search Dominance Is at Risk From Its Own AI Success",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Geopolitics",
-        "summary": "Bloomberg reports: Alphabet’s Search Dominance Is at Risk From Its Own AI Success. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Elevates near-term volatility and rotates institutional positioning toward defensive quality and liquid duration.",
-        "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQQy01RXgzZmM0aHcxVXMzRUpod3NjVDV0TVRwcDlFRDk5V1lCbWhvd29pelNTOHlzNDQ5aElPOUtueTBtNjdLcEpjYTNNclBvUEhtNHhuYkk0LVhxZkU2MFVGZ09sZ29QeFFDQkd5UUFKUnlLaFAyREtzdE43dkpmV0JlRE9Hdm5IZUJtSkZNN19OY2ZYOGlNY1E4SXZEMkMxVWNieTNqU3VibUNxUzF6NjVxbw?oc=5"
-      },
-      {
         "id": "gn-07",
-        "headline": "Live Q&A: What the Democratic Win Means For the Economy and Your Money",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Geopolitics",
-        "summary": "Bloomberg reports: Live Q&A: What the Democratic Win Means For the Economy and Your Money. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Institutional desks are monitoring cross-asset spillovers into US Treasury yields and G10 FX.",
+        "headline": "AI storm dooms tech stocks to $2 trillion decline on darkest day since 2025",
+        "source": "Reuters",
+        "timeAgo": "2h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Reuters coverage on \"AI storm dooms tech stocks to $2 trillion decline on darkest day since 2025\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.84%) and G10 currency pairs.",
         "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOcWxtbHpIMUItQk83SEJjNU54TFlwR09KS0hTUXlMeV9HQl9XT1BkZEF6YXZBUVNCTnQzcjdQajlGYlMwYTZHMThzM2xYUHRMejY5ZjJPeVlwR0p5Ni1QMU9TaUlNR09fM0p1WVVMU055bFp2S1B4WWxkczNHbjR3TTBTNTVhWnVHNUZmNDVOUHRaUFF5NE5IbXpZTU1CYmZqemJ3ZWE0cFpDZ1FkQVJKMHgtekJaSHpVRDFJ?oc=5"
+        "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPVVFVWVUwWmVwQXRLMTV2ZFBIV3dpR1VBUTU4dnhfUW5SN3BwcGZraXF1YTFDMmx2TjZFOTVBTWNqc09zTV9VbE1faDJ5Y294THA0YlFkTlZmX3AzWDJacm96Um1YQ0htd2FLRmJFTlpvLWVhQ0pXdUtyLVh0ZTRESzBJNW1fZ2lrTVBkUEIzejF2VUVLeGdyQWxDazczTmNWQWdOMXIybTR2T0x5OWFGNWMyU256bUhRME54eXBlTQ?oc=5"
       },
       {
         "id": "gn-08",
-        "headline": "Turkey unveils 2040 energy plan built on electricity, requiring $500 billion in investments",
-        "source": "Reuters",
-        "timeAgo": "1h ago",
-        "category": "Inflation",
-        "summary": "Reuters reports: Turkey unveils 2040 energy plan built on electricity, requiring $500 billion in investments. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Institutional desks are monitoring cross-asset spillovers into US Treasury yields and G10 FX.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNalNkdnFOTFQ0RWZGdVpDbHFXSS1US2gxSmU0TkFncTlod3dxTWRxdkVFM1pDMlR3WGIxSHFEU1Y3Y3VMc0JBS1FMdi1aaG5LRjhRRUxkMkhpakllaFhHc216ME5BV0ExYkpZVjlSckRhVDhKYTdLQ3BWU2RZeS12Z2VyRFVIaHBabC01cWk3ejlnWFktRTNlOG1uMXVSQ1paRlI0U2dDV3JJUWVNcDZQenhpX1hsQThmSUlCaFNCZTFZTzVHY2c?oc=5"
+        "headline": "S&P 500 Tumbles Most Since April 2025 on AI Fears: Markets Wrap",
+        "source": "Bloomberg",
+        "timeAgo": "2h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Bloomberg coverage on \"S&P 500 Tumbles Most Since April 2025 on AI Fears: Markets Wrap\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.47%).",
+        "impact": "Risk-Off",
+        "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPaHBnOEludEdwalhTMXRiLWFQbk9RRVVIVGYzY3cwZUk4TmxLY1hnZExZQTZBTExfR2l2TmpJNXUwRWUwc21Jd0EzZklqc2hCbnRta19OU1lQV2NTdjhuNUZxaGQwaHlBZG51eG44WXFxNTNuX1FRYVluOGdaTFptSWRFY3J1ZTdMTlFzY3VmYVhkbDJH?oc=5"
       },
       {
         "id": "gn-09",
-        "headline": "Election Raises Hurdle for Data Center IPOs After Peers Tumble",
+        "headline": "Indonesia Kicks Off First Dollar Bond Sale Since MSCI Fallout",
         "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Geopolitics",
-        "summary": "Bloomberg reports: Election Raises Hurdle for Data Center IPOs After Peers Tumble. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Elevates near-term volatility and rotates institutional positioning toward defensive quality and liquid duration.",
+        "timeAgo": "2h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Bloomberg coverage on \"Indonesia Kicks Off First Dollar Bond Sale Since MSCI Fallout\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.47%).",
         "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNLUlMNXRicmJhd0JLN3ZJRHd0TGkwX2xmU1ptQmg0YWIzSF9wSE1oby1TN3pKTWJDRVYyWjR2RUR3c0hFUnhLNjVyYlBTUks3NW54QVotb2NrdGZLYXBmMlozdzJMc2pwQU9NVk1hZFhpM3NwZ2Q4MUM3YzhwWC1hcmg4ZThndV9pajIzZUFmSDJFME16dlFnNS15VVc2dzVzNThHLWpXckYxYlB0UGIyb3U2WQ?oc=5"
+        "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOOW9hWGdXcjU2c0VGcXpPMXppNmtHenpLcFB1bzdWdEppU1podFNiTlFVNzJiVDVWWk10TGVNbVhySkItNEV1bFNESl9JeVpEV09GY2FHSmNWN2xIWHFhNVJnb0ZMMmhSbTNud29fa09WZnFpNEhERkU0aURkRmdtTXFaVGlRVThRTzNTQ2VXQzEyeGRwX1BPMkpGZjZyanRpMERYV3NXb3hrOGdyakRBdUl3?oc=5"
       },
       {
         "id": "gn-10",
-        "headline": "AI, data-center stocks slip as Democratic sweep clouds expansion plans",
-        "source": "Reuters",
-        "timeAgo": "1h ago",
+        "headline": "Hedge Funds Were ‘Massive’ Sellers of AI Debt, RBC’s Skiba Says",
+        "source": "Bloomberg",
+        "timeAgo": "3h ago",
         "category": "Fiscal & Debt",
-        "summary": "Reuters reports: AI, data-center stocks slip as Democratic sweep clouds expansion plans. Global macro desks are evaluating the cross-asset impact across US Treasury yields, equity futures, and G10 FX.",
-        "macroTakeaway": "Elevates near-term volatility and rotates institutional positioning toward defensive quality and liquid duration.",
-        "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPVVFVWVUwWmVwQXRLMTV2ZFBIV3dpR1VBUTU4dnhfUW5SN3BwcGZraXF1YTFDMmx2TjZFOTVBTWNqc09zTV9VbE1faDJ5Y294THA0YlFkTlZmX3AzWDJacm96Um1YQ0htd2FLRmJFTlpvLWVhQ0pXdUtyLVh0ZTRESzBJNW1fZ2lrTVBkUEIzejF2VUVLeGdyQWxDazczTmNWQWdOMXIybTR2T0x5OWFGNWMyU256bUhRME54eXBlTQ?oc=5"
+        "summary": "Bloomberg coverage on \"Hedge Funds Were ‘Massive’ Sellers of AI Debt, RBC’s Skiba Says\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.84%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.84%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOdnZrQ0ZFd0ZvSEh6Ui1GYXNyOGxSS2pNYVB6bFZJUjJpYUVQX3Fsa0hnczhYaS1wTTVyN1JWcEpkZmpHd2VtbE81ZHBiU09hNWMxNWJoRC1ub0RUZ0FfNEdMR3lkdS1oQVFIUEFvYTc5cDJYS0Z2Nndmb25nX1pTUHBwNC03WldVVlVSWkxLeXVVWjUzTWdZSTZwSnlGWEJKb01VTVA2ODg5NHl5bEdiUg?oc=5"
       }
     ],
     "yieldCurve": {
@@ -124,86 +124,86 @@
         {
           "label": "1M",
           "years": 0.08,
-          "yield": 4.01,
-          "changeBps": -2.0,
-          "priorClose": 4.03
+          "yield": 3.92,
+          "changeBps": -0.3,
+          "priorClose": 3.92
         },
         {
           "label": "3M",
           "years": 0.25,
-          "yield": 4.21,
-          "changeBps": 0.0,
+          "yield": 4.09,
+          "changeBps": -12.0,
           "priorClose": 4.21
         },
         {
           "label": "6M",
           "years": 0.5,
-          "yield": 4.25,
-          "changeBps": -1.0,
-          "priorClose": 4.26
+          "yield": 4.22,
+          "changeBps": -1.1,
+          "priorClose": 4.23
         },
         {
           "label": "1Y",
           "years": 1.0,
-          "yield": 4.39,
-          "changeBps": -1.0,
-          "priorClose": 4.4
+          "yield": 4.29,
+          "changeBps": -1.9,
+          "priorClose": 4.31
         },
         {
           "label": "2Y",
           "years": 2.0,
-          "yield": 4.58,
-          "changeBps": -3.0,
-          "priorClose": 4.61
+          "yield": 4.47,
+          "changeBps": -0.6,
+          "priorClose": 4.48
         },
         {
           "label": "3Y",
           "years": 3.0,
-          "yield": 4.64,
-          "changeBps": -4.0,
-          "priorClose": 4.68
+          "yield": 4.54,
+          "changeBps": -0.2,
+          "priorClose": 4.54
         },
         {
           "label": "5Y",
           "years": 5.0,
-          "yield": 4.69,
-          "changeBps": -5.0,
-          "priorClose": 4.74
+          "yield": 4.61,
+          "changeBps": 0.5,
+          "priorClose": 4.61
         },
         {
           "label": "7Y",
           "years": 7.0,
-          "yield": 4.77,
-          "changeBps": -6.0,
-          "priorClose": 4.83
+          "yield": 4.71,
+          "changeBps": 0.6,
+          "priorClose": 4.71
         },
         {
           "label": "10Y",
           "years": 10.0,
-          "yield": 4.9,
-          "changeBps": -5.0,
-          "priorClose": 4.95
+          "yield": 4.84,
+          "changeBps": 0.6,
+          "priorClose": 4.84
         },
         {
           "label": "20Y",
           "years": 20.0,
-          "yield": 5.3,
-          "changeBps": -5.0,
-          "priorClose": 5.35
+          "yield": 5.28,
+          "changeBps": 0.5,
+          "priorClose": 5.28
         },
         {
           "label": "30Y",
           "years": 30.0,
-          "yield": 5.28,
-          "changeBps": -4.0,
-          "priorClose": 5.32
+          "yield": 5.26,
+          "changeBps": 0.8,
+          "priorClose": 5.25
         }
       ],
       "spreads": {
-        "twoTenSpread": 32.0,
-        "fiveTenSpread": 21.0,
-        "threeMonthTenSpread": 69.0,
-        "fiveThirtySpread": 59.0,
+        "twoTenSpread": 37.0,
+        "fiveTenSpread": 23.0,
+        "threeMonthTenSpread": 75.0,
+        "fiveThirtySpread": 65.0,
         "isInverted": false
       }
     },
@@ -211,123 +211,123 @@
       {
         "symbol": "ES=F",
         "name": "S&P 500 E-mini",
-        "price": 7430.75,
-        "change": -289.75,
-        "changePct": -3.75
+        "price": 7323.0,
+        "change": -397.5,
+        "changePct": -5.15
       },
       {
         "symbol": "NQ=F",
         "name": "Nasdaq 100 E-mini",
-        "price": 26782.0,
-        "change": -1784.75,
-        "changePct": -6.25
+        "price": 26374.0,
+        "change": -2192.75,
+        "changePct": -7.68
       },
       {
         "symbol": "YM=F",
         "name": "Dow Jones Mini",
-        "price": 52183.0,
-        "change": -1320.0,
-        "changePct": -2.47
+        "price": 51315.0,
+        "change": -2188.0,
+        "changePct": -4.09
       },
       {
         "symbol": "RTY=F",
         "name": "Russell 2000 Mini",
-        "price": 2773.8,
-        "change": -92.1,
-        "changePct": -3.21
+        "price": 2714.3,
+        "change": -151.6,
+        "changePct": -5.29
       },
       {
         "symbol": "DX=F",
         "name": "US Dollar Index",
-        "price": 101.46,
-        "change": -0.06,
-        "changePct": -0.05
+        "price": 101.57,
+        "change": 0.06,
+        "changePct": 0.06
       }
     ],
     "fxRates": [
       {
         "pair": "EUR/USD",
         "name": "Euro / US Dollar",
-        "rate": 1.123,
-        "change": 0.0022,
-        "changePct": 0.2
+        "rate": 1.1231,
+        "change": 0.0024,
+        "changePct": 0.21
       },
       {
         "pair": "USD/JPY",
         "name": "US Dollar / Japanese Yen",
-        "rate": 157.85,
-        "change": -0.62,
-        "changePct": -0.39
+        "rate": 157.25,
+        "change": -1.22,
+        "changePct": -0.77
       },
       {
         "pair": "GBP/USD",
         "name": "British Pound / US Dollar",
-        "rate": 1.3476,
-        "change": 0.0042,
-        "changePct": 0.31
+        "rate": 1.3461,
+        "change": 0.0027,
+        "changePct": 0.2
       },
       {
         "pair": "USD/CNH",
         "name": "US Dollar / Offshore Yuan",
-        "rate": 6.6574,
-        "change": -0.0127,
-        "changePct": -0.19
+        "rate": 6.6583,
+        "change": -0.0118,
+        "changePct": -0.18
       },
       {
         "pair": "AUD/USD",
         "name": "Australian Dollar / USD",
-        "rate": 0.6961,
-        "change": -0.0007,
-        "changePct": -0.1
+        "rate": 0.6933,
+        "change": -0.0036,
+        "changePct": -0.51
       },
       {
         "pair": "USD/SGD",
         "name": "US Dollar / Singapore Dollar",
-        "rate": 1.2775,
-        "change": -0.003,
-        "changePct": -0.23
+        "rate": 1.2779,
+        "change": -0.0025,
+        "changePct": -0.2
       }
     ],
     "commodities": [
       {
         "symbol": "CL=F",
         "name": "WTI Crude Oil",
-        "price": 90.07,
+        "price": 91.33,
         "unit": "$/bbl",
-        "change": 1.95,
-        "changePct": 2.21
+        "change": 3.21,
+        "changePct": 3.64
       },
       {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "price": 96.74,
+        "price": 99.46,
         "unit": "$/bbl",
-        "change": 2.12,
-        "changePct": 2.24
+        "change": 4.84,
+        "changePct": 5.12
       },
       {
         "symbol": "GC=F",
         "name": "Gold Futures",
-        "price": 4106.0,
+        "price": 4082.0,
         "unit": "$/t.oz",
-        "change": 33.0,
-        "changePct": 0.81
+        "change": 9.0,
+        "changePct": 0.22
       },
       {
         "symbol": "SI=F",
         "name": "Silver Futures",
-        "price": 52.0,
+        "price": 51.28,
         "unit": "$/t.oz",
-        "change": -0.12,
-        "changePct": -0.23
+        "change": -0.84,
+        "changePct": -1.62
       },
       {
         "symbol": "HG=F",
         "name": "Copper Futures",
-        "price": 6.28,
+        "price": 6.23,
         "unit": "$/lb",
-        "change": -0.12,
-        "changePct": -1.84
+        "change": -0.18,
+        "changePct": -2.76
       }
     ]
   },
@@ -335,56 +335,61 @@
     "commentary": {
       "title": "Bank Indonesia Macro Commentary & Fixed Income Outlook",
       "date": "06 Nov 2026",
-      "executiveSummary": "Bank Indonesia maintains its stability-oriented monetary stance with the BI-Rate at 6.00%, supported by official JISDOR fixing at Rp 18,094 (5 November 2026) and spot USD/IDR at 18,088. 12M SRBI auctions cleared at a 6.601% weighted average accepted rate on IDR 41.81 T nominal bids, while 5Y IndoGB trades at 7.05% and 10Y FR0100 yields 7.18% (+228 bps over 10Y UST).",
+      "executiveSummary": "Bank Indonesia maintains its stability-oriented monetary stance with the BI-Rate at 5.75% (Headline CPI at 3.28% YoY), supported by official JISDOR fixing at Rp 18,094 (5 November 2026) and spot USD/IDR at 18,075. 12M SRBI auctions cleared at a 6.601% weighted average accepted rate on IDR 41.81 T nominal bids, while 5Y IndoGB trades at 7.66% and 10Y FR0100 yields 7.74% (+290 bps over 10Y UST).",
       "macroPillars": [
         {
           "heading": "Monetary & Liquidity Operations (SRBI Weighted Average Rates)",
-          "analysis": "Bank Indonesia continues pro-market open market operations via SRBI auctions. As published on Bank Indonesia Operasi Moneter and CEIC Data, latest weighted average accepted rates cleared at 6.491% for 6M, 6.530% for 9M, and 6.601% for 12M (IDR 41.81 T nominal bids), preserving an orderly carry buffer and absorbing surplus banking reserves."
+          "analysis": "Bank Indonesia continues pro-market open market operations via SRBI auctions with the policy BI-Rate at 5.75%. As published on Bank Indonesia Operasi Moneter and CEIC Data, latest weighted average accepted rates cleared at 6.491% for 6M, 6.530% for 9M, and 6.601% for 12M (IDR 41.81 T nominal bids), preserving an orderly carry buffer above US front-end rates."
         },
         {
-          "heading": "Sovereign Debt Curve (IndoGB ~7% Benchmark Yields)",
-          "analysis": "IndoGB yields reflect solid primary auction uptake and domestic institutional demand. As tracked on TradingEconomics (gidn5y:gov), the 5Y yield trades at 7.05% while the 10Y benchmark (FR0100) trades at 7.18%, establishing a steady +228 bps spread over US Treasuries."
+          "heading": "Sovereign Debt Curve (IndoGB Benchmark Yields)",
+          "analysis": "IndoGB yields reflect active secondary market repricing and institutional demand. The 5Y benchmark (FR0101) trades at 7.66% while the 10Y benchmark (FR0100) trades at 7.74%, establishing a +290 bps sovereign spread over 10Y US Treasuries."
         },
         {
           "heading": "Currency Dynamics (JISDOR Rp 18,094 & Offshore NDF)",
-          "analysis": "Bank Indonesia's official JISDOR reference rate fixed at Rp 18,094 per USD on 5 November 2026 (following Rp 18,140 on 4 November 2026). Offshore 1-Month NDFs trade at 18,153 (+65 IDR spread / 4.31% p.a. basis), while IDX Composite (IHSG) closed at 5,030.26 (+2.25%)."
+          "analysis": "Bank Indonesia's official JISDOR reference rate fixed at Rp 18,094 per USD on 5 November 2026 (following Rp 18,140 on 4 November 2026). Offshore 1-Month NDFs trade at 18,111 (+36 IDR spread / 2.39% p.a. basis), while IDX Composite (IHSG) closed at 4,919.77 (+0.32%)."
         }
       ],
-      "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 6.00% · SRBI Sterilization)",
+      "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 5.75% · Headline CPI 3.28% YoY)",
       "noteworthyHeadlines": [
         {
+          "title": "IDX Demutualization: Finance Ministry, Danantara Not Required to Hold Shares",
           "headline": "IDX Demutualization: Finance Ministry, Danantara Not Required to Hold Shares",
           "source": "Tempo.co English",
-          "timeAgo": "1h ago",
-          "significance": "Supports domestic equity market liquidity and foreign institutional inflows into Jakarta large-caps.",
+          "timeAgo": "9h ago",
+          "significance": "Advances structural reform of Indonesia's exchange governance alongside Danantara sovereign wealth initiatives, deepening long-term institutional participation.",
           "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNVjhzb3J6TG9tdGhjT3BBZDU0V2Z3Q0l5XzN2ZGVUSDgtN2tpVDRYSUtIdWk3UDgzWHFaQ3BnUVF5Njc5V0k0eGhqV3BWRWtiMlVETGlRNnNZZDlzSjRORGZCaGZwT0owMWpqazVDbEhTR2tBWUhyd1QtZE1QVHYteUVMR01vSWJ5dEJ1b0hob1J3OVh4UkFyTk9tcVZJbVdXMllnVDhIdm9ZZw?oc=5"
         },
         {
+          "title": "JCI Surges Sharply by 2.25 Percent Today, Breaking the 5,000 Level! What Caused the Market-Wide Rally?",
           "headline": "JCI Surges Sharply by 2.25 Percent Today, Breaking the 5,000 Level! What Caused the Market-Wide Rally?",
           "source": "Aktualita.co",
-          "timeAgo": "2h ago",
-          "significance": "Supports domestic equity market liquidity and foreign institutional inflows into Jakarta large-caps.",
+          "timeAgo": "9h ago",
+          "significance": "Broad-based buying across banking and cyclical heavyweights propels Jakarta equities (4,919.77, +0.32%), supported by steady USD/IDR at 18,075.",
           "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQTEZ1RE5zS2FUNks1RUxueUNKbkZDR014bU0xYkc2cmhOc3VuRXQzVnN4M3lHWGZabTRENXpOOVlHVTNFVWZQSjdzYmV3aW5sUDlONUdiOUwxeGNGUkZJOFNqUTdVTHFFSU8ta1ZJS09FQzdkMUdDNlJ0eUhxOGJXY21mcWVJaEZUcXVDSkNRajF6TlFSOEdLUHpidVQzc2RyUWl4c2tDWXM3TGkya0JpdTZaanJkMi02TjZHd3ZsZEh4Nm9WU3FlTw?oc=5"
         },
         {
+          "title": "JCI Strengthens, Retail Investors Still in the Red",
           "headline": "JCI Strengthens, Retail Investors Still in the Red",
           "source": "Kompas.id",
-          "timeAgo": "2h ago",
-          "significance": "Supports domestic equity market liquidity and foreign institutional inflows into Jakarta large-caps.",
+          "timeAgo": "9h ago",
+          "significance": "Highlights divergence between institutional block buying and domestic retail positioning as IDX Composite trades at 4,919.77 (+0.32%).",
           "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZXhCNjctR0ZSQzVEZWxjU2EwVkV3OEhucDRYVkhDOEVUZEM0Yl9EeEJoMkthb3ZRaWkzMnNxTzhRUHdaRkozUXo3WmJxTC1LZFh6eWh0Ym1KMzV2QWRpSU1XaWt5QlZPZG1mM2xSUjgzclRRV0Y3VDRCb2tKZ2NESm1BemljSEoyOGxRWTZJNFBIbTVCeDZlRm5ObWhlLVFLc0Q0SEhSR2M?oc=5"
         },
         {
+          "title": "Will IDX Bring Back Short Selling?",
           "headline": "Will IDX Bring Back Short Selling?",
           "source": "Tempo.co English",
-          "timeAgo": "3h ago",
-          "significance": "Supports domestic equity market liquidity and foreign institutional inflows into Jakarta large-caps.",
-          "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5DaWpsV2pTLTROR1U3Ul9lOHUtZi1wYmhvaHBJWDhrSzNIQldVZ1NsY2VPbERkLXdXb0p5aV9WRzVPVXNfa2tCYlY2aWk1RTBmWFhHSHhacXhnQzg1VldqNTZBazNYa3BVVGxZa0lyRndTanc?oc=5"
+          "timeAgo": "10h ago",
+          "significance": "Enhances IDX market microstructure and two-way price discovery ahead of MSCI index rebalancings, supporting foreign institutional turnover.",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOWXpFSVBfWjhfdmhVOUdTMERxTWVBU2pmUE04Rnk4UkFFeG1oZ09qTGQyamNZLWxuejFvQUFNSkRlaF9GXzE5TS1Yam9USnZfUE9sNEFaV21KNWlzTFRsZTg4VXBfWkpZNFBHd21qOHZ3SjJnanVBRjlVX2ZwTUdTWnYzaGJEMmdOVkczTFZNc0tEYkQ4THdxUVVRZkZJSk1iLVl2TVR6UHg4STh6bGtaNzAzNA?oc=5"
         },
         {
+          "title": "IDX Composite closes 2.25% higher at 5,030.26 as all sectors gain - ad-hoc-news.de",
           "headline": "IDX Composite closes 2.25% higher at 5,030.26 as all sectors gain - ad-hoc-news.de",
           "source": "ad-hoc-news.de",
-          "timeAgo": "3h ago",
-          "significance": "Supports domestic equity market liquidity and foreign institutional inflows into Jakarta large-caps.",
+          "timeAgo": "10h ago",
+          "significance": "Sector-wide equity momentum across financials, energy, and infrastructure reinforces foreign net inflows into IDX large-cap benchmarks.",
           "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdHpvTXZ6bkFTYkhXMHl1RW1wYzZFWDAtN2xNenlaYjJlVU9ZbkhDc3VUTm5ySDd0eDRMTWZtaGJNZnNOMjBCbUp6TmFoV1FOa1Etc2JOcjktUDBQTzl4RndDaGg2WlNSYUFsWkFJTF9UaEpBa244ZFVTUXkxejJ4RlBNVHJvWGZEclg5TG84M19vWVMyVXVJZjdkOEtSeF8yQ29vVHZ3ZUtTc2NCQ3k2ZmJnSlZSTGFfNGNmcU1sa1NpdkYz?oc=5"
         }
       ]
@@ -394,29 +399,29 @@
         {
           "tenor": "5Y",
           "code": "FR0101",
-          "yield": 7.05,
-          "changeBps": 1.5,
+          "yield": 7.66,
+          "changeBps": 0.3,
           "coupon": 6.875
         },
         {
           "tenor": "10Y (Benchmark)",
           "code": "FR0100",
-          "yield": 7.18,
-          "changeBps": 2.0,
+          "yield": 7.74,
+          "changeBps": 0.1,
           "coupon": 6.625
         },
         {
           "tenor": "15Y",
           "code": "FR0098",
-          "yield": 7.28,
-          "changeBps": 1.0,
+          "yield": 7.69,
+          "changeBps": -6.2,
           "coupon": 7.125
         },
         {
           "tenor": "20Y",
           "code": "FR0097",
-          "yield": 7.38,
-          "changeBps": 0.5,
+          "yield": 7.74,
+          "changeBps": -0.5,
           "coupon": 7.125
         }
       ],
@@ -449,14 +454,14 @@
           "awardedVolumeIDR": "IDR 12.87 T"
         }
       ],
-      "sovereignSpread10Y": 228,
-      "biRate": 6.0,
-      "cpiInflationYoY": 1.71
+      "sovereignSpread10Y": 290,
+      "biRate": 5.75,
+      "cpiInflationYoY": 3.28
     },
     "fxAndNdf": {
-      "spotRate": 18088,
-      "spotChange": -46,
-      "spotChangePct": -0.25,
+      "spotRate": 18075,
+      "spotChange": -80,
+      "spotChangePct": -0.44,
       "jisdorRate": 18094,
       "jisdorChange": -46,
       "jisdorHistory": [
@@ -481,16 +486,16 @@
           "rate": 18138
         }
       ],
-      "ndf1M": 18153,
-      "ndf3M": 18263,
-      "ndfSpread1M": 65,
-      "annualizedBasis1M": 4.31,
+      "ndf1M": 18111,
+      "ndf3M": 18182,
+      "ndfSpread1M": 36,
+      "annualizedBasis1M": 2.39,
       "ihsgIndex": {
-        "level": 5030.26,
-        "change": 110.49,
-        "changePct": 2.25
+        "level": 4919.77,
+        "change": 15.48,
+        "changePct": 0.32
       },
-      "foreignFlowsDaily": "+IDR 428.5 Billion",
+      "foreignFlowsDaily": "+IDR 78.4 Billion",
       "foreignFlowsYTD": "+IDR 38.2 Trillion"
     }
   }
