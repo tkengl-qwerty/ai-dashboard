@@ -132,9 +132,36 @@ export interface IndonesiaFxAndNdf {
   foreignFlowsYTD: string;
 }
 
+export interface ArgonCriticalLevel {
+  asset: string;
+  current: string;
+  support: string;
+  resistance: string;
+  implication: string;
+}
+
+export interface ArgonWatchEvent {
+  event: string;
+  timing: string;
+  impact: "High" | "Critical" | "Medium";
+  watchFor: string;
+}
+
+export interface ArgonCommentary {
+  modelLabel: string;
+  title: string;
+  regimeBadge: string;
+  conviction: string;
+  synthesis: string;
+  positioningTakeaway: string;
+  criticalLevels: ArgonCriticalLevel[];
+  eventsToWatch: ArgonWatchEvent[];
+}
+
 export interface DailyMacroSnapshot {
   metadata: MarketMetadata;
   globalMacro: {
+    argonCommentary?: ArgonCommentary;
     topNews: MacroNewsItem[];
     yieldCurve: YieldCurveData;
     futures: MarketFuture[];
@@ -142,8 +169,10 @@ export interface DailyMacroSnapshot {
     commodities: Commodity[];
   };
   indonesia: {
+    argonCommentary?: ArgonCommentary;
     commentary: IndonesiaCommentary;
     bonds: IndonesiaBonds;
     fxAndNdf: IndonesiaFxAndNdf;
   };
 }
+

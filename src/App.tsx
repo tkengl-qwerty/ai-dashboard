@@ -5,6 +5,8 @@ import { NavigationTabs } from './components/NavigationTabs';
 import { GlobalMacroTab } from './components/GlobalMacroTab';
 import { IndonesiaTab } from './components/IndonesiaTab';
 import { AlertCircle } from 'lucide-react';
+import { buildGlobalArgonCommentary, buildIndonesiaArgonCommentary } from './utils/argonSynthesis';
+
 
 // Default static fallback snapshot matching public/data/daily_macro.json
 const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
@@ -314,7 +316,7 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     };
   });
 
-  return {
+  const withHeadlines: DailyMacroSnapshot = {
     ...snap,
     indonesia: {
       ...snap.indonesia,
@@ -322,6 +324,20 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
         ...snap.indonesia.commentary,
         noteworthyHeadlines: normalizedHeadlines,
       },
+    },
+  };
+
+  return {
+    ...withHeadlines,
+    globalMacro: {
+      ...withHeadlines.globalMacro,
+      argonCommentary:
+        withHeadlines.globalMacro.argonCommentary ?? buildGlobalArgonCommentary(withHeadlines),
+    },
+    indonesia: {
+      ...withHeadlines.indonesia,
+      argonCommentary:
+        withHeadlines.indonesia.argonCommentary ?? buildIndonesiaArgonCommentary(withHeadlines),
     },
   };
 }
@@ -414,6 +430,8 @@ export default function App() {
           <GlobalMacroTab data={data} />
         ) : (
           <IndonesiaTab
+            argonCommentary={data.indonesia.argonCommentary}
+            lastUpdatedSGT={data.metadata.lastUpdatedSGT}
             commentary={data.indonesia.commentary}
             bonds={data.indonesia.bonds}
             fxAndNdf={data.indonesia.fxAndNdf}

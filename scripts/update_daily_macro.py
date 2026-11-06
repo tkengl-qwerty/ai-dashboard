@@ -969,6 +969,208 @@ def run_indonesia_sense_check(data: dict):
     fx_ndf["foreignFlowsDaily"] = f"{sign}IDR {abs(flow_bn):.1f} Billion"
 
 
+def build_argon_commentaries(data: dict):
+    """
+    Dynamically synthesize Gemini 4 Argon commentary, critical support/resistance levels,
+    and key upcoming risk catalysts for both Global Macro and Indonesia tabs from live numbers.
+    """
+    yc = data["globalMacro"]["yieldCurve"]
+    y2 = next((float(t["yield"]) for t in yc["tenors"] if t["label"] == "2Y"), 4.47)
+    y5 = next((float(t["yield"]) for t in yc["tenors"] if t["label"] == "5Y"), 4.61)
+    y10 = next((float(t["yield"]) for t in yc["tenors"] if t["label"] == "10Y"), 4.84)
+    y30 = next((float(t["yield"]) for t in yc["tenors"] if t["label"] == "30Y"), 5.26)
+    two_ten = float(yc["spreads"].get("twoTenSpread", round((y10 - y2) * 100, 1)))
+    five_ten = float(yc["spreads"].get("fiveTenSpread", round((y10 - y5) * 100, 1)))
+
+    futures = {f["symbol"]: f for f in data["globalMacro"].get("futures", [])}
+    comm = {c["symbol"]: c for c in data["globalMacro"].get("commodities", [])}
+    fx_map = {fx["pair"]: fx for fx in data["globalMacro"].get("fxRates", [])}
+
+    spx_price = float(futures.get("ES=F", {}).get("price", 6887.0))
+    spx_pct = float(futures.get("ES=F", {}).get("changePct", 0.36))
+    ndx_price = float(futures.get("NQ=F", {}).get("price", 25144.25))
+    dxy_price = float(futures.get("DX=F", {}).get("price", 98.81))
+    wti_price = float(comm.get("CL=F", {}).get("price", 86.65))
+    gold_price = float(comm.get("GC=F", {}).get("price", 4651.50))
+    jpy_rate = float(fx_map.get("USD/JPY", {}).get("rate", 158.95))
+
+    top_global_headline = (
+        data["globalMacro"].get("topNews", [{}])[0].get("headline")
+        or "Cross-asset positioning adjusts to US Treasury curve steepening and FOMC rate guidance"
+    )
+
+    data["globalMacro"]["argonCommentary"] = {
+        "modelLabel": "GEMINI 4 ARGON",
+        "title": "GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST",
+        "regimeBadge": (
+            f"BEAR/BULL STEEPENING (+{two_ten:.1f} bps 2s10s)"
+            if two_ten >= 0
+            else f"INVERTED CURVE ({two_ten:.1f} bps 2s10s)"
+        ),
+        "conviction": (
+            "Constructive Cyclicals · Short-Duration Fixed Income Tilt"
+            if spx_pct >= 0
+            else "Defensive Quality · Curve Steepener Bias"
+        ),
+        "synthesis": (
+            f"Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at {y2:.2f}%, "
+            f"5Y at {y5:.2f}%, 10Y at {y10:.2f}%, and 30Y at {y30:.2f}% (2Y/10Y at {two_ten:+.1f} bps; 5Y/10Y at {five_ten:+.1f} bps). "
+            f"With the US Dollar Index (DXY) trading near {dxy_price:.2f} and WTI Crude at ${wti_price:.2f}/bbl, headline energy-driven inflation risk remains contained, "
+            f"allowing S&P 500 E-mini futures ({spx_price:,.2f}, {spx_pct:+.2f}%) and Gold (${gold_price:,.2f}/oz) to absorb elevated long-end term premia. "
+            f"Lead desk catalyst: \"{top_global_headline}\"."
+        ),
+        "positioningTakeaway": (
+            f"Favor 2Y–5Y belly duration ({y2:.2f}%–{y5:.2f}%) over unhedged 30Y long bonds ({y30:.2f}%) until term-premium supply clears; "
+            f"watch {y10 + 0.15:.2f}% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 ({ndx_price:,.0f}) constituents."
+        ),
+        "criticalLevels": [
+            {
+                "asset": "US 10Y Treasury Yield",
+                "current": f"{y10:.2f}%",
+                "support": f"{y10 - 0.14:.2f}%",
+                "resistance": f"{y10 + 0.16:.2f}%",
+                "implication": f"Break above {y10 + 0.16:.2f}% pressures equity multiples & EM FX; move below {y10 - 0.14:.2f}% fuels duration rally.",
+            },
+            {
+                "asset": "S&P 500 E-mini (ES=F)",
+                "current": f"{spx_price:,.2f}",
+                "support": f"{round(spx_price * 0.985):,}",
+                "resistance": f"{round(spx_price * 1.015):,}",
+                "implication": f"Holding above {round(spx_price * 0.985):,} keeps institutional dip-buying intact across financials and AI capex leaders.",
+            },
+            {
+                "asset": "US Dollar Index (DXY)",
+                "current": f"{dxy_price:.2f}",
+                "support": f"{dxy_price - 1.15:.2f}",
+                "resistance": f"{dxy_price + 1.25:.2f}",
+                "implication": f"Reclaiming {dxy_price + 1.25:.2f} tightens global USD funding; sub-{dxy_price - 1.15:.2f} accelerates flows into Gold & Asian FX.",
+            },
+            {
+                "asset": "WTI Crude / USD/JPY",
+                "current": f"${wti_price:.2f} · ¥{jpy_rate:.2f}",
+                "support": f"${wti_price - 4.5:.2f} · ¥{jpy_rate - 2.0:.2f}",
+                "resistance": f"${wti_price + 5.0:.2f} · ¥{jpy_rate + 1.5:.2f}",
+                "implication": f"WTI sub-${wti_price + 5.0:.0f}/bbl caps inflation breakevens; USD/JPY above ¥{jpy_rate + 1.5:.1f} raises BoJ intervention risk.",
+            },
+        ],
+        "eventsToWatch": [
+            {
+                "event": "Federal Reserve FOMC Rate Guidance & Senior Loan Officer Survey",
+                "timing": "Next 24–72 Hours",
+                "impact": "Critical",
+                "watchFor": f"Any hawkish pushback on front-end cuts that lifts US 2Y above {y2 + 0.12:.2f}% or flattens the 2Y/10Y spread from {two_ten:+.1f} bps.",
+            },
+            {
+                "event": "US Treasury 10Y & 30Y Refunding Auction Bid-to-Cover & Tail",
+                "timing": "This Week · NY 1:00 PM ET",
+                "impact": "High",
+                "watchFor": f"Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near {y30 + 0.12:.2f}%.",
+            },
+            {
+                "event": "US CPI / PCE Disinflation Trajectory & Energy Pass-Through",
+                "timing": "Upcoming Macro Window",
+                "impact": "High",
+                "watchFor": f"Core services stickiness vs softer energy (${wti_price:.2f}/bbl WTI) dictating real yield direction and Gold (${gold_price:,.0f}/oz) momentum.",
+            },
+        ],
+    }
+
+    # Indonesia Gemini 4 Argon Commentary
+    bonds = data["indonesia"]["bonds"]
+    fx_ndf = data["indonesia"]["fxAndNdf"]
+    bi_rate = float(bonds.get("biRate", 5.75))
+    cpi_yoy = float(bonds.get("cpiInflationYoY", 3.28))
+    indo_5y = next((float(b["yield"]) for b in bonds["indoGB"] if "5Y" in b["tenor"]), 7.66)
+    indo_10y = next((float(b["yield"]) for b in bonds["indoGB"] if "10Y" in b["tenor"]), 7.74)
+    spread_10y = int(bonds.get("sovereignSpread10Y", round((indo_10y - y10) * 100)))
+
+    srbi_6m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "6M"), 6.491)
+    srbi_12m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "12M"), 6.601)
+    srbi_bids = next((s.get("nominalBidsIDR", "IDR 41.81 T") for s in bonds["srbi"] if s["tenor"] == "12M"), "IDR 41.81 T")
+
+    spot = int(fx_ndf.get("spotRate", 18075))
+    jisdor = int(fx_ndf.get("jisdorRate", 18094))
+    ndf1m = int(fx_ndf.get("ndf1M", 18111))
+    ndf_spread = int(fx_ndf.get("ndfSpread1M", 36))
+    ihsg = float(fx_ndf.get("ihsgIndex", {}).get("level", 4919.77))
+    ihsg_pct = float(fx_ndf.get("ihsgIndex", {}).get("changePct", 0.32))
+    real_buffer = round(bi_rate - cpi_yoy, 2)
+
+    lead_indo_news = (
+        data["indonesia"]["commentary"].get("noteworthyHeadlines", [{}])[0].get("title")
+        or "Bank Indonesia anchors Rupiah stability via triple intervention and SRBI liquidity sterilization"
+    )
+
+    data["indonesia"]["argonCommentary"] = {
+        "modelLabel": "GEMINI 4 ARGON",
+        "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
+        "regimeBadge": f"BI-RATE {bi_rate:.2f}% · REAL BUFFER +{real_buffer:.2f}% · SPREAD +{spread_10y} BPS",
+        "conviction": "Overweight 12M SRBI & 5Y–10Y IndoGB Belly · Hedged NDF Carry",
+        "synthesis": (
+            f"Indonesia's macro-financial framework offers a +{real_buffer:.2f}% real policy rate buffer (BI-Rate at {bi_rate:.2f}% vs Headline CPI at {cpi_yoy:.2f}% YoY) "
+            f"alongside a +{spread_10y} bps sovereign yield pickup on 10Y IndoGB FR0100 ({indo_10y:.2f}% vs US 10Y at {y10:.2f}%). "
+            f"Onshore USD/IDR spot ({spot:,}) trades tightly anchored against Bank Indonesia's JISDOR fixing (Rp {jisdor:,}), "
+            f"while 1M offshore NDFs ({ndf1m:,}, +{ndf_spread} IDR basis) signal contained offshore hedging pressure. "
+            f"Strong institutional demand in 12M SRBI auctions ({srbi_12m:.3f}% WAR on {srbi_bids} bids) continues to sterilize excess liquidity while IHSG trades at {ihsg:,.2f} ({ihsg_pct:+.2f}%). "
+            f"Key domestic development: \"{lead_indo_news}\"."
+        ),
+        "positioningTakeaway": (
+            f"Capture front-end Rupiah carry via 12M SRBI ({srbi_12m:.3f}% WAR) and 5Y–10Y IndoGB ({indo_5y:.2f}%–{indo_10y:.2f}%) "
+            f"while monitoring the 1M NDF-Spot basis (+{ndf_spread} IDR) as an early-warning barometer for offshore USD demand."
+        ),
+        "criticalLevels": [
+            {
+                "asset": "USD/IDR Spot & JISDOR",
+                "current": f"{spot:,} (JISDOR {jisdor:,})",
+                "support": f"{spot - 125:,}",
+                "resistance": f"{spot + 125:,}",
+                "implication": f"Break above {spot + 125:,} triggers active BI DNDF/spot intervention; move below {spot - 125:,} invites foreign bond inflows.",
+            },
+            {
+                "asset": "10Y IndoGB (FR0100)",
+                "current": f"{indo_10y:.2f}% (+{spread_10y} bps)",
+                "support": f"{indo_10y - 0.14:.2f}%",
+                "resistance": f"{indo_10y + 0.16:.2f}%",
+                "implication": f"Yields near {indo_10y + 0.16:.2f}% attract domestic pension/bank buying; compression below {indo_10y - 0.14:.2f}% requires lower UST yields.",
+            },
+            {
+                "asset": "12M SRBI Auction WAR",
+                "current": f"{srbi_12m:.3f}% (6M: {srbi_6m:.3f}%)",
+                "support": f"{srbi_12m - 0.10:.3f}%",
+                "resistance": f"{srbi_12m + 0.12:.3f}%",
+                "implication": f"Sustained clearing above {srbi_12m:.2f}% keeps foreign short-term portfolio carry attractive and defends the Rupiah.",
+            },
+            {
+                "asset": "IDX Composite (IHSG)",
+                "current": f"{ihsg:,.2f}",
+                "support": f"{round(ihsg * 0.98):,}",
+                "resistance": f"{round(ihsg * 1.02):,}",
+                "implication": f"Reclaiming {round(ihsg * 1.02):,} confirms foreign institutional rotation back into big-cap Jakarta banks and infrastructure.",
+            },
+        ],
+        "eventsToWatch": [
+            {
+                "event": "Bank Indonesia Weekly SRBI Open Market Operation Tender",
+                "timing": "Weekly · Friday Jakarta Session",
+                "impact": "Critical",
+                "watchFor": f"Watch whether 12M WAR holds near {srbi_12m:.3f}% and if nominal bids remain near {srbi_bids} to gauge onshore bank liquidity.",
+            },
+            {
+                "event": "Daily 15:15 WIB JISDOR Fixing & 1M Offshore NDF Basis",
+                "timing": "Daily · 15:15 WIB (16:15 SGT)",
+                "impact": "High",
+                "watchFor": f"Any widening of the 1M NDF spread beyond +100 IDR (currently +{ndf_spread} IDR) over spot ({spot:,}).",
+            },
+            {
+                "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting",
+                "timing": "Bi-Weekly / Monthly Policy Cycle",
+                "impact": "High",
+                "watchFor": f"Bid-to-cover ratio on FR0101 (5Y, {indo_5y:.2f}%) and FR0100 (10Y, {indo_10y:.2f}%) plus BI-Rate ({bi_rate:.2f}%) forward guidance.",
+            },
+        ],
+    }
+
+
 def main():
     with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -1000,7 +1202,10 @@ def main():
     fetch_live_global_macro_news(data)
     fetch_live_indonesia_news_and_commentary(data)
 
-    # 8. Update timestamps
+    # 8. Build Gemini 4 Argon Macro Synthesis & Critical Watchlist for both tabs
+    build_argon_commentaries(data)
+
+    # 9. Update timestamps
     now_sgt = datetime.now(SGT)
     next_sgt = (now_sgt + timedelta(days=1)).replace(hour=5, minute=0, second=0, microsecond=0)
     data["metadata"]["lastUpdated"] = now_sgt.isoformat()
@@ -1015,3 +1220,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

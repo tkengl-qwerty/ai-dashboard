@@ -1,8 +1,11 @@
 import React from 'react';
-import { IndonesiaCommentary, IndonesiaBonds, IndonesiaFxAndNdf } from '../types/market';
+import { IndonesiaCommentary, IndonesiaBonds, IndonesiaFxAndNdf, ArgonCommentary } from '../types/market';
 import { Landmark, ArrowUpRight, ArrowDownRight, Newspaper, DollarSign, Layers, ExternalLink, Calendar } from 'lucide-react';
+import { ArgonCommentaryBox } from './ArgonCommentaryBox';
 
 interface IndonesiaTabProps {
+  argonCommentary?: ArgonCommentary;
+  lastUpdatedSGT?: string;
   commentary: IndonesiaCommentary;
   bonds: IndonesiaBonds;
   fxAndNdf: IndonesiaFxAndNdf;
@@ -10,6 +13,8 @@ interface IndonesiaTabProps {
 }
 
 export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
+  argonCommentary,
+  lastUpdatedSGT,
   commentary,
   bonds,
   fxAndNdf,
@@ -120,6 +125,14 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Gemini 4 Argon Indonesia Sovereign, FX & Monetary Synthesis */}
+      {argonCommentary && (
+        <ArgonCommentaryBox
+          commentary={argonCommentary}
+          lastUpdatedSGT={lastUpdatedSGT}
+        />
+      )}
 
       {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
