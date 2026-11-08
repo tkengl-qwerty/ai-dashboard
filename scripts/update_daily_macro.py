@@ -323,15 +323,20 @@ def fetch_live_indogb_and_bi_indicators(existing_data: dict):
     """
     cnbc_indo = fetch_cnbc_batch_quotes(["ID5YT=RR", "ID10YT=RR", "ID15YT=RR", "ID20YT=RR", "IDR="])
 
+    # Official 2026 DJPPR Kemenkeu Seri Benchmark SUN (Surat Utang Negara):
+    # - 5Y Benchmark: FR0109 (Maturity: 15 Mar 2031, Coupon: 5.875%)
+    # - 10Y Benchmark: FR0108 (Maturity: 15 Apr 2036, Coupon: 6.500%)
+    # - 15Y Benchmark: FR0106 (Maturity: 15 Aug 2040, Coupon: 7.125%)
+    # - 20Y Benchmark: FR0107 (Maturity: 15 Aug 2045, Coupon: 7.125%)
     bond_specs = [
-        ("5Y", "FR0101", "ID5YT=RR", 6.875),
-        ("10Y (Benchmark)", "FR0100", "ID10YT=RR", 6.625),
-        ("15Y", "FR0098", "ID15YT=RR", 7.125),
-        ("20Y", "FR0097", "ID20YT=RR", 7.125),
+        ("5Y (Benchmark)", "FR0109", "15 Mar 2031", "ID5YT=RR", 5.875),
+        ("10Y (Benchmark)", "FR0108", "15 Apr 2036", "ID10YT=RR", 6.500),
+        ("15Y (Benchmark)", "FR0106", "15 Aug 2040", "ID15YT=RR", 7.125),
+        ("20Y (Benchmark)", "FR0107", "15 Aug 2045", "ID20YT=RR", 7.125),
     ]
     existing_bonds = {b["code"]: b for b in existing_data["indonesia"]["bonds"].get("indoGB", [])}
     new_indogb = []
-    for tenor, code, sym, coupon in bond_specs:
+    for tenor, code, maturity, sym, coupon in bond_specs:
         if sym in cnbc_indo and 4.0 <= cnbc_indo[sym]["last"] <= 12.0:
             q = cnbc_indo[sym]
             yld = round(q["last"], 2)
@@ -339,18 +344,24 @@ def fetch_live_indogb_and_bi_indicators(existing_data: dict):
             new_indogb.append({
                 "tenor": tenor,
                 "code": code,
+                "maturity": maturity,
                 "yield": yld,
                 "changeBps": chg_bps,
                 "coupon": coupon,
             })
         elif code in existing_bonds:
-            new_indogb.append(existing_bonds[code])
+            b_old = dict(existing_bonds[code])
+            b_old["maturity"] = maturity
+            new_indogb.append(b_old)
 
     if len(new_indogb) == 4:
         existing_data["indonesia"]["bonds"]["indoGB"] = new_indogb
         print(
-            f"Updated Live IndoGB Yields: 5Y={new_indogb[0]['yield']:.2f}%, "
-            f"10Y={new_indogb[1]['yield']:.2f}%, 15Y={new_indogb[2]['yield']:.2f}%, 20Y={new_indogb[3]['yield']:.2f}%"
+            f"Updated Live IndoGB Yields (DJPPR 2026 Benchmarks): "
+            f"5Y {new_indogb[0]['code']}={new_indogb[0]['yield']:.2f}%, "
+            f"10Y {new_indogb[1]['code']}={new_indogb[1]['yield']:.2f}%, "
+            f"15Y {new_indogb[2]['code']}={new_indogb[2]['yield']:.2f}%, "
+            f"20Y {new_indogb[3]['code']}={new_indogb[3]['yield']:.2f}%"
         )
 
     # Also check CNBC IDR= live interbank spot quote
@@ -413,8 +424,138 @@ def fetch_bi_jisdor(existing_data: dict):
         print(f"Warn: BI JISDOR scrape failed ({e}), keeping existing JISDOR.")
 
 
+def _parse_id_float(raw_str: str, default: float = 0.0) -> float:
+    """Parse Indonesian formatted numbers such as '13.280,00' or '6,56638' into float."""
+    try:
+        cleaned = re.sub(r"[^\d,\.]", "", raw_str or "").strip()
+        if not cleaned:
+            return default
+        if "," in cleaned and "." in cleaned:
+            cleaned = cleaned.replace(".", "").replace(",", ".")
+        elif "," in cleaned:
+            cleaned = cleaned.replace(",", ".")
+        return float(cleaned)
+    except Exception:
+        return default
+
+
+def _format_bi_date_short(raw_date: str) -> str:
+    """Normalize Indonesian date string e.g. '6 November 2026' or '30 Oktober 2026' -> '06 Nov 2026'."""
+    id_months = {
+        "januari": "Jan", "februari": "Feb", "maret": "Mar", "april": "Apr",
+        "mei": "May", "juni": "Jun", "juli": "Jul", "agustus": "Aug",
+        "september": "Sep", "oktober": "Oct", "november": "Nov", "desember": "Dec",
+        "january": "Jan", "february": "Feb", "march": "Mar", "may": "May",
+        "june": "Jun", "july": "Jul", "august": "Aug", "october": "Oct", "december": "Dec",
+    }
+    parts = raw_date.strip().split()
+    if len(parts) == 3:
+        day = parts[0].zfill(2)
+        mon = id_months.get(parts[1].lower(), parts[1][:3].title())
+        yr = parts[2]
+        return f"{day} {mon} {yr}"
+    return raw_date.strip()
+
+
 def fetch_ceic_srbi(existing_data: dict):
-    """Scrape latest SRBI Weighted Average Accepted Rates (WAR) & Nominal Bids from CEIC Data."""
+    """
+    Primary: Scrape latest official SRBI auction announcement directly from Bank Indonesia's
+    Operasi Moneter portal (https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Default.aspx)
+    by following the newest `Hasil-Lelang-SRBI-*.aspx` link (e.g. Hasil-Lelang-SRBI-6-November-2026.aspx).
+    Fallback: Scrape CEIC Data if bi.go.id is unreachable.
+    """
+    bi_index_url = "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Default.aspx"
+    try:
+        index_html = http_get_text(bi_index_url, timeout=15)
+        srbi_links = re.findall(
+            r'href=["\'](/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-[^"\']+\.aspx)["\']',
+            index_html,
+            re.I,
+        )
+        if srbi_links:
+            detail_path = srbi_links[0]
+            detail_url = f"https://www.bi.go.id{detail_path}"
+            detail_html = http_get_text(detail_url, timeout=15)
+
+            m_date = re.search(
+                r"Hasil\s+Lelang\s+SRBI\s+(\d{1,2}\s+[A-Za-z]+\s+202\d)",
+                detail_html,
+                re.I,
+            )
+            raw_date = m_date.group(1) if m_date else "6 November 2026"
+            dt_label = _format_bi_date_short(raw_date)
+
+            table_rows = {}
+            for tr in re.findall(r"<tr[^>]*>.*?</tr>", detail_html, re.S | re.I):
+                cells = [
+                    re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", td))).strip()
+                    for td in re.findall(r"<td[^>]*>.*?</td>", tr, re.S | re.I)
+                ]
+                cells = [c for c in cells if c]
+                if len(cells) >= 4:
+                    key = cells[0].lower()
+                    if "seri" in key and "series" in key:
+                        table_rows["series"] = cells[1:4]
+                    elif "jangka waktu" in key or "term" in key:
+                        table_rows["term"] = cells[1:4]
+                    elif "nominal penawaran" in key or "bidding amount" in key:
+                        table_rows["bids_bn"] = cells[1:4]
+                    elif "rate penawaran" in key or ("bidding rate" in key and "weighted" not in key):
+                        table_rows["bid_range"] = cells[1:4]
+                    elif "rata-rata tertimbang penawaran" in key or "weighted average bidding rate" in key:
+                        table_rows["war_bids"] = cells[1:4]
+                    elif "nominal pemenang" in key or "nominal awarded" in key:
+                        table_rows["awarded_bn"] = cells[1:4]
+                    elif "rata-rata tertimbang pemenang" in key or "weighted average winner" in key:
+                        table_rows["war_winner"] = cells[1:4]
+
+            if "war_winner" in table_rows and len(table_rows["war_winner"]) >= 3:
+                tenor_labels = ["6M", "9M", "12M"]
+                default_days = [182, 273, 350]
+                srbi_list = []
+
+                for i in range(3):
+                    series_raw = table_rows.get("series", ["", "", ""])[i]
+                    series_code = series_raw.split("(")[0].strip() if series_raw else f"SRBI-{tenor_labels[i]}"
+
+                    term_raw = table_rows.get("term", ["", "", ""])[i]
+                    m_days = re.search(r"\((\d+)\s*(?:Hari|days)\)", term_raw, re.I)
+                    tenor_days = int(m_days.group(1)) if m_days else default_days[i]
+
+                    bids_bn = _parse_id_float(table_rows.get("bids_bn", ["0", "0", "0"])[i], 0.0)
+                    awarded_bn = _parse_id_float(table_rows.get("awarded_bn", ["0", "0", "0"])[i], 0.0)
+                    war_win = round(_parse_id_float(table_rows["war_winner"][i], 6.60), 3)
+                    war_bid = round(
+                        _parse_id_float(table_rows.get("war_bids", ["0", "0", "0"])[i], war_win + 0.09),
+                        3,
+                    )
+                    bid_range_raw = table_rows.get("bid_range", ["", "", ""])[i].replace(",", ".")
+
+                    srbi_list.append({
+                        "tenor": tenor_labels[i],
+                        "tenorDays": tenor_days,
+                        "series": series_code,
+                        "auctionDate": dt_label,
+                        "weightedAvgYield": war_win,
+                        "cutOffYield": war_bid,
+                        "biddingRateRange": f"{bid_range_raw}%" if bid_range_raw else None,
+                        "nominalBidsIDR": f"IDR {bids_bn / 1000.0:.2f} T",
+                        "awardedVolumeIDR": f"IDR {awarded_bn / 1000.0:.2f} T",
+                        "sourceUrl": detail_url,
+                    })
+
+                existing_data["indonesia"]["bonds"]["srbi"] = srbi_list
+                print(
+                    f"Updated SRBI directly from bi.go.id ({dt_label} · {detail_url}): "
+                    f"6M ({srbi_list[0]['series']})={srbi_list[0]['weightedAvgYield']:.3f}%, "
+                    f"9M ({srbi_list[1]['series']})={srbi_list[1]['weightedAvgYield']:.3f}%, "
+                    f"12M ({srbi_list[2]['series']})={srbi_list[2]['weightedAvgYield']:.3f}%"
+                )
+                return
+    except Exception as e:
+        print(f"Warn: Direct bi.go.id SRBI scrape error ({e}), trying CEIC fallback.")
+
+    # Secondary fallback: CEIC Data
     url = (
         "https://www.ceicdata.com/en/indonesia/monetary-operations-auction-bank-indonesia-"
         "rupiah-securities-srbi/monetary-operation-srbi-norminal-bids-12-months"
@@ -438,22 +579,22 @@ def fetch_ceic_srbi(existing_data: dict):
                     pass
 
         if "Weighted Average Accepted: 12 Months (%)" in metrics:
-            dt_label = auction_date or "23 Oct 2026"
-            war_6m = round(metrics.get("Weighted Average Accepted: 6 Months (%)", 6.491), 3)
-            bid_6m = round(metrics.get("Weighted Average Bids: 6 Months (%)", 6.618), 3)
-            nom_6m = metrics.get("Norminal Bids: 6 Months (IDR bn)", 13535.0) / 1000.0
-            acc_6m = metrics.get("Nominal Accepted: 6 Months (IDR bn)", 1030.0) / 1000.0
+            dt_label = auction_date or "06 Nov 2026"
+            war_6m = round(metrics.get("Weighted Average Accepted: 6 Months (%)", 6.566), 3)
+            bid_6m = round(metrics.get("Weighted Average Bids: 6 Months (%)", 6.643), 3)
+            nom_6m = metrics.get("Norminal Bids: 6 Months (IDR bn)", 13280.0) / 1000.0
+            acc_6m = metrics.get("Nominal Accepted: 6 Months (IDR bn)", 4350.0) / 1000.0
 
-            war_9m = round(metrics.get("Weighted Average Accepted: 9 Months (%)", 6.530), 3)
-            bid_9m = round(metrics.get("Weighted Average Bids: 9 Months (%)", 6.696), 3)
-            nom_9m = metrics.get("Norminal Bids: 9 Months (IDR bn)", 570.0) / 1000.0
-            total_acc = metrics.get("Total Accepted (IDR bn)", 14000.0) / 1000.0
-            acc_12m = metrics.get("Nominal Accepted: 12 Months (IDR bn)", 12870.0) / 1000.0
+            war_9m = round(metrics.get("Weighted Average Accepted: 9 Months (%)", 6.655), 3)
+            bid_9m = round(metrics.get("Weighted Average Bids: 9 Months (%)", 6.761), 3)
+            nom_9m = metrics.get("Norminal Bids: 9 Months (IDR bn)", 4420.0) / 1000.0
+            total_acc = metrics.get("Total Accepted (IDR bn)", 7500.0) / 1000.0
+            acc_12m = metrics.get("Nominal Accepted: 12 Months (IDR bn)", 3000.0) / 1000.0
             acc_9m = max(0.10, round(total_acc - acc_6m - acc_12m, 2))
 
-            war_12m = round(metrics.get("Weighted Average Accepted: 12 Months (%)", 6.601), 3)
-            bid_12m = round(metrics.get("Weighted Average Bids: 12 Months (%)", 6.711), 3)
-            nom_12m = metrics.get("Norminal Bids: 12 Months (IDR bn)", 41806.3) / 1000.0
+            war_12m = round(metrics.get("Weighted Average Accepted: 12 Months (%)", 6.675), 3)
+            bid_12m = round(metrics.get("Weighted Average Bids: 12 Months (%)", 6.790), 3)
+            nom_12m = metrics.get("Norminal Bids: 12 Months (IDR bn)", 19196.0) / 1000.0
 
             existing_data["indonesia"]["bonds"]["srbi"] = [
                 {
@@ -476,7 +617,7 @@ def fetch_ceic_srbi(existing_data: dict):
                 },
                 {
                     "tenor": "12M",
-                    "tenorDays": 364,
+                    "tenorDays": 350,
                     "auctionDate": dt_label,
                     "weightedAvgYield": war_12m,
                     "cutOffYield": bid_12m,
@@ -873,6 +1014,7 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
     ihsg_lvl = fx_ndf.get("ihsgIndex", {}).get("level", 5030.26)
     ihsg_pct = fx_ndf.get("ihsgIndex", {}).get("changePct", 2.25)
 
+    srbi_dt = next((s.get("auctionDate", "06 Nov 2026") for s in bonds["srbi"] if s["tenor"] == "12M"), "06 Nov 2026")
     existing_data["indonesia"]["commentary"]["date"] = datetime.now(SGT).strftime("%d %b %Y")
     existing_data["indonesia"]["commentary"]["biPolicyPosture"] = (
         f"Vigilant FX Stabilization (BI-Rate {bi_rate:.2f}% · Headline CPI {cpi_yoy:.2f}% YoY)"
@@ -880,26 +1022,26 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
     existing_data["indonesia"]["commentary"]["executiveSummary"] = (
         f"Bank Indonesia maintains its stability-oriented monetary stance with the BI-Rate at {bi_rate:.2f}% "
         f"(Headline CPI at {cpi_yoy:.2f}% YoY), supported by official JISDOR fixing at Rp {jisdor:,.0f} ({jisdor_dt}) "
-        f"and spot USD/IDR at {spot:,.0f}. 12M SRBI auctions cleared at a {srbi_12m:.3f}% weighted average accepted rate "
-        f"on {srbi_bids} nominal bids, while 5Y IndoGB trades at {indo_5y:.2f}% and 10Y FR0100 yields {indo_10y:.2f}% "
+        f"and spot USD/IDR at {spot:,.0f}. In the {srbi_dt} SRBI auction on bi.go.id, 12M SRBI cleared at a {srbi_12m:.3f}% weighted average winner rate (WAR) "
+        f"on {srbi_bids} nominal bids, while 5Y benchmark FR0109 trades at {indo_5y:.2f}% and 10Y benchmark FR0108 yields {indo_10y:.2f}% "
         f"(+{spread_10y} bps over 10Y UST)."
     )
     existing_data["indonesia"]["commentary"]["macroPillars"] = [
         {
-            "heading": "Monetary & Liquidity Operations (SRBI Weighted Average Rates)",
+            "heading": f"Monetary & Liquidity Operations ({srbi_dt} SRBI Auction on bi.go.id)",
             "analysis": (
                 f"Bank Indonesia continues pro-market open market operations via SRBI auctions with the policy BI-Rate at {bi_rate:.2f}%. "
-                f"As published on Bank Indonesia Operasi Moneter and CEIC Data, latest weighted average accepted rates "
-                f"cleared at {srbi_6m:.3f}% for 6M, {srbi_9m:.3f}% for 9M, and {srbi_12m:.3f}% for 12M ({srbi_bids} nominal bids), "
+                f"Per Bank Indonesia's official Operasi Moneter release ({srbi_dt}), weighted average winner rates (WAR) "
+                f"cleared at {srbi_6m:.3f}% for 6M, {srbi_9m:.3f}% for 9M, and {srbi_12m:.3f}% for 12M ({srbi_bids} nominal 12M bids), "
                 f"preserving an orderly carry buffer above US front-end rates."
             ),
         },
         {
-            "heading": "Sovereign Debt Curve (IndoGB Benchmark Yields)",
+            "heading": "Sovereign Debt Curve (DJPPR 2026 Benchmark SUN: FR0109 & FR0108)",
             "analysis": (
-                f"IndoGB yields reflect active secondary market repricing and institutional demand. "
-                f"The 5Y benchmark (FR0101) trades at {indo_5y:.2f}% while the "
-                f"10Y benchmark (FR0100) trades at {indo_10y:.2f}%, establishing a +{spread_10y} bps sovereign spread over 10Y US Treasuries."
+                f"IndoGB yields reflect active secondary market repricing across DJPPR's official 2026 benchmark series. "
+                f"The 5Y benchmark (FR0109, 5.875% due Mar 2031) trades at {indo_5y:.2f}% while the "
+                f"10Y benchmark (FR0108, 6.500% due Apr 2036) trades at {indo_10y:.2f}%, establishing a +{spread_10y} bps sovereign spread over 10Y US Treasuries."
             ),
         },
         {
@@ -1105,17 +1247,17 @@ def build_argon_commentaries(data: dict):
         "modelLabel": "GEMINI 4 ARGON",
         "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
         "regimeBadge": f"BI-RATE {bi_rate:.2f}% · REAL BUFFER +{real_buffer:.2f}% · SPREAD +{spread_10y} BPS",
-        "conviction": "Overweight 12M SRBI & 5Y–10Y IndoGB Belly · Hedged NDF Carry",
+        "conviction": "Overweight 12M SRBI & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry",
         "synthesis": (
             f"Indonesia's macro-financial framework offers a +{real_buffer:.2f}% real policy rate buffer (BI-Rate at {bi_rate:.2f}% vs Headline CPI at {cpi_yoy:.2f}% YoY) "
-            f"alongside a +{spread_10y} bps sovereign yield pickup on 10Y IndoGB FR0100 ({indo_10y:.2f}% vs US 10Y at {y10:.2f}%). "
+            f"alongside a +{spread_10y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 ({indo_10y:.2f}% vs US 10Y at {y10:.2f}%). "
             f"Onshore USD/IDR spot ({spot:,}) trades tightly anchored against Bank Indonesia's JISDOR fixing (Rp {jisdor:,}), "
             f"while 1M offshore NDFs ({ndf1m:,}, +{ndf_spread} IDR basis) signal contained offshore hedging pressure. "
-            f"Strong institutional demand in 12M SRBI auctions ({srbi_12m:.3f}% WAR on {srbi_bids} bids) continues to sterilize excess liquidity while IHSG trades at {ihsg:,.2f} ({ihsg_pct:+.2f}%). "
+            f"Strong institutional demand in Bank Indonesia's SRBI auctions (12M WAR at {srbi_12m:.3f}% on {srbi_bids} bids) continues to sterilize excess liquidity while IHSG trades at {ihsg:,.2f} ({ihsg_pct:+.2f}%). "
             f"Key domestic development: \"{lead_indo_news}\"."
         ),
         "positioningTakeaway": (
-            f"Capture front-end Rupiah carry via 12M SRBI ({srbi_12m:.3f}% WAR) and 5Y–10Y IndoGB ({indo_5y:.2f}%–{indo_10y:.2f}%) "
+            f"Capture front-end Rupiah carry via 12M SRBI ({srbi_12m:.3f}% WAR) and 5Y–10Y DJPPR benchmarks FR0109/FR0108 ({indo_5y:.2f}%–{indo_10y:.2f}%) "
             f"while monitoring the 1M NDF-Spot basis (+{ndf_spread} IDR) as an early-warning barometer for offshore USD demand."
         ),
         "criticalLevels": [
@@ -1127,7 +1269,7 @@ def build_argon_commentaries(data: dict):
                 "implication": f"Break above {spot + 125:,} triggers active BI DNDF/spot intervention; move below {spot - 125:,} invites foreign bond inflows.",
             },
             {
-                "asset": "10Y IndoGB (FR0100)",
+                "asset": "10Y IndoGB (FR0108)",
                 "current": f"{indo_10y:.2f}% (+{spread_10y} bps)",
                 "support": f"{indo_10y - 0.14:.2f}%",
                 "resistance": f"{indo_10y + 0.16:.2f}%",
@@ -1165,7 +1307,7 @@ def build_argon_commentaries(data: dict):
                 "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting",
                 "timing": "Bi-Weekly / Monthly Policy Cycle",
                 "impact": "High",
-                "watchFor": f"Bid-to-cover ratio on FR0101 (5Y, {indo_5y:.2f}%) and FR0100 (10Y, {indo_10y:.2f}%) plus BI-Rate ({bi_rate:.2f}%) forward guidance.",
+                "watchFor": f"Bid-to-cover ratio on FR0109 (5Y, {indo_5y:.2f}%) and FR0108 (10Y, {indo_10y:.2f}%) plus BI-Rate ({bi_rate:.2f}%) forward guidance.",
             },
         ],
     }

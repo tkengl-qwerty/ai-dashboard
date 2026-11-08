@@ -141,18 +141,18 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
     'Bank Indonesia anchors Rupiah stability via triple intervention and SRBI liquidity sterilization';
 
   const regimeBadge = `BI-RATE ${biRate.toFixed(2)}% · REAL BUFFER +${realPolicyBuffer}% · SPREAD +${spread10Y} BPS`;
-  const conviction = 'Overweight 12M SRBI & 5Y–10Y IndoGB Belly · Hedged NDF Carry';
+  const conviction = 'Overweight 12M SRBI & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry';
 
   const synthesis =
     `Indonesia's macro-financial framework offers a +${realPolicyBuffer}% real policy rate buffer (BI-Rate at ${biRate.toFixed(2)}% vs Headline CPI at ${cpi.toFixed(2)}% YoY) ` +
-    `alongside a +${spread10Y} bps sovereign yield pickup on 10Y IndoGB FR0100 (${indo10Y.toFixed(2)}% vs US 10Y at ${ust10Y.toFixed(2)}%). ` +
+    `alongside a +${spread10Y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (${indo10Y.toFixed(2)}% vs US 10Y at ${ust10Y.toFixed(2)}%). ` +
     `Onshore USD/IDR spot (${spot.toLocaleString('en-US')}) trades tightly anchored against Bank Indonesia's JISDOR fixing (Rp ${jisdor.toLocaleString('en-US')}), ` +
     `while 1M offshore NDFs (${ndf1M.toLocaleString('en-US')}, +${ndfSpread} IDR basis) signal contained offshore hedging pressure. ` +
-    `Strong institutional demand in 12M SRBI auctions (${srbi12M.toFixed(3)}% WAR on ${srbiBids} bids) continues to sterilize excess liquidity while IHSG trades at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%). ` +
+    `Strong institutional demand in Bank Indonesia's SRBI auctions (12M WAR at ${srbi12M.toFixed(3)}% on ${srbiBids} bids) continues to sterilize excess liquidity while IHSG trades at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%). ` +
     `Key domestic development: "${leadIndoNews}".`;
 
   const positioningTakeaway =
-    `Capture front-end Rupiah carry via 12M SRBI (${srbi12M.toFixed(3)}% WAR) and 5Y–10Y IndoGB (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) ` +
+    `Capture front-end Rupiah carry via 12M SRBI (${srbi12M.toFixed(3)}% WAR) and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) ` +
     `while monitoring the 1M NDF-Spot basis (+${ndfSpread} IDR) as an early-warning barometer for offshore USD demand.`;
 
   const criticalLevels = [
@@ -164,7 +164,7 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
       implication: `Break above ${(spot + 125).toLocaleString('en-US')} triggers active BI DNDF/spot intervention; move below ${(spot - 125).toLocaleString('en-US')} invites foreign bond inflows.`,
     },
     {
-      asset: '10Y IndoGB (FR0100)',
+      asset: '10Y IndoGB (FR0108)',
       current: `${indo10Y.toFixed(2)}% (+${spread10Y} bps)`,
       support: `${(indo10Y - 0.14).toFixed(2)}%`,
       resistance: `${(indo10Y + 0.16).toFixed(2)}%`,
@@ -203,7 +203,7 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
       event: 'DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting',
       timing: 'Bi-Weekly / Monthly Policy Cycle',
       impact: 'High' as const,
-      watchFor: `Bid-to-cover ratio on FR0101 (5Y, ${indo5Y.toFixed(2)}%) and FR0100 (10Y, ${indo10Y.toFixed(2)}%) plus BI-Rate (${biRate.toFixed(2)}%) forward guidance.`,
+      watchFor: `Bid-to-cover ratio on FR0109 (5Y, ${indo5Y.toFixed(2)}%) and FR0108 (10Y, ${indo10Y.toFixed(2)}%) plus BI-Rate (${biRate.toFixed(2)}%) forward guidance.`,
     },
   ];
 
@@ -218,3 +218,4 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
     eventsToWatch,
   };
 }
+

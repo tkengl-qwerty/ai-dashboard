@@ -235,55 +235,95 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
     },
     bonds: {
       indoGB: [
-        { tenor: "5Y", code: "FR0101", yield: 7.05, changeBps: 1.5, coupon: 6.875 },
-        { tenor: "10Y (Benchmark)", code: "FR0100", yield: 7.18, changeBps: 2.0, coupon: 6.625 },
-        { tenor: "15Y", code: "FR0098", yield: 7.28, changeBps: 1.0, coupon: 7.125 },
-        { tenor: "20Y", code: "FR0097", yield: 7.38, changeBps: 0.5, coupon: 7.125 }
+        { tenor: "5Y (Benchmark)", code: "FR0109", maturity: "15 Mar 2031", yield: 7.35, changeBps: 0.0, coupon: 5.875 },
+        { tenor: "10Y (Benchmark)", code: "FR0108", maturity: "15 Apr 2036", yield: 7.69, changeBps: 0.0, coupon: 6.500 },
+        { tenor: "15Y (Benchmark)", code: "FR0106", maturity: "15 Aug 2040", yield: 7.69, changeBps: 0.0, coupon: 7.125 },
+        { tenor: "20Y (Benchmark)", code: "FR0107", maturity: "15 Aug 2045", yield: 7.74, changeBps: 0.0, coupon: 7.125 }
       ],
       srbi: [
-        { tenor: "6M", tenorDays: 182, auctionDate: "25 Oct 2026", weightedAvgYield: 6.491, cutOffYield: 6.550, nominalBidsIDR: "IDR 14.80 T", awardedVolumeIDR: "IDR 8.45 T" },
-        { tenor: "9M", tenorDays: 273, auctionDate: "25 Oct 2026", weightedAvgYield: 6.625, cutOffYield: 6.680, nominalBidsIDR: "IDR 18.25 T", awardedVolumeIDR: "IDR 10.50 T" },
-        { tenor: "12M", tenorDays: 364, auctionDate: "25 Oct 2026", weightedAvgYield: 6.760, cutOffYield: 6.820, nominalBidsIDR: "IDR 29.80 T", awardedVolumeIDR: "IDR 18.75 T" }
+        {
+          tenor: "6M",
+          tenorDays: 182,
+          series: "IDSR070527364S",
+          auctionDate: "06 Nov 2026",
+          weightedAvgYield: 6.566,
+          cutOffYield: 6.643,
+          biddingRateRange: "6.45-7.00%",
+          nominalBidsIDR: "IDR 13.28 T",
+          awardedVolumeIDR: "IDR 4.35 T",
+          sourceUrl: "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx"
+        },
+        {
+          tenor: "9M",
+          tenorDays: 273,
+          series: "IDSR060827364S",
+          auctionDate: "06 Nov 2026",
+          weightedAvgYield: 6.655,
+          cutOffYield: 6.761,
+          biddingRateRange: "6.65-7.10%",
+          nominalBidsIDR: "IDR 4.42 T",
+          awardedVolumeIDR: "IDR 0.15 T",
+          sourceUrl: "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx"
+        },
+        {
+          tenor: "12M",
+          tenorDays: 350,
+          series: "IDSR221027364S",
+          auctionDate: "06 Nov 2026",
+          weightedAvgYield: 6.675,
+          cutOffYield: 6.790,
+          biddingRateRange: "6.60-7.20%",
+          nominalBidsIDR: "IDR 19.20 T",
+          awardedVolumeIDR: "IDR 3.00 T",
+          sourceUrl: "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx"
+        }
       ],
-      sovereignSpread10Y: 228,
-      biRate: 6.00,
-      cpiInflationYoY: 1.71
+      sovereignSpread10Y: 284,
+      biRate: 5.75,
+      cpiInflationYoY: 3.28
     },
     fxAndNdf: {
-      spotRate: 18135,
+      spotRate: 18118,
       spotChange: -13,
       spotChangePct: -0.07,
-      jisdorRate: 18140,
-      jisdorChange: -8,
+      jisdorRate: 18130,
+      jisdorChange: 36,
       jisdorHistory: [
+        { date: "6 November 2026", rate: 18130 },
+        { date: "5 November 2026", rate: 18094 },
         { date: "4 November 2026", rate: 18140 },
         { date: "3 November 2026", rate: 18148 },
-        { date: "2 November 2026", rate: 18161 },
-        { date: "30 October 2026", rate: 18138 },
-        { date: "29 October 2026", rate: 18128 }
+        { date: "2 November 2026", rate: 18161 }
       ],
-      ndf1M: 18205,
-      ndf3M: 18315,
-      ndfSpread1M: 70,
-      annualizedBasis1M: 4.63,
+      ndf1M: 18155,
+      ndf3M: 18229,
+      ndfSpread1M: 37,
+      annualizedBasis1M: 2.45,
       ihsgIndex: {
-        level: 7243.86,
-        change: 29.30,
-        changePct: 0.41
+        level: 4842.02,
+        change: -77.75,
+        changePct: -1.58
       },
-      foreignFlowsDaily: "+IDR 428.5 Billion",
+      foreignFlowsDaily: "-IDR 387.1 Billion",
       foreignFlowsYTD: "+IDR 38.2 Trillion"
     }
   }
 };
 
+const DJPPR_2026_BENCHMARKS = [
+  { match: '5Y', tenor: '5Y (Benchmark)', code: 'FR0109', maturity: '15 Mar 2031', coupon: 5.875 },
+  { match: '10Y', tenor: '10Y (Benchmark)', code: 'FR0108', maturity: '15 Apr 2036', coupon: 6.500 },
+  { match: '15Y', tenor: '15Y (Benchmark)', code: 'FR0106', maturity: '15 Aug 2040', coupon: 7.125 },
+  { match: '20Y', tenor: '20Y (Benchmark)', code: 'FR0107', maturity: '15 Aug 2045', coupon: 7.125 },
+];
+
 function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
   const headlines = snap.indonesia?.commentary?.noteworthyHeadlines || [];
   const usedSigs = new Set<string>();
-  const spot = snap.indonesia?.fxAndNdf?.spotRate ?? 18075;
-  const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18094;
-  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 4919.77;
-  const ihsgPct = snap.indonesia?.fxAndNdf?.ihsgIndex?.changePct ?? 0.32;
+  const spot = snap.indonesia?.fxAndNdf?.spotRate ?? 18118;
+  const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18130;
+  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 4842.02;
+  const ihsgPct = snap.indonesia?.fxAndNdf?.ihsgIndex?.changePct ?? -1.58;
 
   const normalizedHeadlines = headlines.map((item, idx) => {
     const rawTitle = (item.title || item.headline || 'Indonesia Market Disclosure').replace(
@@ -316,10 +356,34 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     };
   });
 
-  const withHeadlines: DailyMacroSnapshot = {
+  // Ensure IndoGB rows always reflect the verified 2026 DJPPR Kemenkeu Seri Benchmark SUN (FR0109, FR0108, FR0106, FR0107)
+  const rawIndoGB = snap.indonesia?.bonds?.indoGB || [];
+  const normalizedIndoGB = rawIndoGB.map((b) => {
+    const spec = DJPPR_2026_BENCHMARKS.find((s) => b.tenor.includes(s.match));
+    if (!spec) return b;
+    return {
+      ...b,
+      tenor: spec.tenor,
+      code: spec.code,
+      maturity: b.maturity || spec.maturity,
+      coupon: spec.coupon,
+    };
+  });
+
+  // Upgrade stale Oct 2026 CEIC SRBI rows if remote cache hasn't refreshed yet
+  const rawSrbi = snap.indonesia?.bonds?.srbi || [];
+  const isStaleOctSrbi = rawSrbi.some((s) => (s.auctionDate || '').includes('Oct'));
+  const normalizedSrbi = isStaleOctSrbi ? DEFAULT_SNAPSHOT.indonesia.bonds.srbi : rawSrbi;
+
+  const withNormalizedBondsAndHeadlines: DailyMacroSnapshot = {
     ...snap,
     indonesia: {
       ...snap.indonesia,
+      bonds: {
+        ...snap.indonesia.bonds,
+        indoGB: normalizedIndoGB,
+        srbi: normalizedSrbi,
+      },
       commentary: {
         ...snap.indonesia.commentary,
         noteworthyHeadlines: normalizedHeadlines,
@@ -328,16 +392,14 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
   };
 
   return {
-    ...withHeadlines,
+    ...withNormalizedBondsAndHeadlines,
     globalMacro: {
-      ...withHeadlines.globalMacro,
-      argonCommentary:
-        withHeadlines.globalMacro.argonCommentary ?? buildGlobalArgonCommentary(withHeadlines),
+      ...withNormalizedBondsAndHeadlines.globalMacro,
+      argonCommentary: buildGlobalArgonCommentary(withNormalizedBondsAndHeadlines),
     },
     indonesia: {
-      ...withHeadlines.indonesia,
-      argonCommentary:
-        withHeadlines.indonesia.argonCommentary ?? buildIndonesiaArgonCommentary(withHeadlines),
+      ...withNormalizedBondsAndHeadlines.indonesia,
+      argonCommentary: buildIndonesiaArgonCommentary(withNormalizedBondsAndHeadlines),
     },
   };
 }

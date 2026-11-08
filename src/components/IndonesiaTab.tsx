@@ -258,25 +258,38 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
 
         {/* Right Column: Debt & FX/NDF Telemetry (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          {/* IndoGB Government Bond Yields (~7% Source: TradingEconomics) */}
+          {/* IndoGB Government Bond Yields (DJPPR 2026 Official Benchmark Series + Live Yields) */}
           <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
             <div className="flex items-center justify-between pb-2.5 border-b border-slate-700/80 mb-2">
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-blue-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
-                  INDOGB (GOVERNMENT BENCHMARKS ~7%)
+                  INDOGB (DJPPR 2026 BENCHMARK SUN SERIES)
                 </h3>
               </div>
-              <a
-                href="https://tradingeconomics.com/gidn5y:gov"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] font-mono text-sky-400 hover:text-sky-300 underline flex items-center gap-0.5"
-                title="TradingEconomics Indonesia Government Bond 5Y (gidn5y:gov)"
-              >
-                <span>TradingEconomics</span>
-                <ExternalLink className="w-2.5 h-2.5" />
-              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://www.djppr.kemenkeu.go.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[9px] font-mono text-sky-400 hover:text-sky-300 underline flex items-center gap-0.5"
+                  title="DJPPR Kemenkeu Official Benchmark SUN Designation (FR0109, FR0108, FR0106, FR0107)"
+                >
+                  <span>DJPPR</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+                <span className="text-slate-600">|</span>
+                <a
+                  href="https://tradingeconomics.com/gidn5y:gov"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[9px] font-mono text-blue-400 hover:text-blue-300 underline flex items-center gap-0.5"
+                  title="TradingEconomics / Refinitiv Live Benchmark Yield Feed (ID5YT=RR / ID10YT=RR)"
+                >
+                  <span>Yields</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -284,7 +297,8 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
                 <thead>
                   <tr className="border-b border-slate-700/80 text-[10px] text-slate-400 uppercase">
                     <th className="py-1 px-1.5">Tenor</th>
-                    <th className="py-1 px-1.5">Series</th>
+                    <th className="py-1 px-1.5">DJPPR Series</th>
+                    <th className="py-1 px-1.5">Maturity</th>
                     <th className="py-1 px-1.5 text-right">Yield</th>
                     <th className="py-1 px-1.5 text-right">Coupon</th>
                     <th className="py-1 px-1.5 text-right">Chg</th>
@@ -293,15 +307,18 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
                 <tbody className="divide-y divide-slate-700/40">
                   {bonds.indoGB.map((bond) => (
                     <tr key={bond.code} className="hover:bg-[#192434]/60">
-                      <td className="py-1.5 px-1.5 font-bold text-slate-200">{bond.tenor}</td>
-                      <td className="py-1.5 px-1.5 text-slate-400">{bond.code}</td>
-                      <td className="py-1.5 px-1.5 text-right font-bold text-sky-300 tabular-nums">
+                      <td className="py-1.5 px-1.5 font-bold text-slate-200 whitespace-nowrap">{bond.tenor}</td>
+                      <td className="py-1.5 px-1.5 font-semibold text-sky-300 whitespace-nowrap">{bond.code}</td>
+                      <td className="py-1.5 px-1.5 text-slate-400 text-[11px] whitespace-nowrap">
+                        {bond.maturity ?? '—'}
+                      </td>
+                      <td className="py-1.5 px-1.5 text-right font-bold text-sky-300 tabular-nums whitespace-nowrap">
                         {bond.yield.toFixed(2)}%
                       </td>
-                      <td className="py-1.5 px-1.5 text-right text-slate-400 tabular-nums">
+                      <td className="py-1.5 px-1.5 text-right text-slate-400 tabular-nums whitespace-nowrap">
                         {bond.coupon.toFixed(3)}%
                       </td>
-                      <td className={`py-1.5 px-1.5 text-right font-semibold tabular-nums ${bond.changeBps <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      <td className={`py-1.5 px-1.5 text-right font-semibold tabular-nums whitespace-nowrap ${bond.changeBps <= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                         {bond.changeBps > 0 ? `+${bond.changeBps}` : bond.changeBps} bps
                       </td>
                     </tr>
@@ -311,32 +328,35 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
             </div>
 
             <div className="mt-3 p-2 bg-[#0e141d] border border-slate-700/80 rounded-xs flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-300 text-[11px]">10Y Sovereign Spread over US:</span>
+              <span className="text-slate-300 text-[11px]">10Y Sovereign Spread over US (FR0108 vs UST 10Y):</span>
               <span className="font-bold text-sky-300">+{sovereignSpread} bps</span>
             </div>
-            <div className="mt-1 text-[10px] text-slate-400 font-mono">
-              * Benchmark reference rates tracked via TradingEconomics (gidn5y:gov / gidn10y:gov) & DJPPR Ministry of Finance
+            <div className="mt-1.5 text-[10px] text-slate-400 font-mono leading-relaxed">
+              * Verified 2026 DJPPR Kemenkeu Seri Benchmark SUN: <span className="text-slate-300">FR0109</span> (5Y, 5.875% due 15 Mar 2031), <span className="text-slate-300">FR0108</span> (10Y, 6.500% due 15 Apr 2036), <span className="text-slate-300">FR0106</span> (15Y, 7.125% due 15 Aug 2040), and <span className="text-slate-300">FR0107</span> (20Y, 7.125% due 15 Aug 2045); liquid reopening <span className="text-slate-300">FR0110</span> carries a 7.250% coupon due 15 May 2032.
             </div>
           </div>
 
-          {/* SRBI (Sekuritas Rupiah Bank Indonesia) Auctions - Weighted Average Rates */}
+          {/* SRBI (Sekuritas Rupiah Bank Indonesia) Auctions - Direct from bi.go.id Operasi Moneter */}
           <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
             <div className="flex items-center justify-between pb-2.5 border-b border-slate-700/80 mb-2">
               <div className="flex items-center gap-2">
                 <Landmark className="w-4 h-4 text-sky-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
-                  SRBI AUCTION YIELDS (BANK INDONESIA WEIGHTED AVERAGE RATE)
+                  SRBI AUCTION YIELDS (OFFICIAL BI OPERASI MONETER)
                 </h3>
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="https://www.bi.go.id/en/publikasi/lelang/operasi-moneter/Default.aspx"
+                  href={
+                    bonds.srbi[0]?.sourceUrl ||
+                    'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Default.aspx'
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[9px] font-mono text-sky-400 hover:text-sky-300 underline flex items-center gap-0.5"
-                  title="Bank Indonesia Operasi Moneter Auction Publication"
+                  title="Official Bank Indonesia Hasil Lelang SRBI Page (bi.go.id)"
                 >
-                  <span>bi.go.id</span>
+                  <span>bi.go.id ({bonds.srbi[0]?.auctionDate ?? 'Latest'})</span>
                   <ExternalLink className="w-2.5 h-2.5" />
                 </a>
                 <span className="text-slate-600">|</span>
@@ -354,44 +374,51 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
             </div>
 
             <p className="text-[11px] text-slate-400 font-mono mb-2">
-              Bank Indonesia Weekly Open Market Operation Auction — Official Weighted Average Accepted Rate (WAR) & Cut-Off Stop-Out.
+              Bank Indonesia Open Market Operation Tender ({bonds.srbi[0]?.auctionDate ?? '06 Nov 2026'}) — Official Weighted Average Winner Rate (WAR), Weighted Avg Bid, & Awarded Volume.
             </p>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
                   <tr className="border-b border-slate-700/80 text-[10px] text-slate-400 uppercase">
-                    <th className="py-1 px-1.5">Tenor</th>
+                    <th className="py-1 px-1.5">Tenor / Series</th>
                     <th className="py-1 px-1.5">Auction Date</th>
-                    <th className="py-1 px-1.5 text-right" title="Official Weighted Average Accepted Rate from Bank Indonesia & CEIC Data">
-                      Weighted Avg (WAR)
+                    <th className="py-1 px-1.5 text-right" title="Rata-Rata Tertimbang Pemenang / Weighted Average Winner Rate (%) from bi.go.id">
+                      Winner WAR
                     </th>
-                    <th className="py-1 px-1.5 text-right" title="Highest accepted cut-off yield / stop-out rate">
-                      Cut-Off Yield
+                    <th className="py-1 px-1.5 text-right" title="Rata-Rata Tertimbang Penawaran / Weighted Average Bidding Rate (%) from bi.go.id">
+                      Avg Bid Rate
                     </th>
-                    <th className="py-1 px-1.5 text-right" title="Nominal Bids submitted by primary dealers / commercial banks">
+                    <th className="py-1 px-1.5 text-right" title="Nominal Penawaran / Bidding Amount submitted by dealers">
                       Nominal Bids
                     </th>
-                    <th className="py-1 px-1.5 text-right">Awarded</th>
+                    <th className="py-1 px-1.5 text-right" title="Nominal Pemenang / Nominal Awarded by Bank Indonesia">
+                      Awarded
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/40">
                   {bonds.srbi.map((srbi) => (
                     <tr key={srbi.tenor} className="hover:bg-[#192434]/60">
-                      <td className="py-1.5 px-1.5 font-bold text-slate-200">
-                        {srbi.tenor} <span className="text-[10px] text-slate-400">({srbi.tenorDays}d)</span>
+                      <td className="py-1.5 px-1.5 font-bold text-slate-200 whitespace-nowrap">
+                        <div>
+                          {srbi.tenor} <span className="text-[10px] text-slate-400">({srbi.tenorDays}d)</span>
+                        </div>
+                        {srbi.series && (
+                          <div className="text-[9px] text-slate-400 font-normal">{srbi.series}</div>
+                        )}
                       </td>
-                      <td className="py-1.5 px-1.5 text-slate-400">{srbi.auctionDate}</td>
-                      <td className="py-1.5 px-1.5 text-right font-bold text-sky-300 tabular-nums">
+                      <td className="py-1.5 px-1.5 text-slate-300 whitespace-nowrap">{srbi.auctionDate}</td>
+                      <td className="py-1.5 px-1.5 text-right font-bold text-sky-300 tabular-nums whitespace-nowrap">
                         {srbi.weightedAvgYield.toFixed(3)}%
                       </td>
-                      <td className="py-1.5 px-1.5 text-right font-semibold text-slate-300 tabular-nums">
+                      <td className="py-1.5 px-1.5 text-right font-semibold text-slate-300 tabular-nums whitespace-nowrap">
                         {srbi.cutOffYield.toFixed(3)}%
                       </td>
-                      <td className="py-1.5 px-1.5 text-right text-slate-400 tabular-nums">
+                      <td className="py-1.5 px-1.5 text-right text-slate-400 tabular-nums whitespace-nowrap">
                         {srbi.nominalBidsIDR ?? '—'}
                       </td>
-                      <td className="py-1.5 px-1.5 text-right text-slate-200 tabular-nums font-semibold">
+                      <td className="py-1.5 px-1.5 text-right text-slate-200 tabular-nums font-semibold whitespace-nowrap">
                         {srbi.awardedVolumeIDR}
                       </td>
                     </tr>
@@ -401,7 +428,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
             </div>
 
             <div className="mt-2 text-[10px] text-slate-400 font-mono">
-              * Sources: Bank Indonesia Operasi Moneter (bi.go.id/en/publikasi/lelang/operasi-moneter) & CEIC Data (Monetary Operations Auction: SRBI). Shows the official Weighted Average Accepted Yield (WAR) and Bids from the latest auction tender.
+              * Source: Scraped directly from Bank Indonesia Hasil Lelang SRBI (bi.go.id/id/publikasi/lelang/operasi-moneter).
             </div>
           </div>
 

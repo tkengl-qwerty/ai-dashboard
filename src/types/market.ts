@@ -65,6 +65,7 @@ export interface Commodity {
 export interface IndoGBBond {
   tenor: string;
   code: string;
+  maturity?: string;
   yield: number;
   changeBps: number;
   coupon: number;
@@ -73,12 +74,16 @@ export interface IndoGBBond {
 export interface SRBIAuction {
   tenor: string;
   tenorDays: number;
+  series?: string;
   auctionDate: string;
   weightedAvgYield: number;
   cutOffYield: number;
+  biddingRateRange?: string;
   nominalBidsIDR?: string;
   awardedVolumeIDR: string;
+  sourceUrl?: string;
 }
+
 
 export interface JisdorHistoryItem {
   date: string;
