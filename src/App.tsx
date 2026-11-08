@@ -311,40 +311,40 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
 };
 
 const DJPPR_2026_BENCHMARKS = [
-  { match: '5Y', tenor: '5Y (Benchmark)', code: 'FR0109', maturity: '15 Mar 2031', coupon: 5.875 },
-  { match: '10Y', tenor: '10Y (Benchmark)', code: 'FR0108', maturity: '15 Apr 2036', coupon: 6.500 },
   { match: '15Y', tenor: '15Y (Benchmark)', code: 'FR0106', maturity: '15 Aug 2040', coupon: 7.125 },
   { match: '20Y', tenor: '20Y (Benchmark)', code: 'FR0107', maturity: '15 Aug 2045', coupon: 7.125 },
+  { match: '10Y', tenor: '10Y (Benchmark)', code: 'FR0108', maturity: '15 Apr 2036', coupon: 6.500 },
+  { match: '5Y', tenor: '5Y (Benchmark)', code: 'FR0109', maturity: '15 Mar 2031', coupon: 5.875 },
 ];
 
 function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
   const headlines = snap.indonesia?.commentary?.noteworthyHeadlines || [];
   const usedSigs = new Set<string>();
-  const spot = snap.indonesia?.fxAndNdf?.spotRate ?? 18118;
+  const spot = snap.indonesia?.fxAndNdf?.spotRate ?? 18080;
   const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18130;
-  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 4842.02;
-  const ihsgPct = snap.indonesia?.fxAndNdf?.ihsgIndex?.changePct ?? -1.58;
+  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 5050.43;
+  const ihsgPct = snap.indonesia?.fxAndNdf?.ihsgIndex?.changePct ?? 0.40;
 
   const normalizedHeadlines = headlines.map((item, idx) => {
     const rawTitle = (item.title || item.headline || 'Indonesia Market Disclosure').replace(
       /\s+-\s+[^-]+$/,
       ''
     );
-    let sig = item.significance || '';
+    let sig = (item.significance || '').replace(/6\.601%/g, '6.675%');
     if (!sig || usedSigs.has(sig)) {
       const low = rawTitle.toLowerCase();
-      if (low.includes('demutualization') || low.includes('danantara')) {
+      if (low.includes('reserve') || low.includes('146.8') || low.includes('forex') || low.includes('export')) {
         sig =
-          "Advances structural reform of Indonesia's exchange governance alongside Danantara sovereign wealth initiatives, deepening long-term institutional participation.";
-      } else if (low.includes('short selling') || low.includes('msci')) {
+          'Bolsters Bank Indonesia’s external reserve buffer and onshore USD supply alongside the 6 Nov SRBI issuance (12M WAR at 6.675%).';
+      } else if (low.includes('ojk') || low.includes('bank') || low.includes('cyber') || low.includes('reform')) {
         sig =
-          'Enhances IDX market microstructure and two-way price discovery ahead of MSCI index rebalancings, supporting foreign institutional turnover.';
-      } else if (low.includes('retail') || low.includes('red')) {
-        sig = `Highlights divergence between institutional block buying and domestic retail positioning as IDX Composite trades at ${ihsg.toLocaleString()} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%).`;
-      } else if (low.includes('5,000') || low.includes('5,030') || low.includes('surge') || low.includes('higher')) {
-        sig = `Broad-based buying across banking and cyclical heavyweights propels Jakarta equities, supported by steady USD/IDR at ${spot.toLocaleString()} and JISDOR at Rp ${jisdor.toLocaleString()}.`;
+          'Strengthens OJK regulatory enforcement and institutional confidence across Jakarta financials and domestic money markets.';
+      } else if (low.includes('rupiah') || low.includes('credibility') || low.includes('dollar')) {
+        sig = `Underscores Bank Indonesia's FX stability focus with JISDOR at Rp ${jisdor.toLocaleString()} and 12M SRBI clearing at 6.675% on 6 Nov.`;
+      } else if (low.includes('gdp') || low.includes('economy') || low.includes('growth')) {
+        sig = `Frames Indonesia's Q3 GDP expansion against domestic purchasing power and anchors demand for 10Y FR0108 IndoGBs.`;
       } else {
-        sig = `Reported by ${item.source}; shapes onshore institutional allocation across Jakarta equities and Rupiah fixed-income markets (#${idx + 1}).`;
+        sig = `Reported by ${item.source}; shapes onshore institutional allocation across Jakarta equities (IHSG ${ihsg.toLocaleString()}) and Rupiah debt (#${idx + 1}).`;
       }
     }
     usedSigs.add(sig);
@@ -356,16 +356,18 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     };
   });
 
-  // Ensure IndoGB rows always reflect the verified 2026 DJPPR Kemenkeu Seri Benchmark SUN (FR0109, FR0108, FR0106, FR0107)
+  // Ensure IndoGB rows always reflect the verified 2026 DJPPR Kemenkeu Seri Benchmark SUN:
+  // Use startsWith(s.match) so "15Y" never matches "5Y"!
   const rawIndoGB = snap.indonesia?.bonds?.indoGB || [];
   const normalizedIndoGB = rawIndoGB.map((b) => {
-    const spec = DJPPR_2026_BENCHMARKS.find((s) => b.tenor.includes(s.match));
+    const trimmedTenor = (b.tenor || '').trim();
+    const spec = DJPPR_2026_BENCHMARKS.find((s) => trimmedTenor.startsWith(s.match));
     if (!spec) return b;
     return {
       ...b,
       tenor: spec.tenor,
       code: spec.code,
-      maturity: b.maturity || spec.maturity,
+      maturity: spec.maturity,
       coupon: spec.coupon,
     };
   });

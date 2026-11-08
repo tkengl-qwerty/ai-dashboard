@@ -115,44 +115,47 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
 export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const bonds = snap.indonesia.bonds;
   const fx = snap.indonesia.fxAndNdf;
-  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.84;
+  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
 
   const biRate = bonds.biRate ?? 5.75;
   const cpi = bonds.cpiInflationYoY ?? 3.28;
-  const indo5Y = bonds.indoGB.find((b) => b.tenor.includes('5Y'))?.yield ?? 7.66;
-  const indo10Y = bonds.indoGB.find((b) => b.tenor.includes('10Y'))?.yield ?? 7.74;
+  const indo5Y = bonds.indoGB.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 7.35;
+  const indo10Y = bonds.indoGB.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.69;
   const spread10Y = Math.round((indo10Y - ust10Y) * 100);
 
-  const srbi6M = bonds.srbi.find((s) => s.tenor === '6M')?.weightedAvgYield ?? 6.491;
-  const srbi12M = bonds.srbi.find((s) => s.tenor === '12M')?.weightedAvgYield ?? 6.601;
-  const srbiBids = bonds.srbi.find((s) => s.tenor === '12M')?.nominalBidsIDR ?? 'IDR 41.81 T';
+  const srbi6M = bonds.srbi.find((s) => s.tenor === '6M')?.weightedAvgYield ?? 6.566;
+  const srbi9M = bonds.srbi.find((s) => s.tenor === '9M')?.weightedAvgYield ?? 6.655;
+  const srbi12M = bonds.srbi.find((s) => s.tenor === '12M')?.weightedAvgYield ?? 6.675;
+  const srbiDate = bonds.srbi.find((s) => s.tenor === '12M')?.auctionDate ?? '06 Nov 2026';
+  const srbi12MBids = bonds.srbi.find((s) => s.tenor === '12M')?.nominalBidsIDR ?? 'IDR 19.20 T';
+  const srbi12MAwarded = bonds.srbi.find((s) => s.tenor === '12M')?.awardedVolumeIDR ?? 'IDR 3.00 T';
 
-  const spot = fx.spotRate ?? 18075;
-  const jisdor = fx.jisdorRate ?? 18094;
-  const ndf1M = fx.ndf1M ?? 18111;
+  const spot = fx.spotRate ?? 18080;
+  const jisdor = fx.jisdorRate ?? 18130;
+  const ndf1M = fx.ndf1M ?? 18116;
   const ndfSpread = fx.ndfSpread1M ?? 36;
-  const ihsg = fx.ihsgIndex.level ?? 4919.77;
-  const ihsgPct = fx.ihsgIndex.changePct ?? 0.32;
+  const ihsg = fx.ihsgIndex.level ?? 5050.43;
+  const ihsgPct = fx.ihsgIndex.changePct ?? 0.40;
 
   const realPolicyBuffer = (biRate - cpi).toFixed(2);
   const leadIndoNews =
     snap.indonesia.commentary.noteworthyHeadlines[0]?.title ||
     snap.indonesia.commentary.noteworthyHeadlines[0]?.headline ||
-    'Bank Indonesia anchors Rupiah stability via triple intervention and SRBI liquidity sterilization';
+    'Bank Indonesia reports US$146.8B FX reserves and prepares 100% Rupiah conversion for resource export earnings';
 
   const regimeBadge = `BI-RATE ${biRate.toFixed(2)}% · REAL BUFFER +${realPolicyBuffer}% · SPREAD +${spread10Y} BPS`;
-  const conviction = 'Overweight 12M SRBI & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry';
+  const conviction = 'Overweight 12M SRBI (6.675% WAR) & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry';
 
   const synthesis =
     `Indonesia's macro-financial framework offers a +${realPolicyBuffer}% real policy rate buffer (BI-Rate at ${biRate.toFixed(2)}% vs Headline CPI at ${cpi.toFixed(2)}% YoY) ` +
-    `alongside a +${spread10Y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (${indo10Y.toFixed(2)}% vs US 10Y at ${ust10Y.toFixed(2)}%). ` +
-    `Onshore USD/IDR spot (${spot.toLocaleString('en-US')}) trades tightly anchored against Bank Indonesia's JISDOR fixing (Rp ${jisdor.toLocaleString('en-US')}), ` +
-    `while 1M offshore NDFs (${ndf1M.toLocaleString('en-US')}, +${ndfSpread} IDR basis) signal contained offshore hedging pressure. ` +
-    `Strong institutional demand in Bank Indonesia's SRBI auctions (12M WAR at ${srbi12M.toFixed(3)}% on ${srbiBids} bids) continues to sterilize excess liquidity while IHSG trades at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%). ` +
-    `Key domestic development: "${leadIndoNews}".`;
+    `alongside a +${spread10Y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (${indo10Y.toFixed(2)}% vs US 10Y at ${ust10Y.toFixed(2)}%, with 5Y FR0109 at ${indo5Y.toFixed(2)}%). ` +
+    `In Bank Indonesia's completed Friday ${srbiDate} SRBI issuance (bi.go.id), total incoming bids reached IDR 36.90 T across tenors while BI awarded IDR 7.50 T (4.92x bid-to-cover), ` +
+    `with Winner WAR clearing at ${srbi6M.toFixed(3)}% (6M), ${srbi9M.toFixed(3)}% (9M), and ${srbi12M.toFixed(3)}% (12M: ${srbi12MAwarded} awarded from ${srbi12MBids} bids). ` +
+    `Onshore USD/IDR spot (${spot.toLocaleString('en-US')}) and JISDOR (Rp ${jisdor.toLocaleString('en-US')}) remain well-anchored with 1M NDFs at ${ndf1M.toLocaleString('en-US')} (+${ndfSpread} IDR basis) and IHSG at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%). ` +
+    `Lead domestic development: "${leadIndoNews}".`;
 
   const positioningTakeaway =
-    `Capture front-end Rupiah carry via 12M SRBI (${srbi12M.toFixed(3)}% WAR) and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) ` +
+    `Following Friday ${srbiDate}'s SRBI issuance (12M WAR at ${srbi12M.toFixed(3)}%), capture front-end Rupiah carry via 12M SRBI and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) ` +
     `while monitoring the 1M NDF-Spot basis (+${ndfSpread} IDR) as an early-warning barometer for offshore USD demand.`;
 
   const criticalLevels = [
@@ -171,11 +174,11 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
       implication: `Yields near ${(indo10Y + 0.16).toFixed(2)}% attract domestic pension/bank buying; compression below ${(indo10Y - 0.14).toFixed(2)}% requires lower UST yields.`,
     },
     {
-      asset: '12M SRBI Auction WAR',
+      asset: `12M SRBI (${srbiDate} Issued)`,
       current: `${srbi12M.toFixed(3)}% (6M: ${srbi6M.toFixed(3)}%)`,
       support: `${(srbi12M - 0.10).toFixed(3)}%`,
       resistance: `${(srbi12M + 0.12).toFixed(3)}%`,
-      implication: `Sustained clearing above ${srbi12M.toFixed(2)}% keeps foreign short-term portfolio carry attractive and defends the Rupiah.`,
+      implication: `Friday ${srbiDate} issuance cleared at ${srbi12M.toFixed(3)}% WAR (${srbi12MAwarded} awarded of ${srbi12MBids} bids), keeping foreign short-term portfolio carry attractive.`,
     },
     {
       asset: 'IDX Composite (IHSG)',
@@ -188,22 +191,22 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
 
   const eventsToWatch = [
     {
-      event: 'Bank Indonesia Weekly SRBI Open Market Operation Tender',
-      timing: 'Weekly · Friday Jakarta Session',
+      event: `Post-${srbiDate} SRBI Issuance Settlement & Next Friday BI OMO Tender`,
+      timing: `Issued Fri ${srbiDate} · Next Tender Fri 13 Nov`,
       impact: 'Critical' as const,
-      watchFor: `Watch whether 12M WAR holds near ${srbi12M.toFixed(3)}% and if nominal bids remain near ${srbiBids} to gauge onshore bank liquidity.`,
+      watchFor: `Following Friday ${srbiDate}'s issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at ${srbi12M.toFixed(3)}%), watch secondary market turnover and whether 12M WAR holds near ${srbi12M.toFixed(3)}% next Friday.`,
     },
     {
-      event: 'Daily 15:15 WIB JISDOR Fixing & 1M Offshore NDF Basis',
+      event: '100% DHE Export Earnings Conversion & Daily 15:15 WIB JISDOR Fixing',
       timing: 'Daily · 15:15 WIB (16:15 SGT)',
       impact: 'High' as const,
-      watchFor: `Any widening of the 1M NDF spread beyond +100 IDR (currently +${ndfSpread} IDR) over spot (${spot.toLocaleString('en-US')}).`,
+      watchFor: `Onshore USD supply from exporter retention alongside any widening of the 1M NDF spread beyond +100 IDR (currently +${ndfSpread} IDR) over spot (${spot.toLocaleString('en-US')}).`,
     },
     {
       event: 'DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting',
       timing: 'Bi-Weekly / Monthly Policy Cycle',
       impact: 'High' as const,
-      watchFor: `Bid-to-cover ratio on FR0109 (5Y, ${indo5Y.toFixed(2)}%) and FR0108 (10Y, ${indo10Y.toFixed(2)}%) plus BI-Rate (${biRate.toFixed(2)}%) forward guidance.`,
+      watchFor: `Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, ${indo5Y.toFixed(2)}%), FR0108 (10Y, ${indo10Y.toFixed(2)}%), FR0106 (15Y), and FR0107 (20Y).`,
     },
   ];
 
@@ -218,4 +221,5 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
     eventsToWatch,
   };
 }
+
 

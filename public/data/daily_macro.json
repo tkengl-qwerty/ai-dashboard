@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-08T16:54:59.899734+08:00",
-    "lastUpdatedSGT": "08 Nov 2026, 04:54 PM SGT",
+    "lastUpdated": "2026-11-08T17:57:41.743450+08:00",
+    "lastUpdatedSGT": "08 Nov 2026, 05:57 PM SGT",
     "nextRefreshSGT": "09 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
@@ -10,75 +10,31 @@
     "topNews": [
       {
         "id": "gn-01",
-        "headline": "South Africa's ANC battered by local election losses ahead of coalition talks",
-        "source": "Reuters",
-        "timeAgo": "9m ago",
-        "category": "Geopolitics",
-        "summary": "Reuters coverage on \"South Africa's ANC battered by local election losses ahead of coalition talks\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNUWgtMk9QU2tBNWhzbzUwRWFhUGFmeXFEZkRsVlBaVjk1U2hGVlRIUzhuUkhCRlE5OFNzcWwzT1QwbFAyTzdtc1J2eDh6Mzl0OVJkZFI5OUVoSU41N3JvSUM5dmsxYmFoOWl2dldEQ2J4THlmWFhkQWxvcHVnTEZLQ1Nvc0t1Q3MzMkkwSGgxRWhjSktRX1I2N201SGhMYWNJQ1NsM0lkZ1FrZGcyRUFVTm1qZHhRaTcxb3pQdVNNQQ?oc=5"
-      },
-      {
-        "id": "gn-02",
         "headline": "Gulf markets retreat as traders await Trump's next move on Iran",
         "source": "Reuters",
-        "timeAgo": "33m ago",
-        "category": "Geopolitics",
-        "summary": "Reuters coverage on \"Gulf markets retreat as traders await Trump's next move on Iran\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "timeAgo": "1h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Reuters coverage on \"Gulf markets retreat as traders await Trump's next move on Iran\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Tighter credit standards and moderating price pressures help cap 10Y Treasury yields around 4.86% (2Y/10Y at +35.0 bps).",
         "impact": "Dovish",
         "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPNEhqejQxdWF5MFpVWjduZHVuY1l1VmxKYm9CN3F4aC1qWkFIWFJqZDJEZ1VoWmthUW1NaWdWQUY4UUprUGsyWFA2a0trUE5HUjEtUHpPNFV1UnBpMHRrR2RlQWo1c2xvY1J2QnprNnNkbHNpY3ZtUWxMQkRzTVpKcktuZjhJdW5zSHdsZUhxYmxBVy00UWVnbndnOEc2WWplMEEwREVib0VyZ3BzZWlR?oc=5"
       },
       {
-        "id": "gn-03",
-        "headline": "State Street SPDR Bloomberg 1-3 Year Euro Government Bond UCITS ETF (SYB3.DE) | Stock Price & Latest News",
-        "source": "Reuters",
-        "timeAgo": "1h ago",
-        "category": "Inflation",
-        "summary": "Reuters coverage on \"State Street SPDR Bloomberg 1-3 Year Euro Government Bond UCITS ETF (SYB3.DE) | Stock Price & Latest News\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9GT2NydWdiY3diOG5XVjdnN25HZ2pwSmUtYkFWcjM2WlNiRzdqNHhlUG9MbWp0OTdWakRQSEdFZVdWcE5DSWNrWDA4SnFBTDE1UTk1azVlYkdoZw?oc=5"
-      },
-      {
-        "id": "gn-04",
+        "id": "gn-02",
         "headline": "Cathie Wood 'always feels better when the market is worried' — here's why",
         "source": "CNBC",
-        "timeAgo": "2h ago",
-        "category": "Geopolitics",
-        "summary": "CNBC coverage on \"Cathie Wood 'always feels better when the market is worried' — here's why\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "timeAgo": "3h ago",
+        "category": "Fiscal & Debt",
+        "summary": "CNBC coverage on \"Cathie Wood 'always feels better when the market is worried' — here's why\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
         "impact": "Neutral",
         "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9YMkdHZlFhVDRueG9heFUzRmpZQlRZMkZoMkY4RTk5Q2hNQTl2bEJNWmp6MkVYUGh4bmpyb3FNYkg0clJDTkQxUU5pa1Jsd1Q2RnQzalB5UEZhaEEtM0k4MUZ1NzdGdkdIbVJz?oc=5"
       },
       {
-        "id": "gn-05",
-        "headline": "AI is speeding up recruitment — and putting agency fees under pressure",
-        "source": "CNBC",
-        "timeAgo": "2h ago",
-        "category": "Geopolitics",
-        "summary": "CNBC coverage on \"AI is speeding up recruitment — and putting agency fees under pressure\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE43SUE2SVgzbENkeHRTNnl4bGVmQmx0bUZaaEw0MVJEVkpXMDJ5NmFvOTVaZHJtejFkZlliZFgtSlBoX2Y4OXduczVaVjNXS0ptRFhwaEJSaG5mYm1CZ2VZUHZUc05vT2tjQUJYaTB6RUo?oc=5"
-      },
-      {
-        "id": "gn-06",
-        "headline": "Louis C Truesdell, American Soil Products Inc: Profile and Biography",
-        "source": "Bloomberg",
-        "timeAgo": "3h ago",
-        "category": "Inflation",
-        "summary": "Bloomberg coverage on \"Louis C Truesdell, American Soil Products Inc: Profile and Biography\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9DQUtwRXdvd1hDTUNQZjRiZ2hoaFZkd2dRN0FJclh1TnVRT0RvMUJNS0RfYUc1LXdVQjdrV1J1S252dENNdC03cFlkOS1fOWFxV1ZMeHZrLTB1eko0VDI5QklYb1E3ZmYxeHlfUnM1SmttT2hEbTJ3?oc=5"
-      },
-      {
-        "id": "gn-07",
+        "id": "gn-03",
         "headline": "As fresh peace talks loom, Putin is escalating his efforts to shatter Ukraine’s economy",
         "source": "CNN",
-        "timeAgo": "3h ago",
+        "timeAgo": "4h ago",
         "category": "Geopolitics",
         "summary": "CNN coverage on \"As fresh peace talks loom, Putin is escalating his efforts to shatter Ukraine’s economy\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
@@ -86,21 +42,10 @@
         "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPVkJhbUU4U3hhRkVIaTZRdXNXSXVvSklBbm13NGtJam9NNFJoaTJUN0VVTmwwejEyN2ZKVEFrTlI1QTkyVVp2c1F2R055akZBUGItd1pWbUxxS3Fkek9aXzRMZTNMZUNEcDgyMU44ME5Jb0psZEVEM21FdjFIRndnZmlzUzB0blhVb243aEFYcXBUanVSbVk2UHZ1NA?oc=5"
       },
       {
-        "id": "gn-08",
-        "headline": "Devin Booker shines down the stretch, leads Suns past Rockets",
-        "source": "Reuters",
-        "timeAgo": "4h ago",
-        "category": "Fiscal & Debt",
-        "summary": "Reuters coverage on \"Devin Booker shines down the stretch, leads Suns past Rockets\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNZEl1RE9zQ0ZrM1lSQjl0YzB0VUplUTYwSldjSElWd291N1dyMVgwV1dmRi1XaDhHVzdjZlBrTkV4dUJuaVVwYUdpa2xZWV9PWmdyaGluOTMySjNSTF8teHhVZ3pCa1VYamJFS1J2d0daRTU3ZVkzaFB1UTFpLUJaRGtsd1pVdzN1dnVzV0dhcFZiakhpNDNwSVE5dDdkWXZyQ0ZhbF85TGFyV3RPVGU1WUcxZUlSdw?oc=5"
-      },
-      {
-        "id": "gn-09",
+        "id": "gn-04",
         "headline": "China Set to Lead World in Energy Investment in 2026, CCTV Says",
         "source": "Bloomberg",
-        "timeAgo": "4h ago",
+        "timeAgo": "5h ago",
         "category": "Inflation",
         "summary": "Bloomberg coverage on \"China Set to Lead World in Energy Investment in 2026, CCTV Says\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
@@ -108,15 +53,70 @@
         "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNQVNBelR6QURBUWMxQVp4SHlEUW9Nc1lhQVluWjgwSFh4cUlqdWxPeE96dXFvcUVmV3BrTFYtVXF6XzNEZU5Mc1k4dUxsa2hWamNRUkhsdGtfQjFCd1JfSkpJRnc1VDFGdU1GT29XSFllQ0hOTExvaEFtc1I5cHM2ZGl1aTFNQ1NMYnhoa084a2doRlQ2aVl2VnpzbzJqVWJkZ2pNdGNVeVJ6Zk5oU1NmTmk5Yw?oc=5"
       },
       {
-        "id": "gn-10",
-        "headline": "Astellas employee imprisoned in China to be released in December, Japanese media report",
-        "source": "Reuters",
-        "timeAgo": "5h ago",
+        "id": "gn-05",
+        "headline": "AI Slump Revives Asia’s Forgotten Trades From China to India",
+        "source": "Bloomberg",
+        "timeAgo": "9h ago",
         "category": "Geopolitics",
-        "summary": "Reuters coverage on \"Astellas employee imprisoned in China to be released in December, Japanese media report\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "summary": "Bloomberg coverage on \"AI Slump Revives Asia’s Forgotten Trades From China to India\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.51%).",
+        "impact": "Risk-Off",
+        "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQOHlmbjBTLXAyMXRaUFkyaXNncWYtdVB2X1puSzZiQmk3eHA2RzBLWTNmcE9KMzdQeGZ5T3lKclFuNTFzU3ItQWI3eTNYSGY4U0RtbnBXbm9jMUpmRjNCeDhpRUI1aWh6MklqTzdPR2w5OHhCQTZXMldXSjlLMEMyMHZwaDZodTlJOU4xbTFhcHJsTHg1bU1uaGNaR0FscDg5QWxmMUp5YTBCQUZNWGs0VQ?oc=5"
+      },
+      {
+        "id": "gn-06",
+        "headline": "US Banks Grow More Cautious on Lending, Fed Survey Shows",
+        "source": "Bloomberg",
+        "timeAgo": "11h ago",
+        "category": "Fed Policy",
+        "summary": "Bloomberg coverage on \"US Banks Grow More Cautious on Lending, Fed Survey Shows\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Tighter credit standards and moderating price pressures help cap 10Y Treasury yields around 4.86% (2Y/10Y at +35.0 bps).",
         "impact": "Dovish",
-        "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOODFjR25tcklTWnhjRDdJX0J4YjdUVTF3QU9hWUEwemp6cEd1c1NEb003Qm5kUE5WblVNN0c1SlBxZU4yM3lGdHRUZzR1cXpyNEs5VE9nTEF1b3d3NzlabkdLRDJWV3Nuc2tJQ3FaTU1MV1E5T0tUOUlKR2ZZSHp1TS10aWxrRzdiVi1ldlZlYXpJQldFMHFrUkRDd0hLc2NkUkp5NEpCTUlDSnJFTkYyUkE1SVJUcGw1cVI3dEdveEg3ckE?oc=5"
+        "url": "https://www.bloomberg.com/markets"
+      },
+      {
+        "id": "gn-07",
+        "headline": "Why the prognosis for healthcare stocks is uncertain ahead of Congress’ new makeup",
+        "source": "CNBC",
+        "timeAgo": "12h ago",
+        "category": "Fiscal & Debt",
+        "summary": "CNBC coverage on \"Why the prognosis for healthcare stocks is uncertain ahead of Congress’ new makeup\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://www.cnbc.com/2026/11/07/healthcare-stocks-may-face-trouble-due-to-midterm-results.html"
+      },
+      {
+        "id": "gn-08",
+        "headline": "Wall Street Strategists Call Stock Rout a Fresh Reason to Buy",
+        "source": "Bloomberg",
+        "timeAgo": "12h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Bloomberg coverage on \"Wall Street Strategists Call Stock Rout a Fresh Reason to Buy\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNRjJsWU9HVVVVTlJNRjYxYkJ6UFBBdnQzNklIM0w5X1R0YUtlT2RSeG5XR2JqMkF6Q3J5NVVBMm5sSVd4TVRfRFpYNHBLVDdSRFlmRXZxTHpJbllDVHM2Vm9lMmVBNGVWSUFrc1c2NEMzc0tBV0p3Yk16R1IwUTdsa2ZzNkNvYXpnM250dGYzZVFsV0FZbXE5YTZwYnllR1hXZkl5a2w3YVFtMXdKSGZkZzdR?oc=5"
+      },
+      {
+        "id": "gn-09",
+        "headline": "Charting the Global Economy: Job Growth in US Tops All Forecasts",
+        "source": "Bloomberg",
+        "timeAgo": "12h ago",
+        "category": "Labor Market",
+        "summary": "Bloomberg coverage on \"Charting the Global Economy: Job Growth in US Tops All Forecasts\" highlights shifting institutional positioning across labor market and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxONmJTYmozcExtUWJtMkNhTF9PdV9NNEV6SE1wR2Y1THVLd1ZlXzRCWDdzQ0psNGh5YVJYY0IxcHZMOWFHMXRZYmNCcEVXeVBxaUVDRkdOZ0lNQlE4NDJfeDliaVZueTBiQTBrYmdHQkl3YXFoUTJuX2dEMWJfdkVtNkNqVjBfNzZqYWlSbV84UENfNUtHczBQQy1IQ19fcHM2NXZjcGE3NmpxWndLd3BDRDFnU0U?oc=5"
+      },
+      {
+        "id": "gn-10",
+        "headline": "Czech Premier Blasts Central Bank Rate Hike as ‘Scandalous’",
+        "source": "Bloomberg",
+        "timeAgo": "12h ago",
+        "category": "Fed Policy",
+        "summary": "Bloomberg coverage on \"Czech Premier Blasts Central Bank Rate Hike as ‘Scandalous’\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Keeps front-end US2Y yields anchored near 4.51% and tempers expectations for aggressive near-term easing.",
+        "impact": "Hawkish",
+        "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxObHZGYm10VWZ4YVdFUWRKTDJxLWdwZ0JTSEVyQTZIcDZGU0dXWDNQMlJrU056TUo3QVRnX3hsSkNjbS01Y192R3FMd29PZDF6VTE1ZWpkdlJjdkhHa2VkUjZWNXZfdUFYaGV1QUFuZk5OZU9qR0N4THA5bnFwZ2IzZWFtM0UzVTdBUTZqZmRaQ1RiWHRkb0xDUjdDdWFBdl9qZ1ZYZDZqZHFHRGF3?oc=5"
       }
     ],
     "yieldCurve": {
@@ -335,7 +335,7 @@
       "title": "GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST",
       "regimeBadge": "BEAR/BULL STEEPENING (+35.0 bps 2s10s)",
       "conviction": "Constructive Cyclicals · Short-Duration Fixed Income Tilt",
-      "synthesis": "Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at 4.51%, 5Y at 4.64%, 10Y at 4.86%, and 30Y at 5.26% (2Y/10Y at +35.0 bps; 5Y/10Y at +22.0 bps). With the US Dollar Index (DXY) trading near 102.30 and WTI Crude at $90.83/bbl, headline energy-driven inflation risk remains contained, allowing S&P 500 E-mini futures (7,402.00, +0.26%) and Gold ($4,074.90/oz) to absorb elevated long-end term premia. Lead desk catalyst: \"South Africa's ANC battered by local election losses ahead of coalition talks\".",
+      "synthesis": "Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at 4.51%, 5Y at 4.64%, 10Y at 4.86%, and 30Y at 5.26% (2Y/10Y at +35.0 bps; 5Y/10Y at +22.0 bps). With the US Dollar Index (DXY) trading near 102.30 and WTI Crude at $90.83/bbl, headline energy-driven inflation risk remains contained, allowing S&P 500 E-mini futures (7,402.00, +0.26%) and Gold ($4,074.90/oz) to absorb elevated long-end term premia. Lead desk catalyst: \"Gulf markets retreat as traders await Trump's next move on Iran\".",
       "positioningTakeaway": "Favor 2Y–5Y belly duration (4.51%–4.64%) over unhedged 30Y long bonds (5.26%) until term-premium supply clears; watch 5.01% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (27,085) constituents.",
       "criticalLevels": [
         {
@@ -411,44 +411,44 @@
       "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 5.75% · Headline CPI 3.28% YoY)",
       "noteworthyHeadlines": [
         {
-          "title": "OJK Accelerates Capital Market Reforms Amid IHSG Pressure",
-          "headline": "OJK Accelerates Capital Market Reforms Amid IHSG Pressure",
-          "source": "MetroTVNews.com",
-          "timeAgo": "1h ago",
-          "significance": "Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp 18,130 and 12M SRBI WAR clearing at 6.601%.",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeTYxUWVVX3Q5Sk5tN1J2YWJHVl9CeUl2eUtPUEMtbHh2el9GcTNXbTVndkJKS1FIOXJRMEdKZ053SFdwVzF6WTNHdmJUeTY5R0tQLUtzTTljLTlla09sSVZ2dWZMZ1ZoWi1KTFZlQlVmSm5hUVFBbFNBbWtiSGp2VENWRVdKMXh3d2J1NFV5RFpFbTBFdWNmbW1RV2oydEtG?oc=5"
+          "title": "Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks",
+          "headline": "Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks",
+          "source": "Kompas.id",
+          "timeAgo": "3h ago",
+          "significance": "Strengthens OJK prudential supervision and institutional governance across Indonesian banks and capital markets (IHSG 5,050.43).",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPMGltd29yTGp2dUZYdVpWdGRjUWUwLVIwYTctOEFlWE9BNTBoeFplaThHNFVsaHpVVWhDZjZpaXhGa2JwUVl2QnBSNjJCcHE1bTNoV0xBNU9WUURBd3RtU0pnaDcxNkhCdEFCbWJvdHZqVGNIVXFUWFBaQjFqaUpKZzJ3dS1oVDhrZHJjWmJuaERCUlJhcU9mdmdXYklLRWI0eF8yQVcwM3otUkU?oc=5"
         },
         {
-          "title": "Indonesia stocks higher at close of trade; IDX Composite Index up 0.18%",
-          "headline": "Indonesia stocks higher at close of trade; IDX Composite Index up 0.18%",
-          "source": "Investing.com",
-          "timeAgo": "2h ago",
-          "significance": "Broad-based buying across banking and cyclical heavyweights propels Jakarta equities (5,050.43, +0.40%), supported by steady USD/IDR at 18,080.",
-          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNa0o2cHRtQ193NDl3WFZWeXVCV0l6QlJBbVdjNTh0M1VHbGVhN09ZZzBDaVp2ZFRUTUNZUHJEUHFEUFplOThqeVBianY1TWwzTU5jemxOazd3cDB6dW1xY3h2aXdPVkFaX1B3OWxHYWFKRUVOUEhjYWl5QkVGenN5ZENMLVhfNzBSdVd5N2UwX2dLUS1IUlRia0NXZWcySGdDNTRTXzFEcVNPSVZzbE1GUWwwRnFlSEdmVW9Zb191ZFJXcU0?oc=5"
+          "title": "At 80, the rupiah needs credibility, not ceremony",
+          "headline": "At 80, the rupiah needs credibility, not ceremony",
+          "source": "The Jakarta Post",
+          "timeAgo": "12h ago",
+          "significance": "Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp 18,130 and the 06 Nov 12M SRBI WAR clearing at 6.675%.",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOWUpaSkZqR0ZYLUdHZEJ6UnFWZkhNcl93TXJYNUFmcGFfSlJtRlFWWlZiaWRJby16blNHdEtCTkxUQVF3Y2hQVkdacGRJUHNIZjk5M1k5bE1ueU5QU0RNSXAwUC1iMkNWZEE1eUFlSDNqWnIzX0Z4VzI4V3lVeG4xWG1xQVhKOHpxZGlKQmhqX3RERFNxSlZNc3dUODlZZw?oc=5"
         },
         {
-          "title": "Indonesia shares higher at close of trade; Jakarta Stock Exchange Composite up 0.13%",
-          "headline": "Indonesia shares higher at close of trade; Jakarta Stock Exchange Composite up 0.13%",
-          "source": "Investing.com UK",
-          "timeAgo": "2h ago",
-          "significance": "Sector-wide equity momentum across financials, energy, and infrastructure reinforces foreign net inflows into IDX large-cap benchmarks.",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQNHhmY2FVbU9VWjJHU0t6Zy13QTRadjZfaTZRaW5pbGF1QkFKWG5taF9OVGtLMEVNZ2ZiRm5oeENfSkJMOE1FXzlzRnFLUWt1OThmNEYzaGY4b0pNenhMTlhZRm8zbXROa3FsYTRZSzVMRUYzVDBsYWRVN3dQUHFON0ZNUTU4LUhJLVhiaHNELWFIcUlvalZaOUJEUmJXRDRmUXQtdEVCOEtCZ1FlNkNHSUxkRmtNUjZSUFQtRFcweGR5YkFJNExuMHNfTXk3TlRqSWQw?oc=5"
+          "title": "Govt prepares 100 pct rupiah conversion for resource export earnings",
+          "headline": "Govt prepares 100 pct rupiah conversion for resource export earnings",
+          "source": "ANTARA News",
+          "timeAgo": "1d ago",
+          "significance": "Mandatory onshore conversion of natural resource export proceeds (DHE SDA) structurally deepens domestic USD liquidity and anchors spot USD/IDR near 18,080.",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQWFpiMS1HV3BkdW13c3kyUHN2ckVGUDNlcXZKYnVGUVJyelZfNVBRaVU4WGt5QWZObU9uUGRRMGpvbkxsRDN0aFRGQnluLXd1RW04dFRMS0xVMGR5ZC1ySHJVN2hUVGkzNi1rU1RrMnVQU19qUk9RUTZoRW5ybDRfTGRjcG1KbjlDRHBJcGlRS0dnNU4xbnpoLUhLQjRIZ0dCVXU3c0toME1RZ9IBrwFBVV95cUxORWhPVGhwa1l1WEdvd3VJNHNabUZpdWZLQ1pzaV9EQ1ZtYVpmdXpCdFVmZTgxTWJoRlZZVWpVeFJ4Z1FSd0NmRjRtaUdwbkhwY0llTmtaMEFRY2h3cHA2VTZxX3BUVjFlYVBYcDdLQlctNm1DU1h5bVZmQXJaWEJJNjlNSUVGajZFTFl1Nnp1OFUtRXJRRjIzekpOaldxdk4zLWd5WkdVV0xtcXl5eVBR?oc=5"
         },
         {
-          "title": "Why Stock Market Plunged After US Midterm Elections",
-          "headline": "Why Stock Market Plunged After US Midterm Elections",
-          "source": "Tempo.co English",
-          "timeAgo": "8h ago",
-          "significance": "Reported by Tempo.co English; shapes onshore institutional allocation across Jakarta equities (IHSG 5,050.43) and Rupiah money markets.",
-          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNdlNnVm51dWpqM0tzbHNnU0h3emdkcEJ6WDVnbElGeDFjdnhkMVlYb2NBZUVKeGhtSGFteFRqVXhuUElSUlhDazEzUllBbjE4cENGTzVhTlJjU201X1VsZF9zRnZTMUZ4NG9YTUdxWm1hQjgzamtLd2JyOXF4dlp2QVhpT3lRMjZVYXdUMA?oc=5"
+          "title": "Bank Indonesia expects export retention policy to boost forex reserves",
+          "headline": "Bank Indonesia expects export retention policy to boost forex reserves",
+          "source": "ANTARA News",
+          "timeAgo": "1d ago",
+          "significance": "Reinforces Bank Indonesia's US$146.8B external reserve buffer to defend JISDOR (Rp 18,130) alongside the 06 Nov SRBI issuance (12M WAR at 6.675%).",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPSDhMX3lFMTZBYmdyWlBlTy0yMUdpRmR3TTdmNElSaUp4c2JFOThJMnBWMXh4VXhPV25kRzY1N0RwNEFMTzlQdWJvNHpGS00teDQ4bS1uQXRQRlBkMUFLVzFYamI0WnV3V1pvaDNuSm53Nlp6X1dCR0VKU1lraEhQOHJ2V3hBc2ZreUVoS3FQc2phLXk2VFl3SDJtbjR1ZThaRG9xYmpjenl2dkR5?oc=5"
         },
         {
-          "title": "Jakarta Stocks Drop 1.48% Despite Stronger-than-Expected GDP Growth",
-          "headline": "Jakarta Stocks Drop 1.48% Despite Stronger-than-Expected GDP Growth",
-          "source": "Jakarta Globe",
-          "timeAgo": "8h ago",
-          "significance": "Reinforces Indonesia's ~5% real GDP growth trajectory and anchors domestic demand for 10Y IndoGB benchmarks (7.69%).",
-          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNVEdXQUlfWThUdFQ4VVZFZzVrOTdSdzhZUERzT0l2RFUzLXJ3Nmh2ZG9Lamx3amJCSWppZlJrWmNpNkEtaUhzMi1oVERjNDJtM0ZKVzhtR3JmM1VwQUhaVWVZSFU0TTBOQUt3RXZwLXZGY2s3Q0NxalJMVllDT3V3RHNQWE92TjEwX2pCRXZTbzI4M3ZwX3FZSE92NVg?oc=5"
+          "title": "Indonesias foreign exchange reserves hit US$146.8 bln in October: BI",
+          "headline": "Indonesias foreign exchange reserves hit US$146.8 bln in October: BI",
+          "source": "ANTARA News",
+          "timeAgo": "1d ago",
+          "significance": "Reported by ANTARA News; shapes onshore institutional allocation across Jakarta equities (IHSG 5,050.43) and Rupiah money markets.",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQLUxTZHdRM1ZrbWdwd1pVWXRnUE9TLUx3SEgyeXZEb2xQUE9JYWZxeEx2UndSTHhWRk5vT09ERzZFNmU4R1lINWlocTZlSnFlZVl6a3JLUEY3a241cXNNZ0Q2eERKaEtwdG1PeHNKcnl6cWF0Q21EWDVlMlB1S0t1MkpUUC1JNFpDY0VUNWlDYkU5N0NidGs2cmNzNnFoYnRmc29XcEVR0gGrAUFVX3lxTE5wQXlVV2lkOTJXNjJPSmMxZ2dyUVp3UkxBSks4RUlyUzlILXJ4VlR0ZVhXb1B4enN0M2pOTjBSSjMxRVlsbElkRnJCc1dnelQ3eTJJT3hadlBjTUxXdnhSaWwzS2prdU5tR19lLVBuTEx2ckFxZVF6UVROcXg3czRGTzBVcUxmSnlVcnd3VW1FelBYNVc4NTFjVnF2ZUJlYjE1cVBVSm9FSk5YWQ?oc=5"
         }
       ]
     },
@@ -573,9 +573,9 @@
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
       "regimeBadge": "BI-RATE 5.75% · REAL BUFFER +2.47% · SPREAD +283 BPS",
-      "conviction": "Overweight 12M SRBI & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry",
-      "synthesis": "Indonesia's macro-financial framework offers a +2.47% real policy rate buffer (BI-Rate at 5.75% vs Headline CPI at 3.28% YoY) alongside a +283 bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (7.69% vs US 10Y at 4.86%). Onshore USD/IDR spot (18,080) trades tightly anchored against Bank Indonesia's JISDOR fixing (Rp 18,130), while 1M offshore NDFs (18,116, +36 IDR basis) signal contained offshore hedging pressure. Strong institutional demand in Bank Indonesia's SRBI auctions (12M WAR at 6.675% on IDR 19.20 T bids) continues to sterilize excess liquidity while IHSG trades at 5,050.43 (+0.40%). Key domestic development: \"OJK Accelerates Capital Market Reforms Amid IHSG Pressure\".",
-      "positioningTakeaway": "Capture front-end Rupiah carry via 12M SRBI (6.675% WAR) and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (7.35%–7.69%) while monitoring the 1M NDF-Spot basis (+36 IDR) as an early-warning barometer for offshore USD demand.",
+      "conviction": "Overweight 12M SRBI (6.675% WAR) & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry",
+      "synthesis": "Indonesia's macro-financial framework offers a +2.47% real policy rate buffer (BI-Rate at 5.75% vs Headline CPI at 3.28% YoY) alongside a +283 bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (7.69% vs US 10Y at 4.86%, with 5Y FR0109 at 7.35%). In Bank Indonesia's completed Friday 06 Nov 2026 SRBI issuance (bi.go.id), total incoming bids reached IDR 36.90 T across tenors while BI awarded IDR 7.50 T (4.92x bid-to-cover), with Winner WAR clearing at 6.566% (6M), 6.655% (9M), and 6.675% (12M: IDR 3.00 T awarded from IDR 19.20 T bids). Onshore USD/IDR spot (18,080) and JISDOR (Rp 18,130) remain well-anchored with 1M NDFs at 18,116 (+36 IDR basis) and IHSG at 5,050.43 (+0.40%). Lead domestic development: \"Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks\".",
+      "positioningTakeaway": "Following Friday 06 Nov 2026's SRBI issuance (12M WAR at 6.675%), capture front-end Rupiah carry via 12M SRBI and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (7.35%–7.69%) while monitoring the 1M NDF-Spot basis (+36 IDR) as an early-warning barometer for offshore USD demand.",
       "criticalLevels": [
         {
           "asset": "USD/IDR Spot & JISDOR",
@@ -592,11 +592,11 @@
           "implication": "Yields near 7.85% attract domestic pension/bank buying; compression below 7.55% requires lower UST yields."
         },
         {
-          "asset": "12M SRBI Auction WAR",
+          "asset": "12M SRBI (06 Nov 2026 Issued)",
           "current": "6.675% (6M: 6.566%)",
           "support": "6.575%",
           "resistance": "6.795%",
-          "implication": "Sustained clearing above 6.67% keeps foreign short-term portfolio carry attractive and defends the Rupiah."
+          "implication": "Friday 06 Nov 2026 issuance cleared at 6.675% WAR (IDR 3.00 T awarded of IDR 19.20 T bids), keeping foreign short-term portfolio carry attractive."
         },
         {
           "asset": "IDX Composite (IHSG)",
@@ -608,22 +608,22 @@
       ],
       "eventsToWatch": [
         {
-          "event": "Bank Indonesia Weekly SRBI Open Market Operation Tender",
-          "timing": "Weekly · Friday Jakarta Session",
+          "event": "Post-06 Nov 2026 SRBI Issuance Settlement & Next Friday BI OMO Tender",
+          "timing": "Issued Fri 06 Nov 2026 · Next Tender Fri 13 Nov",
           "impact": "Critical",
-          "watchFor": "Watch whether 12M WAR holds near 6.675% and if nominal bids remain near IDR 19.20 T to gauge onshore bank liquidity."
+          "watchFor": "Following Friday 06 Nov 2026's issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at 6.675%), watch secondary market turnover and whether 12M WAR holds near 6.675% next Friday."
         },
         {
-          "event": "Daily 15:15 WIB JISDOR Fixing & 1M Offshore NDF Basis",
+          "event": "100% DHE Export Earnings Conversion & Daily 15:15 WIB JISDOR Fixing",
           "timing": "Daily · 15:15 WIB (16:15 SGT)",
           "impact": "High",
-          "watchFor": "Any widening of the 1M NDF spread beyond +100 IDR (currently +36 IDR) over spot (18,080)."
+          "watchFor": "Onshore USD supply from exporter retention alongside any widening of the 1M NDF spread beyond +100 IDR (currently +36 IDR) over spot (18,080)."
         },
         {
           "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting",
           "timing": "Bi-Weekly / Monthly Policy Cycle",
           "impact": "High",
-          "watchFor": "Bid-to-cover ratio on FR0109 (5Y, 7.35%) and FR0108 (10Y, 7.69%) plus BI-Rate (5.75%) forward guidance."
+          "watchFor": "Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, 7.35%), FR0108 (10Y, 7.69%), FR0106 (15Y), and FR0107 (20Y)."
         }
       ]
     }

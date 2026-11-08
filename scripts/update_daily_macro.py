@@ -633,23 +633,33 @@ def fetch_ceic_srbi(existing_data: dict):
 def is_macro_relevant_headline(title: str) -> bool:
     """Ensure every global news headline is genuinely macro, central bank, rates, FX, commodities, or market-moving."""
     lower = title.lower()
-    macro_keywords = [
-        "fed", "powell", "hammack", "fomc", "rate", "central bank", "ecb", "boe", "boj", "rba", "pboc",
-        "treasury", "yield", "bond", "gilts", "bund", "debt", "deficit", "fiscal", "refunding",
-        "inflation", "cpi", "pce", "prices", "lending", "credit", "bank", "gdp", "economy", "economic", "recession",
-        "wall st", "wall street", "stocks", "s&p", "nasdaq", "dow", "russell", "equities", "market", "rally", "slump", "sell-off",
-        "dollar", "dxy", "currency", "currencies", "forex", "yuan", "yen", "euro", "sterling",
-        "oil", "crude", "brent", "wti", "opec", "gold", "silver", "copper", "energy",
-        "tariff", "trade", "midterm", "election", "congress", "senate", "china", "chip", "ai", "qualcomm", "nvidia",
-    ]
     exclude_words = [
         "olive oil", "shake shack", "wendy's", "peloton", "horoscope", "uber food", "prime subscribers",
         "bomb hoax", "passenger flights", "sports", "nfl", "nba", "recipe", "lottery",
         "biggest moves premarket", "biggest moves midday", "here are thursday's", "here are wednesday's",
+        "local election", "anc battered", "municipal election",
+        "check out ", "stock price", "in real time", "profile and biography", "ucits etf",
+        "mutual fund", "victory celebrations", "farms", "| stock price", "latest news",
+        "in pictures:", "knicks", "cavaliers", "suns", "rockets", "lakers", "warriors", "celtics",
+        "imprisoned", "recruitment", "delegate count", "party congress",
+        "page 2 of", "page 1 of", "professional services",
     ]
     if any(w in lower for w in exclude_words):
         return False
-    return any(k in lower for k in macro_keywords)
+
+    macro_pattern = re.compile(
+        r"\b("
+        r"fed|federal reserve|powell|hammack|fomc|interest rate|rates|central bank|ecb|boe|boj|rba|pboc|"
+        r"treasury|treasuries|yield|yields|bond|bonds|gilts|bund|debt|deficit|fiscal|refunding|"
+        r"inflation|cpi|pce|lending|credit|banking|gdp|economy|economic|recession|"
+        r"wall st|wall street|stocks|s&p|nasdaq|dow jones|equities|market|markets|rally|slump|sell-off|"
+        r"dollar|dxy|currency|currencies|forex|yuan|yen|euro|sterling|"
+        r"oil|crude|brent|wti|opec|gold|silver|copper|energy|"
+        r"tariff|tariffs|trade|midterm|midterms|congress|senate|qualcomm|nvidia|semiconductor"
+        r")\b",
+        re.I,
+    )
+    return bool(macro_pattern.search(title))
 
 
 def build_global_story_analysis(title: str, source: str, raw_desc: str, data: dict):
@@ -666,7 +676,7 @@ def build_global_story_analysis(title: str, source: str, raw_desc: str, data: di
         category = "Inflation"
     elif any(k in lower for k in ["job", "payroll", "unemployment", "labor", "wage", "layoff", "hiring"]):
         category = "Labor Market"
-    elif any(k in lower for k in ["treasury", "bond", "yield", "deficit", "debt", "congress", "midterm", "fiscal", "tax", "wall st", "stocks", "s&p", "dow", "nasdaq"]):
+    elif any(k in lower for k in ["treasury", "bond", "yield", "deficit", "debt", "congress", "midterm", "fiscal", "tax", "wall st", "stocks", "s&p", "dow", "nasdaq", "market"]):
         category = "Fiscal & Debt"
     else:
         category = "Geopolitics"
@@ -703,49 +713,99 @@ def build_global_story_analysis(title: str, source: str, raw_desc: str, data: di
     return category, impact, summary, takeaway
 
 
+def is_valid_indonesia_macro_headline(title: str) -> bool:
+    """Strictly require genuine English-language Indonesia macro, BI, OJK, Rupiah, SRBI, IndoGB, or Jakarta market relevance."""
+    low = title.lower()
+    indo_terms = [
+        "indonesia", "indonesian", "rupiah", "bank indonesia", "ojk", "ihsg", "idx", "jci",
+        "jakarta", "jisdor", "srbi", "indogb", "danantara", "prabowo", "sbn", "djppr", "forex reserves",
+    ]
+    exclude_terms = [
+        "why stock market plunged after us midterm",
+        "indonesia stocks higher at close of trade",
+        "indonesia shares higher at close of trade",
+        "manipulasi saham",
+        "rupawan",
+        "generasi muda",
+        "ajak ",
+        "lewat ",
+        "kedaulatan",
+        "hari ini",
+        "menguat",
+        "melemah",
+        "tembus",
+        "di tengah",
+        "untuk ",
+        "dengan ",
+        "dalam ",
+        "ulama in makassar",
+        "asri karya lestari",
+    ]
+    if any(ex in low for ex in exclude_terms):
+        return False
+    return any(k in low for k in indo_terms)
+
+
+def score_indonesia_macro_priority(title: str) -> int:
+    """Prioritize institutional BI / FX reserves / DHE export conversion / OJK / GDP stories over generic commentary."""
+    low = title.lower()
+    score = 0
+    tier1_terms = [
+        "foreign exchange reserves", "forex reserves", "146.8", "srbi", "rupiah conversion",
+        "export earnings", "export retention", "5.47%", "third quarter", "credibility",
+        "jisdor", "indogb", "financial stability", "cyber",
+    ]
+    tier2_terms = [
+        "bank indonesia", "ojk", "gdp", "rupiah", "danantara", "demutualization", "ihsg", "jakarta stocks",
+    ]
+    for term in tier1_terms:
+        if term in low:
+            score += 5
+    for term in tier2_terms:
+        if term in low:
+            score += 2
+    return score
+
+
 def build_indonesia_significance(title: str, source: str, idx: int, data: dict, used_sigs: set) -> str:
     """Generate a distinct, headline-specific market significance for each Indonesia disclosure."""
     low = title.lower()
-    spot = data["indonesia"]["fxAndNdf"].get("spotRate", 18075)
-    jisdor = data["indonesia"]["fxAndNdf"].get("jisdorRate", 18094)
-    ihsg = data["indonesia"]["fxAndNdf"]["ihsgIndex"].get("level", 4919.77)
-    ihsg_pct = data["indonesia"]["fxAndNdf"]["ihsgIndex"].get("changePct", 0.32)
-    indo_10y = next((b["yield"] for b in data["indonesia"]["bonds"]["indoGB"] if "10Y" in b["tenor"]), 7.74)
-    srbi_12m = next((s["weightedAvgYield"] for s in data["indonesia"]["bonds"]["srbi"] if s["tenor"] == "12M"), 6.601)
+    spot = data["indonesia"]["fxAndNdf"].get("spotRate", 18080)
+    jisdor = data["indonesia"]["fxAndNdf"].get("jisdorRate", 18130)
+    ihsg = data["indonesia"]["fxAndNdf"]["ihsgIndex"].get("level", 5050.43)
+    indo_10y = next((b["yield"] for b in data["indonesia"]["bonds"]["indoGB"] if b["tenor"].startswith("10Y")), 7.69)
+    srbi_12m = next((s["weightedAvgYield"] for s in data["indonesia"]["bonds"]["srbi"] if s["tenor"] == "12M"), 6.675)
 
     candidates = []
-    if "demutualization" in low or "danantara" in low or "governance" in low:
+    if "reserve" in low or "146.8" in low or "forex" in low:
         candidates.append(
-            "Advances structural reform of Indonesia's exchange governance alongside Danantara sovereign wealth initiatives, deepening long-term institutional participation."
+            f"Reinforces Bank Indonesia's US$146.8B external reserve buffer to defend JISDOR (Rp {jisdor:,.0f}) alongside the 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%)."
         )
-    if "short selling" in low or "transparency" in low or "msci" in low:
+    if "export" in low or "conversion" in low or "100 pct" in low or "retention" in low:
         candidates.append(
-            "Enhances IDX market microstructure and two-way price discovery ahead of MSCI index rebalancings, supporting foreign institutional turnover."
+            f"Mandatory onshore conversion of natural resource export proceeds (DHE SDA) structurally deepens domestic USD liquidity and anchors spot USD/IDR near {spot:,.0f}."
         )
-    if "retail" in low or "red" in low:
+    if "ojk" in low or "cyber" in low or "fines" in low or "p2p" in low or "islamic banking" in low or "reform" in low:
         candidates.append(
-            f"Highlights divergence between institutional block buying and domestic retail positioning as IDX Composite trades at {ihsg:,.2f} ({ihsg_pct:+.2f}%)."
+            f"Strengthens OJK prudential supervision and institutional governance across Indonesian banks and capital markets (IHSG {ihsg:,.2f})."
         )
-    if "all sectors" in low or "5,000" in low or "5,030" in low or "surge" in low or "jump" in low or "higher" in low:
+    if "demutualization" in low or "danantara" in low or "smart cities" in low or "governance" in low:
         candidates.append(
-            f"Broad-based buying across banking and cyclical heavyweights propels Jakarta equities ({ihsg:,.2f}, {ihsg_pct:+.2f}%), supported by steady USD/IDR at {spot:,.0f}."
+            "Advances structural investment and sovereign wealth deployment under Danantara, supporting medium-term infrastructure and capital market depth."
         )
+    if "gdp" in low or "growth" in low or "economy" in low or "5.47%" in low or "third quarter" in low or "purchasing power" in low:
         candidates.append(
-            f"Sector-wide equity momentum across financials, energy, and infrastructure reinforces foreign net inflows into IDX large-cap benchmarks."
+            f"Frames Indonesia's Q3 real GDP growth trajectory (~5.47% YoY) against domestic consumption trends and anchors institutional demand for 10Y FR0108 IndoGBs ({indo_10y:.2f}%)."
         )
-    if "gdp" in low or "growth" in low or "economy" in low or "fiscal" in low:
+    if "rupiah" in low or "credibility" in low or "jisdor" in low or "bi" in low or "srbi" in low or "dollar" in low:
         candidates.append(
-            f"Reinforces Indonesia's ~5% real GDP growth trajectory and anchors domestic demand for 10Y IndoGB benchmarks ({indo_10y:.2f}%)."
-        )
-    if "rupiah" in low or "jisdor" in low or "bi" in low or "rate" in low or "srbi" in low:
-        candidates.append(
-            f"Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp {jisdor:,.0f} and 12M SRBI WAR clearing at {srbi_12m:.3f}%."
+            f"Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp {jisdor:,.0f} and the 06 Nov 12M SRBI WAR clearing at {srbi_12m:.3f}%."
         )
 
     candidates.extend([
         f"Reported by {source}; shapes onshore institutional allocation across Jakarta equities (IHSG {ihsg:,.2f}) and Rupiah money markets.",
-        f"Tracked by {source}; influences foreign portfolio flows into IndoGB sovereign bonds (10Y at {indo_10y:.2f}%) and FX hedging basis.",
-        f"Monitored by {source}; provides macro context for Bank Indonesia's liquidity operations (12M SRBI WAR at {srbi_12m:.3f}%) and JISDOR (Rp {jisdor:,.0f}).",
+        f"Tracked by {source}; influences foreign portfolio flows into DJPPR benchmark FR0108 bonds (10Y at {indo_10y:.2f}%) and FX hedging basis.",
+        f"Monitored by {source}; provides macro context following Bank Indonesia's 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%) and JISDOR (Rp {jisdor:,.0f}).",
         f"Published by {source}; underscores domestic capital market depth alongside steady USD/IDR spot at {spot:,.0f}.",
         f"Highlighted by {source}; reflects institutional positioning across Indonesian financials and sovereign fixed income.",
     ])
@@ -798,16 +858,17 @@ def get_canonical_source_url(source: str, category: str, rss_link: str) -> str:
 
 def fetch_live_global_macro_news(existing_data: dict):
     """
-    Fetch Top 10 Global Macro News strictly within the last 12 hours from Reuters,
-    Bloomberg, CNBC, and CNN feeds, ordered with most recent at the top.
+    Fetch Top 10 Global Macro News from Reuters, Bloomberg, CNBC, and CNN feeds,
+    ordered with most recent at the top (using 12h primary lookback and 36h weekend expansion).
     """
     rss_urls = [
         "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:cnn.com)+(Fed+OR+Treasury+OR+inflation+OR+markets+OR+Wall+Street+OR+yields+OR+dollar+OR+oil+OR+gold+OR+economy)+when:12h&hl=en-US&gl=US&ceid=US:en",
         "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258",
         "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com)+(Federal+Reserve+OR+Treasury+yields+OR+inflation+OR+Wall+Street+OR+tariff+OR+oil+OR+central+bank)+when:36h&hl=en-US&gl=US&ceid=US:en",
     ]
     now_utc = datetime.now(timezone.utc)
-    cutoff_12h = now_utc - timedelta(hours=12)
+    cutoff_36h = now_utc - timedelta(hours=36)
 
     candidates = []
     seen_titles = set()
@@ -847,7 +908,7 @@ def fetch_live_global_macro_news(existing_data: dict):
                 except Exception:
                     continue
 
-                if pub_dt < cutoff_12h or pub_dt > now_utc + timedelta(minutes=10):
+                if pub_dt < cutoff_36h or pub_dt > now_utc + timedelta(minutes=10):
                     continue
 
                 source = normalize_source_name(raw_source, link)
@@ -901,16 +962,16 @@ def fetch_live_global_macro_news(existing_data: dict):
 
 def fetch_live_indonesia_news_and_commentary(existing_data: dict):
     """
-    Fetch Top 5 Indonesia Market News within the last 16 hours ordered by recency
-    with BOTH `title` and `headline` populated, distinct `significance` per item,
-    clickable URLs, and dynamically refreshed Indonesia commentary & macro pillars.
+    Fetch Top 5 Indonesia Market News ordered by macro relevance and recency (with weekend-aware 72h lookback so
+    Friday Bank Indonesia / ANTARA / Jakarta Post disclosures are captured when Jakarta markets are closed),
+    with BOTH `title` and `headline` populated, distinct `significance` per item, and clickable URLs.
     """
     rss_urls = [
-        "https://news.google.com/rss/search?q=(Indonesia+economy+OR+Bank+Indonesia+OR+Rupiah+OR+IHSG+OR+JISDOR+OR+IDX+Composite+OR+IndoGB)+when:16h&hl=en-ID&gl=ID&ceid=ID:en",
-        "https://news.google.com/rss/search?q=(Indonesia+economy+OR+Bank+Indonesia+OR+Rupiah+OR+IHSG+OR+JISDOR+OR+IDX+Composite)+when:24h&hl=en-ID&gl=ID&ceid=ID:en",
+        "https://news.google.com/rss/search?q=(%22Bank+Indonesia%22+OR+%22Rupiah%22+OR+%22IHSG%22+OR+%22IDX+Composite%22+OR+%22OJK%22+OR+%22Indonesia+economy%22+OR+%22Indonesia+GDP%22+OR+%22Danantara%22+OR+%22SRBI%22+OR+%22foreign+exchange+reserves%22)+when:72h&hl=en-ID&gl=ID&ceid=ID:en",
+        "https://news.google.com/rss/search?q=(site:en.antaranews.com+OR+site:thejakartapost.com+OR+site:jakartaglobe.id+OR+site:en.tempo.co)+(Bank+Indonesia+OR+Rupiah+OR+OJK+OR+forex+reserves+OR+export+OR+GDP)+when:72h&hl=en-ID&gl=ID&ceid=ID:en",
     ]
     now_utc = datetime.now(timezone.utc)
-    cutoff_24h = now_utc - timedelta(hours=24)
+    cutoff_72h = now_utc - timedelta(hours=72)
 
     candidates = []
     seen_titles = set()
@@ -929,6 +990,9 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
                     continue
 
                 clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
+                if not is_valid_indonesia_macro_headline(clean_title):
+                    continue
+
                 title_key = re.sub(r"[^a-z0-9]", "", clean_title.lower())[:40]
                 if title_key in seen_titles:
                     continue
@@ -942,18 +1006,21 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
                 except Exception:
                     continue
 
-                if pub_dt < cutoff_24h or pub_dt > now_utc + timedelta(minutes=10):
+                if pub_dt < cutoff_72h or pub_dt > now_utc + timedelta(minutes=10):
                     continue
 
                 seen_titles.add(title_key)
                 diff_mins = max(15, int((now_utc - pub_dt).total_seconds() // 60))
                 if diff_mins < 60:
                     time_ago = f"{diff_mins}m ago"
+                elif diff_mins < 1440:
+                    time_ago = f"{diff_mins // 60}h ago"
                 else:
-                    time_ago = f"{min(diff_mins // 60, 16)}h ago"
+                    time_ago = f"{diff_mins // 1440}d ago"
 
                 candidates.append({
                     "pub_dt": pub_dt,
+                    "priority": score_indonesia_macro_priority(clean_title),
                     "title": clean_title,
                     "headline": clean_title,
                     "source": raw_source,
@@ -963,12 +1030,14 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
         except Exception as e:
             print(f"Warn: Indonesia RSS error ({rss_url}): {e}")
 
-    candidates.sort(key=lambda x: x["pub_dt"], reverse=True)
+    # Select top 5 high-impact macro disclosures (Tier 1 BI/FX reserves/DHE/GDP/OJK first), then order selected top 5 by recency
+    candidates.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
+    selected_5 = sorted(candidates[:5], key=lambda x: x["pub_dt"], reverse=True)
 
-    if len(candidates) >= 3:
+    if len(selected_5) >= 3:
         top_5 = []
         used_sigs = set()
-        for idx, item in enumerate(candidates[:5]):
+        for idx, item in enumerate(selected_5):
             sig = build_indonesia_significance(item["title"], item["source"], idx, existing_data, used_sigs)
             top_5.append({
                 "title": item["title"],
@@ -989,9 +1058,9 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
 
     fx_ndf = existing_data["indonesia"]["fxAndNdf"]
     bonds = existing_data["indonesia"]["bonds"]
-    spot = fx_ndf.get("spotRate", 18075)
-    jisdor = fx_ndf.get("jisdorRate", 18094)
-    jisdor_hist = fx_ndf.get("jisdorHistory") or [{"date": "5 November 2026", "rate": 18094}]
+    spot = fx_ndf.get("spotRate", 18080)
+    jisdor = fx_ndf.get("jisdorRate", 18130)
+    jisdor_hist = fx_ndf.get("jisdorHistory") or [{"date": "6 November 2026", "rate": 18130}]
     jisdor_dt = jisdor_hist[0]["date"]
     prev_jisdor_str = (
         f"Rp {jisdor_hist[1]['rate']:,.0f} on {jisdor_hist[1]['date']}"
@@ -1001,18 +1070,18 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
 
     bi_rate = bonds.get("biRate", 5.75)
     cpi_yoy = bonds.get("cpiInflationYoY", 3.28)
-    srbi_6m = next((s["weightedAvgYield"] for s in bonds["srbi"] if s["tenor"] == "6M"), 6.491)
-    srbi_9m = next((s["weightedAvgYield"] for s in bonds["srbi"] if s["tenor"] == "9M"), 6.530)
-    srbi_12m = next((s["weightedAvgYield"] for s in bonds["srbi"] if s["tenor"] == "12M"), 6.601)
-    srbi_bids = next((s["nominalBidsIDR"] for s in bonds["srbi"] if s["tenor"] == "12M"), "IDR 41.81 T")
-    indo_5y = next((b["yield"] for b in bonds["indoGB"] if "5Y" in b["tenor"]), 7.66)
-    indo_10y = next((b["yield"] for b in bonds["indoGB"] if "10Y" in b["tenor"]), 7.74)
-    spread_10y = bonds.get("sovereignSpread10Y", 290)
-    ndf1m = fx_ndf.get("ndf1M", 18140)
-    ndf_spread = fx_ndf.get("ndfSpread1M", 65)
-    ndf_basis = fx_ndf.get("annualizedBasis1M", 4.32)
-    ihsg_lvl = fx_ndf.get("ihsgIndex", {}).get("level", 5030.26)
-    ihsg_pct = fx_ndf.get("ihsgIndex", {}).get("changePct", 2.25)
+    srbi_6m = next((s["weightedAvgYield"] for s in bonds["srbi"] if s["tenor"] == "6M"), 6.566)
+    srbi_9m = next((s["weightedAvgYield"] for s in bonds["srbi"] if s["tenor"] == "9M"), 6.655)
+    srbi_12m = next((s["weightedAvgYield"] for s in bonds["srbi"] if s["tenor"] == "12M"), 6.675)
+    srbi_bids = next((s["nominalBidsIDR"] for s in bonds["srbi"] if s["tenor"] == "12M"), "IDR 19.20 T")
+    indo_5y = next((b["yield"] for b in bonds["indoGB"] if b["tenor"].startswith("5Y")), 7.35)
+    indo_10y = next((b["yield"] for b in bonds["indoGB"] if b["tenor"].startswith("10Y")), 7.69)
+    spread_10y = bonds.get("sovereignSpread10Y", 283)
+    ndf1m = fx_ndf.get("ndf1M", 18116)
+    ndf_spread = fx_ndf.get("ndfSpread1M", 36)
+    ndf_basis = fx_ndf.get("annualizedBasis1M", 2.39)
+    ihsg_lvl = fx_ndf.get("ihsgIndex", {}).get("level", 5050.43)
+    ihsg_pct = fx_ndf.get("ihsgIndex", {}).get("changePct", 0.40)
 
     srbi_dt = next((s.get("auctionDate", "06 Nov 2026") for s in bonds["srbi"] if s["tenor"] == "12M"), "06 Nov 2026")
     existing_data["indonesia"]["commentary"]["date"] = datetime.now(SGT).strftime("%d %b %Y")
@@ -1222,42 +1291,45 @@ def build_argon_commentaries(data: dict):
     fx_ndf = data["indonesia"]["fxAndNdf"]
     bi_rate = float(bonds.get("biRate", 5.75))
     cpi_yoy = float(bonds.get("cpiInflationYoY", 3.28))
-    indo_5y = next((float(b["yield"]) for b in bonds["indoGB"] if "5Y" in b["tenor"]), 7.66)
-    indo_10y = next((float(b["yield"]) for b in bonds["indoGB"] if "10Y" in b["tenor"]), 7.74)
+    indo_5y = next((float(b["yield"]) for b in bonds["indoGB"] if b["tenor"].startswith("5Y")), 7.35)
+    indo_10y = next((float(b["yield"]) for b in bonds["indoGB"] if b["tenor"].startswith("10Y")), 7.69)
     spread_10y = int(bonds.get("sovereignSpread10Y", round((indo_10y - y10) * 100)))
 
-    srbi_6m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "6M"), 6.491)
-    srbi_12m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "12M"), 6.601)
-    srbi_bids = next((s.get("nominalBidsIDR", "IDR 41.81 T") for s in bonds["srbi"] if s["tenor"] == "12M"), "IDR 41.81 T")
+    srbi_6m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "6M"), 6.566)
+    srbi_9m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "9M"), 6.655)
+    srbi_12m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "12M"), 6.675)
+    srbi_dt = next((s.get("auctionDate", "06 Nov 2026") for s in bonds["srbi"] if s["tenor"] == "12M"), "06 Nov 2026")
+    srbi_bids = next((s.get("nominalBidsIDR", "IDR 19.20 T") for s in bonds["srbi"] if s["tenor"] == "12M"), "IDR 19.20 T")
+    srbi_awarded = next((s.get("awardedVolumeIDR", "IDR 3.00 T") for s in bonds["srbi"] if s["tenor"] == "12M"), "IDR 3.00 T")
 
-    spot = int(fx_ndf.get("spotRate", 18075))
-    jisdor = int(fx_ndf.get("jisdorRate", 18094))
-    ndf1m = int(fx_ndf.get("ndf1M", 18111))
+    spot = int(fx_ndf.get("spotRate", 18080))
+    jisdor = int(fx_ndf.get("jisdorRate", 18130))
+    ndf1m = int(fx_ndf.get("ndf1M", 18116))
     ndf_spread = int(fx_ndf.get("ndfSpread1M", 36))
-    ihsg = float(fx_ndf.get("ihsgIndex", {}).get("level", 4919.77))
-    ihsg_pct = float(fx_ndf.get("ihsgIndex", {}).get("changePct", 0.32))
+    ihsg = float(fx_ndf.get("ihsgIndex", {}).get("level", 5050.43))
+    ihsg_pct = float(fx_ndf.get("ihsgIndex", {}).get("changePct", 0.40))
     real_buffer = round(bi_rate - cpi_yoy, 2)
 
     lead_indo_news = (
         data["indonesia"]["commentary"].get("noteworthyHeadlines", [{}])[0].get("title")
-        or "Bank Indonesia anchors Rupiah stability via triple intervention and SRBI liquidity sterilization"
+        or "Bank Indonesia reports US$146.8B FX reserves and prepares 100% Rupiah conversion for resource export earnings"
     )
 
     data["indonesia"]["argonCommentary"] = {
         "modelLabel": "GEMINI 4 ARGON",
         "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
         "regimeBadge": f"BI-RATE {bi_rate:.2f}% · REAL BUFFER +{real_buffer:.2f}% · SPREAD +{spread_10y} BPS",
-        "conviction": "Overweight 12M SRBI & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry",
+        "conviction": f"Overweight 12M SRBI ({srbi_12m:.3f}% WAR) & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry",
         "synthesis": (
             f"Indonesia's macro-financial framework offers a +{real_buffer:.2f}% real policy rate buffer (BI-Rate at {bi_rate:.2f}% vs Headline CPI at {cpi_yoy:.2f}% YoY) "
-            f"alongside a +{spread_10y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 ({indo_10y:.2f}% vs US 10Y at {y10:.2f}%). "
-            f"Onshore USD/IDR spot ({spot:,}) trades tightly anchored against Bank Indonesia's JISDOR fixing (Rp {jisdor:,}), "
-            f"while 1M offshore NDFs ({ndf1m:,}, +{ndf_spread} IDR basis) signal contained offshore hedging pressure. "
-            f"Strong institutional demand in Bank Indonesia's SRBI auctions (12M WAR at {srbi_12m:.3f}% on {srbi_bids} bids) continues to sterilize excess liquidity while IHSG trades at {ihsg:,.2f} ({ihsg_pct:+.2f}%). "
-            f"Key domestic development: \"{lead_indo_news}\"."
+            f"alongside a +{spread_10y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 ({indo_10y:.2f}% vs US 10Y at {y10:.2f}%, with 5Y FR0109 at {indo_5y:.2f}%). "
+            f"In Bank Indonesia's completed Friday {srbi_dt} SRBI issuance (bi.go.id), total incoming bids reached IDR 36.90 T across tenors while BI awarded IDR 7.50 T (4.92x bid-to-cover), "
+            f"with Winner WAR clearing at {srbi_6m:.3f}% (6M), {srbi_9m:.3f}% (9M), and {srbi_12m:.3f}% (12M: {srbi_awarded} awarded from {srbi_bids} bids). "
+            f"Onshore USD/IDR spot ({spot:,}) and JISDOR (Rp {jisdor:,}) remain well-anchored with 1M NDFs at {ndf1m:,} (+{ndf_spread} IDR basis) and IHSG at {ihsg:,.2f} ({ihsg_pct:+.2f}%). "
+            f"Lead domestic development: \"{lead_indo_news}\"."
         ),
         "positioningTakeaway": (
-            f"Capture front-end Rupiah carry via 12M SRBI ({srbi_12m:.3f}% WAR) and 5Y–10Y DJPPR benchmarks FR0109/FR0108 ({indo_5y:.2f}%–{indo_10y:.2f}%) "
+            f"Following Friday {srbi_dt}'s SRBI issuance (12M WAR at {srbi_12m:.3f}%), capture front-end Rupiah carry via 12M SRBI and 5Y–10Y DJPPR benchmarks FR0109/FR0108 ({indo_5y:.2f}%–{indo_10y:.2f}%) "
             f"while monitoring the 1M NDF-Spot basis (+{ndf_spread} IDR) as an early-warning barometer for offshore USD demand."
         ),
         "criticalLevels": [
@@ -1276,11 +1348,11 @@ def build_argon_commentaries(data: dict):
                 "implication": f"Yields near {indo_10y + 0.16:.2f}% attract domestic pension/bank buying; compression below {indo_10y - 0.14:.2f}% requires lower UST yields.",
             },
             {
-                "asset": "12M SRBI Auction WAR",
+                "asset": f"12M SRBI ({srbi_dt} Issued)",
                 "current": f"{srbi_12m:.3f}% (6M: {srbi_6m:.3f}%)",
                 "support": f"{srbi_12m - 0.10:.3f}%",
                 "resistance": f"{srbi_12m + 0.12:.3f}%",
-                "implication": f"Sustained clearing above {srbi_12m:.2f}% keeps foreign short-term portfolio carry attractive and defends the Rupiah.",
+                "implication": f"Friday {srbi_dt} issuance cleared at {srbi_12m:.3f}% WAR ({srbi_awarded} awarded of {srbi_bids} bids), keeping foreign short-term portfolio carry attractive.",
             },
             {
                 "asset": "IDX Composite (IHSG)",
@@ -1292,22 +1364,22 @@ def build_argon_commentaries(data: dict):
         ],
         "eventsToWatch": [
             {
-                "event": "Bank Indonesia Weekly SRBI Open Market Operation Tender",
-                "timing": "Weekly · Friday Jakarta Session",
+                "event": f"Post-{srbi_dt} SRBI Issuance Settlement & Next Friday BI OMO Tender",
+                "timing": f"Issued Fri {srbi_dt} · Next Tender Fri 13 Nov",
                 "impact": "Critical",
-                "watchFor": f"Watch whether 12M WAR holds near {srbi_12m:.3f}% and if nominal bids remain near {srbi_bids} to gauge onshore bank liquidity.",
+                "watchFor": f"Following Friday {srbi_dt}'s issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at {srbi_12m:.3f}%), watch secondary market turnover and whether 12M WAR holds near {srbi_12m:.3f}% next Friday.",
             },
             {
-                "event": "Daily 15:15 WIB JISDOR Fixing & 1M Offshore NDF Basis",
+                "event": "100% DHE Export Earnings Conversion & Daily 15:15 WIB JISDOR Fixing",
                 "timing": "Daily · 15:15 WIB (16:15 SGT)",
                 "impact": "High",
-                "watchFor": f"Any widening of the 1M NDF spread beyond +100 IDR (currently +{ndf_spread} IDR) over spot ({spot:,}).",
+                "watchFor": f"Onshore USD supply from exporter retention alongside any widening of the 1M NDF spread beyond +100 IDR (currently +{ndf_spread} IDR) over spot ({spot:,}).",
             },
             {
                 "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting",
                 "timing": "Bi-Weekly / Monthly Policy Cycle",
                 "impact": "High",
-                "watchFor": f"Bid-to-cover ratio on FR0109 (5Y, {indo_5y:.2f}%) and FR0108 (10Y, {indo_10y:.2f}%) plus BI-Rate ({bi_rate:.2f}%) forward guidance.",
+                "watchFor": f"Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, {indo_5y:.2f}%), FR0108 (10Y, {indo_10y:.2f}%), FR0106 (15Y), and FR0107 (20Y).",
             },
         ],
     }
