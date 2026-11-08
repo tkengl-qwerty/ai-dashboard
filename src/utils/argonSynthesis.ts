@@ -46,7 +46,7 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
 
   const positioningTakeaway =
     `Favor 2Y–5Y belly duration (${y2.toFixed(2)}%–${y5.toFixed(2)}%) over unhedged 30Y long bonds (${y30.toFixed(2)}%) until term-premium supply clears; ` +
-    `watch ${ (y10 + 0.15).toFixed(2) }% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (${ndxPrice.toLocaleString('en-US', { maximumFractionDigits: 0 })}) constituents.`;
+    `watch ${(y10 + 0.15).toFixed(2)}% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (${ndxPrice.toLocaleString('en-US', { maximumFractionDigits: 0 })}) constituents.`;
 
   const criticalLevels = [
     {
@@ -222,4 +222,211 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
   };
 }
 
+export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
+  const china = snap.china;
+  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
 
+  const cgb1Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('1Y'))?.yield ?? 1.168;
+  const cgb5Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 1.312;
+  const cgb10Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 1.587;
+  const cgb30Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('30Y'))?.yield ?? 2.028;
+  const curveDate = china?.bonds.curveDate ?? '2026-11-06';
+
+  const omo7d = china?.bonds.pbocOmo7dRate ?? 1.50;
+  const lpr1Y = china?.bonds.lpr1Y ?? 3.10;
+  const lpr5Y = china?.bonds.lpr5Y ?? 3.60;
+  const cpi = china?.bonds.cpiInflationYoY ?? 0.60;
+  const spread10Y = Math.round((cgb10Y - ust10Y) * 100);
+  const slope10s30s = Math.round((cgb30Y - cgb10Y) * 100);
+
+  const cny = china?.fxAndEquities.cnySpot ?? 6.6710;
+  const cnh = china?.fxAndEquities.cnhSpot ?? 6.6736;
+  const fixing = china?.fxAndEquities.pbocFixing ?? 6.6685;
+  const ssec = china?.fxAndEquities.shanghaiComposite.level ?? 3649.18;
+  const ssecPct = china?.fxAndEquities.shanghaiComposite.changePct ?? -1.10;
+
+  const leadHeadline =
+    china?.commentary.noteworthyHeadlines[0]?.title ||
+    china?.commentary.noteworthyHeadlines[0]?.headline ||
+    'PBoC maintains accommodative liquidity operations as CCDC 10Y ChinaBond CGB yield trades near 1.587%';
+
+  const regimeBadge = `7D OMO ${omo7d.toFixed(2)}% · CCDC 10Y ${cgb10Y.toFixed(3)}% · US-CN SPREAD ${spread10Y} BPS`;
+  const conviction = 'Belly CGB Receive (3Y–5Y CCDC Curve) · FX-Hedged Total Return · Watch 30Y Ultra-Long Supply';
+
+  const synthesis =
+    `Official China Central Depository & Clearing (CCDC · yield.chinabond.com.cn) ChinaBond CGB valuations (${curveDate}) show an accommodative sovereign curve with 1Y CGB at ${cgb1Y.toFixed(3)}%, ` +
+    `5Y benchmark at ${cgb5Y.toFixed(3)}%, 10Y benchmark at ${cgb10Y.toFixed(3)}%, and 30Y ultra-long CGB at ${cgb30Y.toFixed(3)}% (10s30s slope at +${slope10s30s} bps; ${spread10Y} bps vs US 10Y Treasuries). ` +
+    `With the PBoC 7-Day Reverse Repo anchored at ${omo7d.toFixed(2)}% (1Y/5Y LPR at ${lpr1Y.toFixed(2)}%/${lpr5Y.toFixed(2)}% and CPI at ${cpi.toFixed(2)}% YoY), commercial bank wealth-management demand continues to compress front-end and belly yields. ` +
+    `In currency markets, onshore USD/CNY (${cny.toFixed(4)}) and offshore USD/CNH (${cnh.toFixed(4)}) track closely around the PBoC daily central parity fixing (${fixing.toFixed(4)}), while the Shanghai Composite trades at ${ssec.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ssecPct >= 0 ? '+' : ''}${ssecPct.toFixed(2)}%). ` +
+    `Lead China macro development: "${leadHeadline}".`;
+
+  const positioningTakeaway =
+    `Express bullish China rates views via 3Y–5Y CCDC CGB benchmarks (${cgb5Y.toFixed(3)}%) where PBoC DR007 funding carry is positive, while avoiding unhedged duration chases below 1.50% on 10Y CGB (${cgb10Y.toFixed(3)}%) where PBoC bond-lending intervention risk rises.`;
+
+  const criticalLevels = [
+    {
+      asset: 'CCDC 10Y ChinaBond CGB',
+      current: `${cgb10Y.toFixed(3)}%`,
+      support: '1.500%',
+      resistance: '1.720%',
+      implication: 'Yields approaching 1.500% risk PBoC secondary bond sales; backup toward 1.720% triggers domestic bank buying.',
+    },
+    {
+      asset: 'CCDC 30Y Ultra-Long CGB',
+      current: `${cgb30Y.toFixed(3)}% (+${slope10s30s} bps 10s30s)`,
+      support: '1.920%',
+      resistance: '2.150%',
+      implication: 'Ultra-long special Treasury issuance supply tests 2.150% ceiling; rural bank duration demand supports 1.920%.',
+    },
+    {
+      asset: 'USD/CNH & PBoC Fixing',
+      current: `${cnh.toFixed(4)} (Fix ${fixing.toFixed(4)})`,
+      support: (cnh - 0.065).toFixed(4),
+      resistance: (cnh + 0.075).toFixed(4),
+      implication: 'PBoC FX reserve requirement adjustments and counter-cyclical fixing factor cap rapid one-way Yuan swings.',
+    },
+    {
+      asset: 'Shanghai Composite (SSEC)',
+      current: ssec.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      support: Math.round(ssec * 0.965).toLocaleString('en-US'),
+      resistance: Math.round(ssec * 1.035).toLocaleString('en-US'),
+      implication: `Break above ${Math.round(ssec * 1.035).toLocaleString('en-US')} drives equity-bond rotation and steepens the CCDC 2s10s CGB curve.`,
+    },
+  ];
+
+  const eventsToWatch = [
+    {
+      event: 'PBoC Daily 7D Reverse Repo OMO & CCDC ChinaBond Valuation Fixing',
+      timing: 'Daily · 09:15 & 17:00 CST (SGT)',
+      impact: 'Critical' as const,
+      watchFor: `Net liquidity injection/drain via 7D OMO (${omo7d.toFixed(2)}%) and whether DR007 repo stays anchored below 1.70% as CCDC publishes end-of-day CGB yields.`,
+    },
+    {
+      event: 'Ministry of Finance (MoF) Ultra-Long Special CGB Auction & LPR Fixing',
+      timing: '20th of Month · 09:15 CST',
+      impact: 'High' as const,
+      watchFor: `Primary auction bid-to-cover on 10Y (${cgb10Y.toFixed(3)}%) and 30Y (${cgb30Y.toFixed(3)}%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR (${lpr1Y.toFixed(2)}% / ${lpr5Y.toFixed(2)}%).`,
+    },
+    {
+      event: 'PBoC USD/CNY Central Parity Fixing & Northbound Bond Connect Flows',
+      timing: 'Daily · 09:15 CST',
+      impact: 'High' as const,
+      watchFor: `Deviation between PBoC central parity (${fixing.toFixed(4)}) and offshore CNH (${cnh.toFixed(4)}) dictating FX-hedged foreign inflows into CCDC-custodied CGBs.`,
+    },
+  ];
+
+  return {
+    modelLabel: 'GEMINI 4 ARGON',
+    title: 'GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS',
+    regimeBadge,
+    conviction,
+    synthesis,
+    positioningTakeaway,
+    criticalLevels,
+    eventsToWatch,
+  };
+}
+
+export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
+  const korea = snap.korea;
+  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
+
+  const ktb3Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('3Y'))?.yield ?? 3.622;
+  const ktb5Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 3.716;
+  const ktb10Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 3.852;
+  const ktb30Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('30Y'))?.yield ?? 3.895;
+  const quoteDate = korea?.bonds.quotationDate ?? '06 Nov 2026';
+
+  const bokRate = korea?.bonds.bokBaseRate ?? 3.00;
+  const kofr = korea?.bonds.kofrOvernightRate ?? 2.98;
+  const cd91d = korea?.bonds.cd91dRate ?? 3.42;
+  const cpi = korea?.bonds.cpiInflationYoY ?? 2.10;
+  const spread10Y = Math.round((ktb10Y - ust10Y) * 100);
+  const slope3s10s = Math.round((ktb10Y - ktb3Y) * 100);
+
+  const krw = korea?.fxAndEquities.krwSpot ?? 1356.34;
+  const ndf1M = korea?.fxAndEquities.ndf1M ?? 1354.10;
+  const kospi = korea?.fxAndEquities.kospiIndex.level ?? 5059.69;
+  const kospiPct = korea?.fxAndEquities.kospiIndex.changePct ?? -6.02;
+
+  const leadHeadline =
+    korea?.commentary.noteworthyHeadlines[0]?.title ||
+    korea?.commentary.noteworthyHeadlines[0]?.headline ||
+    'KOFIA / SOFIA Korea Treasury Bond yields rally as foreign WGBI inflows support 3Y and 10Y KTB benchmarks';
+
+  const regimeBadge = `BOK BASE ${bokRate.toFixed(2)}% · KOFR/SOFIA ${kofr.toFixed(2)}% · 10Y KTB ${ktb10Y.toFixed(3)}%`;
+  const conviction = 'Long 3Y–10Y KTB (KOFIA Benchmark) on WGBI Inflows · Receive 3s10s Box · Watch USD/KRW 1,380';
+
+  const synthesis =
+    `Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) final OTC bond quotations (${quoteDate}) place the benchmark 3Y KTB at ${ktb3Y.toFixed(3)}%, ` +
+    `5Y KTB at ${ktb5Y.toFixed(3)}%, 10Y KTB at ${ktb10Y.toFixed(3)}%, and 30Y KTB at ${ktb30Y.toFixed(3)}% (3s10s slope at +${slope3s10s} bps; ${spread10Y} bps vs 10Y US Treasuries). ` +
+    `With the Bank of Korea (BOK) Base Rate at ${bokRate.toFixed(2)}% (Headline CPI at ${cpi.toFixed(2)}% YoY, real policy buffer +${(bokRate - cpi).toFixed(2)}%), short-term SOFIA / KOFR overnight repo fixes at ${kofr.toFixed(2)}% and 91-day KOFIA CD rates trade at ${cd91d.toFixed(2)}%. ` +
+    `In FX and equity markets, onshore USD/KRW trades at ₩${krw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (1M NDF at ₩${ndf1M.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}) while KOSPI sits at ${kospi.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${kospiPct >= 0 ? '+' : ''}${kospiPct.toFixed(2)}%). ` +
+    `Lead Korea macro catalyst: "${leadHeadline}".`;
+
+  const positioningTakeaway =
+    `Accumulate 3Y and 10Y KTB benchmarks (${ktb3Y.toFixed(3)}% / ${ktb10Y.toFixed(3)}%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding (${kofr.toFixed(2)}%) anchor domestic duration demand.`;
+
+  const criticalLevels = [
+    {
+      asset: 'KOFIA 3Y & 10Y KTB Yield',
+      current: `3Y ${ktb3Y.toFixed(3)}% · 10Y ${ktb10Y.toFixed(3)}%`,
+      support: `${(ktb10Y - 0.15).toFixed(3)}% (10Y)`,
+      resistance: `${(ktb10Y + 0.15).toFixed(3)}% (10Y)`,
+      implication: `10Y KTB above ${(ktb10Y + 0.15).toFixed(2)}% draws pension/insurer duration buying; sub-${(ktb10Y - 0.15).toFixed(2)}% prices in an additional BOK rate cut.`,
+    },
+    {
+      asset: 'KOFR / SOFIA & 91D CD Rate',
+      current: `KOFR ${kofr.toFixed(2)}% · CD ${cd91d.toFixed(2)}%`,
+      support: `${(kofr - 0.15).toFixed(2)}%`,
+      resistance: `${(cd91d + 0.12).toFixed(2)}%`,
+      implication: 'Tight KOFR-to-BOK Base Rate spread confirms ample overnight RP liquidity across Korean securities dealers.',
+    },
+    {
+      asset: 'USD/KRW Spot & 1M NDF',
+      current: `₩${krw.toFixed(2)} (NDF ₩${ndf1M.toFixed(2)})`,
+      support: `₩${(krw - 22).toFixed(0)}`,
+      resistance: `₩${(krw + 25).toFixed(0)}`,
+      implication: `Sustained move above ₩${(krw + 25).toFixed(0)} delays BOK easing and prompts NPS/BOK FX smoothing operations.`,
+    },
+    {
+      asset: 'KOSPI Composite Index',
+      current: kospi.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      support: Math.round(kospi * 0.97).toLocaleString('en-US'),
+      resistance: Math.round(kospi * 1.035).toLocaleString('en-US'),
+      implication: 'Memory semiconductor export cycle and Corporate Value-Up disclosures dictate foreign net equity flows.',
+    },
+  ];
+
+  const eventsToWatch = [
+    {
+      event: 'KOFIA 11:30 & 16:00 KST Final OTC Quotation Yield Fixing & KTB Futures',
+      timing: 'Daily · 11:30 & 16:00 KST (15:00 SGT)',
+      impact: 'Critical' as const,
+      watchFor: `Foreign institutional net buying in 3Y (${ktb3Y.toFixed(3)}%) and 10Y (${ktb10Y.toFixed(3)}%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads.`,
+    },
+    {
+      event: 'Bank of Korea (BOK) Monetary Policy Board Rate Decision & MSB Auctions',
+      timing: 'Monthly BOK Cycle · Weekly MSB Tender',
+      impact: 'High' as const,
+      watchFor: `Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA (${kofr.toFixed(2)}%) repo transmission.`,
+    },
+    {
+      event: 'MOEF Monthly KTB Issuance Plan & FTSE WGBI Foreign Custody Inflows',
+      timing: 'Monthly · Ministry of Economy and Finance',
+      impact: 'High' as const,
+      watchFor: `Competitive auction takedown on 10Y (${ktb10Y.toFixed(3)}%) and 30Y (${ktb30Y.toFixed(3)}%) KTB supply and Euroclear/Clearstream omnibus inflows.`,
+    },
+  ];
+
+  return {
+    modelLabel: 'GEMINI 4 ARGON',
+    title: 'GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS',
+    regimeBadge,
+    conviction,
+    synthesis,
+    positioningTakeaway,
+    criticalLevels,
+    eventsToWatch,
+  };
+}

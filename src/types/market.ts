@@ -6,6 +6,8 @@ export interface MarketMetadata {
   timezone: string;
 }
 
+export type MacroTabId = 'global' | 'indonesia' | 'china' | 'korea';
+
 export interface MacroNewsItem {
   id: string;
   headline: string;
@@ -84,10 +86,18 @@ export interface SRBIAuction {
   sourceUrl?: string;
 }
 
-
 export interface JisdorHistoryItem {
   date: string;
   rate: number;
+}
+
+export interface RegionalDisclosureItem {
+  title: string;
+  headline?: string;
+  source: string;
+  significance: string;
+  url?: string;
+  timeAgo?: string;
 }
 
 export interface IndonesiaCommentary {
@@ -99,14 +109,7 @@ export interface IndonesiaCommentary {
     analysis: string;
   }>;
   biPolicyPosture: string;
-  noteworthyHeadlines: Array<{
-    title: string;
-    headline?: string;
-    source: string;
-    significance: string;
-    url?: string;
-    timeAgo?: string;
-  }>;
+  noteworthyHeadlines: RegionalDisclosureItem[];
 }
 
 export interface IndonesiaBonds {
@@ -135,6 +138,132 @@ export interface IndonesiaFxAndNdf {
   };
   foreignFlowsDaily: string;
   foreignFlowsYTD: string;
+}
+
+export interface CcdcBondItem {
+  tenor: string;
+  code: string;
+  maturity?: string;
+  yield: number;
+  priorYield?: number;
+  changeBps: number;
+  coupon: number;
+}
+
+export interface ChinaMoneyRateItem {
+  instrument: string;
+  code: string;
+  rate: number;
+  changeBps: number;
+  description: string;
+}
+
+export interface ChinaMacroData {
+  argonCommentary?: ArgonCommentary;
+  commentary: {
+    title: string;
+    date: string;
+    executiveSummary: string;
+    macroPillars: Array<{
+      heading: string;
+      analysis: string;
+    }>;
+    policyPosture: string;
+    noteworthyHeadlines: RegionalDisclosureItem[];
+  };
+  bonds: {
+    curveDate: string;
+    ccdcCgb: CcdcBondItem[];
+    policyAndMoneyRates: ChinaMoneyRateItem[];
+    pbocOmo7dRate: number;
+    lpr1Y: number;
+    lpr5Y: number;
+    cpiInflationYoY: number;
+    sovereignSpread10Y: number;
+  };
+  fxAndEquities: {
+    cnySpot: number;
+    cnyChange: number;
+    cnyChangePct: number;
+    cnhSpot: number;
+    cnhChange: number;
+    cnhChangePct: number;
+    pbocFixing: number;
+    pbocFixingChange: number;
+    cnhCnySpreadPips: number;
+    shanghaiComposite: {
+      level: number;
+      change: number;
+      changePct: number;
+    };
+    csi300Index: {
+      level: number;
+      change: number;
+      changePct: number;
+    };
+    northboundBondConnectFlow: string;
+  };
+}
+
+export interface KofiaKtbBondItem {
+  tenor: string;
+  code: string;
+  series: string;
+  yield: number;
+  priorYield?: number;
+  changeBps: number;
+  coupon: number;
+}
+
+export interface SofiaMoneyRateItem {
+  instrument: string;
+  code: string;
+  rate: number;
+  changeBps: number;
+  description: string;
+}
+
+export interface KoreaMacroData {
+  argonCommentary?: ArgonCommentary;
+  commentary: {
+    title: string;
+    date: string;
+    executiveSummary: string;
+    macroPillars: Array<{
+      heading: string;
+      analysis: string;
+    }>;
+    policyPosture: string;
+    noteworthyHeadlines: RegionalDisclosureItem[];
+  };
+  bonds: {
+    quotationDate: string;
+    kofiaKtb: KofiaKtbBondItem[];
+    sofiaAndMoneyRates: SofiaMoneyRateItem[];
+    bokBaseRate: number;
+    kofrOvernightRate: number;
+    cd91dRate: number;
+    cpiInflationYoY: number;
+    sovereignSpread10Y: number;
+  };
+  fxAndEquities: {
+    krwSpot: number;
+    krwChange: number;
+    krwChangePct: number;
+    ndf1M: number;
+    ndfSpread1M: number;
+    kospiIndex: {
+      level: number;
+      change: number;
+      changePct: number;
+    };
+    kosdaqIndex: {
+      level: number;
+      change: number;
+      changePct: number;
+    };
+    foreignKtbFlows: string;
+  };
 }
 
 export interface ArgonCriticalLevel {
@@ -179,5 +308,6 @@ export interface DailyMacroSnapshot {
     bonds: IndonesiaBonds;
     fxAndNdf: IndonesiaFxAndNdf;
   };
+  china?: ChinaMacroData;
+  korea?: KoreaMacroData;
 }
-

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-08T17:57:41.743450+08:00",
-    "lastUpdatedSGT": "08 Nov 2026, 05:57 PM SGT",
+    "lastUpdated": "2026-11-08T19:28:42.728853+08:00",
+    "lastUpdatedSGT": "08 Nov 2026, 07:28 PM SGT",
     "nextRefreshSGT": "09 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
@@ -10,9 +10,75 @@
     "topNews": [
       {
         "id": "gn-01",
+        "headline": "'Trump has cost us': After midterm losses, MAGA asks if it's over",
+        "source": "Reuters",
+        "timeAgo": "9m ago",
+        "category": "Fiscal & Debt",
+        "summary": "Reuters coverage on \"'Trump has cost us': After midterm losses, MAGA asks if it's over\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQaTdYU2RDRkZwOVM0SXV4d2VCdExubk1wWngyTG5LOFNRVC1MWUU5NnVkS1FseU0zTlhwRXBRdW1OR2haNHNZcFM5cmVzNWI4cEhadmpDVzdVM2h4YmtuTU1TWFdtRTNMbjdnWGRQaGh2QTZrcnd6U0phWENkTVVNbFJUSWhEZXV2WVU4RWMtV0Vwc2dzQy05Ylp1cjFTZkhoZFVtY3pSTms?oc=5"
+      },
+      {
+        "id": "gn-02",
+        "headline": "Indian shares consolidate in Diwali session after seven-day rally",
+        "source": "Reuters",
+        "timeAgo": "44m ago",
+        "category": "Geopolitics",
+        "summary": "Reuters coverage on \"Indian shares consolidate in Diwali session after seven-day rally\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Bolsters institutional equity positioning and cross-border cyclical rotation while US10Y trades at 4.86%.",
+        "impact": "Risk-On",
+        "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOSURhQVo2bnpTNGJqSFRaSk5Tc1ZFcmxGcTU0MXNiVkR4b2tQekR0VXlhVktMZzYwMWdHUnpkWWdyM1lGTUowOXhLR19tMl9wd1BpS3J4MWpvNnJxaUpUSXg5M2pyTUtCaUFaRy16dTdKRDBGekI1czdXSGcwMjR4MnJDVGxLbDdPREdyMms4cFlpbTl6U3FxeHY5NXI4NHQ4VVR3VTQyT2cyU2wwa2Iw?oc=5"
+      },
+      {
+        "id": "gn-03",
+        "headline": "Map: How Democrats reshaped the Senate, in charts and maps",
+        "source": "CNN",
+        "timeAgo": "1h ago",
+        "category": "Geopolitics",
+        "summary": "CNN coverage on \"Map: How Democrats reshaped the Senate, in charts and maps\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQNEQ3aEI1a1ZDS2xIU3BqTGREUGRmNzRlajVBcE0zU1FzYko0Wk1KYVlqSXZTRXduS0pYQk83VlRhRzZ3akhoWmVMYVd0NHpoTW1taGRUbElsZ1pPVlRSQmRTOUw1em44TUdic3M4ZllBLVdkaVotUVBFU0lrdDd4Zw?oc=5"
+      },
+      {
+        "id": "gn-04",
+        "headline": "What to Watch at COP31 as Midterms, Brazil Deliver Climate Boost",
+        "source": "Bloomberg",
+        "timeAgo": "1h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Bloomberg coverage on \"What to Watch at COP31 as Midterms, Brazil Deliver Climate Boost\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOX1hTbXBQeU02b3ctblB2TnR6bWl2T09lTkRrNjA4VXlFOFR4QTRhME5oc2xFUU5RdTltUktCbWs1WVdOZ05RejRfaWZIR2ExaXdvOWQ2dEVjTktnWG9HTnBoeThXejBoMzV2MlM4OEhUSFVJTzdaYXJPbVNOYUhIalpTemtlM05PYmpCUTUtTDhtdFdMNjQxOWQ2X25xRmhBUzFXUmUtLVZIdnc4eWd4QW02czc?oc=5"
+      },
+      {
+        "id": "gn-05",
+        "headline": "EU Close to Deal to Link UK Carbon Market After Brexit Split",
+        "source": "Bloomberg",
+        "timeAgo": "2h ago",
+        "category": "Fiscal & Debt",
+        "summary": "Bloomberg coverage on \"EU Close to Deal to Link UK Carbon Market After Brexit Split\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPbUU2andIZ3NUM1pYOHdmWXVzaUw2QlpJOVhyTDdNcDFNRFN6OEFPcXZCZnRtcTVZMWZsWTZEMTBRUGpVY0FVWDExNmRoMnhoQmk0YmZBZUlSOHpsZkhsNFlzM1BNUHNZc1NlMjB3bFZZOU11UXYxQzR4ZjNfSUdKY3UzUVQ1R0daRm1XU3o3MWFmV20zNGNDcEtBbTVWMm1JZWJaQ094dkx0TFhybk14dg?oc=5"
+      },
+      {
+        "id": "gn-06",
+        "headline": "Aramco: Building owned by Saudi oil giant damaged in missile attack on Riyadh’s financial district",
+        "source": "CNN",
+        "timeAgo": "2h ago",
+        "category": "Inflation",
+        "summary": "CNN coverage on \"Aramco: Building owned by Saudi oil giant damaged in missile attack on Riyadh’s financial district\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
+        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQQnlLRVByNzg2LTdwYlg5YVNWZ3daRUw1YXZ2RTYzWWdRYTZCbjdWN1RRMlRsdWl2MDhPVkxPbE1kZElFS3N5MnpiMjQ3VTlsOGp4bjliUWNSQ0FXQXhGWFZGYlZ4T3dJYUZ3NnI5TU9lcGs4TDgyY2NHYVljb0F5YkRwZV9LWFVwcTZHLQ?oc=5"
+      },
+      {
+        "id": "gn-07",
         "headline": "Gulf markets retreat as traders await Trump's next move on Iran",
         "source": "Reuters",
-        "timeAgo": "1h ago",
+        "timeAgo": "3h ago",
         "category": "Fiscal & Debt",
         "summary": "Reuters coverage on \"Gulf markets retreat as traders await Trump's next move on Iran\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Tighter credit standards and moderating price pressures help cap 10Y Treasury yields around 4.86% (2Y/10Y at +35.0 bps).",
@@ -20,10 +86,10 @@
         "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPNEhqejQxdWF5MFpVWjduZHVuY1l1VmxKYm9CN3F4aC1qWkFIWFJqZDJEZ1VoWmthUW1NaWdWQUY4UUprUGsyWFA2a0trUE5HUjEtUHpPNFV1UnBpMHRrR2RlQWo1c2xvY1J2QnprNnNkbHNpY3ZtUWxMQkRzTVpKcktuZjhJdW5zSHdsZUhxYmxBVy00UWVnbndnOEc2WWplMEEwREVib0VyZ3BzZWlR?oc=5"
       },
       {
-        "id": "gn-02",
+        "id": "gn-08",
         "headline": "Cathie Wood 'always feels better when the market is worried' — here's why",
         "source": "CNBC",
-        "timeAgo": "3h ago",
+        "timeAgo": "5h ago",
         "category": "Fiscal & Debt",
         "summary": "CNBC coverage on \"Cathie Wood 'always feels better when the market is worried' — here's why\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
@@ -31,10 +97,10 @@
         "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9YMkdHZlFhVDRueG9heFUzRmpZQlRZMkZoMkY4RTk5Q2hNQTl2bEJNWmp6MkVYUGh4bmpyb3FNYkg0clJDTkQxUU5pa1Jsd1Q2RnQzalB5UEZhaEEtM0k4MUZ1NzdGdkdIbVJz?oc=5"
       },
       {
-        "id": "gn-03",
+        "id": "gn-09",
         "headline": "As fresh peace talks loom, Putin is escalating his efforts to shatter Ukraine’s economy",
         "source": "CNN",
-        "timeAgo": "4h ago",
+        "timeAgo": "6h ago",
         "category": "Geopolitics",
         "summary": "CNN coverage on \"As fresh peace talks loom, Putin is escalating his efforts to shatter Ukraine’s economy\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
@@ -42,81 +108,15 @@
         "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPVkJhbUU4U3hhRkVIaTZRdXNXSXVvSklBbm13NGtJam9NNFJoaTJUN0VVTmwwejEyN2ZKVEFrTlI1QTkyVVp2c1F2R055akZBUGItd1pWbUxxS3Fkek9aXzRMZTNMZUNEcDgyMU44ME5Jb0psZEVEM21FdjFIRndnZmlzUzB0blhVb243aEFYcXBUanVSbVk2UHZ1NA?oc=5"
       },
       {
-        "id": "gn-04",
+        "id": "gn-10",
         "headline": "China Set to Lead World in Energy Investment in 2026, CCTV Says",
         "source": "Bloomberg",
-        "timeAgo": "5h ago",
+        "timeAgo": "7h ago",
         "category": "Inflation",
         "summary": "Bloomberg coverage on \"China Set to Lead World in Energy Investment in 2026, CCTV Says\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
         "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
         "impact": "Neutral",
         "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNQVNBelR6QURBUWMxQVp4SHlEUW9Nc1lhQVluWjgwSFh4cUlqdWxPeE96dXFvcUVmV3BrTFYtVXF6XzNEZU5Mc1k4dUxsa2hWamNRUkhsdGtfQjFCd1JfSkpJRnc1VDFGdU1GT29XSFllQ0hOTExvaEFtc1I5cHM2ZGl1aTFNQ1NMYnhoa084a2doRlQ2aVl2VnpzbzJqVWJkZ2pNdGNVeVJ6Zk5oU1NmTmk5Yw?oc=5"
-      },
-      {
-        "id": "gn-05",
-        "headline": "AI Slump Revives Asia’s Forgotten Trades From China to India",
-        "source": "Bloomberg",
-        "timeAgo": "9h ago",
-        "category": "Geopolitics",
-        "summary": "Bloomberg coverage on \"AI Slump Revives Asia’s Forgotten Trades From China to India\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.51%).",
-        "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQOHlmbjBTLXAyMXRaUFkyaXNncWYtdVB2X1puSzZiQmk3eHA2RzBLWTNmcE9KMzdQeGZ5T3lKclFuNTFzU3ItQWI3eTNYSGY4U0RtbnBXbm9jMUpmRjNCeDhpRUI1aWh6MklqTzdPR2w5OHhCQTZXMldXSjlLMEMyMHZwaDZodTlJOU4xbTFhcHJsTHg1bU1uaGNaR0FscDg5QWxmMUp5YTBCQUZNWGs0VQ?oc=5"
-      },
-      {
-        "id": "gn-06",
-        "headline": "US Banks Grow More Cautious on Lending, Fed Survey Shows",
-        "source": "Bloomberg",
-        "timeAgo": "11h ago",
-        "category": "Fed Policy",
-        "summary": "Bloomberg coverage on \"US Banks Grow More Cautious on Lending, Fed Survey Shows\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Tighter credit standards and moderating price pressures help cap 10Y Treasury yields around 4.86% (2Y/10Y at +35.0 bps).",
-        "impact": "Dovish",
-        "url": "https://www.bloomberg.com/markets"
-      },
-      {
-        "id": "gn-07",
-        "headline": "Why the prognosis for healthcare stocks is uncertain ahead of Congress’ new makeup",
-        "source": "CNBC",
-        "timeAgo": "12h ago",
-        "category": "Fiscal & Debt",
-        "summary": "CNBC coverage on \"Why the prognosis for healthcare stocks is uncertain ahead of Congress’ new makeup\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://www.cnbc.com/2026/11/07/healthcare-stocks-may-face-trouble-due-to-midterm-results.html"
-      },
-      {
-        "id": "gn-08",
-        "headline": "Wall Street Strategists Call Stock Rout a Fresh Reason to Buy",
-        "source": "Bloomberg",
-        "timeAgo": "12h ago",
-        "category": "Fiscal & Debt",
-        "summary": "Bloomberg coverage on \"Wall Street Strategists Call Stock Rout a Fresh Reason to Buy\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNRjJsWU9HVVVVTlJNRjYxYkJ6UFBBdnQzNklIM0w5X1R0YUtlT2RSeG5XR2JqMkF6Q3J5NVVBMm5sSVd4TVRfRFpYNHBLVDdSRFlmRXZxTHpJbllDVHM2Vm9lMmVBNGVWSUFrc1c2NEMzc0tBV0p3Yk16R1IwUTdsa2ZzNkNvYXpnM250dGYzZVFsV0FZbXE5YTZwYnllR1hXZkl5a2w3YVFtMXdKSGZkZzdR?oc=5"
-      },
-      {
-        "id": "gn-09",
-        "headline": "Charting the Global Economy: Job Growth in US Tops All Forecasts",
-        "source": "Bloomberg",
-        "timeAgo": "12h ago",
-        "category": "Labor Market",
-        "summary": "Bloomberg coverage on \"Charting the Global Economy: Job Growth in US Tops All Forecasts\" highlights shifting institutional positioning across labor market and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.86%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxONmJTYmozcExtUWJtMkNhTF9PdV9NNEV6SE1wR2Y1THVLd1ZlXzRCWDdzQ0psNGh5YVJYY0IxcHZMOWFHMXRZYmNCcEVXeVBxaUVDRkdOZ0lNQlE4NDJfeDliaVZueTBiQTBrYmdHQkl3YXFoUTJuX2dEMWJfdkVtNkNqVjBfNzZqYWlSbV84UENfNUtHczBQQy1IQ19fcHM2NXZjcGE3NmpxWndLd3BDRDFnU0U?oc=5"
-      },
-      {
-        "id": "gn-10",
-        "headline": "Czech Premier Blasts Central Bank Rate Hike as ‘Scandalous’",
-        "source": "Bloomberg",
-        "timeAgo": "12h ago",
-        "category": "Fed Policy",
-        "summary": "Bloomberg coverage on \"Czech Premier Blasts Central Bank Rate Hike as ‘Scandalous’\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 4.86%.",
-        "macroTakeaway": "Keeps front-end US2Y yields anchored near 4.51% and tempers expectations for aggressive near-term easing.",
-        "impact": "Hawkish",
-        "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxObHZGYm10VWZ4YVdFUWRKTDJxLWdwZ0JTSEVyQTZIcDZGU0dXWDNQMlJrU056TUo3QVRnX3hsSkNjbS01Y192R3FMd29PZDF6VTE1ZWpkdlJjdkhHa2VkUjZWNXZfdUFYaGV1QUFuZk5OZU9qR0N4THA5bnFwZ2IzZWFtM0UzVTdBUTZqZmRaQ1RiWHRkb0xDUjdDdWFBdl9qZ1ZYZDZqZHFHRGF3?oc=5"
       }
     ],
     "yieldCurve": {
@@ -335,7 +335,7 @@
       "title": "GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST",
       "regimeBadge": "BEAR/BULL STEEPENING (+35.0 bps 2s10s)",
       "conviction": "Constructive Cyclicals · Short-Duration Fixed Income Tilt",
-      "synthesis": "Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at 4.51%, 5Y at 4.64%, 10Y at 4.86%, and 30Y at 5.26% (2Y/10Y at +35.0 bps; 5Y/10Y at +22.0 bps). With the US Dollar Index (DXY) trading near 102.30 and WTI Crude at $90.83/bbl, headline energy-driven inflation risk remains contained, allowing S&P 500 E-mini futures (7,402.00, +0.26%) and Gold ($4,074.90/oz) to absorb elevated long-end term premia. Lead desk catalyst: \"Gulf markets retreat as traders await Trump's next move on Iran\".",
+      "synthesis": "Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at 4.51%, 5Y at 4.64%, 10Y at 4.86%, and 30Y at 5.26% (2Y/10Y at +35.0 bps; 5Y/10Y at +22.0 bps). With the US Dollar Index (DXY) trading near 102.30 and WTI Crude at $90.83/bbl, headline energy-driven inflation risk remains contained, allowing S&P 500 E-mini futures (7,402.00, +0.26%) and Gold ($4,074.90/oz) to absorb elevated long-end term premia. Lead desk catalyst: \"'Trump has cost us': After midterm losses, MAGA asks if it's over\".",
       "positioningTakeaway": "Favor 2Y–5Y belly duration (4.51%–4.64%) over unhedged 30Y long bonds (5.26%) until term-premium supply clears; watch 5.01% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (27,085) constituents.",
       "criticalLevels": [
         {
@@ -414,7 +414,7 @@
           "title": "Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks",
           "headline": "Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks",
           "source": "Kompas.id",
-          "timeAgo": "3h ago",
+          "timeAgo": "4h ago",
           "significance": "Strengthens OJK prudential supervision and institutional governance across Indonesian banks and capital markets (IHSG 5,050.43).",
           "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPMGltd29yTGp2dUZYdVpWdGRjUWUwLVIwYTctOEFlWE9BNTBoeFplaThHNFVsaHpVVWhDZjZpaXhGa2JwUVl2QnBSNjJCcHE1bTNoV0xBNU9WUURBd3RtU0pnaDcxNkhCdEFCbWJvdHZqVGNIVXFUWFBaQjFqaUpKZzJ3dS1oVDhrZHJjWmJuaERCUlJhcU9mdmdXYklLRWI0eF8yQVcwM3otUkU?oc=5"
         },
@@ -422,7 +422,7 @@
           "title": "At 80, the rupiah needs credibility, not ceremony",
           "headline": "At 80, the rupiah needs credibility, not ceremony",
           "source": "The Jakarta Post",
-          "timeAgo": "12h ago",
+          "timeAgo": "14h ago",
           "significance": "Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp 18,130 and the 06 Nov 12M SRBI WAR clearing at 6.675%.",
           "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOWUpaSkZqR0ZYLUdHZEJ6UnFWZkhNcl93TXJYNUFmcGFfSlJtRlFWWlZiaWRJby16blNHdEtCTkxUQVF3Y2hQVkdacGRJUHNIZjk5M1k5bE1ueU5QU0RNSXAwUC1iMkNWZEE1eUFlSDNqWnIzX0Z4VzI4V3lVeG4xWG1xQVhKOHpxZGlKQmhqX3RERFNxSlZNc3dUODlZZw?oc=5"
         },
@@ -443,12 +443,12 @@
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPSDhMX3lFMTZBYmdyWlBlTy0yMUdpRmR3TTdmNElSaUp4c2JFOThJMnBWMXh4VXhPV25kRzY1N0RwNEFMTzlQdWJvNHpGS00teDQ4bS1uQXRQRlBkMUFLVzFYamI0WnV3V1pvaDNuSm53Nlp6X1dCR0VKU1lraEhQOHJ2V3hBc2ZreUVoS3FQc2phLXk2VFl3SDJtbjR1ZThaRG9xYmpjenl2dkR5?oc=5"
         },
         {
-          "title": "Indonesias foreign exchange reserves hit US$146.8 bln in October: BI",
-          "headline": "Indonesias foreign exchange reserves hit US$146.8 bln in October: BI",
+          "title": "Indonesia's foreign exchange reserves hit US$146.8 bln in October: BI",
+          "headline": "Indonesia's foreign exchange reserves hit US$146.8 bln in October: BI",
           "source": "ANTARA News",
-          "timeAgo": "1d ago",
+          "timeAgo": "2d ago",
           "significance": "Reported by ANTARA News; shapes onshore institutional allocation across Jakarta equities (IHSG 5,050.43) and Rupiah money markets.",
-          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQLUxTZHdRM1ZrbWdwd1pVWXRnUE9TLUx3SEgyeXZEb2xQUE9JYWZxeEx2UndSTHhWRk5vT09ERzZFNmU4R1lINWlocTZlSnFlZVl6a3JLUEY3a241cXNNZ0Q2eERKaEtwdG1PeHNKcnl6cWF0Q21EWDVlMlB1S0t1MkpUUC1JNFpDY0VUNWlDYkU5N0NidGs2cmNzNnFoYnRmc29XcEVR0gGrAUFVX3lxTE5wQXlVV2lkOTJXNjJPSmMxZ2dyUVp3UkxBSks4RUlyUzlILXJ4VlR0ZVhXb1B4enN0M2pOTjBSSjMxRVlsbElkRnJCc1dnelQ3eTJJT3hadlBjTUxXdnhSaWwzS2prdU5tR19lLVBuTEx2ckFxZVF6UVROcXg3czRGTzBVcUxmSnlVcnd3VW1FelBYNVc4NTFjVnF2ZUJlYjE1cVBVSm9FSk5YWQ?oc=5"
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQLUxTZHdRM1ZrbWdwd1pVWXRnUE9TLUx3SEgyeXZEb2xQUE9JYWZxeEx2UndSTHhWRk5vT09ERzZFNmU4R1lINWlocTZlSnFlZVl6a3JLUEY3a241cXNNZ0Q2eERKaEtwdG1PeHNKcnl6cWF0Q21EWDVlMlB1S0t1MkpUUC1JNFpDY0VUNWlDYkU5N0NidGs2cmNzNnFoYnRmc29XcEVR?oc=5"
         }
       ]
     },
@@ -624,6 +624,512 @@
           "timing": "Bi-Weekly / Monthly Policy Cycle",
           "impact": "High",
           "watchFor": "Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, 7.35%), FR0108 (10Y, 7.69%), FR0106 (15Y), and FR0107 (20Y)."
+        }
+      ]
+    }
+  },
+  "china": {
+    "commentary": {
+      "title": "PBoC & CCDC ChinaBond Sovereign Fixed Income Outlook",
+      "date": "08 Nov 2026",
+      "executiveSummary": "People's Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, 1Y LPR at 3.10%, and 5Y LPR at 3.60% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. (CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on 2026-11-06, 1Y CGB cleared at 1.1683% (-0.3 bps), 5Y benchmark at 1.3115% (-1.2 bps), 10Y benchmark at 1.5868% (-1.7 bps), and 30Y ultra-long CGB at 2.0275% (-1.5 bps), establishing a -327 bps 10Y spread vs US Treasuries.",
+      "macroPillars": [
+        {
+          "heading": "CCDC ChinaBond CGB Yield Curve (yield.chinabond.com.cn · 2026-11-06)",
+          "analysis": "Official CCDC ChinaBond CGB yields compressed across all maturities on 2026-11-06: 1Y at 1.1683%, 3Y at 1.2291%, 5Y at 1.3115%, 10Y at 1.5868%, and 30Y at 2.0275%, keeping the 2s10s slope at +37 bps."
+        },
+        {
+          "heading": "PBoC Open Market Operations, DR007 Repo & LPR Transmission",
+          "analysis": "With the 7-Day Reverse Repo policy anchor at 1.50% and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and 10Y China Development Bank (CDB) policy bank bonds (1.675%)."
+        },
+        {
+          "heading": "Renminbi Central Parity Fixing (CFETS) & Offshore CNH Basis",
+          "analysis": "Onshore USD/CNY trades at 6.6710 (-0.25%) alongside offshore USD/CNH at 6.6736 and the PBoC daily central parity fixing at 6.6685, while the Shanghai Composite sits at 3,649.18 (-1.10%)."
+        }
+      ],
+      "policyPosture": "Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.10% · 5Y LPR 3.60%)",
+      "noteworthyHeadlines": [
+        {
+          "title": "Vivo Y6k: 6500mAh Battery Phone Launches in China at 1,599 Yuan",
+          "headline": "Vivo Y6k: 6500mAh Battery Phone Launches in China at 1,599 Yuan",
+          "source": "www.krihaa.me",
+          "timeAgo": "1h ago",
+          "significance": "Shapes institutional positioning across CCDC ChinaBond CGBs (10Y 1.5868%, 30Y 2.0275%) and onshore USD/CNY (6.6710).",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNMnRWQ1M4WUs1R3ZMWG1iWWNLbnROWGZTakp3ZG5WYmdHaDF0bXNBWktWandsc3M1Zmt6aTB0Zm5BUHZ0d0hWcnlEY0x0STVrSDBGNVJOUFV0R1NSOExiSGgzNEszQ2w5bjRqWW4xQVVmdFBMcE1ja1ZhT0VzbU9rd0ozbUZVb05BeFlfQXE4MWN1WEE?oc=5"
+        },
+        {
+          "title": "China has been accumulating gold for 24 consecutive months.",
+          "headline": "China has been accumulating gold for 24 consecutive months.",
+          "source": "Vietnam.vn",
+          "timeAgo": "1h ago",
+          "significance": "Shapes institutional positioning across CCDC ChinaBond CGBs (10Y 1.5868%, 30Y 2.0275%) and onshore USD/CNY (6.6710).",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9wb1RFVTlqQ19BQk03THJGWEljV2xtNHJZaGFXeVlKMEdNSnZ1clE1M2tDblM3dWI1M3NOejYzTHVOYjhudVE5ZElCYlk5SHhBVGpRMXRpbHBPRld4VTItZW90UzVlZG05WHI3ODZEWGpodXdsdGFUTg?oc=5"
+        },
+        {
+          "title": "United Imaging Healthcare's First Three Quarters Revenue Tops 10 Billion Yuan for First Time; Overseas Revenue Jumps 50% While Net Profit Still Falls 7.6%",
+          "headline": "United Imaging Healthcare's First Three Quarters Revenue Tops 10 Billion Yuan for First Time; Overseas Revenue Jumps 50% While Net Profit Still Falls 7.6%",
+          "source": "BigGo Finance",
+          "timeAgo": "2h ago",
+          "significance": "Shapes institutional positioning across CCDC ChinaBond CGBs (10Y 1.5868%, 30Y 2.0275%) and onshore USD/CNY (6.6710).",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE0xV09GdC1mQWg2RFJMeWFhLWZIWkxPcVJocmhRNjRzYU1sWFdZTi1zRGltT1k4UEVMSmMxaVlQUUNyNEdvNUVnRXJOOXB1NF81bm9Fd19TSTFVS0c1SDVYVEJZazBZZXhXU0c3UHI1R1hYYWluS0E?oc=5"
+        },
+        {
+          "title": "-1.09% for Solana as People's Bank of China halts Solana promotion",
+          "headline": "-1.09% for Solana as People's Bank of China halts Solana promotion",
+          "source": "Traders Union",
+          "timeAgo": "2h ago",
+          "significance": "Shapes institutional positioning across CCDC ChinaBond CGBs (10Y 1.5868%, 30Y 2.0275%) and onshore USD/CNY (6.6710).",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNZkxrMFdLVlJrVmpHZVVBWnlPd1h4d2trWk1tX25BZmZmaEVQcmN3dXBZbnRPb2xBMmdnbGRsX3k2QWo2eWdyekNMUjFNd2JnMnFfVDRzMnIxN24zMjFfU3ZhbEwxMUFHRnBOVWxHVjduRlYwTmlmTjI5TkhQS3NRcXFmc3UtcGxNblFGalAzLWs5cFlha2NISElPQ3FTQQ?oc=5"
+        },
+        {
+          "title": "How did Chinese opera develop from religious dances and Yuan drama?",
+          "headline": "How did Chinese opera develop from religious dances and Yuan drama?",
+          "source": "Britannica",
+          "timeAgo": "2h ago",
+          "significance": "Shapes institutional positioning across CCDC ChinaBond CGBs (10Y 1.5868%, 30Y 2.0275%) and onshore USD/CNY (6.6710).",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPcmlFSHVIS2g4RGY5bmtVM21kRWVXZURNUUU5ZlE5UXdKSEUweGlPV3BBZ2Zibk90NjliOE1aanFyLWlNUG1obTlTR1Q4eEt6S2k4RElfRWZ0Z184bkhFQmtFV3NaZENOSWxnZVBmakM3Vm5LeHdHQ3gtNTBUc09JSjRUMnFEcnVKay1aZUN1dWhuZ09zUjRyX05WazZ1Z0li?oc=5"
+        }
+      ]
+    },
+    "bonds": {
+      "curveDate": "2026-11-06",
+      "ccdcCgb": [
+        {
+          "tenor": "1Y",
+          "code": "260019.IB",
+          "yield": 1.1683,
+          "priorYield": 1.171,
+          "changeBps": -0.3,
+          "coupon": 1.35
+        },
+        {
+          "tenor": "2Y",
+          "code": "260020.IB",
+          "yield": 1.2155,
+          "priorYield": 1.2214,
+          "changeBps": -0.6,
+          "coupon": 1.42
+        },
+        {
+          "tenor": "3Y",
+          "code": "260016.IB",
+          "yield": 1.2291,
+          "priorYield": 1.2397,
+          "changeBps": -1.1,
+          "coupon": 1.55
+        },
+        {
+          "tenor": "5Y (Benchmark)",
+          "code": "260014.IB",
+          "yield": 1.3115,
+          "priorYield": 1.3236,
+          "changeBps": -1.2,
+          "coupon": 1.75
+        },
+        {
+          "tenor": "7Y",
+          "code": "260018.IB",
+          "yield": 1.3996,
+          "priorYield": 1.4161,
+          "changeBps": -1.6,
+          "coupon": 1.92
+        },
+        {
+          "tenor": "10Y (Benchmark)",
+          "code": "260011.IB",
+          "yield": 1.5868,
+          "priorYield": 1.6038,
+          "changeBps": -1.7,
+          "coupon": 2.04
+        },
+        {
+          "tenor": "15Y",
+          "code": "260015.IB",
+          "yield": 1.8609,
+          "priorYield": 1.879,
+          "changeBps": -1.8,
+          "coupon": 2.28
+        },
+        {
+          "tenor": "20Y",
+          "code": "260017.IB",
+          "yield": 2.0139,
+          "priorYield": 2.0332,
+          "changeBps": -1.9,
+          "coupon": 2.39
+        },
+        {
+          "tenor": "30Y (Ultra-Long)",
+          "code": "2600001.IB",
+          "yield": 2.0275,
+          "priorYield": 2.0425,
+          "changeBps": -1.5,
+          "coupon": 2.47
+        }
+      ],
+      "policyAndMoneyRates": [
+        {
+          "instrument": "7D OMO Reverse Repo",
+          "code": "PBOC-7D",
+          "rate": 1.5,
+          "changeBps": 0.0,
+          "description": "PBoC Primary Open Market Policy Rate Anchor"
+        },
+        {
+          "instrument": "DR007 Interbank Repo",
+          "code": "CCDC-DR007",
+          "rate": 1.62,
+          "changeBps": -1.5,
+          "description": "Depository-Institution 7-Day CGB Pledged Repo"
+        },
+        {
+          "instrument": "10Y CDB Policy Bank",
+          "code": "260210.IB",
+          "rate": 1.675,
+          "changeBps": -1.7,
+          "description": "China Development Bank (+8.8 bps over 10Y CGB)"
+        },
+        {
+          "instrument": "1-Year Loan Prime Rate",
+          "code": "LPR-1Y",
+          "rate": 3.1,
+          "changeBps": 0.0,
+          "description": "CFETS Corporate Lending Benchmark Rate"
+        },
+        {
+          "instrument": "5-Year Loan Prime Rate",
+          "code": "LPR-5Y",
+          "rate": 3.6,
+          "changeBps": 0.0,
+          "description": "CFETS Long-Term Mortgage Reference Rate"
+        }
+      ],
+      "pbocOmo7dRate": 1.5,
+      "lpr1Y": 3.1,
+      "lpr5Y": 3.6,
+      "cpiInflationYoY": 0.6,
+      "sovereignSpread10Y": -327
+    },
+    "fxAndEquities": {
+      "cnySpot": 6.671,
+      "cnyChange": -0.017,
+      "cnyChangePct": -0.25,
+      "cnhSpot": 6.6736,
+      "cnhChange": 0.0088,
+      "cnhChangePct": 0.13,
+      "pbocFixing": 6.6685,
+      "pbocFixingChange": -0.0115,
+      "cnhCnySpreadPips": 26,
+      "shanghaiComposite": {
+        "level": 3649.18,
+        "change": -40.73,
+        "changePct": -1.1
+      },
+      "csi300Index": {
+        "level": 4285.6,
+        "change": -38.4,
+        "changePct": -0.89
+      },
+      "northboundBondConnectFlow": "+RMB 14.8 Billion (CCDC Custody)"
+    },
+    "argonCommentary": {
+      "modelLabel": "GEMINI 4 ARGON",
+      "title": "GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS",
+      "regimeBadge": "7D OMO 1.50% · CCDC 10Y 1.587% · US-CN SPREAD -327 BPS",
+      "conviction": "Belly CGB Receive (3Y–5Y CCDC Curve) · FX-Hedged Total Return · Watch 30Y Ultra-Long Supply",
+      "synthesis": "Official China Central Depository & Clearing (CCDC · yield.chinabond.com.cn) ChinaBond CGB valuations (2026-11-06) show an accommodative sovereign curve with 1Y CGB at 1.168%, 5Y benchmark at 1.312%, 10Y benchmark at 1.587%, and 30Y ultra-long CGB at 2.027% (10s30s slope at +44 bps; -327 bps vs US 10Y Treasuries). With the PBoC 7-Day Reverse Repo anchored at 1.50% (1Y/5Y LPR at 3.10%/3.60%), commercial bank wealth-management demand continues to compress front-end and belly yields. In currency markets, onshore USD/CNY (6.6710) and offshore USD/CNH (6.6736) track closely around the PBoC daily central parity fixing (6.6685), while the Shanghai Composite trades at 3,649.18 (-1.10%). Lead China macro development: \"Vivo Y6k: 6500mAh Battery Phone Launches in China at 1,599 Yuan\".",
+      "positioningTakeaway": "Express bullish China rates views via 3Y–5Y CCDC CGB benchmarks (1.312%) where PBoC DR007 funding carry is positive, while avoiding unhedged duration chases below 1.50% on 10Y CGB (1.587%) where PBoC bond-lending intervention risk rises.",
+      "criticalLevels": [
+        {
+          "asset": "CCDC 10Y ChinaBond CGB",
+          "current": "1.587%",
+          "support": "1.500%",
+          "resistance": "1.720%",
+          "implication": "Yields approaching 1.500% risk PBoC secondary bond sales; backup toward 1.720% triggers domestic bank buying."
+        },
+        {
+          "asset": "CCDC 30Y Ultra-Long CGB",
+          "current": "2.027% (+44 bps 10s30s)",
+          "support": "1.920%",
+          "resistance": "2.150%",
+          "implication": "Ultra-long special Treasury issuance supply tests 2.150% ceiling; rural bank duration demand supports 1.920%."
+        },
+        {
+          "asset": "USD/CNH & PBoC Fixing",
+          "current": "6.6736 (Fix 6.6685)",
+          "support": "6.6086",
+          "resistance": "6.7486",
+          "implication": "PBoC FX reserve requirement adjustments and counter-cyclical fixing factor cap rapid one-way Yuan swings."
+        },
+        {
+          "asset": "Shanghai Composite (SSEC)",
+          "current": "3,649.18",
+          "support": "3,521",
+          "resistance": "3,777",
+          "implication": "Break above 3,777 drives equity-bond rotation and steepens the CCDC 2s10s CGB curve."
+        }
+      ],
+      "eventsToWatch": [
+        {
+          "event": "PBoC Daily 7D Reverse Repo OMO & CCDC ChinaBond Valuation Fixing",
+          "timing": "Daily · 09:15 & 17:00 CST (SGT)",
+          "impact": "Critical",
+          "watchFor": "Net liquidity injection/drain via 7D OMO (1.50%) and whether DR007 repo stays anchored below 1.70% as CCDC publishes end-of-day CGB yields."
+        },
+        {
+          "event": "Ministry of Finance (MoF) Ultra-Long Special CGB Auction & LPR Fixing",
+          "timing": "20th of Month · 09:15 CST",
+          "impact": "High",
+          "watchFor": "Primary auction bid-to-cover on 10Y (1.587%) and 30Y (2.027%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR (3.10% / 3.60%)."
+        },
+        {
+          "event": "PBoC USD/CNY Central Parity Fixing & Northbound Bond Connect Flows",
+          "timing": "Daily · 09:15 CST",
+          "impact": "High",
+          "watchFor": "Deviation between PBoC central parity (6.6685) and offshore CNH (6.6736) dictating FX-hedged foreign inflows into CCDC-custodied CGBs."
+        }
+      ]
+    }
+  },
+  "korea": {
+    "commentary": {
+      "title": "Bank of Korea & KOFIA / SOFIA Fixed Income Outlook",
+      "date": "08 Nov 2026",
+      "executiveSummary": "The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) while Korea Overnight Financing Repo (KOFR / SOFIA) trades tightly at 2.980% and 91-day KOFIA CD rates sit at 3.420%. Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve, the benchmark 3Y KTB trades at 3.622% (-4.9 bps), 5Y KTB at 3.716% (-5.7 bps), 10Y KTB at 3.852% (-4.0 bps, -101 bps vs 10Y UST), and 20Y KTB at 3.968%.",
+      "macroPillars": [
+        {
+          "heading": "KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr)",
+          "analysis": "Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at 3.587%, 2Y KTB at 3.598%, 3Y benchmark KTB at 3.622%, 5Y KTB at 3.716%, and 10Y benchmark KTB at 3.852%, supported by passive FTSE World Government Bond Index (WGBI) allocations."
+        },
+        {
+          "heading": "SOFIA / KOFR Overnight Repo, KOFIA CD/CP & BOK MSB Operations",
+          "analysis": "Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 2.980% (-2 bps below the 3.00% BOK Base Rate), KOFIA 91-day CD final quotation at 3.420%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.510%, and 3Y AA- corporate bonds at 4.185%."
+        },
+        {
+          "heading": "USD/KRW FX Dynamics, Semiconductor Cycle & KOSPI Positioning",
+          "analysis": "Onshore USD/KRW trades at ₩1,356.34 (+1.21%) with 1M offshore NDFs at ₩1,354.10, while KOSPI closed at 5,059.69 (-6.02%) and KOSDAQ at 644.27 (-5.03%)."
+        }
+      ],
+      "policyPosture": "Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 2.98% · CPI 2.10% YoY)",
+      "noteworthyHeadlines": [
+        {
+          "title": "US Semiconductor Stocks Rebound... Will Kospi Breathe a Sigh of Relief on Monday?",
+          "headline": "US Semiconductor Stocks Rebound... Will Kospi Breathe a Sigh of Relief on Monday?",
+          "source": "SBS 뉴스",
+          "timeAgo": "11m ago",
+          "significance": "Influences foreign positioning across KOFIA/SOFIA KTB benchmarks (3Y 3.622%, 10Y 3.852%) and USD/KRW (₩1,356.34).",
+          "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9hZTQxUXdZcTJONERoaUhyVjRjZndwSVNoRS14YThKN2VpV09fNUFoX00tTXV6VW56c19PRHJhVW84bXdwbVNDMlRZak1oQXdna2R0UjJmYmtiWmFJOXFoSVg5V0FTT294WUFmSHNB0gFmQVVfeXFMTlYxcUJVYi04c2JsakFKWWtSX052dGNzWWZ3X05wcWt4blFnVzBXaGN3OG0zTnRlSUVMenRiU1NNX0RRc0xVRVdOQnphOTZ3dVdtX1FwWHJRR0w1MGJLNnY5Um9kX0xn?oc=5"
+        },
+        {
+          "title": "Democratic Party Demands 1.4 Billion Won Deduction for 2028 Election",
+          "headline": "Democratic Party Demands 1.4 Billion Won Deduction for 2028 Election",
+          "source": "조선일보",
+          "timeAgo": "36m ago",
+          "significance": "Influences foreign positioning across KOFIA/SOFIA KTB benchmarks (3Y 3.622%, 10Y 3.852%) and USD/KRW (₩1,356.34).",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPZzFUWEZZd2lUVU9VbGg1WTh5QTZSYklkS1I3N3hydHQwUUp5TEFtUklfaFl0SXpzSmFKcWllX2NjaHNyWVBRcnZmS1hyWlp1WXdGeEpZRVIxOXR2NVE2TTJKN1ItbjBlTGpfR3dKdEc5bENhNFV5U2IwZmY0blVlUE5nRnE1UlQ0?oc=5"
+        },
+        {
+          "title": "South Korea's KOSPI Plunge Triggers Wave of Target Cuts on Seoul Brokerages, From '10,000' to '5,000'",
+          "headline": "South Korea's KOSPI Plunge Triggers Wave of Target Cuts on Seoul Brokerages, From '10,000' to '5,000'",
+          "source": "BigGo Finance",
+          "timeAgo": "1h ago",
+          "significance": "Influences foreign positioning across KOFIA/SOFIA KTB benchmarks (3Y 3.622%, 10Y 3.852%) and USD/KRW (₩1,356.34).",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9HZ1pmbEVtUzQwWl9QUjlwcjlPUktLUHd3bUZiOGFDTzR2cUpWTkZLWTFWckpMOTFUXzNmSkF2eWd4UUF6Zl9pR2ZTakxWQk00d3lmdkZJVWE0MGc2NTRPZmFlYUw0RjBfNEYwc3k2UW9icVNLMkE?oc=5"
+        },
+        {
+          "title": "Samsung Electronics' Cash Reserves Surpass 200 Trillion Won",
+          "headline": "Samsung Electronics' Cash Reserves Surpass 200 Trillion Won",
+          "source": "조선일보",
+          "timeAgo": "1h ago",
+          "significance": "Influences foreign positioning across KOFIA/SOFIA KTB benchmarks (3Y 3.622%, 10Y 3.852%) and USD/KRW (₩1,356.34).",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPdTlBbE5GMWVVd1c0X2lNVHkxYU00TWtubHUtRndIdHpESGotb05SUTdkTHg4dDRraXc0RXJkOVNUdENJVEVXOHRhYmE3cDdRV3lNZXpYOXpOdkdBNEVtb29wb19RZWRuaU9VV21ZeTZzWHo5Y1B2ak5oSFlxNXBlUUh1dldqZWNh?oc=5"
+        },
+        {
+          "title": "The KOSPI also seems to be plunging due to instability in the stock market. The securities industry",
+          "headline": "The KOSPI also seems to be plunging due to instability in the stock market. The securities industry",
+          "source": "매일경제",
+          "timeAgo": "1h ago",
+          "significance": "Influences foreign positioning across KOFIA/SOFIA KTB benchmarks (3Y 3.622%, 10Y 3.852%) and USD/KRW (₩1,356.34).",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBGaFY3NFhCWkdUbDY3S2p0eFI3UnVIUjQyV1NnTXJLSExDaS1mWHI4bjkwaEdIeExOLTg5QVB1bC1VaS1fbHpmNG56YkVDcE0?oc=5"
+        }
+      ]
+    },
+    "bonds": {
+      "quotationDate": "06 Nov 2026",
+      "kofiaKtb": [
+        {
+          "tenor": "1Y KTB",
+          "code": "KR1YT=RR",
+          "series": "KTB 03500-2709",
+          "yield": 3.587,
+          "changeBps": 3.3,
+          "coupon": 3.5
+        },
+        {
+          "tenor": "2Y KTB",
+          "code": "KR2YT=RR",
+          "series": "KTB 03625-2809",
+          "yield": 3.598,
+          "changeBps": -5.1,
+          "coupon": 3.625
+        },
+        {
+          "tenor": "3Y KTB (Benchmark)",
+          "code": "KR3YT=RR",
+          "series": "KTB 03250-2906",
+          "yield": 3.622,
+          "changeBps": -4.9,
+          "coupon": 3.25
+        },
+        {
+          "tenor": "5Y KTB",
+          "code": "KR5YT=RR",
+          "series": "KTB 03375-3109",
+          "yield": 3.716,
+          "changeBps": -5.7,
+          "coupon": 3.375
+        },
+        {
+          "tenor": "10Y KTB (Benchmark)",
+          "code": "KR10YT=RR",
+          "series": "KTB 03500-3606",
+          "yield": 3.852,
+          "changeBps": -4.0,
+          "coupon": 3.5
+        },
+        {
+          "tenor": "20Y KTB",
+          "code": "KR20YT=RR",
+          "series": "KTB 03625-4609",
+          "yield": 3.968,
+          "changeBps": -1.8,
+          "coupon": 3.625
+        },
+        {
+          "tenor": "30Y KTB",
+          "code": "KR30YT=RR",
+          "series": "KTB 03250-5603",
+          "yield": 3.895,
+          "changeBps": -1.8,
+          "coupon": 3.25
+        }
+      ],
+      "sofiaAndMoneyRates": [
+        {
+          "instrument": "KOFR / SOFIA (Overnight Repo)",
+          "code": "KOFR-ON",
+          "rate": 2.98,
+          "changeBps": -0.5,
+          "description": "Korea Overnight Financing Repo Rate (KSD / KOFIA)"
+        },
+        {
+          "instrument": "BOK Base Rate",
+          "code": "BOK-BASE",
+          "rate": 3.0,
+          "changeBps": 0.0,
+          "description": "Bank of Korea Monetary Policy Board Benchmark"
+        },
+        {
+          "instrument": "CD 91-Day (KOFIA Final)",
+          "code": "KOFIA-CD91",
+          "rate": 3.42,
+          "changeBps": -1.0,
+          "description": "Negotiable Certificate of Deposit 91D Quotation"
+        },
+        {
+          "instrument": "MSB 1-Year (BOK 통안증권)",
+          "code": "KOFIA-MSB1Y",
+          "rate": 3.51,
+          "changeBps": -3.2,
+          "description": "Bank of Korea Monetary Stabilization Bond 1Y"
+        },
+        {
+          "instrument": "Corp Bond 3Y (AA- KOFIA)",
+          "code": "KOFIA-AA3Y",
+          "rate": 4.185,
+          "changeBps": -4.5,
+          "description": "Unsupplied AA- Corporate 3Y (+56.3 bps over 3Y KTB)"
+        }
+      ],
+      "bokBaseRate": 3.0,
+      "kofrOvernightRate": 2.98,
+      "cd91dRate": 3.42,
+      "cpiInflationYoY": 2.1,
+      "sovereignSpread10Y": -101
+    },
+    "fxAndEquities": {
+      "krwSpot": 1356.34,
+      "krwChange": 16.27,
+      "krwChangePct": 1.21,
+      "ndf1M": 1354.1,
+      "ndfSpread1M": -2.24,
+      "kospiIndex": {
+        "level": 5059.69,
+        "change": -324.11,
+        "changePct": -6.02
+      },
+      "kosdaqIndex": {
+        "level": 644.27,
+        "change": -34.14,
+        "changePct": -5.03
+      },
+      "foreignKtbFlows": "+KRW 1.85 Trillion (WGBI & KOFIA OTC)"
+    },
+    "argonCommentary": {
+      "modelLabel": "GEMINI 4 ARGON",
+      "title": "GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS",
+      "regimeBadge": "BOK BASE 3.00% · KOFR/SOFIA 2.98% · 10Y KTB 3.852%",
+      "conviction": "Long 3Y–10Y KTB (KOFIA Benchmark) on WGBI Inflows · Receive 3s10s Box · Watch USD/KRW 1,380",
+      "synthesis": "Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) final OTC bond quotations place the benchmark 3Y KTB at 3.622%, 10Y KTB at 3.852%, and 30Y KTB at 3.895% (3s10s slope at +23 bps; -101 bps vs 10Y US Treasuries). With the Bank of Korea (BOK) Base Rate at 3.00% (Headline CPI at 2.10% YoY, real policy buffer +0.90%), short-term SOFIA / KOFR overnight repo fixes at 2.98% and 91-day KOFIA CD rates trade at 3.42%. In FX and equity markets, onshore USD/KRW trades at ₩1,356.34 (1M NDF at ₩1,354.10) while KOSPI sits at 5,059.69 (-6.02%). Lead Korea macro catalyst: \"US Semiconductor Stocks Rebound... Will Kospi Breathe a Sigh of Relief on Monday?\".",
+      "positioningTakeaway": "Accumulate 3Y and 10Y KTB benchmarks (3.622% / 3.852%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding (2.98%) anchor domestic duration demand.",
+      "criticalLevels": [
+        {
+          "asset": "KOFIA 3Y & 10Y KTB Yield",
+          "current": "3Y 3.622% · 10Y 3.852%",
+          "support": "3.702% (10Y)",
+          "resistance": "4.002% (10Y)",
+          "implication": "10Y KTB above 4.00% draws pension/insurer duration buying; sub-3.70% prices in an additional BOK rate cut."
+        },
+        {
+          "asset": "KOFR / SOFIA & 91D CD Rate",
+          "current": "KOFR 2.98% · CD 3.42%",
+          "support": "2.83%",
+          "resistance": "3.54%",
+          "implication": "Tight KOFR-to-BOK Base Rate spread confirms ample overnight RP liquidity across Korean securities dealers."
+        },
+        {
+          "asset": "USD/KRW Spot & 1M NDF",
+          "current": "₩1356.34 (NDF ₩1354.10)",
+          "support": "₩1334",
+          "resistance": "₩1381",
+          "implication": "Sustained move above ₩1381 delays BOK easing and prompts NPS/BOK FX smoothing operations."
+        },
+        {
+          "asset": "KOSPI Composite Index",
+          "current": "5,059.69",
+          "support": "4,908",
+          "resistance": "5,237",
+          "implication": "Memory semiconductor export cycle and Corporate Value-Up disclosures dictate foreign net equity flows."
+        }
+      ],
+      "eventsToWatch": [
+        {
+          "event": "KOFIA 11:30 & 16:00 KST Final OTC Quotation Yield Fixing & KTB Futures",
+          "timing": "Daily · 11:30 & 16:00 KST (15:00 SGT)",
+          "impact": "Critical",
+          "watchFor": "Foreign institutional net buying in 3Y (3.622%) and 10Y (3.852%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads."
+        },
+        {
+          "event": "Bank of Korea (BOK) Monetary Policy Board Rate Decision & MSB Auctions",
+          "timing": "Monthly BOK Cycle · Weekly MSB Tender",
+          "impact": "High",
+          "watchFor": "Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA (2.98%) repo transmission."
+        },
+        {
+          "event": "MOEF Monthly KTB Issuance Plan & FTSE WGBI Foreign Custody Inflows",
+          "timing": "Monthly · Ministry of Economy and Finance",
+          "impact": "High",
+          "watchFor": "Competitive auction takedown on 10Y (3.852%) and 30Y (3.895%) KTB supply and Euroclear/Clearstream omnibus inflows."
         }
       ]
     }
