@@ -19,7 +19,7 @@ const DEFAULT_CHINA_DATA: ChinaMacroData = {
     title: 'PBoC & CCDC ChinaBond Sovereign Fixed Income Outlook',
     date: '08 Nov 2026',
     executiveSummary:
-      'People’s Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, 1Y LPR at 3.10%, and 5Y LPR at 3.60% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. (CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on 2026-11-06, 1Y CGB cleared at 1.1683% (-0.3 bps), 5Y benchmark at 1.3115% (-1.2 bps), 10Y benchmark at 1.5868% (-1.7 bps), and 30Y ultra-long CGB at 2.0275% (-1.5 bps), establishing a -327 bps 10Y spread vs US Treasuries.',
+      'People’s Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, 1Y LPR at 3.00%, and 5Y LPR at 3.50% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. (CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on 2026-11-06, 1Y CGB cleared at 1.1683% (-0.3 bps), 5Y benchmark at 1.3115% (-1.2 bps), 10Y benchmark at 1.5868% (-1.7 bps), and 30Y ultra-long CGB at 2.0275% (-1.5 bps), establishing a -327 bps 10Y spread vs US Treasuries.',
     macroPillars: [
       {
         heading: 'CCDC ChinaBond CGB Yield Curve (yield.chinabond.com.cn · 2026-11-06)',
@@ -27,62 +27,62 @@ const DEFAULT_CHINA_DATA: ChinaMacroData = {
           'Official CCDC ChinaBond CGB yields compressed across all maturities on 6 Nov 2026: 1Y at 1.1683% (vs 1.1710% prior), 3Y at 1.2291% (vs 1.2397%), 5Y at 1.3115% (vs 1.3236%), 10Y at 1.5868% (vs 1.6038%), and 30Y at 2.0275% (vs 2.0425%), keeping the 2s10s slope at +37 bps and 10s30s at +44 bps.',
       },
       {
-        heading: 'PBoC Open Market Operations, DR007 Repo & LPR Transmission',
+        heading: 'PBoC Open Market Operations, DR007 Repo & CCDC CDB Policy Bank Curve',
         analysis:
-          'With the 7-Day Reverse Repo policy anchor at 1.50% and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and 10Y China Development Bank (CDB) policy bank bonds (1.675%).',
+          'With the 7-Day Reverse Repo policy anchor at 1.50%, 1Y/5Y LPR at 3.00%/3.50%, and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and official CCDC 10Y China Development Bank (CDB) policy bank bonds (1.771%, +18.4 bps over 10Y CGB).',
       },
       {
-        heading: 'Renminbi Central Parity Fixing (CFETS) & Offshore CNH Basis',
+        heading: 'Renminbi Central Parity Fixing (CFETS), SSEC & CSI 300 Positioning',
         analysis:
-          'Onshore USD/CNY trades at 6.6710 (-0.25%) alongside offshore USD/CNH at 6.6736 and the PBoC daily central parity fixing at 6.6685, while the Shanghai Composite sits at 3,649.18 (-1.10%) and CSI 300 at 4,285.60 (-0.89%).',
+          'Onshore USD/CNY trades at 6.6760 (+0.12%) alongside offshore USD/CNH at 6.6713 and the PBoC daily central parity fixing at 6.6735, while the Shanghai Composite sits at 3,649.18 (+0.31%) and CSI 300 at 4,054.28 (-1.44%).',
       },
     ],
-    policyPosture: 'Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.10% · 5Y LPR 3.60%)',
+    policyPosture: 'Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.00% · 5Y LPR 3.50%)',
     noteworthyHeadlines: [
       {
-        title: 'China Set to Lead World in Energy Investment in 2026, CCTV Says',
-        headline: 'China Set to Lead World in Energy Investment in 2026, CCTV Says',
-        source: 'Bloomberg',
-        timeAgo: '5h ago',
+        title: 'SSE Composite Weekly Review: Shanghai Rises 1.39% to 3,649.18 and Ends a Six-Week Losing Streak on Beijing Support',
+        headline: 'SSE Composite Weekly Review: Shanghai Rises 1.39% to 3,649.18 and Ends a Six-Week Losing Streak on Beijing Support',
+        source: 'BBN Times',
+        timeAgo: '3h ago',
         significance:
-          'Supports state-owned infrastructure capex and ultra-long 30Y CCDC special Treasury bond deployment (2.0275%).',
-        url: 'https://www.bloomberg.com/markets/rates-bonds',
-      },
-      {
-        title: 'AI Slump Revives Asia’s Forgotten Trades From China to India',
-        headline: 'AI Slump Revives Asia’s Forgotten Trades From China to India',
-        source: 'Bloomberg',
-        timeAgo: '9h ago',
-        significance:
-          'Highlights cross-border equity rotation into Chinese value benchmarks (Shanghai Composite 3,649.18) alongside stable CNH funding.',
+          'Drives onshore asset-allocation rotation between domestic equities (Shanghai Composite 3,649.18, CSI 300 4,054.28) and long-duration 10Y–30Y CCDC CGB benchmarks (1.5868%–2.0275%).',
         url: 'https://www.bloomberg.com/markets',
       },
       {
-        title: 'CCDC ChinaBond 10-Year CGB Yield Fixes at 1.5868% (-1.7 bps) Amid Steady Interbank Liquidity',
-        headline: 'CCDC ChinaBond 10-Year CGB Yield Fixes at 1.5868% (-1.7 bps) Amid Steady Interbank Liquidity',
-        source: 'ChinaBond (CCDC)',
+        title: "Buying the Dip? People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
+        headline: "Buying the Dip? People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
+        source: 'Bloomberg',
+        timeAgo: '5h ago',
+        significance:
+          'Reinforces PBoC balance-sheet diversification alongside US$3.2T+ FX reserves, supporting sovereign credit quality across the CCDC CGB curve (10Y at 1.5868%).',
+        url: 'https://www.bloomberg.com/markets',
+      },
+      {
+        title: 'Bessent, Greer Raise Concerns on China Trade Deal Actions',
+        headline: 'Bessent, Greer Raise Concerns on China Trade Deal Actions',
+        source: 'Bloomberg',
+        timeAgo: '7h ago',
+        significance:
+          'Shapes external trade-surplus expectations and exporter USD conversion flows on CFETS (USD/CNY 6.6760), a key driver for PBoC domestic liquidity injections.',
+        url: 'https://www.bloomberg.com/markets',
+      },
+      {
+        title: 'China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan',
+        headline: 'China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan',
+        source: 'WSJ',
+        timeAgo: '9h ago',
+        significance:
+          'Directly anchors PBoC daily central parity fixing (6.6735) and narrows the offshore-onshore CNH/CNY basis (CNY 6.6760 vs CNH 6.6713), stabilizing FX-hedged inflows into CCDC ChinaBond CGBs.',
+        url: 'https://www.wsj.com/economy/central-banking',
+      },
+      {
+        title: "China's yuan dilemma: too weak abroad and too strong at home",
+        headline: "China's yuan dilemma: too weak abroad and too strong at home",
+        source: 'Reuters',
         timeAgo: '12h ago',
         significance:
-          'Official CCDC end-of-day valuation confirms commercial bank duration demand across 5Y (1.3115%) and 10Y (1.5868%) benchmarks.',
-        url: 'https://yield.chinabond.com.cn/cbweb-mn/yc/ycYz?locale=en_US',
-      },
-      {
-        title: 'People’s Bank of China Calibrates Daily Reverse Repo Operations to Anchor DR007 Near 1.62%',
-        headline: 'People’s Bank of China Calibrates Daily Reverse Repo Operations to Anchor DR007 Near 1.62%',
-        source: 'Reuters',
-        timeAgo: '14h ago',
-        significance:
-          'Maintains positive repo carry for onshore institutional bond portfolios across the CCDC CGB curve.',
-        url: 'https://www.reuters.com/markets/rates-bonds/',
-      },
-      {
-        title: 'Onshore Yuan (USD/CNY) Holds Near 6.6710 as Exporters Step Up FX Settlement',
-        headline: 'Onshore Yuan (USD/CNY) Holds Near 6.6710 as Exporters Step Up FX Settlement',
-        source: 'CNBC',
-        timeAgo: '16h ago',
-        significance:
-          'Tight CNH-CNY basis (+26 pips) limits offshore speculative pressure and supports FX-hedged Bond Connect inflows.',
-        url: 'https://www.cnbc.com/ currencies/',
+          'Reflects PBoC FX management between domestic monetary easing (10Y CCDC CGB at 1.5868%) and external Renminbi stability near 6.6760.',
+        url: 'https://www.reuters.com/markets/currencies/',
       },
     ],
   },
@@ -115,52 +115,52 @@ const DEFAULT_CHINA_DATA: ChinaMacroData = {
         description: 'Depository-Institution 7-Day CGB Pledged Repo',
       },
       {
-        instrument: '10Y CDB Policy Bank',
+        instrument: '10Y CDB Policy Bank (CCDC)',
         code: '260210.IB',
-        rate: 1.675,
-        changeBps: -1.6,
-        description: 'China Development Bank (+8.8 bps over 10Y CGB)',
+        rate: 1.771,
+        changeBps: -1.7,
+        description: 'CCDC ChinaBond CDB 10Y (+18.4 bps over 10Y CGB)',
       },
       {
         instrument: '1-Year Loan Prime Rate',
         code: 'LPR-1Y',
-        rate: 3.100,
+        rate: 3.000,
         changeBps: 0.0,
         description: 'CFETS Corporate Lending Benchmark Rate',
       },
       {
         instrument: '5-Year Loan Prime Rate',
         code: 'LPR-5Y',
-        rate: 3.600,
+        rate: 3.500,
         changeBps: 0.0,
         description: 'CFETS Long-Term Mortgage Reference Rate',
       },
     ],
     pbocOmo7dRate: 1.50,
-    lpr1Y: 3.10,
-    lpr5Y: 3.60,
+    lpr1Y: 3.00,
+    lpr5Y: 3.50,
     cpiInflationYoY: 0.60,
     sovereignSpread10Y: -327,
   },
   fxAndEquities: {
-    cnySpot: 6.6710,
-    cnyChange: -0.0170,
-    cnyChangePct: -0.25,
-    cnhSpot: 6.6736,
-    cnhChange: 0.0088,
-    cnhChangePct: 0.13,
-    pbocFixing: 6.6685,
+    cnySpot: 6.6760,
+    cnyChange: 0.0080,
+    cnyChangePct: 0.12,
+    cnhSpot: 6.6713,
+    cnhChange: -0.0023,
+    cnhChangePct: -0.03,
+    pbocFixing: 6.6735,
     pbocFixingChange: -0.0115,
-    cnhCnySpreadPips: 26,
+    cnhCnySpreadPips: -47,
     shanghaiComposite: {
       level: 3649.18,
-      change: -40.73,
-      changePct: -1.10,
+      change: 11.15,
+      changePct: 0.31,
     },
     csi300Index: {
-      level: 4285.60,
-      change: -38.40,
-      changePct: -0.89,
+      level: 4054.28,
+      change: -59.13,
+      changePct: -1.44,
     },
     northboundBondConnectFlow: '+RMB 14.8 Billion (CCDC Custody)',
   },
@@ -171,70 +171,70 @@ const DEFAULT_KOREA_DATA: KoreaMacroData = {
     title: 'Bank of Korea & KOFIA / SOFIA Fixed Income Outlook',
     date: '08 Nov 2026',
     executiveSummary:
-      'The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) while Korea Overnight Financing Repo (KOFR / SOFIA) trades tightly at 2.980% and 91-day KOFIA CD rates sit at 3.420%. Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve, the benchmark 3Y KTB rallied 4.9 bps to 3.622%, 5Y KTB fell 5.7 bps to 3.716%, 10Y KTB eased 4.0 bps to 3.852% (-101 bps vs 10Y UST), and 20Y KTB closed at 3.968%.',
+      'The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) while Korea Overnight Financing Repo (KOFR / SOFIA) fixes at 3.045% (+3.3 bps), 1-day BOK Call Rate trades at 3.048%, and 91-day KOFIA CD rates sit at 3.340%. Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve, the benchmark 3Y KTB rallied 4.9 bps to 3.622%, 5Y KTB fell 5.7 bps to 3.716%, 10Y KTB eased 4.0 bps to 3.852% (-101 bps vs 10Y UST), and 30Y KTB closed at 3.975% (-2.8 bps).',
     macroPillars: [
       {
-        heading: 'KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr)',
+        heading: 'KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr · 06 Nov 2026)',
         analysis:
-          'Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at 3.587%, 2Y KTB at 3.598% (-5.1 bps), 3Y benchmark KTB at 3.622% (-4.9 bps), 5Y KTB at 3.716% (-5.7 bps), and 10Y benchmark KTB at 3.852% (-4.0 bps), supported by passive FTSE World Government Bond Index (WGBI) allocations.',
+          'Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at 3.587%, 2Y KTB at 3.598% (-5.1 bps), 3Y benchmark KTB at 3.622% (-4.9 bps), 5Y KTB at 3.716% (-5.7 bps), 10Y benchmark KTB at 3.852% (-4.0 bps), and 30Y KTB at 3.975% (-2.8 bps), supported by passive FTSE World Government Bond Index (WGBI) allocations.',
       },
       {
-        heading: 'SOFIA / KOFR Overnight Repo, KOFIA CD/CP & BOK MSB Operations',
+        heading: 'SOFIA / KOFR Overnight Repo, KOFIA CD 91D, Call Rate & AA- Corporate Spreads',
         analysis:
-          'Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 2.980% (-2 bps below the 3.00% BOK Base Rate), KOFIA 91-day CD final quotation at 3.420%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.510%, and 3Y AA- corporate bonds at 4.185% (+56.3 bps credit spread).',
+          'Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 3.045% (+3.3 bps) and 1-day Call Rate at 3.048% against the 3.00% BOK Base Rate, while KOFIA 91-day CD final quotation sits at 3.340%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.535%, and 3Y AA- corporate bonds at 4.358% (+73.6 bps credit spread).',
       },
       {
         heading: 'USD/KRW FX Dynamics, Semiconductor Cycle & KOSPI Positioning',
         analysis:
-          'Onshore USD/KRW trades at ₩1,356.34 (+1.21%) with 1M offshore NDFs at ₩1,354.10 (-2.24 KRW implied basis), while KOSPI closed at 5,059.69 (-6.02%) and KOSDAQ at 644.27 (-5.03%) amid global tech multiple rotation, accelerating domestic safe-haven bids for KTB duration.',
+          'Onshore USD/KRW trades at ₩1,363.27 (-0.03%) with 1M offshore NDFs at ₩1,361.03 (-2.24 KRW implied basis), while KOSPI closed at 5,059.69 (-6.02%) and KOSDAQ at 644.27 (-5.03%) amid global tech multiple rotation, accelerating domestic safe-haven bids for KTB duration.',
       },
     ],
-    policyPosture: 'Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 2.98% · CPI 2.10% YoY)',
+    policyPosture: 'Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 3.045% · CD 91D 3.34%)',
     noteworthyHeadlines: [
       {
-        title: 'KOFIA / SOFIA 3Y and 10Y Korea Treasury Bond Yields Rally as Equity Pullback Spurs Safe-Haven Bids',
-        headline: 'KOFIA / SOFIA 3Y and 10Y Korea Treasury Bond Yields Rally as Equity Pullback Spurs Safe-Haven Bids',
-        source: 'KOFIA Bond Information Service',
+        title: 'U.S. Semiconductor Rebound Raises Hopes for South Korea’s Market',
+        headline: 'U.S. Semiconductor Rebound Raises Hopes for South Korea’s Market',
+        source: '조선일보',
+        timeAgo: '1h ago',
+        significance:
+          'Supports Korean semiconductor export earnings and foreign equity inflows into KOSPI (5,059.69), helping stabilize onshore USD/KRW around ₩1,363.27.',
+        url: 'https://www.chosun.com',
+      },
+      {
+        title: "Savings Banks' LME Loans Surge 50% to 5.3T",
+        headline: "Savings Banks' LME Loans Surge 50% to 5.3T",
+        source: '조선일보',
+        timeAgo: '1h ago',
+        significance:
+          'Highlights domestic non-bank credit and funding dynamics monitored by BOK and KOFIA, where 91-day CD fixes at 3.340% and 3Y AA- corporate bonds yield 4.358%.',
+        url: 'https://www.chosun.com',
+      },
+      {
+        title: '"Rollercoaster" KOSPI Seeks Relief Following U.S. Rebound',
+        headline: '"Rollercoaster" KOSPI Seeks Relief Following U.S. Rebound',
+        source: 'SBS 뉴스',
+        timeAgo: '2h ago',
+        significance:
+          'Heightened equity volatility in KOSPI (5,059.69) accelerates domestic institutional rotation into safe-haven KOFIA 3Y (3.622%) and 10Y (3.852%) Korea Treasury Bonds.',
+        url: 'https://news.sbs.co.kr',
+      },
+      {
+        title: 'Even Blue Chips Slide as 844 Korean Stocks Hit Yearly Lows',
+        headline: 'Even Blue Chips Slide as 844 Korean Stocks Hit Yearly Lows',
+        source: 'Seoul Economic Daily',
         timeAgo: '3h ago',
         significance:
-          'Drives 3Y KTB down 4.9 bps to 3.622% and 10Y KTB down 4.0 bps to 3.852% on heavy KTB futures buying.',
-        url: 'https://www.kofiabond.or.kr',
+          'Prompts Korean pension and insurance desks to rebalance toward long-duration 10Y–30Y KTB benchmarks (3.852%–3.975%) amid tech multiple compression.',
+        url: 'https://www.sedaily.com',
       },
       {
-        title: 'Bank of Korea Monitors USD/KRW Volatility Near ₩1,356 While Keeping Base Rate at 3.00%',
-        headline: 'Bank of Korea Monitors USD/KRW Volatility Near ₩1,356 While Keeping Base Rate at 3.00%',
-        source: 'Reuters',
-        timeAgo: '6h ago',
-        significance:
-          'Balances domestic disinflation (CPI 2.10% YoY) against external FX stability and household debt discipline.',
-        url: 'https://www.reuters.com/markets/asia/',
-      },
-      {
-        title: 'Foreign Institutional Inflows into Korean Treasury Bonds Accelerate Under FTSE WGBI Inclusion',
-        headline: 'Foreign Institutional Inflows into Korean Treasury Bonds Accelerate Under FTSE WGBI Inclusion',
-        source: 'Bloomberg',
+        title: 'South Korea Inflation Remained Above Target in October',
+        headline: 'South Korea Inflation Remained Above Target in October',
+        source: 'WSJ',
         timeAgo: '9h ago',
         significance:
-          'Structural foreign reserve manager demand compresses 10Y–30Y KTB term premia (10Y 3.852%, 30Y 3.895%).',
-        url: 'https://www.bloomberg.com/markets/rates-bonds',
-      },
-      {
-        title: 'Korea Overnight Financing Repo (KOFR / SOFIA) Fixes at 2.980% Amid Ample Dealer RP Liquidity',
-        headline: 'Korea Overnight Financing Repo (KOFR / SOFIA) Fixes at 2.980% Amid Ample Dealer RP Liquidity',
-        source: 'Korea Securities Depository (KSD)',
-        timeAgo: '11h ago',
-        significance:
-          'Anchors front-end money market funding below the 3.00% BOK Base Rate and supports positive KTB carry.',
-        url: 'https://www.kofr.kr/eng/main.jsp',
-      },
-      {
-        title: 'South Korea Ministry of Economy and Finance Confirms Orderly Monthly KTB Competitive Auction Schedule',
-        headline: 'South Korea Ministry of Economy and Finance Confirms Orderly Monthly KTB Competitive Auction Schedule',
-        source: 'MOEF Korea',
-        timeAgo: '14h ago',
-        significance:
-          'Provides predictable duration supply across 3Y (KTB 03250-2906) and 10Y (KTB 03500-3606) benchmark lines.',
-        url: 'https://english.moef.go.kr',
+          'Reinforces the Bank of Korea’s cautious calibration with the Base Rate at 3.00% and KOFR/SOFIA overnight repo at 3.045%, anchoring 3Y KTB yields near 3.622%.',
+        url: 'https://www.wsj.com/economy/central-banking',
       },
     ],
   },
@@ -247,56 +247,63 @@ const DEFAULT_KOREA_DATA: KoreaMacroData = {
       { tenor: '5Y KTB', code: 'KR5YT=RR', series: 'KTB 03375-3109', yield: 3.716, changeBps: -5.7, coupon: 3.375 },
       { tenor: '10Y KTB (Benchmark)', code: 'KR10YT=RR', series: 'KTB 03500-3606', yield: 3.852, changeBps: -4.0, coupon: 3.500 },
       { tenor: '20Y KTB', code: 'KR20YT=RR', series: 'KTB 03625-4609', yield: 3.968, changeBps: -1.8, coupon: 3.625 },
-      { tenor: '30Y KTB', code: 'KR30YT=RR', series: 'KTB 03250-5603', yield: 3.895, changeBps: -1.8, coupon: 3.250 },
+      { tenor: '30Y KTB', code: 'KR30YT=RR', series: 'KTB 03250-5603', yield: 3.975, changeBps: -2.8, coupon: 3.250 },
     ],
     sofiaAndMoneyRates: [
       {
         instrument: 'KOFR / SOFIA (Overnight Repo)',
         code: 'KOFR-ON',
-        rate: 2.980,
-        changeBps: -0.5,
+        rate: 3.045,
+        changeBps: 3.3,
         description: 'Korea Overnight Financing Repo Rate (KSD / KOFIA)',
       },
       {
-        instrument: 'BOK Base Rate',
+        instrument: 'BOK Base Rate (기준금리)',
         code: 'BOK-BASE',
         rate: 3.000,
         changeBps: 0.0,
         description: 'Bank of Korea Monetary Policy Board Benchmark',
       },
       {
+        instrument: 'Call Rate 1-Day (콜금리)',
+        code: 'KRCALLBOKK',
+        rate: 3.048,
+        changeBps: 0.9,
+        description: 'Onshore Interbank Uncollateralized 1D Call Rate',
+      },
+      {
         instrument: 'CD 91-Day (KOFIA Final)',
-        code: 'KOFIA-CD91',
-        rate: 3.420,
-        changeBps: -1.0,
+        code: 'KFIA114000',
+        rate: 3.340,
+        changeBps: 0.0,
         description: 'Negotiable Certificate of Deposit 91D Quotation',
       },
       {
         instrument: 'MSB 1-Year (BOK 통안증권)',
         code: 'KOFIA-MSB1Y',
-        rate: 3.510,
-        changeBps: -3.2,
+        rate: 3.535,
+        changeBps: 3.3,
         description: 'Bank of Korea Monetary Stabilization Bond 1Y',
       },
       {
         instrument: 'Corp Bond 3Y (AA- KOFIA)',
-        code: 'KOFIA-AA3Y',
-        rate: 4.185,
-        changeBps: -4.5,
-        description: 'Unsupplied AA- Corporate 3Y (+56.3 bps over 3Y KTB)',
+        code: 'KFIA103009',
+        rate: 4.358,
+        changeBps: -4.2,
+        description: 'Unsubordinated AA- Corporate 3Y (+73.6 bps over 3Y KTB)',
       },
     ],
     bokBaseRate: 3.00,
-    kofrOvernightRate: 2.98,
-    cd91dRate: 3.42,
+    kofrOvernightRate: 3.045,
+    cd91dRate: 3.34,
     cpiInflationYoY: 2.10,
     sovereignSpread10Y: -101,
   },
   fxAndEquities: {
-    krwSpot: 1356.34,
-    krwChange: 16.27,
-    krwChangePct: 1.21,
-    ndf1M: 1354.10,
+    krwSpot: 1363.27,
+    krwChange: -0.37,
+    krwChangePct: -0.03,
+    ndf1M: 1361.03,
     ndfSpread1M: -2.24,
     kospiIndex: {
       level: 5059.69,
@@ -715,8 +722,97 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
   const isStaleOctSrbi = rawSrbi.some((s) => (s.auctionDate || '').includes('Oct'));
   const normalizedSrbi = isStaleOctSrbi ? DEFAULT_SNAPSHOT.indonesia.bonds.srbi : rawSrbi;
 
-  const chinaData: ChinaMacroData = snap.china ?? DEFAULT_CHINA_DATA;
-  const koreaData: KoreaMacroData = snap.korea ?? DEFAULT_KOREA_DATA;
+  const rawChinaData: ChinaMacroData = snap.china ?? DEFAULT_CHINA_DATA;
+  const rawKoreaData: KoreaMacroData = snap.korea ?? DEFAULT_KOREA_DATA;
+
+  // Normalize & de-duplicate China headlines and Market Significance
+  const usedChinaSigs = new Set<string>();
+  const rawChinaHeadlines = (rawChinaData.commentary?.noteworthyHeadlines || [])
+    .filter((h) => {
+      const t = (h.title || h.headline || '').toLowerCase();
+      return !t.includes('yangwang') && !t.includes('byd unveils') && !t.includes('settlement crisis leaves merchants');
+    });
+  const chinaHeadlinesSource = rawChinaHeadlines.length >= 3 ? rawChinaHeadlines : DEFAULT_CHINA_DATA.commentary.noteworthyHeadlines;
+  const normalizedChinaHeadlines = chinaHeadlinesSource.slice(0, 5).map((item, idx) => {
+    const rawTitle = (item.title || item.headline || '').trim() || `China Macro & CCDC Update #${idx + 1}`;
+    const low = rawTitle.toLowerCase();
+    let sig = (item.significance || '').trim();
+    if (!sig || usedChinaSigs.has(sig) || sig.startsWith('Shapes institutional positioning across CCDC ChinaBond CGBs')) {
+      if (low.includes('forex') || low.includes('yuan') || low.includes('renminbi') || low.includes('fix')) {
+        sig = `Directly anchors PBoC daily central parity fixing (${rawChinaData.fxAndEquities.pbocFixing.toFixed(4)}) and narrows the CNH/CNY basis (CNY ${rawChinaData.fxAndEquities.cnySpot.toFixed(4)}), stabilizing FX-hedged CGB inflows.`;
+      } else if (low.includes('gold') || low.includes('reserve')) {
+        sig = `Reinforces PBoC balance-sheet diversification alongside US$3.2T+ FX reserves, supporting sovereign credit quality across the CCDC CGB curve.`;
+      } else if (low.includes('sse') || low.includes('shanghai') || low.includes('stocks') || low.includes('forgotten trades')) {
+        sig = `Drives onshore asset-allocation rotation between domestic equities (SSEC ${rawChinaData.fxAndEquities.shanghaiComposite.level.toLocaleString()}) and long-duration 10Y–30Y CCDC CGB benchmarks.`;
+      } else if (low.includes('tariff') || low.includes('trade') || low.includes('bessent') || low.includes('sanctions') || low.includes('exports')) {
+        sig = `Shapes external trade-surplus expectations and exporter USD conversion flows on CFETS (USD/CNY ${rawChinaData.fxAndEquities.cnySpot.toFixed(4)}), guiding PBoC liquidity operations.`;
+      } else {
+        sig = `Reported by ${item.source}; influences onshore bank duration appetite across 10Y CCDC CGBs (1.5868%) and PBoC DR007 repo funding (#${idx + 1}).`;
+      }
+      if (usedChinaSigs.has(sig)) {
+        sig = `${sig.replace(/\.$/, '')} (Desk Note #${idx + 1}).`;
+      }
+    }
+    usedChinaSigs.add(sig);
+    return {
+      ...item,
+      title: rawTitle,
+      headline: rawTitle,
+      significance: sig,
+    };
+  });
+
+  // Normalize & de-duplicate Korea headlines and Market Significance
+  const usedKoreaSigs = new Set<string>();
+  const rawKoreaHeadlines = (rawKoreaData.commentary?.noteworthyHeadlines || [])
+    .filter((h) => {
+      const t = (h.title || h.headline || '').toLowerCase();
+      return !t.includes('pokémon') && !t.includes('pokemon') && !t.includes('youtube program') && !t.includes("korean won't");
+    });
+  const koreaHeadlinesSource = rawKoreaHeadlines.length >= 3 ? rawKoreaHeadlines : DEFAULT_KOREA_DATA.commentary.noteworthyHeadlines;
+  const normalizedKoreaHeadlines = koreaHeadlinesSource.slice(0, 5).map((item, idx) => {
+    const rawTitle = (item.title || item.headline || '').trim() || `Korea BOK & KOFIA Update #${idx + 1}`;
+    const low = rawTitle.toLowerCase();
+    let sig = (item.significance || '').trim();
+    if (!sig || usedKoreaSigs.has(sig) || sig.startsWith('Influences foreign positioning across KOFIA/SOFIA KTB benchmarks')) {
+      if (low.includes('inflation') || low.includes('cpi') || low.includes('target') || low.includes('bank of korea')) {
+        sig = `Reinforces the Bank of Korea's cautious calibration with the Base Rate at ${rawKoreaData.bonds.bokBaseRate.toFixed(2)}% and KOFR/SOFIA overnight repo at ${rawKoreaData.bonds.kofrOvernightRate.toFixed(3)}%.`;
+      } else if (low.includes('semiconductor') || low.includes('chip') || low.includes('rebound') || low.includes('samsung')) {
+        sig = `Supports Korean semiconductor export earnings and foreign equity inflows into KOSPI (${rawKoreaData.fxAndEquities.kospiIndex.level.toLocaleString()}), stabilizing onshore USD/KRW (₩${rawKoreaData.fxAndEquities.krwSpot.toFixed(2)}).`;
+      } else if (low.includes('loans') || low.includes('lme') || low.includes('savings banks') || low.includes('credit')) {
+        sig = `Highlights domestic non-bank credit and funding dynamics monitored by BOK and KOFIA alongside 91-day CD (${rawKoreaData.bonds.cd91dRate.toFixed(2)}%) and AA- corporate spreads.`;
+      } else if (low.includes('kospi') || low.includes('stocks') || low.includes('blue chips') || low.includes('foreign selling') || low.includes('rout')) {
+        sig = `Heightened equity volatility in KOSPI (${rawKoreaData.fxAndEquities.kospiIndex.level.toLocaleString()}) accelerates domestic institutional rotation into safe-haven KOFIA 3Y (3.622%) and 10Y (3.852%) KTBs.`;
+      } else {
+        sig = `Tracked by ${item.source}; shapes foreign institutional positioning across KOFIA 3Y/10Y KTB futures and onshore KRW basis (#${idx + 1}).`;
+      }
+      if (usedKoreaSigs.has(sig)) {
+        sig = `${sig.replace(/\.$/, '')} (Desk Note #${idx + 1}).`;
+      }
+    }
+    usedKoreaSigs.add(sig);
+    return {
+      ...item,
+      title: rawTitle,
+      headline: rawTitle,
+      significance: sig,
+    };
+  });
+
+  const chinaData: ChinaMacroData = {
+    ...rawChinaData,
+    commentary: {
+      ...rawChinaData.commentary,
+      noteworthyHeadlines: normalizedChinaHeadlines,
+    },
+  };
+  const koreaData: KoreaMacroData = {
+    ...rawKoreaData,
+    commentary: {
+      ...rawKoreaData.commentary,
+      noteworthyHeadlines: normalizedKoreaHeadlines,
+    },
+  };
 
   const withNormalizedBondsAndHeadlines: DailyMacroSnapshot = {
     ...snap,

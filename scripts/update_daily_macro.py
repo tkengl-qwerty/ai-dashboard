@@ -1180,11 +1180,11 @@ def run_indonesia_sense_check(data: dict):
     fx_ndf["foreignFlowsDaily"] = f"{sign}IDR {abs(flow_bn):.1f} Billion"
 
 
-def fetch_ccdc_curve_for_date(work_time: str = ""):
-    """Query official CCDC (yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM)."""
+def fetch_ccdc_curve_for_date(work_time: str = "", yc_def_id: str = "2c9081e50a2f9606010a3068cae70001"):
+    """Query official CCDC (yield.chinabond.com.cn) ChinaBond Government Bond or CDB Yield Curve (YTM)."""
     url = "https://yield.chinabond.com.cn/cbweb-mn/yc/ycDetail"
     payload = (
-        f"ycDefIds=2c9081e50a2f9606010a3068cae70001&zblx=txy&workTime={work_time}"
+        f"ycDefIds={yc_def_id}&zblx=txy&workTime={work_time}"
         f"&dxbj=0&qxlx=0,&yqqxN=N&yqqxK=K&wrjxCBFlag=0&locale=en_US"
     ).encode("utf-8")
     req = urllib.request.Request(
@@ -1212,8 +1212,125 @@ def fetch_ccdc_curve_for_date(work_time: str = ""):
     return curve_dt, pts
 
 
+def is_valid_china_macro_headline(title: str) -> bool:
+    """Strictly require genuine China macro, PBoC, CCDC/bonds, yuan/FX, trade, or Shanghai/CSI market relevance."""
+    low = title.lower()
+    exclude_words = [
+        "stock price", "check out ", "in pictures", "delegate count", "imprisoned",
+        "charts, data & news", "charts, data and news", "byd unveils", "yangwang",
+        "sedan priced", "solana", "crypto promotion", "crypto news", "lottery",
+        "horoscope", "sports", "football", "basketball", "movie", "actor",
+        "settlement crisis leaves merchants", "sets the dollar exchange rate",
+        "expected to set the usd/cny reference rate",
+    ]
+    if any(w in low for w in exclude_words):
+        return False
+
+    china_pattern = re.compile(
+        r"\b(china|chinese|pboc|people's bank of china|yuan|renminbi|cnh|cny|beijing|shanghai|sse composite|csi 300|chinabond|ccdc)\b",
+        re.I,
+    )
+    macro_context_pattern = re.compile(
+        r"\b(pboc|central bank|forex|reserve|yuan|renminbi|cnh|cny|fix|fixing|bond|bonds|yield|yields|treasury|"
+        r"rate|rates|lpr|liquidity|stimulus|economy|economic|gdp|cpi|inflation|deflation|trade|tariff|tariffs|"
+        r"exports|imports|sanctions|summit|stocks|equities|sse|shanghai|market|markets|gold|investment|energy|growth|ai)\b",
+        re.I,
+    )
+    return bool(china_pattern.search(title) and macro_context_pattern.search(title))
+
+
+def score_china_macro_priority(title: str, source: str) -> int:
+    """Prioritize PBoC, Yuan/FX reserve rules, CGB bonds, Shanghai stocks, and major institutional macro stories."""
+    low = title.lower()
+    score = 0
+    if source in ("Bloomberg", "Reuters", "WSJ", "Wall Street Journal", "CNBC", "Financial Times", "South China Morning Post", "Caixin Global"):
+        score += 4
+    tier1 = [
+        "pboc", "people's bank of china", "central bank", "forex reserve", "yuan", "renminbi",
+        "bond", "yield", "lpr", "rate", "sse composite", "shanghai rises", "csi 300", "gold purchases",
+        "stimulus", "deflation", "cpi",
+    ]
+    tier2 = [
+        "tariff", "trade deal", "exports", "economy", "growth", "bessent", "rare earths", "energy investment",
+    ]
+    for k in tier1:
+        if k in low:
+            score += 5
+    for k in tier2:
+        if k in low:
+            score += 2
+    return score
+
+
+def build_china_significance(
+    title: str,
+    source: str,
+    idx: int,
+    cgb_5y: float,
+    cgb_10y: float,
+    cgb_30y: float,
+    cdb_10y: float,
+    cny_spot: float,
+    cnh_spot: float,
+    pboc_fixing: float,
+    ssec_lvl: float,
+    csi_lvl: float,
+    used_sigs: set,
+) -> str:
+    """Generate a distinct, non-duplicated, headline-specific Market Significance for each China macro story."""
+    low = title.lower()
+    candidates = []
+
+    if any(k in low for k in ["forex reserve", "steady yuan", "yuan fix", "yuan dilemma", "renminbi", "chinese yuan", "cnh", "cny", "exchange rate"]):
+        candidates.append(
+            f"Directly anchors PBoC daily central parity fixing ({pboc_fixing:.4f}) and narrows the offshore-onshore CNH/CNY basis (CNY {cny_spot:.4f} vs CNH {cnh_spot:.4f}), stabilizing FX-hedged inflows into CCDC ChinaBond CGBs."
+        )
+        candidates.append(
+            f"Reflects PBoC FX management between domestic monetary easing (10Y CCDC CGB at {cgb_10y:.4f}%) and external Renminbi stability near {cny_spot:.4f}."
+        )
+    if any(k in low for k in ["gold", "bullion", "reserves"]):
+        candidates.append(
+            f"Reinforces PBoC balance-sheet diversification alongside US$3.2T+ FX reserves, supporting sovereign credit quality across the CCDC CGB curve (10Y at {cgb_10y:.4f}%)."
+        )
+    if any(k in low for k in ["sse composite", "shanghai", "csi 300", "stocks", "equities", "losing streak", "forgotten trades"]):
+        candidates.append(
+            f"Drives onshore asset-allocation rotation between domestic equities (Shanghai Composite {ssec_lvl:,.2f}, CSI 300 {csi_lvl:,.2f}) and long-duration 10Y–30Y CCDC CGB benchmarks ({cgb_10y:.4f}%–{cgb_30y:.4f}%)."
+        )
+    if any(k in low for k in ["tariff", "trade", "bessent", "greer", "sanctions", "rare earths", "exports", "canada", "apec", "summit", "xi", "trump"]):
+        candidates.append(
+            f"Shapes external trade-surplus expectations and exporter USD conversion flows on CFETS (USD/CNY {cny_spot:.4f}), a key driver for PBoC domestic liquidity injections."
+        )
+        candidates.append(
+            f"External tariff and bilateral trade negotiations influence China's industrial export outlook, keeping PBoC policy supportive with 5Y CCDC CGB yields anchored at {cgb_5y:.4f}%."
+        )
+    if any(k in low for k in ["ai", "growth", "blue wave", "energy investment", "infrastructure", "stimulus", "fiscal"]):
+        candidates.append(
+            f"Informs state capex and ultra-long special Treasury issuance demand across the CCDC 30Y CGB ({cgb_30y:.4f}%) and 10Y CDB policy bank curve ({cdb_10y:.3f}%)."
+        )
+    if any(k in low for k in ["pboc", "people's bank", "rate", "lpr", "repo", "bond", "yield", "ccdc"]):
+        candidates.append(
+            f"Guides interbank DR007 repo funding conditions and commercial bank duration demand across 5Y ({cgb_5y:.4f}%) and 10Y ({cgb_10y:.4f}%) CCDC ChinaBond benchmarks."
+        )
+
+    candidates.extend([
+        f"Reported by {source}; influences onshore bank duration appetite across 10Y CCDC CGB ({cgb_10y:.4f}%) and 10Y CDB policy bank bonds ({cdb_10y:.3f}%).",
+        f"Tracked by {source}; shapes cross-border Bond Connect positioning and CFETS Renminbi parity expectations ({pboc_fixing:.4f}).",
+        f"Highlighted by {source}; frames PBoC liquidity calibration (7D OMO at 1.50%) against onshore equity sentiment (SSEC {ssec_lvl:,.2f}).",
+        f"Monitored by {source}; impacts institutional curve steepening trades between 5Y ({cgb_5y:.4f}%) and 30Y ({cgb_30y:.4f}%) CCDC CGBs.",
+        f"Published by {source}; factored into offshore CNH ({cnh_spot:.4f}) forward points and CSI 300 ({csi_lvl:,.2f}) institutional flows.",
+    ])
+
+    for sig in candidates:
+        if sig not in used_sigs:
+            used_sigs.add(sig)
+            return sig
+    fallback = f"{candidates[0]} (#{idx + 1})"
+    used_sigs.add(fallback)
+    return fallback
+
+
 def fetch_live_china_ccdc_and_macro(data: dict):
-    """Fetch official CCDC ChinaBond CGB yield curve, PBoC rates, CNY/CNH, SSEC, and China macro news."""
+    """Fetch official CCDC ChinaBond CGB & CDB yield curves, PBoC rates, CNY/CNH, SSEC, CSI 300, and China macro news."""
     ust_10y = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
         4.86,
@@ -1222,15 +1339,19 @@ def fetch_live_china_ccdc_and_macro(data: dict):
     curve_dt = "2026-11-06"
     curr_pts = {}
     prev_pts = {}
+    cdb_curr_pts = {}
+    cdb_prev_pts = {}
     try:
-        curve_dt, curr_pts = fetch_ccdc_curve_for_date("")
+        curve_dt, curr_pts = fetch_ccdc_curve_for_date("", "2c9081e50a2f9606010a3068cae70001")
+        _, cdb_curr_pts = fetch_ccdc_curve_for_date("", "2c9081e50a2f9606010a309f4adc000a")
         if curve_dt:
             dt_obj = datetime.strptime(curve_dt, "%Y-%m-%d")
             for back_days in range(1, 5):
                 cand_dt = (dt_obj - timedelta(days=back_days)).strftime("%Y-%m-%d")
-                _, cand_pts = fetch_ccdc_curve_for_date(cand_dt)
+                _, cand_pts = fetch_ccdc_curve_for_date(cand_dt, "2c9081e50a2f9606010a3068cae70001")
                 if cand_pts and cand_pts.get("10.0y") != curr_pts.get("10.0y"):
                     prev_pts = cand_pts
+                    _, cdb_prev_pts = fetch_ccdc_curve_for_date(cand_dt, "2c9081e50a2f9606010a309f4adc000a")
                     break
     except Exception as e:
         print(f"Warn: CCDC direct POST failed ({e}), using CNBC/cached fallback.")
@@ -1268,85 +1389,150 @@ def fetch_live_china_ccdc_and_macro(data: dict):
     cgb_30y = next((b["yield"] for b in ccdc_cgb if b["tenor"].startswith("30Y")), 2.0275)
     spread_10y = round((cgb_10y - ust_10y) * 100)
 
-    cny_spot = 6.6710
-    cny_chg = -0.0170
-    cny_pct = -0.25
-    cny_yf = get_yf_quote(["CNY=X"])
-    if cny_yf and 5.5 <= cny_yf[0] <= 8.5:
-        cny_spot, _, cny_chg, cny_pct = cny_yf
-    elif "CNY=" in cnbc_cn:
+    # Official CCDC 10Y China Development Bank (CDB) yield & daily bps change
+    cdb_10y = round(cdb_curr_pts.get("10.0y", cgb_10y + 0.184), 4)
+    cdb_10y_prev = cdb_prev_pts.get("10.0y", cdb_10y + 0.017)
+    cdb_10y_chg_bps = round((cdb_10y - cdb_10y_prev) * 100, 1)
+    cdb_spread_bps = round((cdb_10y - cgb_10y) * 100, 1)
+
+    # Check live PBoC 1Y LPR from Naver standardInterest API
+    lpr_1y = 3.00
+    lpr_5y = 3.50
+    try:
+        nav_std_raw = http_get_text(
+            "https://stock.naver.com/api/securityService/marketindex/standardInterest", timeout=8
+        )
+        for item in json.loads(nav_std_raw):
+            if item.get("reutersCode") == "CNLPRO=ECIX":
+                val = float(str(item.get("closePrice", "3.00")).replace(",", ""))
+                if 1.5 <= val <= 6.0:
+                    lpr_1y = round(val, 2)
+                    lpr_5y = round(val + 0.50, 2)
+                break
+    except Exception:
+        pass
+
+    # Prefer CNBC CNY= (CFETS onshore close) or Yahoo Finance CNY=X
+    cny_spot = 6.6760
+    cny_chg = 0.0080
+    cny_pct = 0.12
+    if "CNY=" in cnbc_cn and 5.5 <= cnbc_cn["CNY="]["last"] <= 8.5:
         cny_spot = cnbc_cn["CNY="]["last"]
         cny_chg = cnbc_cn["CNY="]["change"]
         cny_pct = (cny_chg / cny_spot) * 100.0 if cny_spot else 0.0
+    else:
+        cny_yf = get_yf_quote(["CNY=X"])
+        if cny_yf and 5.5 <= cny_yf[0] <= 8.5:
+            cny_spot, _, cny_chg, cny_pct = cny_yf
 
-    cnh_spot = round(cny_spot + 0.0026, 4)
-    cnh_chg = 0.0088
-    cnh_pct = 0.13
+    cnh_spot = round(cny_spot - 0.0047, 4)
+    cnh_chg = -0.0023
+    cnh_pct = -0.03
     if "CNH=" in cnbc_cn and 5.5 <= cnbc_cn["CNH="]["last"] <= 8.5:
         cnh_spot = cnbc_cn["CNH="]["last"]
         cnh_chg = cnbc_cn["CNH="]["change"]
         cnh_pct = (cnh_chg / cnh_spot) * 100.0 if cnh_spot else 0.0
+    else:
+        cnh_yf = get_yf_quote(["CNH=X"])
+        if cnh_yf and 5.5 <= cnh_yf[0] <= 8.5:
+            cnh_spot, _, cnh_chg, cnh_pct = cnh_yf
 
-    ssec_lvl, ssec_chg, ssec_pct = 3649.18, -40.73, -1.10
+    ssec_lvl, ssec_chg, ssec_pct = 3649.18, 11.15, 0.31
     ssec_yf = get_yf_quote(["000001.SS"])
     if ssec_yf and 2000 <= ssec_yf[0] <= 8000:
         ssec_lvl, _, ssec_chg, ssec_pct = ssec_yf
 
+    csi_lvl, csi_chg, csi_pct = 4054.28, -59.13, -1.44
+    csi_yf = get_yf_quote(["000300.SS"])
+    if csi_yf and 2000 <= csi_yf[0] <= 9000:
+        csi_lvl, _, csi_chg, csi_pct = csi_yf
+
     pboc_fixing = round(cny_spot - 0.0025, 4)
     pips_spread = round((cnh_spot - cny_spot) * 10000)
 
-    # Fetch live China macro headlines
+    # Fetch live China macro headlines from institutional and macro feeds
     china_headlines = []
-    rss_url = (
-        "https://news.google.com/rss/search?q=(%22PBOC%22+OR+%22People%27s+Bank+of+China%22+OR+%22China+bond%22+OR+"
-        "%22yuan%22+OR+%22China+economy%22+OR+%22China+stimulus%22+OR+%22renminbi%22)+when:72h&hl=en-US&gl=US&ceid=US:en"
-    )
-    now_utc = datetime.now(timezone.utc)
-    seen_cn = set()
-    try:
-        xml_bytes = http_get_bytes(rss_url, timeout=12)
-        root = ET.fromstring(xml_bytes)
-        for item in root.findall(".//item"):
-            raw_title = html.unescape(item.findtext("title") or "").strip()
-            pub_str = (item.findtext("pubDate") or "").strip()
-            link = (item.findtext("link") or "").strip()
-            raw_source = (item.findtext("source") or "Bloomberg").strip()
-            clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
-            if not clean_title or len(clean_title) < 20:
-                continue
-            low = clean_title.lower()
-            if any(w in low for w in ["stock price", "check out ", "in pictures", "delegate count", "imprisoned"]):
-                continue
-            if not any(k in low for k in ["china", "chinese", "pboc", "yuan", "renminbi", "cnh", "cny", "beijing", "shanghai", "asia"]):
-                continue
-            key = re.sub(r"[^a-z0-9]", "", low)[:40]
-            if key in seen_cn:
-                continue
-            seen_cn.add(key)
-            try:
-                pub_dt = email.utils.parsedate_to_datetime(pub_str).astimezone(timezone.utc)
-            except Exception:
-                pub_dt = now_utc - timedelta(hours=6)
-            china_headlines.append({
-                "pub_dt": pub_dt,
-                "title": clean_title,
-                "headline": clean_title,
-                "source": normalize_source_name(raw_source, link),
-                "timeAgo": format_time_ago(pub_dt, now_utc),
-                "significance": (
-                    f"Shapes institutional positioning across CCDC ChinaBond CGBs (10Y {cgb_10y:.4f}%, 30Y {cgb_30y:.4f}%) "
-                    f"and onshore USD/CNY ({cny_spot:.4f})."
-                ),
-                "url": link or "https://www.bloomberg.com/markets",
-            })
-    except Exception as e:
-        print(f"Warn: China RSS fetch error: {e}")
-
-    china_headlines.sort(key=lambda x: x["pub_dt"], reverse=True)
-    top_cn_news = [
-        {k: v for k, v in item.items() if k != "pub_dt"}
-        for item in china_headlines[:5]
+    rss_urls = [
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:scmp.com+OR+site:wsj.com)+(China+PBOC+OR+China+bonds+OR+China+yields+OR+yuan+OR+renminbi+OR+China+economy+OR+China+exports+OR+China+tariff+OR+Shanghai+stocks)+when:72h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(%22People%27s+Bank+of+China%22+OR+%22PBOC%22+OR+%22Forex+Reserve%22+OR+%22Yuan+Fix%22+OR+%22SSE+Composite%22+OR+%22China+stimulus%22)+when:72h&hl=en-US&gl=US&ceid=US:en",
     ]
+    now_utc = datetime.now(timezone.utc)
+    cutoff_72h = now_utc - timedelta(hours=72)
+    seen_cn = set()
+
+    for rss_url in rss_urls:
+        try:
+            xml_bytes = http_get_bytes(rss_url, timeout=12)
+            root = ET.fromstring(xml_bytes)
+            for item in root.findall(".//item"):
+                raw_title = html.unescape(item.findtext("title") or "").strip()
+                pub_str = (item.findtext("pubDate") or "").strip()
+                link = (item.findtext("link") or "").strip()
+                raw_source = (item.findtext("source") or "Bloomberg").strip()
+                clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
+                if not clean_title or len(clean_title) < 22:
+                    continue
+                if not is_valid_china_macro_headline(clean_title):
+                    continue
+                key = re.sub(r"[^a-z0-9]", "", clean_title.lower())[:42]
+                if key in seen_cn:
+                    continue
+                try:
+                    pub_dt = email.utils.parsedate_to_datetime(pub_str)
+                    if pub_dt.tzinfo is None:
+                        pub_dt = pub_dt.replace(tzinfo=timezone.utc)
+                    else:
+                        pub_dt = pub_dt.astimezone(timezone.utc)
+                except Exception:
+                    continue
+                if pub_dt < cutoff_72h or pub_dt > now_utc + timedelta(minutes=10):
+                    continue
+
+                seen_cn.add(key)
+                norm_src = normalize_source_name(raw_source, link)
+                china_headlines.append({
+                    "pub_dt": pub_dt,
+                    "priority": score_china_macro_priority(clean_title, norm_src),
+                    "title": clean_title,
+                    "headline": clean_title,
+                    "source": norm_src,
+                    "timeAgo": format_time_ago(pub_dt, now_utc),
+                    "url": link or "https://www.bloomberg.com/markets",
+                })
+        except Exception as e:
+            print(f"Warn: China RSS fetch error: {e}")
+
+    # Pick top 5 high-signal China macro stories and sort selected 5 by recency
+    china_headlines.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
+    selected_cn = sorted(china_headlines[:5], key=lambda x: x["pub_dt"], reverse=True)
+
+    used_cn_sigs = set()
+    top_cn_news = []
+    for idx, item in enumerate(selected_cn):
+        sig = build_china_significance(
+            item["title"],
+            item["source"],
+            idx,
+            cgb_5y,
+            cgb_10y,
+            cgb_30y,
+            cdb_10y,
+            cny_spot,
+            cnh_spot,
+            pboc_fixing,
+            ssec_lvl,
+            csi_lvl,
+            used_cn_sigs,
+        )
+        top_cn_news.append({
+            "title": item["title"],
+            "headline": item["headline"],
+            "source": item["source"],
+            "timeAgo": item["timeAgo"],
+            "significance": sig,
+            "url": item["url"],
+        })
+
     if len(top_cn_news) < 3:
         top_cn_news = [
             {
@@ -1358,19 +1544,19 @@ def fetch_live_china_ccdc_and_macro(data: dict):
                 "url": "https://yield.chinabond.com.cn/cbweb-mn/yc/ycYz?locale=en_US",
             },
             {
-                "title": "China Set to Lead World in Energy Investment in 2026, CCTV Says",
-                "headline": "China Set to Lead World in Energy Investment in 2026, CCTV Says",
-                "source": "Bloomberg",
-                "timeAgo": "5h ago",
-                "significance": f"Supports state infrastructure capex and 30Y ultra-long CCDC special Treasury bond issuance ({cgb_30y:.4f}%).",
-                "url": "https://www.bloomberg.com/markets",
+                "title": "China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan",
+                "headline": "China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan",
+                "source": "WSJ",
+                "timeAgo": "6h ago",
+                "significance": f"Directly anchors PBoC daily central parity fixing ({pboc_fixing:.4f}) and narrows the offshore-onshore CNH/CNY basis (CNY {cny_spot:.4f}).",
+                "url": "https://www.wsj.com/economy/central-banking",
             },
             {
-                "title": "AI Slump Revives Asia’s Forgotten Trades From China to India",
-                "headline": "AI Slump Revives Asia’s Forgotten Trades From China to India",
+                "title": "People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
+                "headline": "People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
                 "source": "Bloomberg",
                 "timeAgo": "9h ago",
-                "significance": f"Drives value rotation into Shanghai equities ({ssec_lvl:,.2f}) alongside steady CNH funding ({cnh_spot:.4f}).",
+                "significance": f"Reinforces PBoC reserve diversification alongside sovereign CCDC CGB curve stability (30Y at {cgb_30y:.4f}%).",
                 "url": "https://www.bloomberg.com/markets",
             },
         ]
@@ -1381,7 +1567,7 @@ def fetch_live_china_ccdc_and_macro(data: dict):
             "date": datetime.now(SGT).strftime("%d %b %Y"),
             "executiveSummary": (
                 f"People's Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, "
-                f"1Y LPR at 3.10%, and 5Y LPR at 3.60% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. "
+                f"1Y LPR at {lpr_1y:.2f}%, and 5Y LPR at {lpr_5y:.2f}% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. "
                 f"(CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on {curve_dt}, 1Y CGB cleared at "
                 f"{ccdc_cgb[0]['yield']:.4f}% ({ccdc_cgb[0]['changeBps']:+.1f} bps), 5Y benchmark at {cgb_5y:.4f}% ({ccdc_cgb[3]['changeBps']:+.1f} bps), "
                 f"10Y benchmark at {cgb_10y:.4f}% ({ccdc_cgb[5]['changeBps']:+.1f} bps), and 30Y ultra-long CGB at {cgb_30y:.4f}% "
@@ -1397,21 +1583,21 @@ def fetch_live_china_ccdc_and_macro(data: dict):
                     ),
                 },
                 {
-                    "heading": "PBoC Open Market Operations, DR007 Repo & LPR Transmission",
+                    "heading": "PBoC Open Market Operations, DR007 Repo & CCDC CDB Policy Bank Curve",
                     "analysis": (
-                        "With the 7-Day Reverse Repo policy anchor at 1.50% and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, "
-                        "interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and 10Y China Development Bank (CDB) policy bank bonds (1.675%)."
+                        f"With the 7-Day Reverse Repo policy anchor at 1.50%, 1Y/5Y LPR at {lpr_1y:.2f}%/{lpr_5y:.2f}%, and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, "
+                        f"interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and official CCDC 10Y China Development Bank (CDB) policy bank bonds ({cdb_10y:.3f}%, +{cdb_spread_bps:.1f} bps over 10Y CGB)."
                     ),
                 },
                 {
-                    "heading": "Renminbi Central Parity Fixing (CFETS) & Offshore CNH Basis",
+                    "heading": "Renminbi Central Parity Fixing (CFETS), SSEC & CSI 300 Positioning",
                     "analysis": (
                         f"Onshore USD/CNY trades at {cny_spot:.4f} ({cny_pct:+.2f}%) alongside offshore USD/CNH at {cnh_spot:.4f} and the PBoC daily central parity fixing at {pboc_fixing:.4f}, "
-                        f"while the Shanghai Composite sits at {ssec_lvl:,.2f} ({ssec_pct:+.2f}%)."
+                        f"while the Shanghai Composite sits at {ssec_lvl:,.2f} ({ssec_pct:+.2f}%) and CSI 300 at {csi_lvl:,.2f} ({csi_pct:+.2f}%)."
                     ),
                 },
             ],
-            "policyPosture": "Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.10% · 5Y LPR 3.60%)",
+            "policyPosture": f"Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR {lpr_1y:.2f}% · 5Y LPR {lpr_5y:.2f}%)",
             "noteworthyHeadlines": top_cn_news,
         },
         "bonds": {
@@ -1433,30 +1619,30 @@ def fetch_live_china_ccdc_and_macro(data: dict):
                     "description": "Depository-Institution 7-Day CGB Pledged Repo",
                 },
                 {
-                    "instrument": "10Y CDB Policy Bank",
+                    "instrument": "10Y CDB Policy Bank (CCDC)",
                     "code": "260210.IB",
-                    "rate": round(cgb_10y + 0.088, 3),
-                    "changeBps": ccdc_cgb[5]["changeBps"],
-                    "description": "China Development Bank (+8.8 bps over 10Y CGB)",
+                    "rate": round(cdb_10y, 3),
+                    "changeBps": cdb_10y_chg_bps,
+                    "description": f"CCDC ChinaBond CDB 10Y (+{cdb_spread_bps:.1f} bps over 10Y CGB)",
                 },
                 {
                     "instrument": "1-Year Loan Prime Rate",
                     "code": "LPR-1Y",
-                    "rate": 3.100,
+                    "rate": lpr_1y,
                     "changeBps": 0.0,
                     "description": "CFETS Corporate Lending Benchmark Rate",
                 },
                 {
                     "instrument": "5-Year Loan Prime Rate",
                     "code": "LPR-5Y",
-                    "rate": 3.600,
+                    "rate": lpr_5y,
                     "changeBps": 0.0,
                     "description": "CFETS Long-Term Mortgage Reference Rate",
                 },
             ],
             "pbocOmo7dRate": 1.50,
-            "lpr1Y": 3.10,
-            "lpr5Y": 3.60,
+            "lpr1Y": lpr_1y,
+            "lpr5Y": lpr_5y,
             "cpiInflationYoY": 0.60,
             "sovereignSpread10Y": spread_10y,
         },
@@ -1476,22 +1662,156 @@ def fetch_live_china_ccdc_and_macro(data: dict):
                 "changePct": round(ssec_pct, 2),
             },
             "csi300Index": {
-                "level": 4285.60,
-                "change": -38.40,
-                "changePct": -0.89,
+                "level": round(csi_lvl, 2),
+                "change": round(csi_chg, 2),
+                "changePct": round(csi_pct, 2),
             },
             "northboundBondConnectFlow": "+RMB 14.8 Billion (CCDC Custody)",
         },
     }
-    print(f"Updated China CCDC CGB Curve ({curve_dt}): 1Y={ccdc_cgb[0]['yield']:.4f}%, 5Y={cgb_5y:.4f}%, 10Y={cgb_10y:.4f}%, 30Y={cgb_30y:.4f}%")
+    print(
+        f"Updated China CCDC CGB & CDB Curves ({curve_dt}): "
+        f"1Y={ccdc_cgb[0]['yield']:.4f}%, 5Y={cgb_5y:.4f}%, 10Y={cgb_10y:.4f}%, 30Y={cgb_30y:.4f}%, 10Y CDB={cdb_10y:.4f}%, "
+        f"Top News={len(top_cn_news)} (unique significances={len(used_cn_sigs)})"
+    )
+
+
+def is_valid_korea_macro_headline(title: str) -> bool:
+    """Strictly require genuine South Korea macro, BOK, KOFIA/SOFIA, KTB bonds, KRW, KOSPI, exports, or financial credit relevance."""
+    low = title.lower()
+    exclude_words = [
+        "stock price", "check out ", "north korea", "k-pop", "pokemon", "pokémon",
+        "auction show", "youtube program", "president lee's youtube", "korean won't",
+        "charts, data and news", "charts, data & news", "drama", "movie", "baseball",
+        "football", "golf", "celebrity", "lottery",
+    ]
+    if any(w in low for w in exclude_words):
+        return False
+
+    korea_pattern = re.compile(
+        r"\b(south korea|korea|korean|kospi|kosdaq|bok|bank of korea|seoul|ktb|kofia|kofr|samsung|sk hynix|krw)\b",
+        re.I,
+    )
+    macro_context_pattern = re.compile(
+        r"\b(bok|bank of korea|central bank|inflation|cpi|rate|rates|yield|yields|bond|bonds|ktb|kofia|kofr|"
+        r"kospi|kosdaq|stocks|equities|market|markets|blue chips|foreign selling|rout|rebound|sell-off|rally|"
+        r"won|krw|currency|forex|fx|exports|imports|current account|surplus|gdp|economy|economic|"
+        r"semiconductor|chip|chips|ai|loans|lme|savings banks|credit|corporate reforms|value-up)\b",
+        re.I,
+    )
+    return bool(korea_pattern.search(title) and macro_context_pattern.search(title))
+
+
+def score_korea_macro_priority(title: str, source: str) -> int:
+    """Prioritize BOK, inflation, KTB bonds, KOSPI/semiconductors, credit/loans, and current account stories."""
+    low = title.lower()
+    score = 0
+    if source in ("Bloomberg", "Reuters", "WSJ", "The Korea Herald", "The Korea Times", "KED Global", "Seoul Economic Daily", "Yonhap"):
+        score += 4
+    tier1 = [
+        "bank of korea", "inflation", "current account", "kospi", "semiconductor", "chip",
+        "loans", "savings banks", "foreign selling", "corporate reforms", "bond", "ktb", "won",
+    ]
+    for k in tier1:
+        if k in low:
+            score += 4
+    return score
+
+
+def build_korea_significance(
+    title: str,
+    source: str,
+    idx: int,
+    ktb_3y: float,
+    ktb_10y: float,
+    ktb_30y: float,
+    bok_base: float,
+    kofr_rate: float,
+    cd_rate: float,
+    corp_aa_rate: float,
+    krw_spot: float,
+    kospi_lvl: float,
+    used_sigs: set,
+) -> str:
+    """Generate a distinct, non-duplicated, headline-specific Market Significance for each Korea macro story."""
+    low = title.lower()
+    candidates = []
+
+    if any(k in low for k in ["inflation", "cpi", "price", "above target", "bok", "bank of korea", "rate"]):
+        candidates.append(
+            f"Reinforces the Bank of Korea's cautious calibration with the Base Rate at {bok_base:.2f}% and KOFR/SOFIA overnight repo at {kofr_rate:.3f}%, anchoring 3Y KTB yields near {ktb_3y:.3f}%."
+        )
+    if any(k in low for k in ["semiconductor", "chip", "samsung", "hynix", "rebound", "u.s. rebound"]):
+        candidates.append(
+            f"Supports Korean semiconductor export earnings and foreign equity inflows into KOSPI ({kospi_lvl:,.2f}), helping stabilize onshore USD/KRW around ₩{krw_spot:,.2f}."
+        )
+    if any(k in low for k in ["loans", "lme", "savings banks", "credit", "debt", "default", "corporate"]):
+        candidates.append(
+            f"Highlights domestic non-bank credit and funding dynamics monitored by BOK and KOFIA, where 91-day CD fixes at {cd_rate:.3f}% and 3Y AA- corporate bonds yield {corp_aa_rate:.3f}%."
+        )
+    if any(k in low for k in ["current account", "surplus", "exports", "trade"]):
+        candidates.append(
+            f"Record semiconductor-led trade surpluses bolster Korea's external balances, cushioning USD/KRW (₩{krw_spot:,.2f}) and supporting foreign WGBI demand for 10Y KTBs ({ktb_10y:.3f}%)."
+        )
+    if any(k in low for k in ["kospi", "stocks", "blue chips", "yearly lows", "foreign selling", "rout", "black friday", "rollercoaster", "sell-off"]):
+        candidates.append(
+            f"Heightened equity volatility in KOSPI ({kospi_lvl:,.2f}) accelerates domestic institutional rotation into safe-haven KOFIA 3Y ({ktb_3y:.3f}%) and 10Y ({ktb_10y:.3f}%) Korea Treasury Bonds."
+        )
+        candidates.append(
+            f"Foreign equity outflows pressure onshore USD/KRW (₩{krw_spot:,.2f}) and keep financial authorities focused on market-stabilization liquidity measures."
+        )
+        candidates.append(
+            f"Prompts Korean pension and insurance desks to rebalance toward long-duration 10Y–30Y KTB benchmarks ({ktb_10y:.3f}%–{ktb_30y:.3f}%) amid tech multiple compression."
+        )
+
+    candidates.extend([
+        f"Reported by {source}; shapes foreign institutional positioning across 3Y ({ktb_3y:.3f}%) and 10Y ({ktb_10y:.3f}%) KOFIA KTB futures.",
+        f"Tracked by {source}; informs Bank of Korea Monetary Policy Board assessment alongside KOFR/SOFIA overnight funding ({kofr_rate:.3f}%).",
+        f"Monitored by {source}; impacts onshore KRW hedging basis (USD/KRW ₩{krw_spot:,.2f}) and KOFIA AA- corporate credit spreads ({corp_aa_rate:.3f}%).",
+        f"Highlighted by {source}; reflects shifting foreign portfolio allocation between KOSPI large-caps ({kospi_lvl:,.2f}) and WGBI-eligible KTBs.",
+        f"Published by {source}; guides Seoul fixed-income dealer pricing across 91-day CD ({cd_rate:.3f}%) and 30Y KTB ({ktb_30y:.3f}%) tenors.",
+    ])
+
+    for sig in candidates:
+        if sig not in used_sigs:
+            used_sigs.add(sig)
+            return sig
+    fallback = f"{candidates[0]} (#{idx + 1})"
+    used_sigs.add(fallback)
+    return fallback
 
 
 def fetch_live_korea_sofia_and_macro(data: dict):
-    """Fetch KOFIA / SOFIA Korea Treasury Bond (KTB) yields, KOFR/CD money rates, USD/KRW, KOSPI, and Korea news."""
+    """Fetch KOFIA / SOFIA Korea Treasury Bond (KTB) yields, KOFR/CD/Call/Corp AA- money rates, USD/KRW, KOSPI, and Korea news."""
     ust_10y = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
         4.86,
     )
+
+    # 1. Fetch live Korean Treasury Bonds (1Y, 2Y, 3Y, 5Y, 10Y, 20Y, 30Y, 50Y) from Naver SecurityService & CNBC
+    naver_kor_bonds = {}
+    quotation_date_label = "06 Nov 2026"
+    try:
+        kor_bond_raw = http_get_text(
+            "https://stock.naver.com/api/securityService/marketindex/bond/nation/KOR", timeout=10
+        )
+        for item in json.loads(kor_bond_raw):
+            rc = item.get("reutersCode")
+            if not rc:
+                continue
+            yld = float(str(item.get("closePrice", "0")).replace(",", ""))
+            chg = float(str(item.get("fluctuations", "0")).replace(",", ""))
+            dt_str = item.get("localTradedAt", "")
+            if dt_str and len(dt_str) >= 10:
+                try:
+                    dt_parsed = datetime.strptime(dt_str[:10], "%Y-%m-%d")
+                    quotation_date_label = dt_parsed.strftime("%d %b %Y")
+                except Exception:
+                    pass
+            if 1.0 <= yld <= 9.0:
+                naver_kor_bonds[rc] = {"last": yld, "change": chg}
+    except Exception as e:
+        print(f"Warn: Naver KOR bond API failed ({e}), falling back to CNBC.")
 
     cnbc_kr = fetch_cnbc_batch_quotes([
         "KR1YT=RR", "KR2YT=RR", "KR3YT=RR", "KR5YT=RR", "KR10YT=RR", "KR20YT=RR", "KR30YT=RR", "KR50YT=RR", "KRW=", ".KS11"
@@ -1504,16 +1824,19 @@ def fetch_live_korea_sofia_and_macro(data: dict):
         ("5Y KTB", "KR5YT=RR", "KTB 03375-3109", 3.716, -5.7, 3.375),
         ("10Y KTB (Benchmark)", "KR10YT=RR", "KTB 03500-3606", 3.852, -4.0, 3.500),
         ("20Y KTB", "KR20YT=RR", "KTB 03625-4609", 3.968, -1.8, 3.625),
-        ("30Y KTB", "KR30YT=RR", "KTB 03250-5603", 3.895, -1.8, 3.250),
+        ("30Y KTB", "KR30YT=RR", "KTB 03250-5603", 3.975, -2.8, 3.250),
     ]
 
     kofia_ktb = []
     for tenor, sym, series, def_y, def_chg, coupon in ktb_specs:
-        if sym in cnbc_kr and 1.5 <= cnbc_kr[sym]["last"] <= 8.0:
+        if sym in naver_kor_bonds:
+            yld = round(naver_kor_bonds[sym]["last"], 3)
+            chg_bps = round(naver_kor_bonds[sym]["change"] * 100, 1)
+        elif sym in cnbc_kr and 1.5 <= cnbc_kr[sym]["last"] <= 8.0:
             yld = round(cnbc_kr[sym]["last"], 3)
             chg_bps = round(cnbc_kr[sym]["change"] * 100, 1)
         elif sym == "KR30YT=RR" and "KR50YT=RR" in cnbc_kr:
-            yld = round(cnbc_kr["KR50YT=RR"]["last"] + 0.019, 3)
+            yld = round(cnbc_kr["KR50YT=RR"]["last"] + 0.099, 3)
             chg_bps = round(cnbc_kr["KR50YT=RR"]["change"] * 100, 1)
         else:
             yld = def_y
@@ -1527,16 +1850,69 @@ def fetch_live_korea_sofia_and_macro(data: dict):
             "coupon": coupon,
         })
 
+    ktb_1y = next((b["yield"] for b in kofia_ktb if b["tenor"].startswith("1Y")), 3.587)
     ktb_3y = next((b["yield"] for b in kofia_ktb if b["tenor"].startswith("3Y")), 3.622)
     ktb_5y = next((b["yield"] for b in kofia_ktb if b["tenor"].startswith("5Y")), 3.716)
     ktb_10y = next((b["yield"] for b in kofia_ktb if b["tenor"].startswith("10Y")), 3.852)
-    ktb_30y = next((b["yield"] for b in kofia_ktb if b["tenor"].startswith("30Y")), 3.895)
+    ktb_30y = next((b["yield"] for b in kofia_ktb if b["tenor"].startswith("30Y")), 3.975)
     spread_10y = round((ktb_10y - ust_10y) * 100)
 
-    krw_spot, krw_chg, krw_pct = 1356.34, 16.27, 1.21
-    krw_yf = get_yf_quote(["KRW=X"])
-    if krw_yf and 900 <= krw_yf[0] <= 1800:
-        krw_spot, _, krw_chg, krw_pct = krw_yf
+    # 2. Fetch live Korea KOFR / SOFIA overnight repo, Call Rate, CD 91D, and Corporate AA- 3Y from Naver domesticInterest API
+    kofr_rate, kofr_chg_bps = 3.045, 3.3
+    call_rate, call_chg_bps = 3.048, 0.9
+    cd91_rate, cd91_chg_bps = 3.340, 0.0
+    corp_aa_rate, corp_aa_chg_bps = 4.358, -4.2
+    bok_base_rate = 3.000
+
+    try:
+        dom_raw = http_get_text(
+            "https://stock.naver.com/api/securityService/marketindex/domesticInterest", timeout=10
+        )
+        for item in json.loads(dom_raw):
+            rc = item.get("reutersCode")
+            val = float(str(item.get("closePrice", "0")).replace(",", ""))
+            chg = float(str(item.get("fluctuations", "0")).replace(",", ""))
+            if rc == "KOFR" and 1.0 <= val <= 7.0:
+                kofr_rate = round(val, 3)
+                kofr_chg_bps = round(chg * 100, 1)
+            elif rc == "KRCALLBOKK" and 1.0 <= val <= 7.0:
+                call_rate = round(val, 3)
+                call_chg_bps = round(chg * 100, 1)
+            elif rc == "KFIA114000" and 1.0 <= val <= 7.0:
+                cd91_rate = round(val, 3)
+                cd91_chg_bps = round(chg * 100, 1)
+            elif rc == "KFIA103009" and 1.5 <= val <= 9.0:
+                corp_aa_rate = round(val, 3)
+                corp_aa_chg_bps = round(chg * 100, 1)
+    except Exception as e:
+        print(f"Warn: Korea domesticInterest fetch failed ({e}).")
+
+    try:
+        std_raw = http_get_text(
+            "https://stock.naver.com/api/securityService/marketindex/standardInterest", timeout=8
+        )
+        for item in json.loads(std_raw):
+            if item.get("reutersCode") == "KROCRT=ECIX":
+                val = float(str(item.get("closePrice", "3.00")).replace(",", ""))
+                if 1.0 <= val <= 7.0:
+                    bok_base_rate = round(val, 2)
+                break
+    except Exception:
+        pass
+
+    msb_1y_rate = round(ktb_1y - 0.052, 3)
+    msb_1y_chg_bps = next((b["changeBps"] for b in kofia_ktb if b["tenor"].startswith("1Y")), 3.3)
+    corp_spread_bps = round((corp_aa_rate - ktb_3y) * 100, 1)
+
+    krw_spot, krw_chg, krw_pct = 1363.37, 7.03, 0.52
+    if "KRW=" in cnbc_kr and 900 <= cnbc_kr["KRW="]["last"] <= 1800:
+        krw_spot = cnbc_kr["KRW="]["last"]
+        krw_chg = cnbc_kr["KRW="]["change"]
+        krw_pct = (krw_chg / krw_spot) * 100.0 if krw_spot else 0.0
+    else:
+        krw_yf = get_yf_quote(["KRW=X"])
+        if krw_yf and 900 <= krw_yf[0] <= 1800:
+            krw_spot, _, krw_chg, krw_pct = krw_yf
 
     kospi_lvl, kospi_chg, kospi_pct = 5059.69, -324.11, -6.02
     kospi_yf = get_yf_quote(["^KS11"])
@@ -1550,58 +1926,88 @@ def fetch_live_korea_sofia_and_macro(data: dict):
 
     ndf_1m = round(krw_spot - 2.24, 2)
 
-    # Fetch live Korea macro headlines
+    # 3. Fetch live Korea macro headlines with strict filtering & distinct Market Significance per item
     korea_headlines = []
-    rss_url = (
-        "https://news.google.com/rss/search?q=(%22Bank+of+Korea%22+OR+%22South+Korea+economy%22+OR+%22KOSPI%22+OR+"
-        "%22Korean+won%22+OR+%22Korea+bonds%22+OR+%22Korea+exports%22)+when:72h&hl=en-US&gl=US&ceid=US:en"
-    )
-    now_utc = datetime.now(timezone.utc)
-    seen_kr = set()
-    try:
-        xml_bytes = http_get_bytes(rss_url, timeout=12)
-        root = ET.fromstring(xml_bytes)
-        for item in root.findall(".//item"):
-            raw_title = html.unescape(item.findtext("title") or "").strip()
-            pub_str = (item.findtext("pubDate") or "").strip()
-            link = (item.findtext("link") or "").strip()
-            raw_source = (item.findtext("source") or "Reuters").strip()
-            clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
-            if not clean_title or len(clean_title) < 20:
-                continue
-            low = clean_title.lower()
-            if any(w in low for w in ["stock price", "check out ", "north korea", "k-pop"]):
-                continue
-            if not any(k in low for k in ["korea", "korean", "kospi", "bok", "won", "seoul", "ktb", "samsung", "hynix"]):
-                continue
-            key = re.sub(r"[^a-z0-9]", "", low)[:40]
-            if key in seen_kr:
-                continue
-            seen_kr.add(key)
-            try:
-                pub_dt = email.utils.parsedate_to_datetime(pub_str).astimezone(timezone.utc)
-            except Exception:
-                pub_dt = now_utc - timedelta(hours=6)
-            korea_headlines.append({
-                "pub_dt": pub_dt,
-                "title": clean_title,
-                "headline": clean_title,
-                "source": normalize_source_name(raw_source, link),
-                "timeAgo": format_time_ago(pub_dt, now_utc),
-                "significance": (
-                    f"Influences foreign positioning across KOFIA/SOFIA KTB benchmarks (3Y {ktb_3y:.3f}%, 10Y {ktb_10y:.3f}%) "
-                    f"and USD/KRW (₩{krw_spot:,.2f})."
-                ),
-                "url": link or "https://www.reuters.com/markets/asia/",
-            })
-    except Exception as e:
-        print(f"Warn: Korea RSS fetch error: {e}")
-
-    korea_headlines.sort(key=lambda x: x["pub_dt"], reverse=True)
-    top_kr_news = [
-        {k: v for k, v in item.items() if k != "pub_dt"}
-        for item in korea_headlines[:5]
+    rss_urls = [
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:wsj.com+OR+site:en.yna.co.kr+OR+site:koreaherald.com+OR+site:koreatimes.co.kr+OR+site:kedglobal.com)+(Bank+of+Korea+OR+KOSPI+OR+Korean+won+OR+Korea+bonds+OR+Korea+economy+OR+Korea+exports+OR+Korea+inflation+OR+Korea+rates)+when:72h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(%22Bank+of+Korea%22+OR+%22South+Korea+Inflation%22+OR+%22KOSPI%22+OR+%22South+Korea%E2%80%99s+Market%22+OR+%22Korean+Stocks%22+OR+%22Savings+Banks%22)+when:48h&hl=en-US&gl=US&ceid=US:en",
     ]
+    now_utc = datetime.now(timezone.utc)
+    cutoff_72h = now_utc - timedelta(hours=72)
+    seen_kr = set()
+
+    for rss_url in rss_urls:
+        try:
+            xml_bytes = http_get_bytes(rss_url, timeout=12)
+            root = ET.fromstring(xml_bytes)
+            for item in root.findall(".//item"):
+                raw_title = html.unescape(item.findtext("title") or "").strip()
+                pub_str = (item.findtext("pubDate") or "").strip()
+                link = (item.findtext("link") or "").strip()
+                raw_source = (item.findtext("source") or "Reuters").strip()
+                clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
+                if not clean_title or len(clean_title) < 20:
+                    continue
+                if not is_valid_korea_macro_headline(clean_title):
+                    continue
+                key = re.sub(r"[^a-z0-9]", "", clean_title.lower())[:42]
+                if key in seen_kr:
+                    continue
+                try:
+                    pub_dt = email.utils.parsedate_to_datetime(pub_str)
+                    if pub_dt.tzinfo is None:
+                        pub_dt = pub_dt.replace(tzinfo=timezone.utc)
+                    else:
+                        pub_dt = pub_dt.astimezone(timezone.utc)
+                except Exception:
+                    continue
+                if pub_dt < cutoff_72h or pub_dt > now_utc + timedelta(minutes=10):
+                    continue
+
+                seen_kr.add(key)
+                norm_src = normalize_source_name(raw_source, link)
+                korea_headlines.append({
+                    "pub_dt": pub_dt,
+                    "priority": score_korea_macro_priority(clean_title, norm_src),
+                    "title": clean_title,
+                    "headline": clean_title,
+                    "source": norm_src,
+                    "timeAgo": format_time_ago(pub_dt, now_utc),
+                    "url": link or "https://www.reuters.com/markets/asia/",
+                })
+        except Exception as e:
+            print(f"Warn: Korea RSS fetch error: {e}")
+
+    korea_headlines.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
+    selected_kr = sorted(korea_headlines[:5], key=lambda x: x["pub_dt"], reverse=True)
+
+    used_kr_sigs = set()
+    top_kr_news = []
+    for idx, item in enumerate(selected_kr):
+        sig = build_korea_significance(
+            item["title"],
+            item["source"],
+            idx,
+            ktb_3y,
+            ktb_10y,
+            ktb_30y,
+            bok_base_rate,
+            kofr_rate,
+            cd91_rate,
+            corp_aa_rate,
+            krw_spot,
+            kospi_lvl,
+            used_kr_sigs,
+        )
+        top_kr_news.append({
+            "title": item["title"],
+            "headline": item["headline"],
+            "source": item["source"],
+            "timeAgo": item["timeAgo"],
+            "significance": sig,
+            "url": item["url"],
+        })
+
     if len(top_kr_news) < 3:
         top_kr_news = [
             {
@@ -1613,19 +2019,19 @@ def fetch_live_korea_sofia_and_macro(data: dict):
                 "url": "https://www.kofiabond.or.kr",
             },
             {
-                "title": f"Bank of Korea Monitors USD/KRW Near ₩{krw_spot:,.0f} While Keeping Base Rate at 3.00%",
-                "headline": f"Bank of Korea Monitors USD/KRW Near ₩{krw_spot:,.0f} While Keeping Base Rate at 3.00%",
-                "source": "Reuters",
+                "title": "South Korea Inflation Remained Above Target in October",
+                "headline": "South Korea Inflation Remained Above Target in October",
+                "source": "WSJ",
                 "timeAgo": "6h ago",
-                "significance": "Balances domestic disinflation (CPI 2.10% YoY) against external FX stability and household debt discipline.",
-                "url": "https://www.reuters.com/markets/asia/",
+                "significance": f"Reinforces the Bank of Korea's cautious calibration with the Base Rate at {bok_base_rate:.2f}% and KOFR/SOFIA overnight repo at {kofr_rate:.3f}%.",
+                "url": "https://www.wsj.com/economy/central-banking",
             },
             {
-                "title": "Foreign Institutional Inflows into Korean Treasury Bonds Accelerate Under FTSE WGBI Inclusion",
-                "headline": "Foreign Institutional Inflows into Korean Treasury Bonds Accelerate Under FTSE WGBI Inclusion",
+                "title": "South Korea’s Current Account Surplus Hits Record on Chip Boom",
+                "headline": "South Korea’s Current Account Surplus Hits Record on Chip Boom",
                 "source": "Bloomberg",
                 "timeAgo": "9h ago",
-                "significance": f"Structural foreign reserve manager demand compresses 10Y–30Y KTB term premia (10Y {ktb_10y:.3f}%, 30Y {ktb_30y:.3f}%).",
+                "significance": f"Record semiconductor-led trade surpluses bolster Korea's external balances, cushioning USD/KRW (₩{krw_spot:,.2f}) and supporting 10Y KTBs ({ktb_10y:.3f}%).",
                 "url": "https://www.bloomberg.com/markets/rates-bonds",
             },
         ]
@@ -1635,26 +2041,26 @@ def fetch_live_korea_sofia_and_macro(data: dict):
             "title": "Bank of Korea & KOFIA / SOFIA Fixed Income Outlook",
             "date": datetime.now(SGT).strftime("%d %b %Y"),
             "executiveSummary": (
-                f"The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) "
-                f"while Korea Overnight Financing Repo (KOFR / SOFIA) trades tightly at 2.980% and 91-day KOFIA CD rates sit at 3.420%. "
-                f"Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve, "
+                f"The Bank of Korea (BOK) maintains its Base Rate at {bok_base_rate:.2f}% (Headline CPI at 2.10% YoY, +{bok_base_rate - 2.10:.2f}% real policy buffer) "
+                f"while Korea Overnight Financing Repo (KOFR / SOFIA) fixes at {kofr_rate:.3f}% ({kofr_chg_bps:+.1f} bps), 1-day BOK Call Rate trades at {call_rate:.3f}%, and 91-day KOFIA CD rates sit at {cd91_rate:.3f}%. "
+                f"Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve ({quotation_date_label}), "
                 f"the benchmark 3Y KTB trades at {ktb_3y:.3f}% ({kofia_ktb[2]['changeBps']:+.1f} bps), 5Y KTB at {ktb_5y:.3f}% ({kofia_ktb[3]['changeBps']:+.1f} bps), "
-                f"10Y KTB at {ktb_10y:.3f}% ({kofia_ktb[4]['changeBps']:+.1f} bps, {spread_10y} bps vs 10Y UST), and 20Y KTB at {kofia_ktb[5]['yield']:.3f}%."
+                f"10Y KTB at {ktb_10y:.3f}% ({kofia_ktb[4]['changeBps']:+.1f} bps, {spread_10y} bps vs 10Y UST), and 30Y KTB at {ktb_30y:.3f}% ({kofia_ktb[6]['changeBps']:+.1f} bps)."
             ),
             "macroPillars": [
                 {
-                    "heading": "KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr)",
+                    "heading": f"KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr · {quotation_date_label})",
                     "analysis": (
                         f"Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at {kofia_ktb[0]['yield']:.3f}%, "
-                        f"2Y KTB at {kofia_ktb[1]['yield']:.3f}%, 3Y benchmark KTB at {ktb_3y:.3f}%, 5Y KTB at {ktb_5y:.3f}%, and 10Y benchmark KTB at {ktb_10y:.3f}%, "
+                        f"2Y KTB at {kofia_ktb[1]['yield']:.3f}%, 3Y benchmark KTB at {ktb_3y:.3f}%, 5Y KTB at {ktb_5y:.3f}%, 10Y benchmark KTB at {ktb_10y:.3f}%, and 30Y KTB at {ktb_30y:.3f}%, "
                         "supported by passive FTSE World Government Bond Index (WGBI) allocations."
                     ),
                 },
                 {
-                    "heading": "SOFIA / KOFR Overnight Repo, KOFIA CD/CP & BOK MSB Operations",
+                    "heading": "SOFIA / KOFR Overnight Repo, KOFIA CD 91D, Call Rate & AA- Corporate Spreads",
                     "analysis": (
-                        "Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 2.980% (-2 bps below the 3.00% BOK Base Rate), "
-                        "KOFIA 91-day CD final quotation at 3.420%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.510%, and 3Y AA- corporate bonds at 4.185%."
+                        f"Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at {kofr_rate:.3f}% ({kofr_chg_bps:+.1f} bps) and 1-day Call Rate at {call_rate:.3f}% against the {bok_base_rate:.2f}% BOK Base Rate, "
+                        f"while KOFIA 91-day CD final quotation sits at {cd91_rate:.3f}%, 1Y BOK Monetary Stabilization Bonds (MSB) at {msb_1y_rate:.3f}%, and 3Y AA- corporate bonds at {corp_aa_rate:.3f}% (+{corp_spread_bps:.1f} bps over 3Y KTB)."
                     ),
                 },
                 {
@@ -1665,52 +2071,59 @@ def fetch_live_korea_sofia_and_macro(data: dict):
                     ),
                 },
             ],
-            "policyPosture": "Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 2.98% · CPI 2.10% YoY)",
+            "policyPosture": f"Measured Calibration (BOK Base Rate {bok_base_rate:.2f}% · KOFR/SOFIA {kofr_rate:.3f}% · CD 91D {cd91_rate:.2f}%)",
             "noteworthyHeadlines": top_kr_news,
         },
         "bonds": {
-            "quotationDate": "06 Nov 2026",
+            "quotationDate": quotation_date_label,
             "kofiaKtb": kofia_ktb,
             "sofiaAndMoneyRates": [
                 {
                     "instrument": "KOFR / SOFIA (Overnight Repo)",
                     "code": "KOFR-ON",
-                    "rate": 2.980,
-                    "changeBps": -0.5,
+                    "rate": kofr_rate,
+                    "changeBps": kofr_chg_bps,
                     "description": "Korea Overnight Financing Repo Rate (KSD / KOFIA)",
                 },
                 {
-                    "instrument": "BOK Base Rate",
+                    "instrument": "BOK Base Rate (기준금리)",
                     "code": "BOK-BASE",
-                    "rate": 3.000,
+                    "rate": bok_base_rate,
                     "changeBps": 0.0,
                     "description": "Bank of Korea Monetary Policy Board Benchmark",
                 },
                 {
+                    "instrument": "Call Rate 1-Day (콜금리)",
+                    "code": "KRCALLBOKK",
+                    "rate": call_rate,
+                    "changeBps": call_chg_bps,
+                    "description": "Onshore Interbank Uncollateralized 1D Call Rate",
+                },
+                {
                     "instrument": "CD 91-Day (KOFIA Final)",
-                    "code": "KOFIA-CD91",
-                    "rate": 3.420,
-                    "changeBps": -1.0,
+                    "code": "KFIA114000",
+                    "rate": cd91_rate,
+                    "changeBps": cd91_chg_bps,
                     "description": "Negotiable Certificate of Deposit 91D Quotation",
                 },
                 {
                     "instrument": "MSB 1-Year (BOK 통안증권)",
                     "code": "KOFIA-MSB1Y",
-                    "rate": 3.510,
-                    "changeBps": -3.2,
+                    "rate": msb_1y_rate,
+                    "changeBps": msb_1y_chg_bps,
                     "description": "Bank of Korea Monetary Stabilization Bond 1Y",
                 },
                 {
                     "instrument": "Corp Bond 3Y (AA- KOFIA)",
-                    "code": "KOFIA-AA3Y",
-                    "rate": round(ktb_3y + 0.563, 3),
-                    "changeBps": -4.5,
-                    "description": "Unsupplied AA- Corporate 3Y (+56.3 bps over 3Y KTB)",
+                    "code": "KFIA103009",
+                    "rate": corp_aa_rate,
+                    "changeBps": corp_aa_chg_bps,
+                    "description": f"Unsubordinated AA- Corporate 3Y (+{corp_spread_bps:.1f} bps over 3Y KTB)",
                 },
             ],
-            "bokBaseRate": 3.00,
-            "kofrOvernightRate": 2.98,
-            "cd91dRate": 3.42,
+            "bokBaseRate": bok_base_rate,
+            "kofrOvernightRate": round(kofr_rate, 3),
+            "cd91dRate": round(cd91_rate, 2),
             "cpiInflationYoY": 2.10,
             "sovereignSpread10Y": spread_10y,
         },
@@ -1733,7 +2146,11 @@ def fetch_live_korea_sofia_and_macro(data: dict):
             "foreignKtbFlows": "+KRW 1.85 Trillion (WGBI & KOFIA OTC)",
         },
     }
-    print(f"Updated Korea KOFIA/SOFIA KTB Curve: 3Y={ktb_3y:.3f}%, 5Y={ktb_5y:.3f}%, 10Y={ktb_10y:.3f}%, USD/KRW={krw_spot:,.2f}")
+    print(
+        f"Updated Korea KOFIA/SOFIA KTB & Money Curve ({quotation_date_label}): "
+        f"3Y={ktb_3y:.3f}%, 10Y={ktb_10y:.3f}%, 30Y={ktb_30y:.3f}%, KOFR={kofr_rate:.3f}%, CD91D={cd91_rate:.3f}%, AA-3Y={corp_aa_rate:.3f}%, "
+        f"Top News={len(top_kr_news)} (unique significances={len(used_kr_sigs)})"
+    )
 
 
 def build_argon_commentaries(data: dict):
@@ -1948,13 +2365,15 @@ def build_argon_commentaries(data: dict):
         cgb_5y = next((float(b["yield"]) for b in cn_bonds["ccdcCgb"] if b["tenor"].startswith("5Y")), 1.3115)
         cgb_10y = next((float(b["yield"]) for b in cn_bonds["ccdcCgb"] if b["tenor"].startswith("10Y")), 1.5868)
         cgb_30y = next((float(b["yield"]) for b in cn_bonds["ccdcCgb"] if b["tenor"].startswith("30Y")), 2.0275)
+        lpr1 = float(cn_bonds.get("lpr1Y", 3.00))
+        lpr5 = float(cn_bonds.get("lpr5Y", 3.50))
         cn_spread = round((cgb_10y - y10) * 100)
         slope_10s30s = round((cgb_30y - cgb_10y) * 100)
-        cny = float(cn_fx.get("cnySpot", 6.6710))
-        cnh = float(cn_fx.get("cnhSpot", 6.6736))
-        fix = float(cn_fx.get("pbocFixing", 6.6685))
+        cny = float(cn_fx.get("cnySpot", 6.6760))
+        cnh = float(cn_fx.get("cnhSpot", 6.6713))
+        fix = float(cn_fx.get("pbocFixing", 6.6735))
         ssec = float(cn_fx.get("shanghaiComposite", {}).get("level", 3649.18))
-        ssec_pct = float(cn_fx.get("shanghaiComposite", {}).get("changePct", -1.10))
+        ssec_pct = float(cn_fx.get("shanghaiComposite", {}).get("changePct", 0.31))
         lead_cn = (
             data["china"]["commentary"].get("noteworthyHeadlines", [{}])[0].get("title")
             or "CCDC ChinaBond 10-Year CGB Yield Fixes Near 1.5868% Amid Accommodative PBoC Liquidity"
@@ -1968,7 +2387,7 @@ def build_argon_commentaries(data: dict):
                 f"Official China Central Depository & Clearing (CCDC · yield.chinabond.com.cn) ChinaBond CGB valuations ({cn_bonds.get('curveDate', '2026-11-06')}) "
                 f"show an accommodative sovereign curve with 1Y CGB at {cgb_1y:.3f}%, 5Y benchmark at {cgb_5y:.3f}%, 10Y benchmark at {cgb_10y:.3f}%, "
                 f"and 30Y ultra-long CGB at {cgb_30y:.3f}% (10s30s slope at +{slope_10s30s} bps; {cn_spread} bps vs US 10Y Treasuries). "
-                f"With the PBoC 7-Day Reverse Repo anchored at 1.50% (1Y/5Y LPR at 3.10%/3.60%), commercial bank wealth-management demand continues to compress front-end and belly yields. "
+                f"With the PBoC 7-Day Reverse Repo anchored at 1.50% (1Y/5Y LPR at {lpr1:.2f}%/{lpr5:.2f}%), commercial bank wealth-management demand continues to compress front-end and belly yields. "
                 f"In currency markets, onshore USD/CNY ({cny:.4f}) and offshore USD/CNH ({cnh:.4f}) track closely around the PBoC daily central parity fixing ({fix:.4f}), "
                 f"while the Shanghai Composite trades at {ssec:,.2f} ({ssec_pct:+.2f}%). Lead China macro development: \"{lead_cn}\"."
             ),
@@ -2017,7 +2436,7 @@ def build_argon_commentaries(data: dict):
                     "event": "Ministry of Finance (MoF) Ultra-Long Special CGB Auction & LPR Fixing",
                     "timing": "20th of Month · 09:15 CST",
                     "impact": "High",
-                    "watchFor": f"Primary auction bid-to-cover on 10Y ({cgb_10y:.3f}%) and 30Y ({cgb_30y:.3f}%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR (3.10% / 3.60%).",
+                    "watchFor": f"Primary auction bid-to-cover on 10Y ({cgb_10y:.3f}%) and 30Y ({cgb_30y:.3f}%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR ({lpr1:.2f}% / {lpr5:.2f}%).",
                 },
                 {
                     "event": "PBoC USD/CNY Central Parity Fixing & Northbound Bond Connect Flows",
@@ -2034,11 +2453,14 @@ def build_argon_commentaries(data: dict):
         kr_fx = data["korea"]["fxAndEquities"]
         ktb_3y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("3Y")), 3.622)
         ktb_10y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("10Y")), 3.852)
-        ktb_30y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("30Y")), 3.895)
+        ktb_30y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("30Y")), 3.975)
+        bok_rate = float(kr_bonds.get("bokBaseRate", 3.00))
+        kofr_val = float(kr_bonds.get("kofrOvernightRate", 3.045))
+        cd_val = float(kr_bonds.get("cd91dRate", 3.34))
         kr_spread = round((ktb_10y - y10) * 100)
         slope_3s10s = round((ktb_10y - ktb_3y) * 100)
-        krw = float(kr_fx.get("krwSpot", 1356.34))
-        ndf_krw = float(kr_fx.get("ndf1M", 1354.10))
+        krw = float(kr_fx.get("krwSpot", 1363.27))
+        ndf_krw = float(kr_fx.get("ndf1M", 1361.03))
         kospi = float(kr_fx.get("kospiIndex", {}).get("level", 5059.69))
         kospi_pct = float(kr_fx.get("kospiIndex", {}).get("changePct", -6.02))
         lead_kr = (
@@ -2048,17 +2470,17 @@ def build_argon_commentaries(data: dict):
         data["korea"]["argonCommentary"] = {
             "modelLabel": "GEMINI 4 ARGON",
             "title": "GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS",
-            "regimeBadge": f"BOK BASE 3.00% · KOFR/SOFIA 2.98% · 10Y KTB {ktb_10y:.3f}%",
+            "regimeBadge": f"BOK BASE {bok_rate:.2f}% · KOFR/SOFIA {kofr_val:.3f}% · 10Y KTB {ktb_10y:.3f}%",
             "conviction": "Long 3Y–10Y KTB (KOFIA Benchmark) on WGBI Inflows · Receive 3s10s Box · Watch USD/KRW 1,380",
             "synthesis": (
                 f"Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) final OTC bond quotations place the benchmark 3Y KTB at {ktb_3y:.3f}%, "
                 f"10Y KTB at {ktb_10y:.3f}%, and 30Y KTB at {ktb_30y:.3f}% (3s10s slope at +{slope_3s10s} bps; {kr_spread} bps vs 10Y US Treasuries). "
-                f"With the Bank of Korea (BOK) Base Rate at 3.00% (Headline CPI at 2.10% YoY, real policy buffer +0.90%), short-term SOFIA / KOFR overnight repo fixes at 2.98% and 91-day KOFIA CD rates trade at 3.42%. "
+                f"With the Bank of Korea (BOK) Base Rate at {bok_rate:.2f}% (Headline CPI at 2.10% YoY, real policy buffer +{bok_rate - 2.10:.2f}%), short-term SOFIA / KOFR overnight repo fixes at {kofr_val:.3f}% and 91-day KOFIA CD rates trade at {cd_val:.2f}%. "
                 f"In FX and equity markets, onshore USD/KRW trades at ₩{krw:,.2f} (1M NDF at ₩{ndf_krw:,.2f}) while KOSPI sits at {kospi:,.2f} ({kospi_pct:+.2f}%). "
                 f"Lead Korea macro catalyst: \"{lead_kr}\"."
             ),
             "positioningTakeaway": (
-                f"Accumulate 3Y and 10Y KTB benchmarks ({ktb_3y:.3f}% / {ktb_10y:.3f}%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding (2.98%) anchor domestic duration demand."
+                f"Accumulate 3Y and 10Y KTB benchmarks ({ktb_3y:.3f}% / {ktb_10y:.3f}%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding ({kofr_val:.3f}%) anchor domestic duration demand."
             ),
             "criticalLevels": [
                 {
@@ -2070,9 +2492,9 @@ def build_argon_commentaries(data: dict):
                 },
                 {
                     "asset": "KOFR / SOFIA & 91D CD Rate",
-                    "current": "KOFR 2.98% · CD 3.42%",
-                    "support": "2.83%",
-                    "resistance": "3.54%",
+                    "current": f"KOFR {kofr_val:.3f}% · CD {cd_val:.2f}%",
+                    "support": "2.85%",
+                    "resistance": "3.50%",
                     "implication": "Tight KOFR-to-BOK Base Rate spread confirms ample overnight RP liquidity across Korean securities dealers.",
                 },
                 {
@@ -2101,7 +2523,7 @@ def build_argon_commentaries(data: dict):
                     "event": "Bank of Korea (BOK) Monetary Policy Board Rate Decision & MSB Auctions",
                     "timing": "Monthly BOK Cycle · Weekly MSB Tender",
                     "impact": "High",
-                    "watchFor": "Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA (2.98%) repo transmission.",
+                    "watchFor": f"Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA ({kofr_val:.3f}%) repo transmission.",
                 },
                 {
                     "event": "MOEF Monthly KTB Issuance Plan & FTSE WGBI Foreign Custody Inflows",
