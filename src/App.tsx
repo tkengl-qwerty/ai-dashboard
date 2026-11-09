@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DailyMacroSnapshot, MacroTabId, ChinaMacroData, KoreaMacroData } from './types/market';
+import { DailyMacroSnapshot, MacroTabId, ChinaMacroData, KoreaMacroData, IndiaMacroData } from './types/market';
 import { Header } from './components/Header';
 import { NavigationTabs } from './components/NavigationTabs';
 import { GlobalMacroTab } from './components/GlobalMacroTab';
 import { IndonesiaTab } from './components/IndonesiaTab';
 import { ChinaTab } from './components/ChinaTab';
 import { KoreaTab } from './components/KoreaTab';
+import { IndiaTab } from './components/IndiaTab';
 import { AlertCircle } from 'lucide-react';
 import {
   buildGlobalArgonCommentary,
   buildIndonesiaArgonCommentary,
   buildChinaArgonCommentary,
   buildKoreaArgonCommentary,
+  buildIndiaArgonCommentary,
 } from './utils/argonSynthesis';
 
 const DEFAULT_CHINA_DATA: ChinaMacroData = {
@@ -316,6 +318,210 @@ const DEFAULT_KOREA_DATA: KoreaMacroData = {
       changePct: -5.03,
     },
     foreignKtbFlows: '+KRW 1.85 Trillion (WGBI & KOFIA OTC)',
+  },
+};
+
+const DEFAULT_INDIA_DATA: IndiaMacroData = {
+  commentary: {
+    title: 'Reserve Bank of India (RBI) & CCIL Sovereign G-Sec Outlook',
+    date: '08 Nov 2026',
+    executiveSummary:
+      'The Reserve Bank of India (RBI · rbi.org.in) Monetary Policy Committee maintains the Policy Repo Rate at 5.50% (Standing Deposit Facility floor at 5.25%, Marginal Standing Facility & Bank Rate at 5.75%, CRR at 3.00%, SLR at 18.00%). Across official RBI / CCIL NDS-OM on-the-run Government of India Dated Securities (G-Sec), the 3Y benchmark (6.20% GS 2029) yields 6.958%, 5Y benchmark (6.53% GS 2031) trades at 7.023% (-2.2 bps), 10Y benchmark (6.94% GS 2036) yields 7.162% (+1.7 bps, +230 bps over 10Y UST), and 30Y benchmark (7.63% GS 2056) closes at 7.619%. Per RBI’s Weekly Statistical Supplement (06 Nov 2026), India’s Foreign Exchange Reserves stand at US$717.06B, anchoring spot USD/INR at ₹93.8950 (FBIL Reference Rate ₹94.1402).',
+    macroPillars: [
+      {
+        heading: 'RBI / CCIL Sovereign G-Sec Curve & Friday ₹36,000 Cr Primary Auction (rbi.org.in · 06 Nov 2026)',
+        analysis:
+          'Official RBI/CCIL G-Sec benchmarks remain well-bid across the curve: 1Y at 6.451%, 2Y at 6.871%, 3Y (6.20% GS 2029) at 6.958%, 5Y (6.53% GS 2031) at 7.023%, 10Y (6.94% GS 2036) at 7.162%, 15Y (7.06% GS 2041) at 7.343%, and 30Y (7.63% GS 2056) at 7.619%. In Friday 06 Nov 2026’s primary auction (Press Release #63936), ₹23,000 Cr of 7.06% GS 2041 cleared at 7.3881% and ₹13,000 Cr of 7.43% GS 2076 cleared at 7.7708% with NIL Primary Dealer devolvement.',
+      },
+      {
+        heading: 'RBI LAF Corridor (Repo 5.50% / SDF 5.25% / MSF 5.75%), VRR/VRRR & T-Bill Cut-Offs',
+        analysis:
+          'RBI actively manages banking system liquidity via fine-tuning Variable Rate Repo (4-day VRR on Nov 09) and Variable Rate Reverse Repo (3-day VRRR on Nov 06) operations, keeping interbank Call Money within 4.30%–5.75%. Meanwhile, 91-Day, 182-Day, and 364-Day Treasury Bills yield 5.897%, 6.320%, and 6.649% ahead of Wednesday’s ₹23,000 Cr T-Bill auction.',
+      },
+      {
+        heading: 'Indian Rupee (FBIL Reference ₹94.1402), US$717.06B FX Reserves & Nifty 50 / Sensex',
+        analysis:
+          'Onshore USD/INR spot trades at ₹93.8950 (-0.60%) alongside the official RBI/FBIL Reference Rate at ₹94.1402, backed by US$717.06B in total RBI Forex Reserves (Foreign Currency Assets US$591.12B, Gold US$102.59B). In equities, Nifty 50 stands at 24,986.40 (-0.18%) and S&P BSE Sensex at 80,999.40 (-0.04%) following an +8.8% weekly surge.',
+      },
+    ],
+    policyPosture: 'Neutral Calibration (RBI Repo 5.50% · SDF 5.25% · MSF 5.75% · CRR 3.00%)',
+    noteworthyHeadlines: [
+      {
+        title: 'RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026',
+        headline: 'RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026',
+        source: 'RBI Official RSS',
+        timeAgo: '4h ago',
+        significance:
+          'Injects short-term banking liquidity to keep interbank Call Money (4.30%–5.75%) anchored near the 5.50% Policy Repo Rate and supports front-end 1Y–3Y G-Secs (6.451%–6.958%).',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63943',
+      },
+      {
+        title: "India's October consumer inflation likely nears top of RBI target on food costs",
+        headline: "India's October consumer inflation likely nears top of RBI target on food costs",
+        source: 'Reuters',
+        timeAgo: '6h ago',
+        significance:
+          'Near-term food CPI stickiness reinforces the RBI MPC hold at 5.50% Repo and caps aggressive bull-flattening below 7.10% on the 10Y 6.94% GS 2036 benchmark (7.162%).',
+        url: 'https://www.reuters.com/world/india/',
+      },
+      {
+        title: 'Government Stock Auction Results: ₹23,000 Cr 7.06% GS 2041 at 7.3881% & ₹13,000 Cr 7.43% GS 2076 at 7.7708%',
+        headline: 'Government Stock Auction Results: ₹23,000 Cr 7.06% GS 2041 at 7.3881% & ₹13,000 Cr 7.43% GS 2076 at 7.7708%',
+        source: 'RBI Official RSS',
+        timeAgo: '8h ago',
+        significance:
+          'Full ₹36,000 Cr absorption with NIL Primary Dealer devolvement confirms robust domestic insurance and provident fund demand for long-duration 15Y–50Y G-Secs.',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63936',
+      },
+      {
+        title: 'RBI Weekly Statistical Supplement: India Foreign Exchange Reserves Stand at US$717.06 Billion',
+        headline: 'RBI Weekly Statistical Supplement: India Foreign Exchange Reserves Stand at US$717.06 Billion',
+        source: 'RBI Official RSS',
+        timeAgo: '9h ago',
+        significance:
+          'Provides the Reserve Bank of India with an ample US$717.06B buffer (US$591.12B FCA, US$102.59B Gold) to smooth USD/INR volatility around ₹93.8950 (FBIL Ref ₹94.1402).',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63939',
+      },
+      {
+        title: 'Sensex Jumps 8.82% to 81,028, Nifty Reclaims 25,000 as ₹28.7 Lakh Crore Added in Best Week Since 2021',
+        headline: 'Sensex Jumps 8.82% to 81,028, Nifty Reclaims 25,000 as ₹28.7 Lakh Crore Added in Best Week Since 2021',
+        source: 'HDFC Sky',
+        timeAgo: '11h ago',
+        significance:
+          'Resilient domestic equity momentum in Nifty 50 (24,986.40) and Sensex (80,999.40) attracts FPI capital inflows and supports onshore INR stability.',
+        url: 'https://www.nseindia.com',
+      },
+    ],
+    rbiOfficialReleases: [
+      {
+        title: 'RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026',
+        category: 'LAF Liquidity Operation',
+        pubDate: '06 Nov 2026, 19:10 IST',
+        summary: 'Fine-tuning Variable Rate Repo auction under the Liquidity Adjustment Facility (LAF) to align overnight call/TREPS rates with the 5.50% Repo anchor.',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63943',
+      },
+      {
+        title: 'Auction of 91-Day, 182-Day and 364-Day Government of India Treasury Bills (₹23,000 Crore)',
+        category: 'T-Bill Tender',
+        pubDate: '06 Nov 2026, 17:55 IST',
+        summary: 'Notified amounts: ₹8,000 Cr (91-Day), ₹8,000 Cr (182-Day), and ₹7,000 Cr (364-Day) scheduled for auction on November 11, 2026.',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63942',
+      },
+      {
+        title: 'Reserve Bank of India – Bulletin Weekly Statistical Supplement (WSS) – Extract',
+        category: 'FX Reserves & WSS',
+        pubDate: '06 Nov 2026, 17:00 IST',
+        summary: 'Total Foreign Exchange Reserves at US$ 717,056 Mn (₹68,08,728 Cr): FCA US$ 591,118 Mn, Gold US$ 102,591 Mn, SDRs US$ 18,558 Mn.',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63939',
+      },
+      {
+        title: 'Government Stock - Auction Results: Cut-off (7.06% GS 2041 & 7.43% GS 2076)',
+        category: 'G-Sec Primary Auction',
+        pubDate: '06 Nov 2026, 14:20 IST',
+        summary: '7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881% yield; 7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% yield; NIL devolvement on Primary Dealers.',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63936',
+      },
+      {
+        title: 'Result of the 3-day Variable Rate Reverse Repo (VRRR) auction held on November 06, 2026',
+        category: 'LAF Liquidity Absorption',
+        pubDate: '06 Nov 2026, 10:25 IST',
+        summary: 'RBI liquidity absorption operation under LAF keeping money market rates bounded above the 5.25% Standing Deposit Facility (SDF) floor.',
+        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63935',
+      },
+    ],
+  },
+  bonds: {
+    quotationDate: '06 Nov 2026',
+    gsecCurve: [
+      { tenor: '1Y G-Sec', code: 'IN1YT=RR', series: '6.99% GS 2027', yield: 6.451, changeBps: -6.9, coupon: 6.99 },
+      { tenor: '2Y G-Sec', code: 'IN2YT=RR', series: '7.06% GS 2028', yield: 6.871, changeBps: -15.9, coupon: 7.06 },
+      { tenor: '3Y G-Sec (Benchmark)', code: 'IN3YT=RR', series: '6.20% GS 2029 (RBI)', yield: 6.958, rbiBenchmarkYield: 6.9581, changeBps: -4.3, coupon: 6.20 },
+      { tenor: '5Y G-Sec (Benchmark)', code: 'IN5YT=RR', series: '6.53% GS 2031 (RBI)', yield: 7.023, rbiBenchmarkYield: 7.0231, changeBps: -2.2, coupon: 6.53 },
+      { tenor: '7Y G-Sec', code: 'IN7YT=RR', series: '7.10% GS 2033', yield: 7.199, changeBps: 2.4, coupon: 7.10 },
+      { tenor: '10Y G-Sec (Benchmark)', code: 'IN10YT=RR', series: '6.94% GS 2036 (RBI)', yield: 7.162, rbiBenchmarkYield: 7.1620, changeBps: 1.7, coupon: 6.94 },
+      { tenor: '15Y G-Sec (Benchmark)', code: 'IN15YT=RR', series: '7.06% GS 2041 (RBI)', yield: 7.343, rbiBenchmarkYield: 7.3432, changeBps: 2.3, coupon: 7.06 },
+      { tenor: '30Y G-Sec (Benchmark)', code: 'IN30YT=RR', series: '7.63% GS 2056 (RBI)', yield: 7.619, rbiBenchmarkYield: 7.6191, changeBps: 2.6, coupon: 7.63 },
+    ],
+    rbiAndMoneyRates: [
+      {
+        instrument: 'RBI Policy Repo Rate',
+        code: 'INREPO=ECIX',
+        rate: 5.500,
+        changeBps: 0.0,
+        description: 'Reserve Bank of India MPC Primary Policy Anchor',
+      },
+      {
+        instrument: 'Standing Deposit Facility (SDF)',
+        code: 'RBI-SDF',
+        rate: 5.250,
+        changeBps: 0.0,
+        description: 'RBI LAF Uncollateralized Overnight Liquidity Floor',
+      },
+      {
+        instrument: 'Marginal Standing Facility (MSF)',
+        code: 'RBI-MSF',
+        rate: 5.750,
+        changeBps: 0.0,
+        description: 'RBI LAF Penal Overnight Liquidity Ceiling & Bank Rate',
+      },
+      {
+        instrument: '91-Day Treasury Bill (RBI)',
+        code: 'IN3MT=RR',
+        rate: 5.897,
+        changeBps: 0.0,
+        description: 'Government of India 91D T-Bill Primary Cut-Off Yield',
+      },
+      {
+        instrument: '182-Day Treasury Bill (RBI)',
+        code: 'IN6MT=RR',
+        rate: 6.320,
+        changeBps: -5.0,
+        description: 'Government of India 182D T-Bill Secondary/Cut-Off Yield',
+      },
+      {
+        instrument: '364-Day Treasury Bill (RBI)',
+        code: 'RBI-TB364D',
+        rate: 6.649,
+        changeBps: -2.0,
+        description: 'Government of India 364D T-Bill Primary Cut-Off Yield',
+      },
+    ],
+    rbiRepoRate: 5.50,
+    sdfRate: 5.25,
+    msfRate: 5.75,
+    crrRate: 3.00,
+    slrRate: 18.00,
+    callRateRange: '4.30% - 5.75%',
+    tbill91dRate: 5.897,
+    tbill182dRate: 6.320,
+    tbill364dRate: 6.6485,
+    cpiInflationYoY: 4.85,
+    sovereignSpread10Y: 230,
+    latestGsecAuctionSummary:
+      '06 Nov 2026 (PR #63936): 7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881%; 7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% · PD Devolvement: NIL.',
+  },
+  fxAndEquities: {
+    inrSpot: 93.8950,
+    inrChange: -0.5639,
+    inrChangePct: -0.60,
+    rbiReferenceUsd: 94.1402,
+    rbiReferenceEur: 105.3758,
+    rbiReferenceGbp: 126.3870,
+    rbiReferenceJpy: 59.6200,
+    forexReservesUsdBn: 717.06,
+    forexReservesWeeklyChgUsdBn: -2.69,
+    forexReservesDate: '30 Oct 2026 (WSS)',
+    nifty50Index: {
+      level: 24986.40,
+      change: -43.95,
+      changePct: -0.18,
+    },
+    sensexIndex: {
+      level: 80999.40,
+      change: -28.62,
+      changePct: -0.04,
+    },
+    farIndexInflows: '+US$ 18.4 Billion YTD (JPM GBI-EM / FAR G-Secs)',
   },
 };
 
@@ -655,6 +861,7 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
   },
   china: DEFAULT_CHINA_DATA,
   korea: DEFAULT_KOREA_DATA,
+  india: DEFAULT_INDIA_DATA,
 };
 
 const DJPPR_2026_BENCHMARKS = [
@@ -799,6 +1006,40 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     };
   });
 
+  const rawIndiaData: IndiaMacroData = snap.india ?? DEFAULT_INDIA_DATA;
+  const usedIndiaSigs = new Set<string>();
+  const rawIndiaHeadlines = rawIndiaData.commentary?.noteworthyHeadlines || [];
+  const indiaHeadlinesSource =
+    rawIndiaHeadlines.length >= 3 ? rawIndiaHeadlines : DEFAULT_INDIA_DATA.commentary.noteworthyHeadlines;
+  const normalizedIndiaHeadlines = indiaHeadlinesSource.slice(0, 5).map((item, idx) => {
+    const rawTitle = (item.title || item.headline || '').trim() || `India RBI & G-Sec Update #${idx + 1}`;
+    const low = rawTitle.toLowerCase();
+    let sig = (item.significance || '').trim();
+    if (!sig || usedIndiaSigs.has(sig)) {
+      if (low.includes('vrr') || low.includes('laf') || low.includes('repo') || low.includes('liquidity')) {
+        sig = `Anchors interbank Call Money (${rawIndiaData.bonds.callRateRange}) near the ${rawIndiaData.bonds.rbiRepoRate.toFixed(2)}% RBI Repo Rate and supports short-end 1Y–5Y G-Secs.`;
+      } else if (low.includes('inflation') || low.includes('cpi') || low.includes('food')) {
+        sig = `Shapes RBI Monetary Policy Committee rate path expectations and 10Y G-Sec (6.94% GS 2036 at 7.162%) term premia.`;
+      } else if (low.includes('auction') || low.includes('government stock') || low.includes('treasury bill') || low.includes('t-bill')) {
+        sig = `Demonstrates strong domestic bank SLR and insurer absorption across primary RBI debt tenders with 91D/364D T-Bills at ${rawIndiaData.bonds.tbill91dRate.toFixed(3)}%/${rawIndiaData.bonds.tbill364dRate.toFixed(3)}%.`;
+      } else if (low.includes('reserve') || low.includes('statistical supplement') || low.includes('rupee') || low.includes('forex')) {
+        sig = `Reinforces RBI's US$${rawIndiaData.fxAndEquities.forexReservesUsdBn.toFixed(2)}B FX reserve buffer stabilizing USD/INR spot around ₹${rawIndiaData.fxAndEquities.inrSpot.toFixed(4)} (FBIL Ref ₹${rawIndiaData.fxAndEquities.rbiReferenceUsd.toFixed(4)}).`;
+      } else {
+        sig = `Reported by ${item.source}; guides institutional positioning across NSE Nifty 50 (${rawIndiaData.fxAndEquities.nifty50Index.level.toLocaleString()}) and FAR-eligible Indian G-Secs (#${idx + 1}).`;
+      }
+      if (usedIndiaSigs.has(sig)) {
+        sig = `${sig.replace(/\.$/, '')} (Desk Note #${idx + 1}).`;
+      }
+    }
+    usedIndiaSigs.add(sig);
+    return {
+      ...item,
+      title: rawTitle,
+      headline: rawTitle,
+      significance: sig,
+    };
+  });
+
   const chinaData: ChinaMacroData = {
     ...rawChinaData,
     commentary: {
@@ -811,6 +1052,17 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     commentary: {
       ...rawKoreaData.commentary,
       noteworthyHeadlines: normalizedKoreaHeadlines,
+    },
+  };
+  const indiaData: IndiaMacroData = {
+    ...rawIndiaData,
+    commentary: {
+      ...rawIndiaData.commentary,
+      noteworthyHeadlines: normalizedIndiaHeadlines,
+      rbiOfficialReleases:
+        rawIndiaData.commentary?.rbiOfficialReleases?.length
+          ? rawIndiaData.commentary.rbiOfficialReleases
+          : DEFAULT_INDIA_DATA.commentary.rbiOfficialReleases,
     },
   };
 
@@ -830,6 +1082,7 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     },
     china: chinaData,
     korea: koreaData,
+    india: indiaData,
   };
 
   return {
@@ -849,6 +1102,10 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     korea: {
       ...koreaData,
       argonCommentary: buildKoreaArgonCommentary(withNormalizedBondsAndHeadlines),
+    },
+    india: {
+      ...indiaData,
+      argonCommentary: buildIndiaArgonCommentary(withNormalizedBondsAndHeadlines),
     },
   };
 }
@@ -962,6 +1219,13 @@ export default function App() {
             us10YYield={us10Y}
           />
         )}
+        {activeTab === 'india' && data.india && (
+          <IndiaTab
+            india={data.india}
+            lastUpdatedSGT={data.metadata.lastUpdatedSGT}
+            us10YYield={us10Y}
+          />
+        )}
       </main>
 
       {/* 4. Terminal Footer */}
@@ -973,7 +1237,7 @@ export default function App() {
             <span>Daily Market Intelligence refreshed at 05:00 AM SGT (21:00 UTC)</span>
           </div>
           <div className="text-slate-400">
-            <span>Global Macro · Indonesia (BI/DJPPR) · China (CCDC) · Korea (SOFIA/KOFIA)</span>
+            <span>Global Macro · Indonesia (BI/DJPPR) · China (CCDC) · Korea (SOFIA/KOFIA) · India (RBI/CCIL)</span>
           </div>
         </div>
       </footer>

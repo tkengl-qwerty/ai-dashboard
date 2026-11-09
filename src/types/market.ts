@@ -6,7 +6,7 @@ export interface MarketMetadata {
   timezone: string;
 }
 
-export type MacroTabId = 'global' | 'indonesia' | 'china' | 'korea';
+export type MacroTabId = 'global' | 'indonesia' | 'china' | 'korea' | 'india';
 
 export interface MacroNewsItem {
   id: string;
@@ -266,6 +266,88 @@ export interface KoreaMacroData {
   };
 }
 
+export interface IndiaGSecBondItem {
+  tenor: string;
+  code: string;
+  series: string;
+  yield: number;
+  rbiBenchmarkYield?: number;
+  changeBps: number;
+  coupon: number;
+}
+
+export interface IndiaMoneyRateItem {
+  instrument: string;
+  code: string;
+  rate: number;
+  changeBps: number;
+  description: string;
+}
+
+export interface RbiOfficialReleaseItem {
+  title: string;
+  category: string;
+  pubDate: string;
+  summary: string;
+  url: string;
+}
+
+export interface IndiaMacroData {
+  argonCommentary?: ArgonCommentary;
+  commentary: {
+    title: string;
+    date: string;
+    executiveSummary: string;
+    macroPillars: Array<{
+      heading: string;
+      analysis: string;
+    }>;
+    policyPosture: string;
+    noteworthyHeadlines: RegionalDisclosureItem[];
+    rbiOfficialReleases: RbiOfficialReleaseItem[];
+  };
+  bonds: {
+    quotationDate: string;
+    gsecCurve: IndiaGSecBondItem[];
+    rbiAndMoneyRates: IndiaMoneyRateItem[];
+    rbiRepoRate: number;
+    sdfRate: number;
+    msfRate: number;
+    crrRate: number;
+    slrRate: number;
+    callRateRange: string;
+    tbill91dRate: number;
+    tbill182dRate: number;
+    tbill364dRate: number;
+    cpiInflationYoY: number;
+    sovereignSpread10Y: number;
+    latestGsecAuctionSummary?: string;
+  };
+  fxAndEquities: {
+    inrSpot: number;
+    inrChange: number;
+    inrChangePct: number;
+    rbiReferenceUsd: number;
+    rbiReferenceEur: number;
+    rbiReferenceGbp: number;
+    rbiReferenceJpy: number;
+    forexReservesUsdBn: number;
+    forexReservesWeeklyChgUsdBn: number;
+    forexReservesDate: string;
+    nifty50Index: {
+      level: number;
+      change: number;
+      changePct: number;
+    };
+    sensexIndex: {
+      level: number;
+      change: number;
+      changePct: number;
+    };
+    farIndexInflows: string;
+  };
+}
+
 export interface ArgonCriticalLevel {
   asset: string;
   current: string;
@@ -310,4 +392,5 @@ export interface DailyMacroSnapshot {
   };
   china?: ChinaMacroData;
   korea?: KoreaMacroData;
+  india?: IndiaMacroData;
 }

@@ -32,6 +32,10 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
   const ktb10y = data.korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 3.852;
   const krwSpot = data.korea?.fxAndEquities.krwSpot ?? 1356.34;
 
+  const indGsec10y = data.india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.162;
+  const rbiRepo = data.india?.bonds.rbiRepoRate ?? 5.50;
+  const inrSpot = data.india?.fxAndEquities.inrSpot ?? 93.895;
+
   return (
     <div className="bg-[#121a26] border-b border-slate-700/80 px-4">
       <div className="max-w-7xl mx-auto flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2 pt-2">
@@ -87,6 +91,19 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           >
             <Layers className={`w-3.5 h-3.5 ${activeTab === 'korea' ? 'text-blue-400' : 'text-slate-500'}`} />
             <span>4. KOREA (SOFIA / KOFIA)</span>
+          </button>
+
+          {/* 5. India Market (RBI / CCIL) Tab */}
+          <button
+            onClick={() => onTabChange('india')}
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase ${
+              activeTab === 'india'
+                ? 'border-blue-500 text-sky-300 bg-[#192436]'
+                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
+            }`}
+          >
+            <Landmark className={`w-3.5 h-3.5 ${activeTab === 'india' ? 'text-blue-400' : 'text-slate-500'}`} />
+            <span>5. INDIA (RBI / CCIL)</span>
           </button>
         </div>
 
@@ -166,6 +183,25 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
               <div className="flex items-center gap-1.5">
                 <span className="text-slate-400 text-[10px]">USD/KRW:</span>
                 <span className="text-slate-200 tabular-nums">₩{krwSpot.toFixed(2)}</span>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'india' && (
+            <>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400 text-[10px]">RBI 10Y G-Sec:</span>
+                <span className="text-sky-300 font-bold tabular-nums">{indGsec10y.toFixed(3)}%</span>
+              </div>
+              <span className="text-slate-700">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400 text-[10px]">RBI Repo:</span>
+                <span className="text-blue-400 font-semibold tabular-nums">{rbiRepo.toFixed(2)}%</span>
+              </div>
+              <span className="text-slate-700">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400 text-[10px]">USD/INR:</span>
+                <span className="text-slate-200 tabular-nums">₹{inrSpot.toFixed(2)}</span>
               </div>
             </>
           )}

@@ -430,3 +430,111 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     eventsToWatch,
   };
 }
+
+export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
+  const india = snap.india;
+  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
+
+  const gsec3Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('3Y'))?.yield ?? 6.958;
+  const gsec5Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 7.023;
+  const gsec10Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.162;
+  const gsec30Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('30Y'))?.yield ?? 7.619;
+  const quoteDate = india?.bonds.quotationDate ?? '06 Nov 2026';
+
+  const repoRate = india?.bonds.rbiRepoRate ?? 5.50;
+  const sdfRate = india?.bonds.sdfRate ?? 5.25;
+  const msfRate = india?.bonds.msfRate ?? 5.75;
+  const tbill91d = india?.bonds.tbill91dRate ?? 5.897;
+  const tbill364d = india?.bonds.tbill364dRate ?? 6.649;
+  const cpi = india?.bonds.cpiInflationYoY ?? 4.85;
+  const spread10Y = Math.round((gsec10Y - ust10Y) * 100);
+  const slope5s10s = Math.round((gsec10Y - gsec5Y) * 100);
+
+  const inrSpot = india?.fxAndEquities.inrSpot ?? 93.895;
+  const rbiRef = india?.fxAndEquities.rbiReferenceUsd ?? 94.1402;
+  const fxReserves = india?.fxAndEquities.forexReservesUsdBn ?? 717.06;
+  const nifty = india?.fxAndEquities.nifty50Index.level ?? 24986.40;
+  const niftyPct = india?.fxAndEquities.nifty50Index.changePct ?? -0.18;
+
+  const leadHeadline =
+    india?.commentary.noteworthyHeadlines[0]?.title ||
+    india?.commentary.noteworthyHeadlines[0]?.headline ||
+    'RBI conducts LAF Variable Rate Repo operations as 10Y G-Sec benchmark 6.94% GS 2036 trades near 7.162%';
+
+  const regimeBadge = `RBI REPO ${repoRate.toFixed(2)}% (SDF ${sdfRate.toFixed(2)}% / MSF ${msfRate.toFixed(2)}%) · 10Y G-SEC ${gsec10Y.toFixed(3)}%`;
+  const conviction = 'Long 5Y–10Y FAR G-Secs (6.53% GS 2031 / 6.94% GS 2036) · Positive Carry +230 bps vs UST · Watch RBI VRR/VRRR';
+
+  const synthesis =
+    `Reserve Bank of India (RBI · rbi.org.in) and CCIL/NDS-OM sovereign fixings (${quoteDate}) place the 3Y G-Sec benchmark (6.20% GS 2029) at ${gsec3Y.toFixed(3)}%, ` +
+    `5Y benchmark (6.53% GS 2031) at ${gsec5Y.toFixed(3)}%, 10Y benchmark (6.94% GS 2036) at ${gsec10Y.toFixed(3)}%, and 30Y G-Sec (7.63% GS 2056) at ${gsec30Y.toFixed(3)}% (5s10s slope at +${slope5s10s} bps; +${spread10Y} bps over 10Y US Treasuries). ` +
+    `With the RBI Monetary Policy Committee maintaining the Policy Repo Rate at ${repoRate.toFixed(2)}% (SDF floor at ${sdfRate.toFixed(2)}%, MSF ceiling at ${msfRate.toFixed(2)}%, CRR at 3.00%) and 91D/364D T-Bills clearing at ${tbill91d.toFixed(3)}%/${tbill364d.toFixed(3)}%, ` +
+    `RBI's US$${fxReserves.toFixed(2)}B Foreign Exchange Reserves cushion spot USD/INR around ₹${inrSpot.toFixed(4)} (FBIL Reference Rate ₹${rbiRef.toFixed(4)}) as Nifty 50 trades at ${nifty.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${niftyPct >= 0 ? '+' : ''}${niftyPct.toFixed(2)}%). ` +
+    `Lead India macro catalyst: "${leadHeadline}".`;
+
+  const positioningTakeaway =
+    `Overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs (${gsec5Y.toFixed(3)}%–${gsec10Y.toFixed(3)}%) to capture +${spread10Y} bps sovereign spread over USTs and low FX volatility backed by RBI's US$${fxReserves.toFixed(2)}B reserve war chest; ` +
+    `monitor RBI fine-tuning VRR/VRRR LAF operations keeping overnight call rates (${india?.bonds.callRateRange || '4.30% - 5.75%'}) aligned with the ${repoRate.toFixed(2)}% Repo anchor.`;
+
+  const criticalLevels = [
+    {
+      asset: '10Y G-Sec (6.94% GS 2036)',
+      current: `${gsec10Y.toFixed(3)}% (+${spread10Y} bps)`,
+      support: `${(gsec10Y - 0.12).toFixed(3)}%`,
+      resistance: `${(gsec10Y + 0.14).toFixed(3)}%`,
+      implication: `Yields near ${(gsec10Y + 0.14).toFixed(2)}% attract PSU bank SLR & foreign FAR inflows; sub-${(gsec10Y - 0.12).toFixed(2)}% requires softer food CPI.`,
+    },
+    {
+      asset: 'RBI LAF Corridor & 91D T-Bill',
+      current: `Repo ${repoRate.toFixed(2)}% · 91D ${tbill91d.toFixed(3)}%`,
+      support: `${sdfRate.toFixed(2)}% (SDF Floor)`,
+      resistance: `${msfRate.toFixed(2)}% (MSF Ceiling)`,
+      implication: 'Active RBI VRR/VRRR liquidity auctions prevent overnight call/TREPS rates from breaching the 5.25%–5.75% LAF band.',
+    },
+    {
+      asset: 'USD/INR Spot & FBIL Ref',
+      current: `₹${inrSpot.toFixed(2)} (Ref ₹${rbiRef.toFixed(2)})`,
+      support: `₹${(inrSpot - 0.65).toFixed(2)}`,
+      resistance: `₹${(inrSpot + 0.65).toFixed(2)}`,
+      implication: `RBI two-way FX intervention backed by US$${fxReserves.toFixed(1)}B reserves caps rupee volatility near ₹${(inrSpot + 0.65).toFixed(2)}.`,
+    },
+    {
+      asset: 'NIFTY 50 & BSE SENSEX',
+      current: `${nifty.toLocaleString('en-US', { maximumFractionDigits: 0 })} / ${(india?.fxAndEquities.sensexIndex.level ?? 80999).toLocaleString('en-US', { maximumFractionDigits: 0 })}`,
+      support: Math.round(nifty * 0.975).toLocaleString('en-US'),
+      resistance: Math.round(nifty * 1.025).toLocaleString('en-US'),
+      implication: 'Domestic SIP inflows and banking earnings offset foreign equity rotation and support INR capital account stability.',
+    },
+  ];
+
+  const eventsToWatch = [
+    {
+      event: 'RBI Variable Rate Repo (VRR) / Reverse Repo (VRRR) LAF Operations & Weekly T-Bill Auction',
+      timing: 'Nov 09 & Nov 11, 2026 · rbi.org.in',
+      impact: 'Critical' as const,
+      watchFor: `Allotment in RBI's 4-day VRR auction and Wednesday's ₹23,000 Cr T-Bill tender (₹8,000 Cr 91D, ₹8,000 Cr 182D, ₹7,000 Cr 364D) dictating front-end money market funding.`,
+    },
+    {
+      event: 'Weekly Friday RBI Government Stock (G-Sec) Primary Auction & PD Devolvement',
+      timing: 'Fridays · 14:30 IST (17:00 SGT)',
+      impact: 'High' as const,
+      watchFor: `Following the 06 Nov auction (₹23,000 Cr 7.06% GS 2041 @ 7.3881% & ₹13,000 Cr 7.43% GS 2076 @ 7.7708% with NIL devolvement), watch long-duration insurer demand.`,
+    },
+    {
+      event: 'India MoSPI CPI Inflation Print & RBI Weekly Statistical Supplement (WSS) FX Reserves',
+      timing: '12th of Month & Fridays 17:00 IST',
+      impact: 'High' as const,
+      watchFor: `Food-price trajectory relative to RBI's 4% (±2%) target band and weekly variation in RBI's US$${fxReserves.toFixed(2)}B Forex Reserves.`,
+    },
+  ];
+
+  return {
+    modelLabel: 'GEMINI 4 ARGON',
+    title: 'GEMINI 4 ARGON · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS',
+    regimeBadge,
+    conviction,
+    synthesis,
+    positioningTakeaway,
+    criticalLevels,
+    eventsToWatch,
+  };
+}
