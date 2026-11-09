@@ -538,3 +538,103 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     eventsToWatch,
   };
 }
+
+export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
+  const eq = snap.equities;
+  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
+  const ust2Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '2Y')?.yield ?? 4.53;
+
+  const spx = eq?.indexSummary.spxLevel ?? 7376.86;
+  const spxPct = eq?.indexSummary.spxChangePct ?? 0.31;
+  const spxFwdPe = eq?.indexSummary.spxForwardPe ?? 21.8;
+  const spxEy = eq?.indexSummary.spxEarningsYieldPct ?? Number((100 / spxFwdPe).toFixed(2));
+  const erpBps = Math.round((spxEy - ust10Y) * 100);
+
+  const peLeader = eq?.topForwardPe[0];
+  const fcfLeader = eq?.topFcfToEv[0];
+  const divLeader = eq?.topDividendYield[0];
+
+  const leadHeadline =
+    eq?.noteworthyHeadlines[0]?.title ||
+    eq?.noteworthyHeadlines[0]?.headline ||
+    'S&P 500 factor dispersion widens as 10Y Treasury yields near 4.86% reward high FCF/EV and low Forward P/E constituents';
+
+  const regimeBadge = `S&P 500 ${spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} · FWD P/E ${spxFwdPe.toFixed(1)}x (E/P ${spxEy.toFixed(2)}%) · ERP ${erpBps >= 0 ? `+${erpBps}` : erpBps} BPS VS 10Y UST`;
+  const conviction = 'Overweight High FCF/EV & Low Forward P/E Value · Quality Cash-Return Barbell vs Cap-Weighted Index';
+
+  const synthesis =
+    `With the S&P 500 Index trading at ${spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${spxPct >= 0 ? '+' : ''}${spxPct.toFixed(2)}%) on a ${spxFwdPe.toFixed(1)}x consensus NTM Forward P/E ` +
+    `(implied Forward Earnings Yield of ${spxEy.toFixed(2)}% vs the ${ust10Y.toFixed(2)}% 10-Year US Treasury risk-free rate, compressing the aggregate Equity Risk Premium to ${erpBps} bps), ` +
+    `factor dispersion across the S&P 500 offers substantial valuation alpha outside mega-cap growth. ` +
+    `Our live three-factor screen highlights deep earnings value led by ${peLeader?.ticker || 'GM'} (${(peLeader?.forwardPe ?? 6.8).toFixed(2)}x Forward P/E, ${(peLeader?.earningsYieldPct ?? 14.7).toFixed(1)}% E/P), ` +
+    `unlevered cash-return leadership in ${fcfLeader?.ticker || 'DVN'} (${(fcfLeader?.fcfToEvPct ?? 12.8).toFixed(2)}% FCF/EV yield), ` +
+    `and FCF-covered cash income anchored by ${divLeader?.ticker || 'MO'} (${(divLeader?.dividendYieldPct ?? 7.4).toFixed(2)}% Dividend/Price yield). ` +
+    `Lead US equity catalyst: "${leadHeadline}".`;
+
+  const positioningTakeaway =
+    `When 10Y US Treasury yields sit near ${ust10Y.toFixed(2)}% and aggregate S&P 500 ERP is ${erpBps} bps, rotate marginal equity exposure toward the Top 10 FCF/EV (>9%–13% cash yield) ` +
+    `and Top 10 Forward P/E (6.5x–9.5x NTM EPS) baskets, which provide +450 to +900 bps of positive earnings/cash-flow carry over risk-free Treasuries.`;
+
+  const criticalLevels = [
+    {
+      asset: 'S&P 500 Cash Index (^GSPC)',
+      current: spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      support: Math.round(spx * 0.982).toLocaleString('en-US'),
+      resistance: Math.round(spx * 1.018).toLocaleString('en-US'),
+      implication: `Sustaining above ${Math.round(spx * 0.982).toLocaleString('en-US')} preserves breadth rotation into cyclical value, financials, and energy cash cows.`,
+    },
+    {
+      asset: 'S&P 500 Forward P/E & ERP',
+      current: `${spxFwdPe.toFixed(1)}x (${erpBps} bps ERP)`,
+      support: '19.8x (5.05% E/P)',
+      resistance: '22.5x (4.44% E/P)',
+      implication: `Multiple expansion above 22.5x requires 10Y UST yields to ease below ${(ust10Y - 0.25).toFixed(2)}%; higher rates favor low-duration FCF/EV leaders.`,
+    },
+    {
+      asset: 'Top 10 FCF / EV Spread vs 10Y UST',
+      current: `${(fcfLeader?.fcfToEvPct ?? 12.8).toFixed(2)}% vs ${ust10Y.toFixed(2)}% UST`,
+      support: '+450 bps FCF Spread',
+      resistance: '+850 bps FCF Spread',
+      implication: 'Double-digit FCF/EV yields fund aggressive share buybacks and debt retirement independent of capital market conditions.',
+    },
+    {
+      asset: 'Top 10 Div / Price vs US 2Y',
+      current: `${(divLeader?.dividendYieldPct ?? 7.4).toFixed(2)}% vs ${ust2Y.toFixed(2)}% 2Y`,
+      support: '+150 bps Income Pickup',
+      resistance: '+300 bps Income Pickup',
+      implication: 'High-dividend S&P 500 cash generators with <75% FCF payout ratios attract institutional income reallocation as front-end rates peak.',
+    },
+  ];
+
+  const eventsToWatch = [
+    {
+      event: 'S&P 500 Consensus NTM EPS Revisions & Quarterly Earnings Guidance Window',
+      timing: 'Ongoing Quarterly Reporting Cycle',
+      impact: 'Critical' as const,
+      watchFor: 'Operating margin resilience and forward EPS revisions across Value vs Mega-Cap Technology constituents.',
+    },
+    {
+      event: '10-Year US Treasury Real Yield & Equity Risk Premium (ERP) Re-Rating Threshold',
+      timing: 'Daily NY Cash Session (09:30–16:00 ET)',
+      impact: 'High' as const,
+      watchFor: `Any move in 10Y UST above ${(ust10Y + 0.15).toFixed(2)}% accelerating institutional factor rotation from high-P/E growth into high FCF/EV and low Forward P/E leaders.`,
+    },
+    {
+      event: 'Corporate Share Repurchase Blackout Exit & Ex-Dividend Reinvestment Flows',
+      timing: 'Post-Earnings Open Window',
+      impact: 'High' as const,
+      watchFor: 'Authorized buyback execution among Top 10 FCF/EV constituents (Energy, Healthcare, Industrials, Legacy Tech) shrinking float and boosting EPS.',
+    },
+  ];
+
+  return {
+    modelLabel: 'GEMINI 4 ARGON',
+    title: 'GEMINI 4 ARGON · US EQUITIES (S&P 500) VALUATION, ERP & FACTOR SYNTHESIS',
+    regimeBadge,
+    conviction,
+    synthesis,
+    positioningTakeaway,
+    criticalLevels,
+    eventsToWatch,
+  };
+}

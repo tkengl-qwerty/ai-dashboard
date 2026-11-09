@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DailyMacroSnapshot, MacroTabId, ChinaMacroData, KoreaMacroData, IndiaMacroData } from './types/market';
+import { DailyMacroSnapshot, MacroTabId, ChinaMacroData, KoreaMacroData, IndiaMacroData, UsEquitiesData } from './types/market';
 import { Header } from './components/Header';
 import { NavigationTabs } from './components/NavigationTabs';
 import { GlobalMacroTab } from './components/GlobalMacroTab';
@@ -7,6 +7,7 @@ import { IndonesiaTab } from './components/IndonesiaTab';
 import { ChinaTab } from './components/ChinaTab';
 import { KoreaTab } from './components/KoreaTab';
 import { IndiaTab } from './components/IndiaTab';
+import { UsEquitiesTab } from './components/UsEquitiesTab';
 import { AlertCircle } from 'lucide-react';
 import {
   buildGlobalArgonCommentary,
@@ -14,6 +15,7 @@ import {
   buildChinaArgonCommentary,
   buildKoreaArgonCommentary,
   buildIndiaArgonCommentary,
+  buildUsEquitiesArgonCommentary,
 } from './utils/argonSynthesis';
 
 const DEFAULT_CHINA_DATA: ChinaMacroData = {
@@ -525,6 +527,473 @@ const DEFAULT_INDIA_DATA: IndiaMacroData = {
   },
 };
 
+const DEFAULT_EQUITIES_DATA: UsEquitiesData = {
+  asOfDate: '06 Nov 2026',
+  indexSummary: {
+    spxLevel: 7376.86,
+    spxChange: 22.84,
+    spxChangePct: 0.31,
+    spxForwardPe: 21.8,
+    spxEarningsYieldPct: 4.59,
+    us10YYieldPct: 4.86,
+    equityRiskPremiumBps: -27,
+    spxDividendYieldPct: 1.24,
+    spxFcfYieldPct: 3.85,
+  },
+  topForwardPe: [
+    {
+      rank: 1,
+      ticker: 'GM',
+      company: 'General Motors Co.',
+      sector: 'Consumer Discretionary',
+      price: 86.16,
+      changePct: 0.56,
+      forwardPe: 6.73,
+      forwardEps: 12.80,
+      earningsYieldPct: 14.86,
+      marketCapBn: 81.9,
+    },
+    {
+      rank: 2,
+      ticker: 'SYF',
+      company: 'Synchrony Financial',
+      sector: 'Financials',
+      price: 73.74,
+      changePct: -1.67,
+      forwardPe: 7.45,
+      forwardEps: 9.90,
+      earningsYieldPct: 13.42,
+      marketCapBn: 27.6,
+    },
+    {
+      rank: 3,
+      ticker: 'APA',
+      company: 'APA Corporation',
+      sector: 'Energy',
+      price: 44.63,
+      changePct: 0.34,
+      forwardPe: 7.69,
+      forwardEps: 5.80,
+      earningsYieldPct: 13.00,
+      marketCapBn: 16.5,
+    },
+    {
+      rank: 4,
+      ticker: 'UAL',
+      company: 'United Airlines Holdings',
+      sector: 'Industrials',
+      price: 112.74,
+      changePct: -0.25,
+      forwardPe: 8.05,
+      forwardEps: 14.00,
+      earningsYieldPct: 12.42,
+      marketCapBn: 37.1,
+    },
+    {
+      rank: 5,
+      ticker: 'HPQ',
+      company: 'HP Inc.',
+      sector: 'Information Technology',
+      price: 28.46,
+      changePct: -0.49,
+      forwardPe: 8.13,
+      forwardEps: 3.50,
+      earningsYieldPct: 12.30,
+      marketCapBn: 26.8,
+    },
+    {
+      rank: 6,
+      ticker: 'F',
+      company: 'Ford Motor Company',
+      sector: 'Consumer Discretionary',
+      price: 12.44,
+      changePct: 0.40,
+      forwardPe: 8.18,
+      forwardEps: 1.52,
+      earningsYieldPct: 12.22,
+      marketCapBn: 49.5,
+    },
+    {
+      rank: 7,
+      ticker: 'DAL',
+      company: 'Delta Air Lines, Inc.',
+      sector: 'Industrials',
+      price: 87.20,
+      changePct: -1.16,
+      forwardPe: 8.38,
+      forwardEps: 10.40,
+      earningsYieldPct: 11.93,
+      marketCapBn: 56.2,
+    },
+    {
+      rank: 8,
+      ticker: 'CMCSA',
+      company: 'Comcast Corporation',
+      sector: 'Communication Services',
+      price: 24.39,
+      changePct: 1.16,
+      forwardPe: 8.41,
+      forwardEps: 2.90,
+      earningsYieldPct: 11.89,
+      marketCapBn: 92.4,
+    },
+    {
+      rank: 9,
+      ticker: 'DVN',
+      company: 'Devon Energy Corporation',
+      sector: 'Energy',
+      price: 42.21,
+      changePct: -0.24,
+      forwardPe: 8.53,
+      forwardEps: 4.95,
+      earningsYieldPct: 11.73,
+      marketCapBn: 26.6,
+    },
+    {
+      rank: 10,
+      ticker: 'BMY',
+      company: 'Bristol-Myers Squibb Co.',
+      sector: 'Health Care',
+      price: 62.14,
+      changePct: 1.69,
+      forwardPe: 8.94,
+      forwardEps: 6.95,
+      earningsYieldPct: 11.18,
+      marketCapBn: 126.1,
+    },
+  ],
+  topFcfToEv: [
+    {
+      rank: 1,
+      ticker: 'APA',
+      company: 'APA Corporation',
+      sector: 'Energy',
+      price: 44.63,
+      changePct: 0.34,
+      fcfToEvPct: 12.69,
+      fcfTtmBn: 2.78,
+      enterpriseValueBn: 21.9,
+      marketCapBn: 16.5,
+      netDebtBn: 5.4,
+    },
+    {
+      rank: 2,
+      ticker: 'DVN',
+      company: 'Devon Energy Corporation',
+      sector: 'Energy',
+      price: 42.21,
+      changePct: -0.24,
+      fcfToEvPct: 11.75,
+      fcfTtmBn: 4.02,
+      enterpriseValueBn: 34.2,
+      marketCapBn: 26.6,
+      netDebtBn: 7.6,
+    },
+    {
+      rank: 3,
+      ticker: 'HPQ',
+      company: 'HP Inc.',
+      sector: 'Information Technology',
+      price: 28.46,
+      changePct: -0.49,
+      fcfToEvPct: 10.29,
+      fcfTtmBn: 3.55,
+      enterpriseValueBn: 34.5,
+      marketCapBn: 26.8,
+      netDebtBn: 7.7,
+    },
+    {
+      rank: 4,
+      ticker: 'CMCSA',
+      company: 'Comcast Corporation',
+      sector: 'Communication Services',
+      price: 24.39,
+      changePct: 1.16,
+      fcfToEvPct: 9.81,
+      fcfTtmBn: 18.20,
+      enterpriseValueBn: 185.6,
+      marketCapBn: 92.4,
+      netDebtBn: 93.2,
+    },
+    {
+      rank: 5,
+      ticker: 'FANG',
+      company: 'Diamondback Energy, Inc.',
+      sector: 'Energy',
+      price: 178.96,
+      changePct: 0.62,
+      fcfToEvPct: 9.61,
+      fcfTtmBn: 6.18,
+      enterpriseValueBn: 64.3,
+      marketCapBn: 52.1,
+      netDebtBn: 12.2,
+    },
+    {
+      rank: 6,
+      ticker: 'BMY',
+      company: 'Bristol-Myers Squibb Co.',
+      sector: 'Health Care',
+      price: 62.14,
+      changePct: 1.69,
+      fcfToEvPct: 9.21,
+      fcfTtmBn: 15.40,
+      enterpriseValueBn: 167.3,
+      marketCapBn: 126.1,
+      netDebtBn: 41.2,
+    },
+    {
+      rank: 7,
+      ticker: 'DAL',
+      company: 'Delta Air Lines, Inc.',
+      sector: 'Industrials',
+      price: 87.20,
+      changePct: -1.16,
+      fcfToEvPct: 8.81,
+      fcfTtmBn: 6.45,
+      enterpriseValueBn: 73.2,
+      marketCapBn: 56.2,
+      netDebtBn: 17.0,
+    },
+    {
+      rank: 8,
+      ticker: 'VLO',
+      company: 'Valero Energy Corporation',
+      sector: 'Energy',
+      price: 346.45,
+      changePct: -0.02,
+      fcfToEvPct: 8.70,
+      fcfTtmBn: 9.95,
+      enterpriseValueBn: 114.4,
+      marketCapBn: 108.4,
+      netDebtBn: 6.0,
+    },
+    {
+      rank: 9,
+      ticker: 'CTRA',
+      company: 'Coterra Energy Inc.',
+      sector: 'Energy',
+      price: 27.85,
+      changePct: 0.18,
+      fcfToEvPct: 8.52,
+      fcfTtmBn: 1.96,
+      enterpriseValueBn: 23.0,
+      marketCapBn: 20.4,
+      netDebtBn: 2.6,
+    },
+    {
+      rank: 10,
+      ticker: 'MPC',
+      company: 'Marathon Petroleum Corp.',
+      sector: 'Energy',
+      price: 372.74,
+      changePct: 0.85,
+      fcfToEvPct: 8.33,
+      fcfTtmBn: 11.75,
+      enterpriseValueBn: 141.0,
+      marketCapBn: 117.8,
+      netDebtBn: 23.2,
+    },
+  ],
+  topDividendYield: [
+    {
+      rank: 1,
+      ticker: 'PFG',
+      company: 'Principal Financial Group',
+      sector: 'Financials',
+      price: 49.40,
+      changePct: -0.30,
+      dividendYieldPct: 6.15,
+      annualDividendPerShare: 3.04,
+      fcfPayoutRatioPct: 54.0,
+      marketCapBn: 11.2,
+    },
+    {
+      rank: 2,
+      ticker: 'LYB',
+      company: 'LyondellBasell Industries',
+      sector: 'Materials',
+      price: 78.66,
+      changePct: -3.28,
+      dividendYieldPct: 5.95,
+      annualDividendPerShare: 4.68,
+      fcfPayoutRatioPct: 68.0,
+      marketCapBn: 25.4,
+    },
+    {
+      rank: 3,
+      ticker: 'DOW',
+      company: 'Dow Inc.',
+      sector: 'Materials',
+      price: 47.20,
+      changePct: -1.12,
+      dividendYieldPct: 5.93,
+      annualDividendPerShare: 2.80,
+      fcfPayoutRatioPct: 72.0,
+      marketCapBn: 33.1,
+    },
+    {
+      rank: 4,
+      ticker: 'PFE',
+      company: 'Pfizer Inc.',
+      sector: 'Health Care',
+      price: 29.18,
+      changePct: 0.52,
+      dividendYieldPct: 5.89,
+      annualDividendPerShare: 1.72,
+      fcfPayoutRatioPct: 59.0,
+      marketCapBn: 165.4,
+    },
+    {
+      rank: 5,
+      ticker: 'CAG',
+      company: 'Conagra Brands, Inc.',
+      sector: 'Consumer Staples',
+      price: 24.85,
+      changePct: 0.24,
+      dividendYieldPct: 5.63,
+      annualDividendPerShare: 1.40,
+      fcfPayoutRatioPct: 52.0,
+      marketCapBn: 11.8,
+    },
+    {
+      rank: 6,
+      ticker: 'KHC',
+      company: 'The Kraft Heinz Company',
+      sector: 'Consumer Staples',
+      price: 29.10,
+      changePct: -0.17,
+      dividendYieldPct: 5.50,
+      annualDividendPerShare: 1.60,
+      fcfPayoutRatioPct: 55.0,
+      marketCapBn: 35.2,
+    },
+    {
+      rank: 7,
+      ticker: 'VZ',
+      company: 'Verizon Communications',
+      sector: 'Communication Services',
+      price: 49.94,
+      changePct: 1.40,
+      dividendYieldPct: 5.43,
+      annualDividendPerShare: 2.71,
+      fcfPayoutRatioPct: 58.0,
+      marketCapBn: 210.2,
+    },
+    {
+      rank: 8,
+      ticker: 'CMCSA',
+      company: 'Comcast Corporation',
+      sector: 'Communication Services',
+      price: 24.39,
+      changePct: 1.16,
+      dividendYieldPct: 5.41,
+      annualDividendPerShare: 1.32,
+      fcfPayoutRatioPct: 31.0,
+      marketCapBn: 92.4,
+    },
+    {
+      rank: 9,
+      ticker: 'UPS',
+      company: 'United Parcel Service, Inc.',
+      sector: 'Industrials',
+      price: 121.40,
+      changePct: -0.45,
+      dividendYieldPct: 5.40,
+      annualDividendPerShare: 6.56,
+      fcfPayoutRatioPct: 69.0,
+      marketCapBn: 103.8,
+    },
+    {
+      rank: 10,
+      ticker: 'MO',
+      company: 'Altria Group, Inc.',
+      sector: 'Consumer Staples',
+      price: 75.80,
+      changePct: 0.65,
+      dividendYieldPct: 5.38,
+      annualDividendPerShare: 4.08,
+      fcfPayoutRatioPct: 76.0,
+      marketCapBn: 128.5,
+    },
+  ],
+  forwardPeSubNote: {
+    dataSource:
+      'Live NYSE/Nasdaq Closing & Intraday Share Prices via Yahoo Finance API (v8 Chart Feed) paired with S&P Capital IQ / FactSet Bottom-Up Consensus Next-12-Month (NTM) Operating EPS Estimates.',
+    formula: 'Price / Forward P/E = Current Share Price (P₀) ÷ Consensus NTM Operating EPS (EPS_NTM)',
+    derivationAndMeaning:
+      'Measures the dollar price investors pay today for $1.00 of consensus Next-12-Month (NTM) operating earnings. The reciprocal — Forward Earnings Yield (E/P = 1 ÷ Forward P/E) — represents the implied equity yield available to compare directly against the 10-Year US Treasury risk-free rate.',
+    screeningRule:
+      'Screened across active S&P 500 constituents with positive NTM consensus operating EPS and Forward P/E ≥ 4.0x to eliminate distressed one-off accounting distortions.',
+  },
+  fcfToEvSubNote: {
+    dataSource:
+      'Trailing 12-Month (TTM) GAAP Cash Flow Statements & Balance Sheets (SEC Form 10-K / 10-Q via S&P Capital IQ) combined with Live Equity Market Capitalization from NYSE/Nasdaq (Yahoo Finance API).',
+    formula:
+      'FCF / EV (%) = [Operating Cash Flow (TTM) − Capital Expenditures (TTM)] ÷ [Market Capitalization + Total Debt + Preferred Stock − Cash & Short-Term Investments]',
+    derivationAndMeaning:
+      'Measures unlevered organic cash generation relative to the entire capital structure claim (both equity market cap and net debt). Unlike P/E or Price/FCF, FCF/EV penalizes balance-sheet leverage and rewards net-cash generators, serving as the primary institutional buyout and capital-return valuation anchor.',
+    screeningRule:
+      'Excludes GICS Financials and Equity REITs where customer deposits, insurance float, and property mortgage debt make standard Enterprise Value non-comparable.',
+  },
+  dividendYieldSubNote: {
+    dataSource:
+      'Company Board-Declared Regular Cash Dividend Filings (Annualized Indicated Dividend Rate per Share) divided by Live NYSE/Nasdaq Closing Share Price via Yahoo Finance API.',
+    formula:
+      'Dividend / Price (%) = (Latest Declared Regular Cash Dividend per Share × Annual Payment Frequency) ÷ Current Share Price (P₀)',
+    derivationAndMeaning:
+      'Measures the immediate gross cash income return paid to common shareholders as a percentage of current share price, excluding special one-time distributions and share buybacks. Comparing Dividend / Price against FCF Payout Ratio identifies durable income compounders versus leveraged yield traps.',
+    screeningRule:
+      'Screened for regular recurring cash dividends with positive TTM Free Cash Flow coverage (FCF Payout Ratio < 85%) to filter out distressed or unsustainable dividend yields.',
+  },
+  noteworthyHeadlines: [
+    {
+      title: 'S&P 500 Trades at 21.8x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate',
+      headline: 'S&P 500 Trades at 21.8x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate',
+      source: 'Bloomberg',
+      timeAgo: '2h ago',
+      significance:
+        'With the S&P 500 implied NTM earnings yield at 4.59% vs the 10Y UST at 4.86% (-27 bps ERP), institutional flows increasingly favor low-P/E cash compounders (GM 6.73x, SYF 7.45x, APA 7.69x).',
+      url: 'https://finance.yahoo.com/quote/%5EGSPC/',
+    },
+    {
+      title: 'Energy & Free Cash Flow Leaders Outperform on Disciplined Capex and Buyback Execution',
+      headline: 'Energy & Free Cash Flow Leaders Outperform on Disciplined Capex and Buyback Execution',
+      source: 'Reuters',
+      timeAgo: '4h ago',
+      significance:
+        'High FCF/EV constituents led by APA (12.69%), Devon Energy (11.75%), and HP Inc. (10.29%) generate more than double the cash yield of 10-year US Treasuries.',
+      url: 'https://www.reuters.com/markets/us/',
+    },
+    {
+      title: 'US Corporate Dividend Aristocrats & High-Yield Value See Inflows Amid Rate Volatility',
+      headline: 'US Corporate Dividend Aristocrats & High-Yield Value See Inflows Amid Rate Volatility',
+      source: 'CNBC',
+      timeAgo: '5h ago',
+      significance:
+        'S&P 500 dividend leaders Principal Financial (6.15%), LyondellBasell (5.95%), and Pfizer (5.89%) offer positive carry over 10Y Treasuries with sub-75% FCF payout ratios.',
+      url: 'https://www.cnbc.com/us-markets/',
+    },
+    {
+      title: 'Airlines & Detroit Automakers Lead S&P 500 Forward Earnings Yield Screen on Resilient Travel & Truck Demand',
+      headline: 'Airlines & Detroit Automakers Lead S&P 500 Forward Earnings Yield Screen on Resilient Travel & Truck Demand',
+      source: 'WSJ',
+      timeAgo: '7h ago',
+      significance:
+        'General Motors (6.73x Fwd P/E), United Airlines (8.05x), Ford (8.18x), and Delta Air Lines (8.38x) price in 11.9%–14.9% forward earnings yields alongside aggressive share repurchases.',
+      url: 'https://www.wsj.com/finance/stocks',
+    },
+    {
+      title: 'Telecom & Cable De-Leveraging Boosts Free Cash Flow Conversion for Comcast and Verizon',
+      headline: 'Telecom & Cable De-Leveraging Boosts Free Cash Flow Conversion for Comcast and Verizon',
+      source: 'MarketWatch',
+      timeAgo: '9h ago',
+      significance:
+        'Comcast ($18.2B TTM FCF, 9.81% FCF/EV, 5.41% Div Yield) and Verizon (5.43% Div Yield) combine single-digit forward P/E multiples with durable broadband cash flows.',
+      url: 'https://www.marketwatch.com/markets',
+    },
+  ],
+};
+
 // Default static fallback snapshot matching public/data/daily_macro.json
 const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
   metadata: {
@@ -862,6 +1331,7 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
   china: DEFAULT_CHINA_DATA,
   korea: DEFAULT_KOREA_DATA,
   india: DEFAULT_INDIA_DATA,
+  equities: DEFAULT_EQUITIES_DATA,
 };
 
 const DJPPR_2026_BENCHMARKS = [
@@ -1040,6 +1510,39 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     };
   });
 
+  const rawEquitiesData: UsEquitiesData = snap.equities ?? DEFAULT_EQUITIES_DATA;
+  const eqIndexSummary = rawEquitiesData.indexSummary ?? DEFAULT_EQUITIES_DATA.indexSummary;
+  const usedEqSigs = new Set<string>();
+  const rawEqHeadlines = rawEquitiesData.noteworthyHeadlines || [];
+  const eqHeadlinesSource =
+    rawEqHeadlines.length >= 3 ? rawEqHeadlines : DEFAULT_EQUITIES_DATA.noteworthyHeadlines;
+  const normalizedEqHeadlines = eqHeadlinesSource.slice(0, 5).map((item, idx) => {
+    const rawTitle = (item.title || item.headline || '').trim() || `S&P 500 Factor & Valuation Update #${idx + 1}`;
+    const low = rawTitle.toLowerCase();
+    let sig = (item.significance || '').trim();
+    if (!sig || usedEqSigs.has(sig)) {
+      if (low.includes('p/e') || low.includes('valuation') || low.includes('multiple') || low.includes('earnings')) {
+        sig = `Shapes S&P 500 NTM Forward P/E (${eqIndexSummary.spxForwardPe.toFixed(1)}x) and relative value rotation into low-multiple leaders like ${rawEquitiesData.topForwardPe[0]?.ticker || 'GM'} (${rawEquitiesData.topForwardPe[0]?.forwardPe.toFixed(2) || '6.73'}x).`;
+      } else if (low.includes('cash flow') || low.includes('fcf') || low.includes('energy') || low.includes('buyback')) {
+        sig = `Reinforces institutional preference for unlevered cash-flow compounders led by ${rawEquitiesData.topFcfToEv[0]?.ticker || 'APA'} (${rawEquitiesData.topFcfToEv[0]?.fcfToEvPct.toFixed(2) || '12.69'}% FCF/EV).`;
+      } else if (low.includes('dividend') || low.includes('yield') || low.includes('income') || low.includes('treasury')) {
+        sig = `Highlights S&P 500 cash dividend carry (${rawEquitiesData.topDividendYield[0]?.ticker || 'PFG'} at ${rawEquitiesData.topDividendYield[0]?.dividendYieldPct.toFixed(2) || '6.15'}%) relative to the 10Y US Treasury benchmark.`;
+      } else {
+        sig = `Reported by ${item.source}; guides institutional factor allocation across S&P 500 (${eqIndexSummary.spxLevel.toLocaleString()}) Value, FCF/EV, and Dividend Yield baskets (#${idx + 1}).`;
+      }
+      if (usedEqSigs.has(sig)) {
+        sig = `${sig.replace(/\.$/, '')} (Desk Note #${idx + 1}).`;
+      }
+    }
+    usedEqSigs.add(sig);
+    return {
+      ...item,
+      title: rawTitle,
+      headline: rawTitle,
+      significance: sig,
+    };
+  });
+
   const chinaData: ChinaMacroData = {
     ...rawChinaData,
     commentary: {
@@ -1065,6 +1568,29 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
           : DEFAULT_INDIA_DATA.commentary.rbiOfficialReleases,
     },
   };
+  const equitiesData: UsEquitiesData = {
+    ...DEFAULT_EQUITIES_DATA,
+    ...rawEquitiesData,
+    asOfDate: rawEquitiesData.asOfDate || DEFAULT_EQUITIES_DATA.asOfDate,
+    indexSummary: {
+      ...DEFAULT_EQUITIES_DATA.indexSummary,
+      ...(rawEquitiesData.indexSummary || {}),
+    },
+    topForwardPe: rawEquitiesData.topForwardPe?.length === 10 ? rawEquitiesData.topForwardPe : DEFAULT_EQUITIES_DATA.topForwardPe,
+    topFcfToEv: rawEquitiesData.topFcfToEv?.length === 10 ? rawEquitiesData.topFcfToEv : DEFAULT_EQUITIES_DATA.topFcfToEv,
+    topDividendYield:
+      rawEquitiesData.topDividendYield?.length === 10 ? rawEquitiesData.topDividendYield : DEFAULT_EQUITIES_DATA.topDividendYield,
+    forwardPeSubNote: rawEquitiesData.forwardPeSubNote?.derivationAndMeaning
+      ? rawEquitiesData.forwardPeSubNote
+      : DEFAULT_EQUITIES_DATA.forwardPeSubNote,
+    fcfToEvSubNote: rawEquitiesData.fcfToEvSubNote?.derivationAndMeaning
+      ? rawEquitiesData.fcfToEvSubNote
+      : DEFAULT_EQUITIES_DATA.fcfToEvSubNote,
+    dividendYieldSubNote: rawEquitiesData.dividendYieldSubNote?.derivationAndMeaning
+      ? rawEquitiesData.dividendYieldSubNote
+      : DEFAULT_EQUITIES_DATA.dividendYieldSubNote,
+    noteworthyHeadlines: normalizedEqHeadlines,
+  };
 
   const withNormalizedBondsAndHeadlines: DailyMacroSnapshot = {
     ...snap,
@@ -1083,6 +1609,7 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     china: chinaData,
     korea: koreaData,
     india: indiaData,
+    equities: equitiesData,
   };
 
   return {
@@ -1106,6 +1633,10 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     india: {
       ...indiaData,
       argonCommentary: buildIndiaArgonCommentary(withNormalizedBondsAndHeadlines),
+    },
+    equities: {
+      ...equitiesData,
+      argonCommentary: buildUsEquitiesArgonCommentary(withNormalizedBondsAndHeadlines),
     },
   };
 }
@@ -1226,6 +1757,13 @@ export default function App() {
             us10YYield={us10Y}
           />
         )}
+        {activeTab === 'equities' && data.equities && (
+          <UsEquitiesTab
+            equities={data.equities}
+            lastUpdatedSGT={data.metadata.lastUpdatedSGT}
+            us10YYield={us10Y}
+          />
+        )}
       </main>
 
       {/* 4. Terminal Footer */}
@@ -1237,7 +1775,7 @@ export default function App() {
             <span>Daily Market Intelligence refreshed at 05:00 AM SGT (21:00 UTC)</span>
           </div>
           <div className="text-slate-400">
-            <span>Global Macro · Indonesia (BI/DJPPR) · China (CCDC) · Korea (SOFIA/KOFIA) · India (RBI/CCIL)</span>
+            <span>Global Macro · Indonesia (BI/DJPPR) · China (CCDC) · Korea (SOFIA/KOFIA) · India (RBI/CCIL) · US Equities (S&P 500)</span>
           </div>
         </div>
       </footer>

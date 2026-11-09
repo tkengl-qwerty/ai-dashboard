@@ -6,7 +6,7 @@ export interface MarketMetadata {
   timezone: string;
 }
 
-export type MacroTabId = 'global' | 'indonesia' | 'china' | 'korea' | 'india';
+export type MacroTabId = 'global' | 'indonesia' | 'china' | 'korea' | 'india' | 'equities';
 
 export interface MacroNewsItem {
   id: string;
@@ -348,6 +348,76 @@ export interface IndiaMacroData {
   };
 }
 
+export interface SpxForwardPeItem {
+  rank: number;
+  ticker: string;
+  company: string;
+  sector: string;
+  price: number;
+  changePct: number;
+  forwardEps: number;
+  forwardPe: number;
+  earningsYieldPct: number;
+  marketCapBn: number;
+}
+
+export interface SpxFcfEvItem {
+  rank: number;
+  ticker: string;
+  company: string;
+  sector: string;
+  price: number;
+  changePct: number;
+  fcfTtmBn: number;
+  marketCapBn: number;
+  netDebtBn: number;
+  enterpriseValueBn: number;
+  fcfToEvPct: number;
+}
+
+export interface SpxDividendYieldItem {
+  rank: number;
+  ticker: string;
+  company: string;
+  sector: string;
+  price: number;
+  changePct: number;
+  annualDividendPerShare: number;
+  dividendYieldPct: number;
+  fcfPayoutRatioPct: number;
+  marketCapBn: number;
+}
+
+export interface TableMethodologySubNote {
+  dataSource: string;
+  formula: string;
+  derivationAndMeaning: string;
+  screeningRule: string;
+}
+
+export interface UsEquitiesData {
+  argonCommentary?: ArgonCommentary;
+  asOfDate: string;
+  indexSummary: {
+    spxLevel: number;
+    spxChange: number;
+    spxChangePct: number;
+    spxForwardPe: number;
+    spxEarningsYieldPct: number;
+    us10YYieldPct: number;
+    equityRiskPremiumBps: number;
+    spxDividendYieldPct: number;
+    spxFcfYieldPct: number;
+  };
+  topForwardPe: SpxForwardPeItem[];
+  forwardPeSubNote: TableMethodologySubNote;
+  topFcfToEv: SpxFcfEvItem[];
+  fcfToEvSubNote: TableMethodologySubNote;
+  topDividendYield: SpxDividendYieldItem[];
+  dividendYieldSubNote: TableMethodologySubNote;
+  noteworthyHeadlines: RegionalDisclosureItem[];
+}
+
 export interface ArgonCriticalLevel {
   asset: string;
   current: string;
@@ -393,4 +463,5 @@ export interface DailyMacroSnapshot {
   china?: ChinaMacroData;
   korea?: KoreaMacroData;
   india?: IndiaMacroData;
+  equities?: UsEquitiesData;
 }

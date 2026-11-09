@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe2, Landmark, Building2, Layers } from 'lucide-react';
+import { Globe2, Landmark, Building2, Layers, TrendingUp } from 'lucide-react';
 import { DailyMacroSnapshot, MacroTabId } from '../types/market';
 
 interface NavigationTabsProps {
@@ -36,6 +36,11 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
   const rbiRepo = data.india?.bonds.rbiRepoRate ?? 5.50;
   const inrSpot = data.india?.fxAndEquities.inrSpot ?? 93.895;
 
+  const spxLevel = data.equities?.indexSummary.spxLevel ?? 7376.86;
+  const spxFwdPe = data.equities?.indexSummary.spxForwardPe ?? 21.8;
+  const spxEy = data.equities?.indexSummary.spxEarningsYieldPct ?? 4.59;
+  const erpBps = Math.round((spxEy - ust10y) * 100);
+
   return (
     <div className="bg-[#121a26] border-b border-slate-700/80 px-4">
       <div className="max-w-7xl mx-auto flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2 pt-2">
@@ -44,7 +49,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 1. Global Macro Tab */}
           <button
             onClick={() => onTabChange('global')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'global'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -57,7 +62,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 2. Indonesia Market Tab */}
           <button
             onClick={() => onTabChange('indonesia')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'indonesia'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -70,7 +75,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 3. China Market (CCDC) Tab */}
           <button
             onClick={() => onTabChange('china')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'china'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -83,7 +88,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 4. Korea Market (SOFIA / KOFIA) Tab */}
           <button
             onClick={() => onTabChange('korea')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'korea'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -96,7 +101,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 5. India Market (RBI / CCIL) Tab */}
           <button
             onClick={() => onTabChange('india')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'india'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -104,6 +109,19 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           >
             <Landmark className={`w-3.5 h-3.5 ${activeTab === 'india' ? 'text-blue-400' : 'text-slate-500'}`} />
             <span>5. INDIA (RBI / CCIL)</span>
+          </button>
+
+          {/* 6. US Equities (S&P 500) Tab */}
+          <button
+            onClick={() => onTabChange('equities')}
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+              activeTab === 'equities'
+                ? 'border-blue-500 text-sky-300 bg-[#192436]'
+                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
+            }`}
+          >
+            <TrendingUp className={`w-3.5 h-3.5 ${activeTab === 'equities' ? 'text-blue-400' : 'text-slate-500'}`} />
+            <span>6. US EQUITIES (S&P 500)</span>
           </button>
         </div>
 
@@ -202,6 +220,27 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
               <div className="flex items-center gap-1.5">
                 <span className="text-slate-400 text-[10px]">USD/INR:</span>
                 <span className="text-slate-200 tabular-nums">₹{inrSpot.toFixed(2)}</span>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'equities' && (
+            <>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400 text-[10px]">S&P 500 (^GSPC):</span>
+                <span className="text-sky-300 font-bold tabular-nums">
+                  {spxLevel.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+              <span className="text-slate-700">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400 text-[10px]">FWD P/E:</span>
+                <span className="text-blue-400 font-semibold tabular-nums">{spxFwdPe.toFixed(1)}x</span>
+              </div>
+              <span className="text-slate-700">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-400 text-[10px]">ERP vs 10Y:</span>
+                <span className="text-slate-200 tabular-nums">{erpBps >= 0 ? `+${erpBps}` : erpBps} bps</span>
               </div>
             </>
           )}

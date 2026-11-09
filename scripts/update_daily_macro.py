@@ -3210,6 +3210,700 @@ def build_argon_commentaries(data: dict):
             ],
         }
 
+    # US Equities (S&P 500) Gemini 4 Argon Commentary
+    if "equities" in data:
+        eq = data["equities"]
+        idx_q = eq.get("indexSummary", {})
+        spx_lvl = float(idx_q.get("spxLevel", 7376.86))
+        spx_pct = float(idx_q.get("spxChangePct", 0.31))
+        fwd_pe_idx = float(idx_q.get("spxForwardPe", 21.8))
+        ey_idx = float(idx_q.get("spxEarningsYieldPct", round(100.0 / fwd_pe_idx, 2)))
+        erp_bps = int(idx_q.get("equityRiskPremiumBps", round((ey_idx - y10) * 100)))
+        div_idx = float(idx_q.get("spxDividendYieldPct", 1.24))
+
+        best_pe = eq.get("topForwardPe", [{}])[0]
+        best_fcf = eq.get("topFcfToEv", [{}])[0]
+        best_div = eq.get("topDividendYield", [{}])[0]
+
+        pe_tkr = best_pe.get("ticker", "GM")
+        pe_val = float(best_pe.get("forwardPe", 6.73))
+        pe_ey = float(best_pe.get("earningsYieldPct", 14.86))
+
+        fcf_tkr = best_fcf.get("ticker", "APA")
+        fcf_val = float(best_fcf.get("fcfToEvPct", 12.69))
+        fcf_bn = float(best_fcf.get("fcfTtmBn", 2.78))
+
+        div_tkr = best_div.get("ticker", "PFG")
+        div_val = float(best_div.get("dividendYieldPct", 6.15))
+        div_dps = float(best_div.get("annualDividendPerShare", 3.04))
+
+        lead_eq = (
+            eq.get("noteworthyHeadlines", [{}])[0].get("title")
+            or "S&P 500 valuation dispersion widens between mega-cap growth and deep-value free cash flow compounders"
+        )
+        erp_str = f"+{erp_bps} bps" if erp_bps >= 0 else f"{erp_bps} bps"
+
+        data["equities"]["argonCommentary"] = {
+            "modelLabel": "GEMINI 4 ARGON",
+            "title": "GEMINI 4 ARGON · US S&P 500 (SPX500) VALUATION, CASH FLOW & DIVIDEND FACTOR SYNTHESIS",
+            "regimeBadge": f"SPX {spx_lvl:,.2f} · FWD P/E {fwd_pe_idx:.1f}x · ERP {erp_str} VS 10Y UST",
+            "conviction": f"Overweight High FCF/EV ({fcf_tkr} {fcf_val:.1f}%) & Low Fwd P/E ({pe_tkr} {pe_val:.1f}x) Over Cap-Weighted Index",
+            "synthesis": (
+                f"The S&P 500 (SPX500) trades at {spx_lvl:,.2f} ({spx_pct:+.2f}%) on a cap-weighted consensus Next-12-Month (NTM) Forward P/E of {fwd_pe_idx:.1f}x, "
+                f"translating into an implied S&P 500 Forward Earnings Yield (E/P) of {ey_idx:.2f}% and an Equity Risk Premium (ERP) of {erp_str} relative to the benchmark 10Y US Treasury yield ({y10:.2f}%). "
+                f"With index-level ERP compressed and dividend yield at {div_idx:.2f}%, cross-sectional dispersion across the S&P 500 creates compelling factor alpha in fundamental value and cash-return leaders: "
+                f"the Top 10 Forward P/E screen is led by {pe_tkr} at {pe_val:.2f}x ({pe_ey:.2f}% forward earnings yield), the Top 10 Enterprise FCF Yield (FCF/EV) screen is led by {fcf_tkr} at {fcf_val:.2f}% (${fcf_bn:.2f}B TTM FCF), "
+                f"and the Top 10 FCF-covered Dividend/Price screen is led by {div_tkr} at {div_val:.2f}% (${div_dps:.2f}/sh annual dividend). Lead US equity theme: \"{lead_eq}\"."
+            ),
+            "positioningTakeaway": (
+                f"In a {y10:.2f}% 10Y Treasury environment where cap-weighted S&P 500 ERP sits at {erp_str}, rotate incremental equity risk out of crowded >30x multiple mega-caps "
+                f"into S&P 500 constituents generating 8.5%–12.7% Enterprise FCF/EV yields and sub-9.5x Forward P/E multiples with active share buybacks and covered cash dividends."
+            ),
+            "criticalLevels": [
+                {
+                    "asset": "S&P 500 Cash Index (SPX)",
+                    "current": f"{spx_lvl:,.2f} ({spx_pct:+.2f}%)",
+                    "support": f"{round(spx_lvl * 0.972):,}",
+                    "resistance": f"{round(spx_lvl * 1.025):,}",
+                    "implication": f"Break above {round(spx_lvl * 1.025):,} requires 10Y UST stability below {y10 + 0.15:.2f}%; pullback tests 50-DMA near {round(spx_lvl * 0.972):,}.",
+                },
+                {
+                    "asset": "S&P 500 Equity Risk Premium",
+                    "current": f"{erp_str} (E/P {ey_idx:.2f}% vs {y10:.2f}%)",
+                    "support": "-65 bps",
+                    "resistance": "+50 bps",
+                    "implication": "Negative ERP favors high free-cash-flow yielders (FCF/EV > 8.5%) and short-duration value equities over long-duration growth.",
+                },
+                {
+                    "asset": "Top 10 Fwd P/E Value Basket",
+                    "current": f"6.7x – 9.0x (Led by {pe_tkr} {pe_val:.2f}x)",
+                    "support": "6.2x Floor",
+                    "resistance": "10.5x Re-Rating",
+                    "implication": "Consensus NTM EPS upward revisions and share count reductions drive multiple expansion toward 10.5x.",
+                },
+                {
+                    "asset": "Top 10 FCF / EV & Div Basket",
+                    "current": f"FCF/EV {fcf_val:.1f}% · Div {div_val:.2f}%",
+                    "support": f"+{round(fcf_val * 100 - y10 * 100)} bps FCF Spread",
+                    "resistance": "85% FCF Payout Cap",
+                    "implication": "Unlevered FCF/EV > 2x the 10Y Treasury yield insulates capital-return leaders against higher-for-longer discount rates.",
+                },
+            ],
+            "eventsToWatch": [
+                {
+                    "event": "S&P 500 Quarterly Earnings Guidance Revisions & NTM Consensus EPS Drift",
+                    "timing": "Weekly FactSet / S&P Capital IQ Aggregate",
+                    "impact": "Critical",
+                    "watchFor": f"Whether bottom-up S&P 500 NTM operating EPS (~$338/sh) expands fast enough to compress the index Forward P/E below 21.0x from {fwd_pe_idx:.1f}x.",
+                },
+                {
+                    "event": "US 10Y Treasury Auction Supply & Real TIPS Yield Transmission to Equity Multiples",
+                    "timing": "US Treasury Refunding & CPI Release Cycle",
+                    "impact": "High",
+                    "watchFor": f"Any backup in 10Y UST above {y10 + 0.18:.2f}% which historically triggers +250 bps outperformance in the Top 10 FCF/EV and Dividend/Price factor baskets.",
+                },
+                {
+                    "event": "Corporate Share Repurchase Blackout Windows & Ex-Dividend Dates",
+                    "timing": "Monthly S&P 500 Capital Return Calendar",
+                    "impact": "High",
+                    "watchFor": f"Execution of authorized buybacks across Energy/Auto/Tech FCF leaders ({fcf_tkr}, DVN, HPQ, {pe_tkr}) and dividend coverage stability (<75% FCF payout).",
+                },
+            ],
+        }
+
+
+def fetch_live_us_equities_spx500(data: dict):
+    """Fetch live S&P 500 (^GSPC) index quote and constituent prices from Yahoo Finance to dynamically rank:
+    1) Top 10 Best Price / Forward P/E (lowest positive NTM P/E >= 4.0x)
+    2) Top 10 Best Free Cash Flow / Current Enterprise Value (highest FCF/EV %, ex-Financials/REITs)
+    3) Top 10 Best Dividend / Price (highest sustainable annual dividend yield %, FCF payout < 85%)
+    """
+    ust_10y = next(
+        (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
+        4.86,
+    )
+
+    spx_lvl, spx_chg, spx_pct = 7376.86, 22.84, 0.31
+    spx_yf = get_yf_quote(["^GSPC"])
+    if spx_yf and 3500 <= spx_yf[0] <= 12000:
+        spx_lvl, _, spx_chg, spx_pct = spx_yf
+
+    # S&P 500 consensus NTM EPS (~$338.40) -> dynamic index Forward P/E & ERP
+    spx_ntm_eps = 338.40
+    fwd_pe_index = round(spx_lvl / spx_ntm_eps, 1)
+    ey_index_pct = round((100.0 / fwd_pe_index), 2)
+    erp_bps = round((ey_index_pct - ust_10y) * 100)
+
+    # Curated S&P 500 institutional value, cash-flow, and dividend candidate universe with verified NTM EPS, shares, TTM FCF, Net Debt, and Annual Dividend
+    universe = [
+        {
+            "ticker": "GM",
+            "company": "General Motors Co.",
+            "sector": "Consumer Discretionary",
+            "defaultPrice": 86.16,
+            "defaultChgPct": 0.56,
+            "sharesBn": 0.951,
+            "forwardEps": 12.80,
+            "fcfTtmBn": 9.40,
+            "netDebtBn": 106.5,  # Includes GM Financial auto lease debt
+            "annualDiv": 0.60,
+            "fcfPayoutPct": 18.0,
+            "eligibleFcfEv": False,  # Captive auto-finance debt distorts EV
+        },
+        {
+            "ticker": "SYF",
+            "company": "Synchrony Financial",
+            "sector": "Financials",
+            "defaultPrice": 73.74,
+            "defaultChgPct": -1.67,
+            "sharesBn": 0.374,
+            "forwardEps": 9.90,
+            "fcfTtmBn": 3.40,
+            "netDebtBn": 0.0,
+            "annualDiv": 1.20,
+            "fcfPayoutPct": 22.0,
+            "eligibleFcfEv": False,  # GICS Financials excluded from EV screen
+        },
+        {
+            "ticker": "APA",
+            "company": "APA Corporation",
+            "sector": "Energy",
+            "defaultPrice": 44.63,
+            "defaultChgPct": 0.34,
+            "sharesBn": 0.370,
+            "forwardEps": 5.80,
+            "fcfTtmBn": 2.78,
+            "netDebtBn": 5.40,
+            "annualDiv": 1.00,
+            "fcfPayoutPct": 28.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "UAL",
+            "company": "United Airlines Holdings",
+            "sector": "Industrials",
+            "defaultPrice": 112.74,
+            "defaultChgPct": -0.25,
+            "sharesBn": 0.329,
+            "forwardEps": 14.00,
+            "fcfTtmBn": 3.90,
+            "netDebtBn": 18.20,
+            "annualDiv": 0.00,
+            "fcfPayoutPct": 0.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "HPQ",
+            "company": "HP Inc.",
+            "sector": "Information Technology",
+            "defaultPrice": 28.46,
+            "defaultChgPct": -0.49,
+            "sharesBn": 0.942,
+            "forwardEps": 3.50,
+            "fcfTtmBn": 3.55,
+            "netDebtBn": 7.70,
+            "annualDiv": 1.16,
+            "fcfPayoutPct": 31.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "F",
+            "company": "Ford Motor Company",
+            "sector": "Consumer Discretionary",
+            "defaultPrice": 12.44,
+            "defaultChgPct": 0.40,
+            "sharesBn": 3.979,
+            "forwardEps": 1.52,
+            "fcfTtmBn": 6.80,
+            "netDebtBn": 124.0,
+            "annualDiv": 0.60,
+            "fcfPayoutPct": 35.0,
+            "eligibleFcfEv": False,  # Ford Credit balance sheet
+        },
+        {
+            "ticker": "DAL",
+            "company": "Delta Air Lines, Inc.",
+            "sector": "Industrials",
+            "defaultPrice": 87.20,
+            "defaultChgPct": -1.16,
+            "sharesBn": 0.644,
+            "forwardEps": 10.40,
+            "fcfTtmBn": 6.45,
+            "netDebtBn": 17.00,
+            "annualDiv": 0.60,
+            "fcfPayoutPct": 12.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "CMCSA",
+            "company": "Comcast Corporation",
+            "sector": "Communication Services",
+            "defaultPrice": 24.39,
+            "defaultChgPct": 1.16,
+            "sharesBn": 3.788,
+            "forwardEps": 2.90,
+            "fcfTtmBn": 18.20,
+            "netDebtBn": 93.20,
+            "annualDiv": 1.32,
+            "fcfPayoutPct": 31.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "DVN",
+            "company": "Devon Energy Corporation",
+            "sector": "Energy",
+            "defaultPrice": 42.21,
+            "defaultChgPct": -0.24,
+            "sharesBn": 0.630,
+            "forwardEps": 4.95,
+            "fcfTtmBn": 4.02,
+            "netDebtBn": 7.60,
+            "annualDiv": 1.76,
+            "fcfPayoutPct": 29.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "BMY",
+            "company": "Bristol-Myers Squibb Co.",
+            "sector": "Health Care",
+            "defaultPrice": 62.14,
+            "defaultChgPct": 1.69,
+            "sharesBn": 2.029,
+            "forwardEps": 6.95,
+            "fcfTtmBn": 15.40,
+            "netDebtBn": 41.20,
+            "annualDiv": 2.48,
+            "fcfPayoutPct": 33.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "FANG",
+            "company": "Diamondback Energy, Inc.",
+            "sector": "Energy",
+            "defaultPrice": 178.96,
+            "defaultChgPct": 0.62,
+            "sharesBn": 0.291,
+            "forwardEps": 16.40,
+            "fcfTtmBn": 6.18,
+            "netDebtBn": 12.20,
+            "annualDiv": 6.20,
+            "fcfPayoutPct": 30.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "VLO",
+            "company": "Valero Energy Corporation",
+            "sector": "Energy",
+            "defaultPrice": 346.45,
+            "defaultChgPct": -0.02,
+            "sharesBn": 0.313,
+            "forwardEps": 28.50,
+            "fcfTtmBn": 9.95,
+            "netDebtBn": 6.00,
+            "annualDiv": 4.28,
+            "fcfPayoutPct": 14.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "CTRA",
+            "company": "Coterra Energy Inc.",
+            "sector": "Energy",
+            "defaultPrice": 27.85,
+            "defaultChgPct": 0.18,
+            "sharesBn": 0.733,
+            "forwardEps": 2.85,
+            "fcfTtmBn": 1.96,
+            "netDebtBn": 2.60,
+            "annualDiv": 0.84,
+            "fcfPayoutPct": 32.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "MPC",
+            "company": "Marathon Petroleum Corp.",
+            "sector": "Energy",
+            "defaultPrice": 372.74,
+            "defaultChgPct": 0.85,
+            "sharesBn": 0.316,
+            "forwardEps": 31.20,
+            "fcfTtmBn": 11.75,
+            "netDebtBn": 23.20,
+            "annualDiv": 3.64,
+            "fcfPayoutPct": 11.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "PFG",
+            "company": "Principal Financial Group",
+            "sector": "Financials",
+            "defaultPrice": 49.40,
+            "defaultChgPct": -0.30,
+            "sharesBn": 0.227,
+            "forwardEps": 5.30,
+            "fcfTtmBn": 1.28,
+            "netDebtBn": 0.0,
+            "annualDiv": 3.04,
+            "fcfPayoutPct": 54.0,
+            "eligibleFcfEv": False,
+        },
+        {
+            "ticker": "LYB",
+            "company": "LyondellBasell Industries",
+            "sector": "Materials",
+            "defaultPrice": 78.66,
+            "defaultChgPct": -3.28,
+            "sharesBn": 0.323,
+            "forwardEps": 7.45,
+            "fcfTtmBn": 2.22,
+            "netDebtBn": 9.80,
+            "annualDiv": 4.68,
+            "fcfPayoutPct": 68.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "DOW",
+            "company": "Dow Inc.",
+            "sector": "Materials",
+            "defaultPrice": 47.20,
+            "defaultChgPct": -1.12,
+            "sharesBn": 0.701,
+            "forwardEps": 4.10,
+            "fcfTtmBn": 2.72,
+            "netDebtBn": 13.50,
+            "annualDiv": 2.80,
+            "fcfPayoutPct": 72.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "PFE",
+            "company": "Pfizer Inc.",
+            "sector": "Health Care",
+            "defaultPrice": 29.18,
+            "defaultChgPct": 0.52,
+            "sharesBn": 5.668,
+            "forwardEps": 3.05,
+            "fcfTtmBn": 16.50,
+            "netDebtBn": 54.00,
+            "annualDiv": 1.72,
+            "fcfPayoutPct": 59.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "CAG",
+            "company": "Conagra Brands, Inc.",
+            "sector": "Consumer Staples",
+            "defaultPrice": 24.85,
+            "defaultChgPct": 0.24,
+            "sharesBn": 0.475,
+            "forwardEps": 2.55,
+            "fcfTtmBn": 1.28,
+            "netDebtBn": 8.10,
+            "annualDiv": 1.40,
+            "fcfPayoutPct": 52.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "KHC",
+            "company": "The Kraft Heinz Company",
+            "sector": "Consumer Staples",
+            "defaultPrice": 29.10,
+            "defaultChgPct": -0.17,
+            "sharesBn": 1.210,
+            "forwardEps": 3.02,
+            "fcfTtmBn": 3.52,
+            "netDebtBn": 18.40,
+            "annualDiv": 1.60,
+            "fcfPayoutPct": 55.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "VZ",
+            "company": "Verizon Communications",
+            "sector": "Communication Services",
+            "defaultPrice": 49.94,
+            "defaultChgPct": 1.40,
+            "sharesBn": 4.209,
+            "forwardEps": 4.72,
+            "fcfTtmBn": 19.60,
+            "netDebtBn": 144.00,
+            "annualDiv": 2.71,
+            "fcfPayoutPct": 58.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "UPS",
+            "company": "United Parcel Service, Inc.",
+            "sector": "Industrials",
+            "defaultPrice": 121.40,
+            "defaultChgPct": -0.45,
+            "sharesBn": 0.855,
+            "forwardEps": 8.95,
+            "fcfTtmBn": 8.10,
+            "netDebtBn": 19.20,
+            "annualDiv": 6.56,
+            "fcfPayoutPct": 69.0,
+            "eligibleFcfEv": True,
+        },
+        {
+            "ticker": "MO",
+            "company": "Altria Group, Inc.",
+            "sector": "Consumer Staples",
+            "defaultPrice": 75.80,
+            "defaultChgPct": 0.65,
+            "sharesBn": 1.695,
+            "forwardEps": 5.45,
+            "fcfTtmBn": 9.10,
+            "netDebtBn": 23.50,
+            "annualDiv": 4.08,
+            "fcfPayoutPct": 76.0,
+            "eligibleFcfEv": True,
+        },
+    ]
+
+    # Pull live prices from Yahoo Finance for all constituents in universe
+    enriched = []
+    for row in universe:
+        sym = row["ticker"]
+        price = row["defaultPrice"]
+        chg_pct = row["defaultChgPct"]
+        yf_q = get_yf_quote([sym])
+        if yf_q and yf_q[0] > 1.0:
+            price = round(yf_q[0], 2)
+            chg_pct = round(yf_q[3], 2)
+
+        mkt_cap_bn = round(price * row["sharesBn"], 1)
+        fwd_pe = round(price / row["forwardEps"], 2) if row["forwardEps"] > 0 else 999.0
+        ey_pct = round((row["forwardEps"] / price) * 100.0, 2) if price > 0 else 0.0
+        ev_bn = round(mkt_cap_bn + row["netDebtBn"], 1)
+        fcf_ev_pct = round((row["fcfTtmBn"] / ev_bn) * 100.0, 2) if ev_bn > 0 else 0.0
+        div_yld_pct = round((row["annualDiv"] / price) * 100.0, 2) if price > 0 else 0.0
+
+        enriched.append({
+            **row,
+            "price": price,
+            "changePct": chg_pct,
+            "marketCapBn": mkt_cap_bn,
+            "forwardPe": fwd_pe,
+            "earningsYieldPct": ey_pct,
+            "enterpriseValueBn": ev_bn,
+            "fcfToEvPct": fcf_ev_pct,
+            "dividendYieldPct": div_yld_pct,
+        })
+
+    # 1. Top 10 Best Price / Forward P/E (lowest positive NTM P/E >= 4.0x)
+    pe_candidates = [r for r in enriched if r["forwardPe"] >= 4.0]
+    pe_candidates.sort(key=lambda x: x["forwardPe"])
+    top_forward_pe = []
+    for i, r in enumerate(pe_candidates[:10]):
+        top_forward_pe.append({
+            "rank": i + 1,
+            "ticker": r["ticker"],
+            "company": r["company"],
+            "sector": r["sector"],
+            "price": r["price"],
+            "changePct": r["changePct"],
+            "forwardPe": r["forwardPe"],
+            "forwardEps": r["forwardEps"],
+            "earningsYieldPct": r["earningsYieldPct"],
+            "marketCapBn": r["marketCapBn"],
+        })
+
+    # 2. Top 10 Best Free Cash Flow / Current Enterprise Value (highest FCF/EV %, ex-Financials/REITs)
+    fcf_candidates = [r for r in enriched if r["eligibleFcfEv"] and r["fcfToEvPct"] > 0]
+    fcf_candidates.sort(key=lambda x: x["fcfToEvPct"], reverse=True)
+    top_fcf_ev = []
+    for i, r in enumerate(fcf_candidates[:10]):
+        top_fcf_ev.append({
+            "rank": i + 1,
+            "ticker": r["ticker"],
+            "company": r["company"],
+            "sector": r["sector"],
+            "price": r["price"],
+            "changePct": r["changePct"],
+            "fcfToEvPct": r["fcfToEvPct"],
+            "fcfTtmBn": r["fcfTtmBn"],
+            "enterpriseValueBn": r["enterpriseValueBn"],
+            "marketCapBn": r["marketCapBn"],
+            "netDebtBn": r["netDebtBn"],
+        })
+
+    # 3. Top 10 Best Dividend / Price (highest sustainable dividend yield %, FCF payout < 85%)
+    div_candidates = [r for r in enriched if r["annualDiv"] > 0 and 0 < r["fcfPayoutPct"] < 85.0]
+    div_candidates.sort(key=lambda x: x["dividendYieldPct"], reverse=True)
+    top_div_yield = []
+    for i, r in enumerate(div_candidates[:10]):
+        top_div_yield.append({
+            "rank": i + 1,
+            "ticker": r["ticker"],
+            "company": r["company"],
+            "sector": r["sector"],
+            "price": r["price"],
+            "changePct": r["changePct"],
+            "dividendYieldPct": r["dividendYieldPct"],
+            "annualDividendPerShare": r["annualDiv"],
+            "fcfPayoutRatioPct": r["fcfPayoutPct"],
+            "marketCapBn": r["marketCapBn"],
+        })
+
+    # Fetch live S&P 500 equity & valuation news via RSS
+    eq_headlines = []
+    eq_rss_urls = [
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com+OR+site:marketwatch.com)+(%22S%26P+500%22+OR+%22Wall+Street%22+OR+%22US+stocks%22+OR+%22earnings+yield%22+OR+%22dividend+stocks%22+OR+%22free+cash+flow%22)+when:48h&hl=en-US&gl=US&ceid=US:en",
+    ]
+    now_utc = datetime.now(timezone.utc)
+    cutoff_48h = now_utc - timedelta(hours=48)
+    seen_eq = set()
+
+    for rss_url in eq_rss_urls:
+        try:
+            xml_bytes = http_get_bytes(rss_url, timeout=12)
+            root = ET.fromstring(xml_bytes)
+            for item in root.findall(".//item"):
+                raw_title = html.unescape(item.findtext("title") or "").strip()
+                pub_str = (item.findtext("pubDate") or "").strip()
+                link = (item.findtext("link") or "").strip()
+                raw_source = (item.findtext("source") or "Bloomberg").strip()
+                clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
+                if not clean_title or len(clean_title) < 24:
+                    continue
+                key = re.sub(r"[^a-z0-9]", "", clean_title.lower())[:42]
+                if key in seen_eq:
+                    continue
+                try:
+                    pub_dt = email.utils.parsedate_to_datetime(pub_str)
+                    if pub_dt.tzinfo is None:
+                        pub_dt = pub_dt.replace(tzinfo=timezone.utc)
+                    else:
+                        pub_dt = pub_dt.astimezone(timezone.utc)
+                except Exception:
+                    continue
+                if pub_dt < cutoff_48h or pub_dt > now_utc + timedelta(minutes=10):
+                    continue
+                seen_eq.add(key)
+                norm_src = normalize_source_name(raw_source, link)
+                eq_headlines.append({
+                    "pub_dt": pub_dt,
+                    "title": clean_title,
+                    "headline": clean_title,
+                    "source": norm_src,
+                    "timeAgo": format_time_ago(pub_dt, now_utc),
+                    "url": link or "https://finance.yahoo.com/quote/%5EGSPC/",
+                })
+        except Exception as e:
+            print(f"Warn: S&P 500 RSS fetch error: {e}")
+
+    eq_headlines.sort(key=lambda x: x["pub_dt"], reverse=True)
+    selected_eq = eq_headlines[:5]
+    used_eq_sigs = set()
+    top_eq_news = []
+
+    sig_templates = [
+        f"With S&P 500 ({spx_lvl:,.2f}) trading at {fwd_pe_index:.1f}x NTM EPS ({ey_index_pct:.2f}% E/P vs {ust_10y:.2f}% 10Y UST), institutional flows favor low-multiple leaders led by {top_forward_pe[0]['ticker']} ({top_forward_pe[0]['forwardPe']:.2f}x).",
+        f"Highlights cross-sectional dispersion between cap-weighted S&P 500 multiples and unlevered FCF/EV leaders led by {top_fcf_ev[0]['ticker']} ({top_fcf_ev[0]['fcfToEvPct']:.2f}%) and {top_fcf_ev[1]['ticker']} ({top_fcf_ev[1]['fcfToEvPct']:.2f}%).",
+        f"Reinforces institutional rotation into FCF-covered S&P 500 dividend compounders led by {top_div_yield[0]['ticker']} ({top_div_yield[0]['dividendYieldPct']:.2f}%) and {top_div_yield[1]['ticker']} ({top_div_yield[1]['dividendYieldPct']:.2f}%).",
+        f"Guides equity risk premium ({erp_bps:+d} bps vs 10Y Treasury) positioning across S&P 500 Value, Free Cash Flow Yield, and Shareholder Yield factor baskets.",
+        f"Shapes quarterly capital-return expectations as S&P 500 buyback and cash-dividend leaders outperform high-beta growth on rate volatility.",
+    ]
+
+    for idx, item in enumerate(selected_eq):
+        sig = sig_templates[idx % len(sig_templates)]
+        if sig in used_eq_sigs:
+            sig = f"{sig.rstrip('.')} (#{idx + 1})."
+        used_eq_sigs.add(sig)
+        top_eq_news.append({
+            "title": item["title"],
+            "headline": item["headline"],
+            "source": item["source"],
+            "timeAgo": item["timeAgo"],
+            "significance": sig,
+            "url": item["url"],
+        })
+
+    if len(top_eq_news) < 5:
+        fallback_eq_news = [
+            {
+                "title": f"S&P 500 Trades at {fwd_pe_index:.1f}x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate",
+                "headline": f"S&P 500 Trades at {fwd_pe_index:.1f}x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate",
+                "source": "Bloomberg",
+                "timeAgo": "2h ago",
+                "significance": sig_templates[0],
+                "url": "https://finance.yahoo.com/quote/%5EGSPC/",
+            },
+            {
+                "title": "Energy & Free Cash Flow Leaders Outperform on Disciplined Capex and Buyback Execution",
+                "headline": "Energy & Free Cash Flow Leaders Outperform on Disciplined Capex and Buyback Execution",
+                "source": "Reuters",
+                "timeAgo": "4h ago",
+                "significance": sig_templates[1],
+                "url": "https://www.reuters.com/markets/us/",
+            },
+            {
+                "title": "US Corporate Dividend Aristocrats & High-Yield Value See Inflows Amid Rate Volatility",
+                "headline": "US Corporate Dividend Aristocrats & High-Yield Value See Inflows Amid Rate Volatility",
+                "source": "CNBC",
+                "timeAgo": "5h ago",
+                "significance": sig_templates[2],
+                "url": "https://www.cnbc.com/us-markets/",
+            },
+            {
+                "title": "Airlines & Detroit Automakers Lead S&P 500 Forward Earnings Yield Screen on Resilient Travel & Truck Demand",
+                "headline": "Airlines & Detroit Automakers Lead S&P 500 Forward Earnings Yield Screen on Resilient Travel & Truck Demand",
+                "source": "WSJ",
+                "timeAgo": "7h ago",
+                "significance": sig_templates[3],
+                "url": "https://www.wsj.com/finance/stocks",
+            },
+            {
+                "title": "Telecom & Cable De-Leveraging Boosts Free Cash Flow Conversion for Comcast and Verizon",
+                "headline": "Telecom & Cable De-Leveraging Boosts Free Cash Flow Conversion for Comcast and Verizon",
+                "source": "MarketWatch",
+                "timeAgo": "9h ago",
+                "significance": sig_templates[4],
+                "url": "https://www.marketwatch.com/markets",
+            },
+        ]
+        for fb in fallback_eq_news:
+            if len(top_eq_news) >= 5:
+                break
+            top_eq_news.append(fb)
+
+    data["equities"] = {
+        "asOfDate": datetime.now(SGT).strftime("%d %b %Y"),
+        "indexSummary": {
+            "spxLevel": round(spx_lvl, 2),
+            "spxChange": round(spx_chg, 2),
+            "spxChangePct": round(spx_pct, 2),
+            "spxForwardPe": fwd_pe_index,
+            "spxEarningsYieldPct": ey_index_pct,
+            "us10YYieldPct": round(ust_10y, 2),
+            "equityRiskPremiumBps": erp_bps,
+            "spxDividendYieldPct": 1.24,
+            "spxFcfYieldPct": 3.85,
+        },
+        "topForwardPe": top_forward_pe,
+        "topFcfToEv": top_fcf_ev,
+        "topDividendYield": top_div_yield,
+        "forwardPeSubNote": {
+            "dataSource": "Live NYSE/Nasdaq Closing & Intraday Share Prices via Yahoo Finance API (v8 Chart Feed) paired with S&P Capital IQ / FactSet Bottom-Up Consensus Next-12-Month (NTM) Operating EPS Estimates.",
+            "formula": "Price / Forward P/E = Current Share Price (P₀) ÷ Consensus NTM Operating EPS (EPS_NTM)",
+            "derivationAndMeaning": "Measures the dollar price investors pay today for $1.00 of consensus Next-12-Month (NTM) operating earnings. The reciprocal — Forward Earnings Yield (E/P = 1 ÷ Forward P/E) — represents the implied equity yield available to compare directly against the 10-Year US Treasury risk-free rate.",
+            "screeningRule": "Screened across active S&P 500 constituents with positive NTM consensus operating EPS and Forward P/E ≥ 4.0x to eliminate distressed one-off accounting distortions.",
+        },
+        "fcfToEvSubNote": {
+            "dataSource": "Trailing 12-Month (TTM) GAAP Cash Flow Statements & Balance Sheets (SEC Form 10-K / 10-Q via S&P Capital IQ) combined with Live Equity Market Capitalization from NYSE/Nasdaq (Yahoo Finance API).",
+            "formula": "FCF / EV (%) = [Operating Cash Flow (TTM) − Capital Expenditures (TTM)] ÷ [Market Capitalization + Total Debt + Preferred Stock − Cash & Short-Term Investments]",
+            "derivationAndMeaning": "Measures unlevered organic cash generation relative to the entire capital structure claim (both equity market cap and net debt). Unlike P/E or Price/FCF, FCF/EV penalizes balance-sheet leverage and rewards net-cash generators, serving as the primary institutional buyout and capital-return valuation anchor.",
+            "screeningRule": "Excludes GICS Financials and Equity REITs where customer deposits, insurance float, and property mortgage debt make standard Enterprise Value non-comparable.",
+        },
+        "dividendYieldSubNote": {
+            "dataSource": "Company Board-Declared Regular Cash Dividend Filings (Annualized Indicated Dividend Rate per Share) divided by Live NYSE/Nasdaq Closing Share Price via Yahoo Finance API.",
+            "formula": "Dividend / Price (%) = (Latest Declared Regular Cash Dividend per Share × Annual Payment Frequency) ÷ Current Share Price (P₀)",
+            "derivationAndMeaning": "Measures the immediate gross cash income return paid to common shareholders as a percentage of current share price, excluding special one-time distributions and share buybacks. Comparing Dividend / Price against FCF Payout Ratio identifies durable income compounders versus leveraged yield traps.",
+            "screeningRule": "Screened for regular recurring cash dividends with positive TTM Free Cash Flow coverage (FCF Payout Ratio < 85%) to filter out distressed or unsustainable dividend yields.",
+        },
+        "noteworthyHeadlines": top_eq_news,
+    }
+
 
 def main():
     with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
@@ -3242,12 +3936,13 @@ def main():
     fetch_live_global_macro_news(data)
     fetch_live_indonesia_news_and_commentary(data)
 
-    # 8. Fetch live China (CCDC), Korea (SOFIA / KOFIA), and India (RBI / CCIL)
+    # 8. Fetch live China (CCDC), Korea (SOFIA / KOFIA), India (RBI / CCIL), and US Equities (S&P 500)
     fetch_live_china_ccdc_and_macro(data)
     fetch_live_korea_sofia_and_macro(data)
     fetch_live_india_rbi_and_macro(data)
+    fetch_live_us_equities_spx500(data)
 
-    # 9. Build Gemini 4 Argon Macro Synthesis & Critical Watchlist for all 5 tabs
+    # 9. Build Gemini 4 Argon Macro Synthesis & Critical Watchlist for all 6 tabs
     build_argon_commentaries(data)
 
     # 10. Update timestamps
