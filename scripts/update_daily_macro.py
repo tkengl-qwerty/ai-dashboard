@@ -631,75 +631,140 @@ def fetch_ceic_srbi(existing_data: dict):
 
 
 def is_macro_relevant_headline(title: str) -> bool:
-    """Ensure every global news headline is genuinely macro, central bank, rates, FX, commodities, or market-moving."""
+    """Ensure every global news headline is genuinely macro, central bank, rates, FX, commodities, or high-impact political-economic."""
     lower = title.lower()
     exclude_words = [
         "olive oil", "shake shack", "wendy's", "peloton", "horoscope", "uber food", "prime subscribers",
         "bomb hoax", "passenger flights", "sports", "nfl", "nba", "recipe", "lottery",
         "biggest moves premarket", "biggest moves midday", "here are thursday's", "here are wednesday's",
+        "here are monday's", "here are tuesday's", "here are friday's",
         "local election", "anc battered", "municipal election",
         "check out ", "stock price", "in real time", "profile and biography", "ucits etf",
         "mutual fund", "victory celebrations", "farms", "| stock price", "latest news",
         "in pictures:", "knicks", "cavaliers", "suns", "rockets", "lakers", "warriors", "celtics",
         "imprisoned", "recruitment", "delegate count", "party congress",
-        "page 2 of", "page 1 of", "professional services",
+        "page 2 of", "page 1 of", "professional services", "celebrity", "box office", "grammy",
     ]
     if any(w in lower for w in exclude_words):
         return False
 
     macro_pattern = re.compile(
         r"\b("
-        r"fed|federal reserve|powell|hammack|fomc|interest rate|rates|central bank|ecb|boe|boj|rba|pboc|"
+        r"fed|federal reserve|powell|hammack|waller|bowman|goolsbee|fomc|interest rate|rates|central bank|ecb|boe|boj|rba|pboc|"
         r"treasury|treasuries|yield|yields|bond|bonds|gilts|bund|debt|deficit|fiscal|refunding|"
-        r"inflation|cpi|pce|lending|credit|banking|gdp|economy|economic|recession|"
+        r"inflation|cpi|pce|lending|credit|banking|gdp|economy|economic|recession|jobs|payrolls|unemployment|"
         r"wall st|wall street|stocks|s&p|nasdaq|dow jones|equities|market|markets|rally|slump|sell-off|"
         r"dollar|dxy|currency|currencies|forex|yuan|yen|euro|sterling|"
-        r"oil|crude|brent|wti|opec|gold|silver|copper|energy|"
-        r"tariff|tariffs|trade|midterm|midterms|congress|senate|qualcomm|nvidia|semiconductor"
+        r"oil|crude|brent|wti|opec|gold|silver|copper|energy|lng|"
+        r"tariff|tariffs|trade|sanctions|export control|white house|trump|bessent|congress|senate|budget|tax|debt ceiling|"
+        r"geopolitical|g7|g20|imf|world bank|qualcomm|nvidia|semiconductor"
         r")\b",
         re.I,
     )
     return bool(macro_pattern.search(title))
 
 
-def build_global_story_analysis(title: str, source: str, raw_desc: str, data: dict):
-    """Build a unique, non-repetitive summary and macro takeaway tailored to the specific headline."""
+def get_global_topic_cluster(title: str) -> str:
+    """Group global macro headlines by event cluster so a single story never dominates multiple Top 10 slots."""
+    low = title.lower()
+    if any(k in low for k in ["tariff", "trade war", "trade deal", "export control", "customs", "duties"]):
+        return "glob_trade_tariffs"
+    if any(k in low for k in ["powell", "fomc", "federal reserve", "fed's", "fed ", "rate cut", "rate hike", "hammack", "waller", "goolsbee"]):
+        return "glob_fed_policy"
+    if any(k in low for k in ["ecb", "bank of england", "boe", "bank of japan", "boj", "rba"]):
+        return "glob_g10_cb"
+    if any(k in low for k in ["cpi", "pce", "inflation", "consumer price", "producer price"]):
+        return "glob_inflation"
+    if any(k in low for k in ["oil", "crude", "brent", "wti", "opec", "energy", "natural gas", "lng"]):
+        return "glob_energy_oil"
+    if any(k in low for k in ["gold", "bullion", "silver", "copper"]):
+        return "glob_precious_metals"
+    if any(k in low for k in ["treasury", "10-year", "bond yield", "yields", "refunding", "debt ceiling", "deficit"]):
+        return "glob_ust_rates"
+    if any(k in low for k in ["white house", "trump", "congress", "senate", "fiscal", "tax", "budget", "sanctions", "deregulation"]):
+        return "glob_us_pol_fiscal"
+    if any(k in low for k in ["payroll", "jobs", "unemployment", "jobless", "labor", "layoff"]):
+        return "glob_labor_market"
+    if any(k in low for k in ["dollar", "dxy", "forex", "yen", "euro", "yuan", "sterling"]):
+        return "glob_fx_dollar"
+    return "glob_" + re.sub(r"[^a-z0-9]", "", low)[:26]
+
+
+def build_global_story_analysis(title: str, source: str, raw_desc: str, data: dict, used_takeaways: set = None, idx: int = 0):
+    """Build a unique, non-repetitive summary and macro/political-economic takeaway tailored to the specific headline."""
+    if used_takeaways is None:
+        used_takeaways = set()
     lower = title.lower()
     yc = data["globalMacro"]["yieldCurve"]
     y10 = next((t["yield"] for t in yc["tenors"] if t["label"] == "10Y"), 4.84)
     y2 = next((t["yield"] for t in yc["tenors"] if t["label"] == "2Y"), 4.47)
     two_ten = yc["spreads"].get("twoTenSpread", 37.0)
 
-    if any(k in lower for k in ["fed", "powell", "hammack", "fomc", "lending", "central bank", "boe", "ecb", "rba", "boj"]):
+    if any(k in lower for k in ["fed", "powell", "hammack", "waller", "goolsbee", "fomc", "lending", "central bank", "boe", "ecb", "rba", "boj"]):
         category = "Fed Policy"
-    elif any(k in lower for k in ["inflation", "cpi", "pce", "oil", "crude", "gold", "price", "tariff", "commodity", "energy"]):
+    elif any(k in lower for k in ["inflation", "cpi", "pce", "oil", "crude", "gold", "price", "commodity", "energy", "opec"]):
         category = "Inflation"
     elif any(k in lower for k in ["job", "payroll", "unemployment", "labor", "wage", "layoff", "hiring"]):
         category = "Labor Market"
-    elif any(k in lower for k in ["treasury", "bond", "yield", "deficit", "debt", "congress", "midterm", "fiscal", "tax", "wall st", "stocks", "s&p", "dow", "nasdaq", "market"]):
+    elif any(k in lower for k in ["tariff", "trade", "sanctions", "white house", "trump", "geopolitics", "ukraine", "middle east", "china", "beijing", "summit", "export control"]):
+        category = "Geopolitics"
+    elif any(k in lower for k in ["treasury", "bond", "yield", "deficit", "debt", "congress", "senate", "midterm", "fiscal", "tax", "budget", "wall st", "stocks", "s&p", "dow", "nasdaq", "market"]):
         category = "Fiscal & Debt"
     else:
         category = "Geopolitics"
 
+    takeaway_candidates = []
+    if any(k in lower for k in ["tariff", "trade", "sanctions", "export control", "duties"]):
+        takeaway_candidates.append(
+            f"Trade and tariff policy shifts drive cross-border inflation breakevens and G10/EM FX risk premia while US10Y trades at {y10:.2f}%."
+        )
+    if any(k in lower for k in ["white house", "trump", "congress", "senate", "fiscal", "tax", "budget", "deficit", "debt"]):
+        takeaway_candidates.append(
+            f"US executive and legislative fiscal policy expectations directly shape Treasury term premia across the 2Y/10Y curve ({two_ten:+.1f} bps)."
+        )
     if any(k in lower for k in ["restrictive", "hike", "hawkish", "sticky", "higher rate", "inflation rises"]):
         impact = "Hawkish"
-        takeaway = f"Keeps front-end US2Y yields anchored near {y2:.2f}% and tempers expectations for aggressive near-term easing."
+        takeaway_candidates.append(
+            f"Keeps front-end US2Y yields anchored near {y2:.2f}% and tempers market pricing for aggressive near-term policy easing."
+        )
     elif any(k in lower for k in ["cut", "dovish", "cool", "ease", "retreat", "lower yield", "cautious on lending"]):
         impact = "Dovish"
-        takeaway = f"Tighter credit standards and moderating price pressures help cap 10Y Treasury yields around {y10:.2f}% (2Y/10Y at {two_ten:+.1f} bps)."
-    elif any(k in lower for k in ["surge", "jump", "rally", "gain", "climb", "record", "optimism", "beat", "opportunity"]):
+        takeaway_candidates.append(
+            f"Tighter credit standards and moderating price pressures help cap 10Y Treasury yields around {y10:.2f}% (2Y/10Y at {two_ten:+.1f} bps)."
+        )
+    elif any(k in lower for k in ["surge", "jump", "rally", "gain", "climb", "record", "optimism", "beat", "opportunity", "rebound"]):
         impact = "Risk-On"
-        takeaway = f"Bolsters institutional equity positioning and cross-border cyclical rotation while US10Y trades at {y10:.2f}%."
-    elif any(k in lower for k in ["slump", "slide", "slip", "fall", "drop", "tumble", "correction", "cloud", "risk", "sell-off"]):
+        takeaway_candidates.append(
+            f"Bolsters institutional equity positioning and cross-border cyclical rotation while US10Y trades at {y10:.2f}%."
+        )
+    elif any(k in lower for k in ["slump", "slide", "slip", "fall", "drop", "tumble", "correction", "cloud", "risk", "sell-off", "warn", "threat"]):
         impact = "Risk-Off"
-        takeaway = f"Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries ({y2:.2f}%)."
+        takeaway_candidates.append(
+            f"Prompts de-risking in high-beta growth multiples and increases defensive demand for short-duration Treasuries (US2Y at {y2:.2f}%)."
+        )
     else:
         impact = "Neutral"
-        takeaway = f"Desk participants are assessing secondary transmission into the US Treasury curve (10Y {y10:.2f}%) and G10 currency pairs."
+
+    takeaway_candidates.extend([
+        f"Reported by {source}; institutional desks are recalibrating US Treasury curve positioning (2Y {y2:.2f}%, 10Y {y10:.2f}%) and DXY dollar exposure.",
+        f"Tracked by {source}; shapes cross-asset volatility and sovereign term-premium expectations with the 2Y/10Y slope at {two_ten:+.1f} bps.",
+        f"Highlighted by {source}; influences global central bank rate-path expectations and real yield differentials anchored by US10Y at {y10:.2f}%.",
+        f"Monitored by {source}; guides institutional allocation across global equities, G10 FX, and front-end USD funding markets ({y2:.2f}%).",
+        f"Published by {source}; factors into macro hedge fund positioning across inflation breakevens and sovereign fixed income.",
+    ])
+
+    takeaway = takeaway_candidates[0]
+    for cand in takeaway_candidates:
+        if cand not in used_takeaways:
+            takeaway = cand
+            used_takeaways.add(cand)
+            break
+    else:
+        takeaway = f"{takeaway_candidates[0]} (#{idx + 1})"
+        used_takeaways.add(takeaway)
 
     clean_desc = re.sub(r"<[^>]+>", " ", raw_desc)
     clean_desc = re.sub(r"\s+", " ", clean_desc).strip()
-    # Remove trailing publisher suffix from Google News RSS descriptions
     clean_desc = re.sub(r"\s+(Reuters|Bloomberg(?:\.com)?|CNBC|CNN|Financial Times)\s*$", "", clean_desc, flags=re.I).strip()
 
     if len(clean_desc) > len(title) + 25 and not clean_desc.lower().startswith(title.lower()[:35]):
@@ -714,11 +779,12 @@ def build_global_story_analysis(title: str, source: str, raw_desc: str, data: di
 
 
 def is_valid_indonesia_macro_headline(title: str) -> bool:
-    """Strictly require genuine English-language Indonesia macro, BI, OJK, Rupiah, SRBI, IndoGB, or Jakarta market relevance."""
+    """Require English-language Indonesia macro, BI/OJK, Rupiah, sovereign/FDI, or high-impact political-economic relevance."""
     low = title.lower()
     indo_terms = [
         "indonesia", "indonesian", "rupiah", "bank indonesia", "ojk", "ihsg", "idx", "jci",
-        "jakarta", "jisdor", "srbi", "indogb", "danantara", "prabowo", "sbn", "djppr", "forex reserves",
+        "jakarta", "jisdor", "srbi", "indogb", "danantara", "prabowo", "gibran", "sbn",
+        "djppr", "forex reserves", "dpr", "kemenkeu", "bahlil", "airlangga", "sri mulyani",
     ]
     exclude_terms = [
         "why stock market plunged after us midterm",
@@ -738,37 +804,104 @@ def is_valid_indonesia_macro_headline(title: str) -> bool:
         "untuk ",
         "dengan ",
         "dalam ",
+        "bakal keluarkan",
+        "ini alasan",
         "ulama in makassar",
         "asri karya lestari",
+        "hajj and umrah",
+        "film industry",
+        "national hero",
+        "asian cup",
+        "guinness world",
+        "theme song",
+        "sanitation gaps",
+        "visa abuse",
+        "alice huang",
+        "spying on nvidia",
+        "condolence",
+        "like his father",
+        "career: from solo",
+        "electric buses",
     ]
     if any(ex in low for ex in exclude_terms):
         return False
-    return any(k in low for k in indo_terms)
+    if not any(k in low for k in indo_terms):
+        return False
+
+    # Require either economic/financial/investment context OR major executive/parliamentary/constitutional political context
+    econ_or_pol_context = [
+        "economy", "economic", "gdp", "growth", "rupiah", "bank indonesia", "srbi", "jisdor",
+        "indogb", "bond", "yield", "ojk", "bank", "banks", "cyber", "ihsg", "idx", "stocks",
+        "equities", "msci", "reform", "danantara", "investment", "infrastructure", "transport",
+        "trade", "tariff", "export", "reserve", "reserves", "fiscal", "budget", "apbn", "tax",
+        "subsidy", "energy", "transition", "mineral", "nickel", "msme", "marketplace", "telkom",
+        "conflict of interest", "sekuritas", "resign", "resignation", "step down", "steps down",
+        "vice president", "vice-president", "vp ", "constitutional court", "supreme court",
+        "diploma ruling", "dpr ", "house to seek", "wiretap", "cabinet", "state secretary",
+    ]
+    return any(c in low for c in econ_or_pol_context)
 
 
-def score_indonesia_macro_priority(title: str) -> int:
-    """Prioritize institutional BI / FX reserves / DHE export conversion / OJK / GDP stories over generic commentary."""
+def get_indonesia_topic_cluster(title: str) -> str:
+    """Group headlines by underlying story cluster so a single event (e.g., OJK cyber or VP Gibran) never takes >1 slot."""
     low = title.lower()
-    score = 0
-    tier1_terms = [
-        "foreign exchange reserves", "forex reserves", "146.8", "srbi", "rupiah conversion",
-        "export earnings", "export retention", "5.47%", "third quarter", "credibility",
-        "jisdor", "indogb", "financial stability", "cyber",
+    if any(k in low for k in ["gibran", "vice president", "vice-president", "vp ", "resign", "step down", "steps down", "diploma"]):
+        return "pol_vp_gibran"
+    if any(k in low for k in ["wiretap", "wiretapping", "spying probe", "ahrie sonta", "treason"]):
+        return "pol_wiretap_dpr"
+    if any(k in low for k in ["danantara", "padisera", "pandu sjahrir", "supra sekuritas"]):
+        return "swf_danantara"
+    if any(k in low for k in ["austrian investment", "transport infrastructure", "rail, road", "conservation investment", "energy transition"]):
+        return "fdi_infrastructure"
+    if any(k in low for k in ["cyber", "hacking", "suspicious transactions"]):
+        return "ojk_cyber_banks"
+    if any(k in low for k in ["msci", "equity market reform", "demutualization"]):
+        return "idx_msci_reform"
+    if any(k in low for k in ["third quarter", "q3", "5.47%", "picks up pace", "gdp"]):
+        return "macro_gdp"
+    if any(k in low for k in ["rupiah", "credibility", "jisdor", "srbi", "forex reserve", "foreign exchange reserve"]):
+        return "bi_rupiah_fx"
+    # Default unique key per headline
+    return "indo_" + re.sub(r"[^a-z0-9]", "", low)[:24]
+
+
+def score_indonesia_macro_priority(title: str, source: str, pub_dt: datetime, now_utc: datetime) -> float:
+    """Combine recency (<12h / <24h boost), institutional source authority, and macro + political-economic impact."""
+    low = title.lower()
+    score = 0.0
+    age_hours = max(0.0, (now_utc - pub_dt).total_seconds() / 3600.0)
+
+    # Strong recency boost so today's (<24h) developments always beat 1d-2d old stories
+    if age_hours <= 12:
+        score += 10.0
+    elif age_hours <= 24:
+        score += 7.0
+    elif age_hours <= 36:
+        score += 3.5
+    elif age_hours <= 48:
+        score += 1.5
+
+    # Institutional source authority bonus
+    src_low = (source or "").lower()
+    if any(s in src_low for s in ["reuters", "financial times", "bloomberg", "antara", "jakarta post", "jakarta globe", "tempo", "nikkei"]):
+        score += 4.0
+
+    # High-impact macro, sovereign, FDI, and political-economic keywords
+    high_impact = [
+        "bank indonesia", "rupiah", "srbi", "jisdor", "indogb", "forex reserves", "foreign exchange reserves",
+        "danantara", "investment", "infrastructure", "msci", "equity market reform",
+        "vice president", "vice-president", "gibran", "resign", "step down", "prabowo",
+        "constitutional court", "dpr", "ojk", "gdp", "economy",
     ]
-    tier2_terms = [
-        "bank indonesia", "ojk", "gdp", "rupiah", "danantara", "demutualization", "ihsg", "jakarta stocks",
-    ]
-    for term in tier1_terms:
+    for term in high_impact:
         if term in low:
-            score += 5
-    for term in tier2_terms:
-        if term in low:
-            score += 2
+            score += 2.5
+
     return score
 
 
 def build_indonesia_significance(title: str, source: str, idx: int, data: dict, used_sigs: set) -> str:
-    """Generate a distinct, headline-specific market significance for each Indonesia disclosure."""
+    """Generate a distinct, headline-specific market & political-economic significance for each Indonesia disclosure."""
     low = title.lower()
     spot = data["indonesia"]["fxAndNdf"].get("spotRate", 18080)
     jisdor = data["indonesia"]["fxAndNdf"].get("jisdorRate", 18130)
@@ -777,6 +910,26 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
     srbi_12m = next((s["weightedAvgYield"] for s in data["indonesia"]["bonds"]["srbi"] if s["tenor"] == "12M"), 6.675)
 
     candidates = []
+    if any(k in low for k in ["gibran", "vice president", "vice-president", "resign", "step down", "steps down", "diploma"]):
+        candidates.append(
+            f"High-profile executive and constitutional development closely watched by foreign institutional desks for cabinet policy continuity, sovereign risk premia on 10Y FR0108 IndoGBs ({indo_10y:.2f}%), and onshore USD/IDR ({spot:,.0f}) stability."
+        )
+    if any(k in low for k in ["dpr", "wiretap", "wiretapping", "house to seek", "parliament"]):
+        candidates.append(
+            f"Parliamentary (DPR) oversight and executive security inquiries influence domestic political-risk sentiment across Jakarta equities (IHSG {ihsg:,.2f}) and sovereign credit spreads."
+        )
+    if any(k in low for k in ["danantara", "padisera", "pandu sjahrir", "supra sekuritas", "msme"]):
+        candidates.append(
+            f"Advances sovereign wealth fund Danantara's institutional governance and digital SOE deployment (Telkom/MSMEs), supporting medium-term capital market depth (IHSG {ihsg:,.2f})."
+        )
+    if any(k in low for k in ["austrian investment", "transport infrastructure", "rail, road", "conservation investment", "energy transition"]):
+        candidates.append(
+            f"Bolsters bilateral foreign direct investment (FDI) into Indonesian transport and green infrastructure, strengthening the capital account buffer supporting USD/IDR near {spot:,.0f}."
+        )
+    if any(k in low for k in ["msci", "equity market reform", "demutualization"]):
+        candidates.append(
+            f"Structural IDX/OJK equity market reforms address free-float and investability criteria to defend Indonesia's MSCI EM index weight and catalyze foreign inflows into IHSG ({ihsg:,.2f})."
+        )
     if "reserve" in low or "146.8" in low or "forex" in low:
         candidates.append(
             f"Reinforces Bank Indonesia's US$146.8B external reserve buffer to defend JISDOR (Rp {jisdor:,.0f}) alongside the 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%)."
@@ -785,13 +938,9 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
         candidates.append(
             f"Mandatory onshore conversion of natural resource export proceeds (DHE SDA) structurally deepens domestic USD liquidity and anchors spot USD/IDR near {spot:,.0f}."
         )
-    if "ojk" in low or "cyber" in low or "fines" in low or "p2p" in low or "islamic banking" in low or "reform" in low:
+    if "ojk" in low or "cyber" in low or "fines" in low or "p2p" in low or "islamic banking" in low:
         candidates.append(
-            f"Strengthens OJK prudential supervision and institutional governance across Indonesian banks and capital markets (IHSG {ihsg:,.2f})."
-        )
-    if "demutualization" in low or "danantara" in low or "smart cities" in low or "governance" in low:
-        candidates.append(
-            "Advances structural investment and sovereign wealth deployment under Danantara, supporting medium-term infrastructure and capital market depth."
+            f"Strengthens OJK prudential supervision and operational resilience across Indonesian commercial banks and domestic money markets (IHSG {ihsg:,.2f})."
         )
     if "gdp" in low or "growth" in low or "economy" in low or "5.47%" in low or "third quarter" in low or "purchasing power" in low:
         candidates.append(
@@ -805,8 +954,8 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
     candidates.extend([
         f"Reported by {source}; shapes onshore institutional allocation across Jakarta equities (IHSG {ihsg:,.2f}) and Rupiah money markets.",
         f"Tracked by {source}; influences foreign portfolio flows into DJPPR benchmark FR0108 bonds (10Y at {indo_10y:.2f}%) and FX hedging basis.",
-        f"Monitored by {source}; provides macro context following Bank Indonesia's 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%) and JISDOR (Rp {jisdor:,.0f}).",
-        f"Published by {source}; underscores domestic capital market depth alongside steady USD/IDR spot at {spot:,.0f}.",
+        f"Monitored by {source}; provides macro-political context following Bank Indonesia's 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%) and JISDOR (Rp {jisdor:,.0f}).",
+        f"Published by {source}; underscores domestic capital market and fiscal policy transmission alongside USD/IDR spot at {spot:,.0f}.",
         f"Highlighted by {source}; reflects institutional positioning across Indonesian financials and sovereign fixed income.",
     ])
 
@@ -814,7 +963,9 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
         if sig not in used_sigs:
             used_sigs.add(sig)
             return sig
-    return candidates[0]
+    fallback = f"{candidates[0]} (#{idx + 1})"
+    used_sigs.add(fallback)
+    return fallback
 
 
 def format_time_ago(pub_dt: datetime, now_utc: datetime) -> str:
@@ -822,8 +973,9 @@ def format_time_ago(pub_dt: datetime, now_utc: datetime) -> str:
     mins = diff_sec // 60
     if mins < 60:
         return f"{mins}m ago"
-    hours = mins // 60
-    return f"{min(hours, 12)}h ago"
+    if mins < 1440:
+        return f"{mins // 60}h ago"
+    return f"{mins // 1440}d ago"
 
 
 def normalize_source_name(raw_source: str, url: str = "") -> str:
@@ -858,14 +1010,14 @@ def get_canonical_source_url(source: str, category: str, rss_link: str) -> str:
 
 def fetch_live_global_macro_news(existing_data: dict):
     """
-    Fetch Top 10 Global Macro News from Reuters, Bloomberg, CNBC, and CNN feeds,
-    ordered with most recent at the top (using 12h primary lookback and 36h weekend expansion).
+    Fetch Top 10 Global Macro & Political-Economic News from Reuters, Bloomberg, CNBC, CNN, and Financial Times feeds,
+    ordered with most recent at the top and diversified across macro & geopolitical topic clusters.
     """
     rss_urls = [
-        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:cnn.com)+(Fed+OR+Treasury+OR+inflation+OR+markets+OR+Wall+Street+OR+yields+OR+dollar+OR+oil+OR+gold+OR+economy)+when:12h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:cnn.com+OR+site:ft.com)+(Fed+OR+Treasury+OR+inflation+OR+tariff+OR+%22White+House%22+OR+Congress+OR+sanctions+OR+yields+OR+dollar+OR+oil+OR+economy)+when:12h&hl=en-US&gl=US&ceid=US:en",
         "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258",
         "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
-        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com)+(Federal+Reserve+OR+Treasury+yields+OR+inflation+OR+Wall+Street+OR+tariff+OR+oil+OR+central+bank)+when:36h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:ft.com)+(Federal+Reserve+OR+Treasury+yields+OR+inflation+OR+Wall+Street+OR+tariff+OR+trade+war+OR+fiscal+OR+oil+OR+central+bank)+when:24h&hl=en-US&gl=US&ceid=US:en",
     ]
     now_utc = datetime.now(timezone.utc)
     cutoff_36h = now_utc - timedelta(hours=36)
@@ -916,39 +1068,56 @@ def fetch_live_global_macro_news(existing_data: dict):
                     continue
 
                 seen_titles.add(title_key)
-                category, impact, summary, takeaway = build_global_story_analysis(
-                    clean_title, source, desc_html, existing_data
-                )
-
                 candidates.append({
                     "pub_dt": pub_dt,
+                    "cluster": get_global_topic_cluster(clean_title),
                     "headline": clean_title,
                     "source": source,
+                    "desc_html": desc_html,
                     "timeAgo": format_time_ago(pub_dt, now_utc),
-                    "category": category,
-                    "summary": summary,
-                    "macroTakeaway": takeaway,
-                    "impact": impact,
-                    "url": get_canonical_source_url(source, category, link),
+                    "link": link,
                 })
         except Exception as e:
             print(f"Warn: Global RSS error ({rss_url}): {e}")
 
+    # Sort newest first, with a preference for <24h items and max 2 items per broad topic cluster
     candidates.sort(key=lambda x: x["pub_dt"], reverse=True)
+    selected = []
+    cluster_counts = {}
+    for item in candidates:
+        c = item["cluster"]
+        if cluster_counts.get(c, 0) >= 2:
+            continue
+        cluster_counts[c] = cluster_counts.get(c, 0) + 1
+        selected.append(item)
+        if len(selected) >= 10:
+            break
+    if len(selected) < 10:
+        for item in candidates:
+            if item not in selected:
+                selected.append(item)
+            if len(selected) >= 10:
+                break
 
-    if len(candidates) >= 5:
+    selected.sort(key=lambda x: x["pub_dt"], reverse=True)
+
+    if len(selected) >= 5:
         top_10 = []
-        for idx, item in enumerate(candidates[:10], start=1):
+        used_takeaways = set()
+        for idx, item in enumerate(selected[:10], start=1):
+            category, impact, summary, takeaway = build_global_story_analysis(
+                item["headline"], item["source"], item["desc_html"], existing_data, used_takeaways, idx
+            )
             top_10.append({
                 "id": f"gn-{idx:02d}",
                 "headline": item["headline"],
                 "source": item["source"],
                 "timeAgo": item["timeAgo"],
-                "category": item["category"],
-                "summary": item["summary"],
-                "macroTakeaway": item["macroTakeaway"],
-                "impact": item["impact"],
-                "url": item["url"],
+                "category": category,
+                "summary": summary,
+                "macroTakeaway": takeaway,
+                "impact": impact,
+                "url": get_canonical_source_url(item["source"], category, item["link"]),
             })
         existing_news = existing_data["globalMacro"].get("topNews", [])
         while len(top_10) < 10 and len(existing_news) > len(top_10):
@@ -962,13 +1131,14 @@ def fetch_live_global_macro_news(existing_data: dict):
 
 def fetch_live_indonesia_news_and_commentary(existing_data: dict):
     """
-    Fetch Top 5 Indonesia Market News ordered by macro relevance and recency (with weekend-aware 72h lookback so
-    Friday Bank Indonesia / ANTARA / Jakarta Post disclosures are captured when Jakarta markets are closed),
-    with BOTH `title` and `headline` populated, distinct `significance` per item, and clickable URLs.
+    Fetch Top 5 Indonesia Macro, Central Bank & Political-Economic News ordered by recency-weighted priority
+    and deduplicated by topic cluster so one story never takes multiple slots.
+    Pulls from direct ANTARA News English RSS + Google News Tier-1 & Macro-Political feeds.
     """
     rss_urls = [
-        "https://news.google.com/rss/search?q=(%22Bank+Indonesia%22+OR+%22Rupiah%22+OR+%22IHSG%22+OR+%22IDX+Composite%22+OR+%22OJK%22+OR+%22Indonesia+economy%22+OR+%22Indonesia+GDP%22+OR+%22Danantara%22+OR+%22SRBI%22+OR+%22foreign+exchange+reserves%22)+when:72h&hl=en-ID&gl=ID&ceid=ID:en",
-        "https://news.google.com/rss/search?q=(site:en.antaranews.com+OR+site:thejakartapost.com+OR+site:jakartaglobe.id+OR+site:en.tempo.co)+(Bank+Indonesia+OR+Rupiah+OR+OJK+OR+forex+reserves+OR+export+OR+GDP)+when:72h&hl=en-ID&gl=ID&ceid=ID:en",
+        "https://en.antaranews.com/rss/news.xml",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:ft.com+OR+site:en.antaranews.com+OR+site:thejakartapost.com+OR+site:jakartaglobe.id+OR+site:en.tempo.co)+(Indonesia+OR+Indonesian)+(economy+OR+Rupiah+OR+%22Bank+Indonesia%22+OR+Prabowo+OR+Gibran+OR+%22vice+president%22+OR+Danantara+OR+OJK+OR+investment+OR+infrastructure+OR+fiscal+OR+trade+OR+market+OR+banks)+when:36h&hl=en-ID&gl=ID&ceid=ID:en",
+        "https://news.google.com/rss/search?q=(%22Bank+Indonesia%22+OR+%22Rupiah%22+OR+%22IHSG%22+OR+%22IDX+Composite%22+OR+%22OJK%22+OR+%22Indonesia+economy%22+OR+%22Indonesia+GDP%22+OR+%22Danantara%22+OR+%22Prabowo%22+OR+%22Gibran%22+OR+%22Indonesia+investment%22+OR+%22SRBI%22+OR+%22foreign+exchange+reserves%22)+when:72h&hl=en-ID&gl=ID&ceid=ID:en",
     ]
     now_utc = datetime.now(timezone.utc)
     cutoff_72h = now_utc - timedelta(hours=72)
@@ -1020,7 +1190,8 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
 
                 candidates.append({
                     "pub_dt": pub_dt,
-                    "priority": score_indonesia_macro_priority(clean_title),
+                    "cluster": get_indonesia_topic_cluster(clean_title),
+                    "priority": score_indonesia_macro_priority(clean_title, raw_source, pub_dt, now_utc),
                     "title": clean_title,
                     "headline": clean_title,
                     "source": raw_source,
@@ -1030,9 +1201,28 @@ def fetch_live_indonesia_news_and_commentary(existing_data: dict):
         except Exception as e:
             print(f"Warn: Indonesia RSS error ({rss_url}): {e}")
 
-    # Select top 5 high-impact macro disclosures (Tier 1 BI/FX reserves/DHE/GDP/OJK first), then order selected top 5 by recency
+    # Sort by recency-weighted priority, then deduplicate by topic cluster so each of the 5 slots covers a distinct event
     candidates.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
-    selected_5 = sorted(candidates[:5], key=lambda x: x["pub_dt"], reverse=True)
+    deduped = []
+    used_clusters = set()
+    for item in candidates:
+        if item["cluster"] in used_clusters:
+            continue
+        used_clusters.add(item["cluster"])
+        deduped.append(item)
+        if len(deduped) >= 5:
+            break
+
+    # If fewer than 5 distinct clusters found, backfill from remaining candidates
+    if len(deduped) < 5:
+        for item in candidates:
+            if item not in deduped:
+                deduped.append(item)
+            if len(deduped) >= 5:
+                break
+
+    # Order the chosen 5 headlines strictly newest-first (most recent at #1)
+    selected_5 = sorted(deduped[:5], key=lambda x: x["pub_dt"], reverse=True)
 
     if len(selected_5) >= 3:
         top_5 = []
@@ -1213,7 +1403,7 @@ def fetch_ccdc_curve_for_date(work_time: str = "", yc_def_id: str = "2c9081e50a2
 
 
 def is_valid_china_macro_headline(title: str) -> bool:
-    """Strictly require genuine China macro, PBoC, CCDC/bonds, yuan/FX, trade, or Shanghai/CSI market relevance."""
+    """Strictly require genuine China macro, PBoC, CCDC/bonds, yuan/FX, trade/geopolitics, or Beijing political-economic relevance."""
     low = title.lower()
     exclude_words = [
         "stock price", "check out ", "in pictures", "delegate count", "imprisoned",
@@ -1221,44 +1411,80 @@ def is_valid_china_macro_headline(title: str) -> bool:
         "sedan priced", "solana", "crypto promotion", "crypto news", "lottery",
         "horoscope", "sports", "football", "basketball", "movie", "actor",
         "settlement crisis leaves merchants", "sets the dollar exchange rate",
-        "expected to set the usd/cny reference rate",
+        "expected to set the usd/cny reference rate", "spying on nvidia", "alice huang",
     ]
     if any(w in low for w in exclude_words):
         return False
 
     china_pattern = re.compile(
-        r"\b(china|chinese|pboc|people's bank of china|yuan|renminbi|cnh|cny|beijing|shanghai|sse composite|csi 300|chinabond|ccdc)\b",
+        r"\b(china|chinese|pboc|people's bank of china|yuan|renminbi|cnh|cny|beijing|shanghai|sse composite|csi 300|chinabond|ccdc|xi jinping|state council|npc|mofcom|politburo)\b",
         re.I,
     )
     macro_context_pattern = re.compile(
         r"\b(pboc|central bank|forex|reserve|yuan|renminbi|cnh|cny|fix|fixing|bond|bonds|yield|yields|treasury|"
-        r"rate|rates|lpr|liquidity|stimulus|economy|economic|gdp|cpi|inflation|deflation|trade|tariff|tariffs|"
-        r"exports|imports|sanctions|summit|stocks|equities|sse|shanghai|market|markets|gold|investment|energy|growth|ai)\b",
+        r"rate|rates|lpr|liquidity|stimulus|fiscal|budget|debt swap|local government|state council|politburo|npc|"
+        r"economy|economic|gdp|cpi|inflation|deflation|trade|tariff|tariffs|bessent|greer|trump|"
+        r"exports|imports|sanctions|summit|apec|rare earth|rare earths|export control|property|housing|"
+        r"stocks|equities|sse|shanghai|market|markets|gold|investment|energy|growth|ai|semiconductor|chip)\b",
         re.I,
     )
     return bool(china_pattern.search(title) and macro_context_pattern.search(title))
 
 
-def score_china_macro_priority(title: str, source: str) -> int:
-    """Prioritize PBoC, Yuan/FX reserve rules, CGB bonds, Shanghai stocks, and major institutional macro stories."""
+def get_china_topic_cluster(title: str) -> str:
+    """Group China headlines by underlying topic cluster so no single event occupies multiple slots."""
     low = title.lower()
-    score = 0
-    if source in ("Bloomberg", "Reuters", "WSJ", "Wall Street Journal", "CNBC", "Financial Times", "South China Morning Post", "Caixin Global"):
-        score += 4
+    if any(k in low for k in ["forex reserve", "steady yuan", "yuan fix", "yuan dilemma", "renminbi", "cnh", "cny", "exchange rate"]):
+        return "cn_pboc_yuan_fx"
+    if any(k in low for k in ["gold", "bullion"]):
+        return "cn_pboc_gold"
+    if any(k in low for k in ["tariff", "trade", "bessent", "greer", "sanctions", "rare earth", "export control", "summit", "apec", "trump", "canada", "eu "]):
+        return "cn_trade_geopolitics"
+    if any(k in low for k in ["npc", "state council", "politburo", "stimulus", "fiscal", "debt swap", "local government", "special bond", "property", "housing"]):
+        return "cn_pol_fiscal_stimulus"
+    if any(k in low for k in ["sse composite", "shanghai", "csi 300", "stocks", "equities", "losing streak", "forgotten trades"]):
+        return "cn_onshore_equities"
+    if any(k in low for k in ["bond", "yield", "cgb", "ccdc", "chinabond", "lpr", "repo"]):
+        return "cn_ccdc_bonds_rates"
+    if any(k in low for k in ["cpi", "ppi", "inflation", "deflation", "gdp", "pmi", "industrial"]):
+        return "cn_macro_data"
+    return "cn_" + re.sub(r"[^a-z0-9]", "", low)[:26]
+
+
+def score_china_macro_priority(title: str, source: str, pub_dt: datetime, now_utc: datetime) -> float:
+    """Combine strong recency boost (<12h/<24h), institutional source authority, and macro + political-economic impact."""
+    low = title.lower()
+    score = 0.0
+    age_hours = max(0.0, (now_utc - pub_dt).total_seconds() / 3600.0)
+
+    if age_hours <= 12:
+        score += 12.0
+    elif age_hours <= 24:
+        score += 8.0
+    elif age_hours <= 36:
+        score += 4.5
+    elif age_hours <= 48:
+        score += 2.0
+
+    src_low = (source or "").lower()
+    if any(s in src_low for s in ["bloomberg", "reuters", "wsj", "wall street journal", "cnbc", "financial times", "south china morning post", "scmp", "caixin", "nikkei"]):
+        score += 4.0
+
     tier1 = [
         "pboc", "people's bank of china", "central bank", "forex reserve", "yuan", "renminbi",
-        "bond", "yield", "lpr", "rate", "sse composite", "shanghai rises", "csi 300", "gold purchases",
-        "stimulus", "deflation", "cpi",
+        "bond", "yield", "lpr", "rate", "sse composite", "shanghai", "csi 300", "gold",
+        "stimulus", "fiscal", "state council", "npc", "politburo", "deflation", "cpi",
     ]
     tier2 = [
-        "tariff", "trade deal", "exports", "economy", "growth", "bessent", "rare earths", "energy investment",
+        "tariff", "trade", "exports", "economy", "growth", "bessent", "rare earth",
+        "sanctions", "summit", "xi", "property", "energy investment", "semiconductor",
     ]
     for k in tier1:
         if k in low:
-            score += 5
+            score += 3.5
     for k in tier2:
         if k in low:
-            score += 2
+            score += 2.5
     return score
 
 
@@ -1277,10 +1503,14 @@ def build_china_significance(
     csi_lvl: float,
     used_sigs: set,
 ) -> str:
-    """Generate a distinct, non-duplicated, headline-specific Market Significance for each China macro story."""
+    """Generate a distinct, non-duplicated, headline-specific Market Significance for each China macro & political-economic story."""
     low = title.lower()
     candidates = []
 
+    if any(k in low for k in ["npc", "state council", "politburo", "fiscal", "stimulus", "debt swap", "local government", "property", "housing"]):
+        candidates.append(
+            f"Beijing's fiscal and legislative policy signals directly govern ultra-long special Treasury supply and institutional duration positioning across 10Y ({cgb_10y:.4f}%) and 30Y ({cgb_30y:.4f}%) CCDC CGBs."
+        )
     if any(k in low for k in ["forex reserve", "steady yuan", "yuan fix", "yuan dilemma", "renminbi", "chinese yuan", "cnh", "cny", "exchange rate"]):
         candidates.append(
             f"Directly anchors PBoC daily central parity fixing ({pboc_fixing:.4f}) and narrows the offshore-onshore CNH/CNY basis (CNY {cny_spot:.4f} vs CNH {cnh_spot:.4f}), stabilizing FX-hedged inflows into CCDC ChinaBond CGBs."
@@ -1296,16 +1526,16 @@ def build_china_significance(
         candidates.append(
             f"Drives onshore asset-allocation rotation between domestic equities (Shanghai Composite {ssec_lvl:,.2f}, CSI 300 {csi_lvl:,.2f}) and long-duration 10Y–30Y CCDC CGB benchmarks ({cgb_10y:.4f}%–{cgb_30y:.4f}%)."
         )
-    if any(k in low for k in ["tariff", "trade", "bessent", "greer", "sanctions", "rare earths", "exports", "canada", "apec", "summit", "xi", "trump"]):
+    if any(k in low for k in ["tariff", "trade", "bessent", "greer", "sanctions", "rare earths", "rare earth", "exports", "canada", "apec", "summit", "xi", "trump"]):
         candidates.append(
-            f"Shapes external trade-surplus expectations and exporter USD conversion flows on CFETS (USD/CNY {cny_spot:.4f}), a key driver for PBoC domestic liquidity injections."
+            f"Geopolitical and bilateral trade-tariff dynamics shape China's external surplus and CFETS USD/CNY conversion flows ({cny_spot:.4f}), a primary catalyst for PBoC liquidity and rate calibration."
         )
         candidates.append(
-            f"External tariff and bilateral trade negotiations influence China's industrial export outlook, keeping PBoC policy supportive with 5Y CCDC CGB yields anchored at {cgb_5y:.4f}%."
+            f"External tariff and diplomatic negotiations influence China's industrial export outlook, keeping PBoC policy supportive with 5Y CCDC CGB yields anchored at {cgb_5y:.4f}%."
         )
-    if any(k in low for k in ["ai", "growth", "blue wave", "energy investment", "infrastructure", "stimulus", "fiscal"]):
+    if any(k in low for k in ["ai", "growth", "blue wave", "energy investment", "infrastructure", "semiconductor", "chip"]):
         candidates.append(
-            f"Informs state capex and ultra-long special Treasury issuance demand across the CCDC 30Y CGB ({cgb_30y:.4f}%) and 10Y CDB policy bank curve ({cdb_10y:.3f}%)."
+            f"Informs state strategic capex and policy bank financing demand across the CCDC 30Y CGB ({cgb_30y:.4f}%) and 10Y CDB policy bank curve ({cdb_10y:.3f}%)."
         )
     if any(k in low for k in ["pboc", "people's bank", "rate", "lpr", "repo", "bond", "yield", "ccdc"]):
         candidates.append(
@@ -1330,7 +1560,7 @@ def build_china_significance(
 
 
 def fetch_live_china_ccdc_and_macro(data: dict):
-    """Fetch official CCDC ChinaBond CGB & CDB yield curves, PBoC rates, CNY/CNH, SSEC, CSI 300, and China macro news."""
+    """Fetch official CCDC ChinaBond CGB & CDB yield curves, PBoC rates, CNY/CNH, SSEC, CSI 300, and China macro & political-economic news."""
     ust_10y = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
         4.86,
@@ -1450,11 +1680,12 @@ def fetch_live_china_ccdc_and_macro(data: dict):
     pboc_fixing = round(cny_spot - 0.0025, 4)
     pips_spread = round((cnh_spot - cny_spot) * 10000)
 
-    # Fetch live China macro headlines from institutional and macro feeds
+    # Fetch live China macro & political-economic headlines from institutional feeds (prioritizing <24h/<36h)
     china_headlines = []
     rss_urls = [
-        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:scmp.com+OR+site:wsj.com)+(China+PBOC+OR+China+bonds+OR+China+yields+OR+yuan+OR+renminbi+OR+China+economy+OR+China+exports+OR+China+tariff+OR+Shanghai+stocks)+when:72h&hl=en-US&gl=US&ceid=US:en",
-        "https://news.google.com/rss/search?q=(%22People%27s+Bank+of+China%22+OR+%22PBOC%22+OR+%22Forex+Reserve%22+OR+%22Yuan+Fix%22+OR+%22SSE+Composite%22+OR+%22China+stimulus%22)+when:72h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:scmp.com+OR+site:wsj.com+OR+site:ft.com+OR+site:asia.nikkei.com)+(China+OR+Beijing+OR+PBOC)+(economy+OR+stimulus+OR+fiscal+OR+tariff+OR+trade+OR+yuan+OR+bonds+OR+stocks+OR+%22State+Council%22+OR+NPC+OR+%22rare+earths%22)+when:24h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:scmp.com+OR+site:wsj.com)+(China+PBOC+OR+China+bonds+OR+China+yields+OR+yuan+OR+renminbi+OR+China+economy+OR+China+exports+OR+China+tariff+OR+Shanghai+stocks+OR+China+stimulus)+when:48h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(%22People%27s+Bank+of+China%22+OR+%22PBOC%22+OR+%22Forex+Reserve%22+OR+%22Yuan+Fix%22+OR+%22SSE+Composite%22+OR+%22China+stimulus%22+OR+%22US-China+trade%22)+when:72h&hl=en-US&gl=US&ceid=US:en",
     ]
     now_utc = datetime.now(timezone.utc)
     cutoff_72h = now_utc - timedelta(hours=72)
@@ -1492,7 +1723,8 @@ def fetch_live_china_ccdc_and_macro(data: dict):
                 norm_src = normalize_source_name(raw_source, link)
                 china_headlines.append({
                     "pub_dt": pub_dt,
-                    "priority": score_china_macro_priority(clean_title, norm_src),
+                    "cluster": get_china_topic_cluster(clean_title),
+                    "priority": score_china_macro_priority(clean_title, norm_src, pub_dt, now_utc),
                     "title": clean_title,
                     "headline": clean_title,
                     "source": norm_src,
@@ -1502,9 +1734,25 @@ def fetch_live_china_ccdc_and_macro(data: dict):
         except Exception as e:
             print(f"Warn: China RSS fetch error: {e}")
 
-    # Pick top 5 high-signal China macro stories and sort selected 5 by recency
+    # Sort by recency-weighted priority and deduplicate by topic cluster so each of the 5 slots covers a distinct event
     china_headlines.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
-    selected_cn = sorted(china_headlines[:5], key=lambda x: x["pub_dt"], reverse=True)
+    deduped_cn = []
+    used_cn_clusters = set()
+    for item in china_headlines:
+        if item["cluster"] in used_cn_clusters:
+            continue
+        used_cn_clusters.add(item["cluster"])
+        deduped_cn.append(item)
+        if len(deduped_cn) >= 5:
+            break
+    if len(deduped_cn) < 5:
+        for item in china_headlines:
+            if item not in deduped_cn:
+                deduped_cn.append(item)
+            if len(deduped_cn) >= 5:
+                break
+
+    selected_cn = sorted(deduped_cn[:5], key=lambda x: x["pub_dt"], reverse=True)
 
     used_cn_sigs = set()
     top_cn_news = []
@@ -1677,44 +1925,80 @@ def fetch_live_china_ccdc_and_macro(data: dict):
 
 
 def is_valid_korea_macro_headline(title: str) -> bool:
-    """Strictly require genuine South Korea macro, BOK, KOFIA/SOFIA, KTB bonds, KRW, KOSPI, exports, or financial credit relevance."""
+    """Strictly require genuine South Korea macro, BOK, KOFIA/SOFIA, KTB bonds, KRW, KOSPI, exports, or Seoul political-economic relevance."""
     low = title.lower()
     exclude_words = [
         "stock price", "check out ", "north korea", "k-pop", "pokemon", "pokémon",
         "auction show", "youtube program", "president lee's youtube", "korean won't",
         "charts, data and news", "charts, data & news", "drama", "movie", "baseball",
-        "football", "golf", "celebrity", "lottery",
+        "football", "golf", "celebrity", "lottery", "squid game", "bts", "blackpink",
+        "lipstick", "beauty tech", "cosmetics", "ces ",
     ]
     if any(w in low for w in exclude_words):
         return False
 
     korea_pattern = re.compile(
-        r"\b(south korea|korea|korean|kospi|kosdaq|bok|bank of korea|seoul|ktb|kofia|kofr|samsung|sk hynix|krw)\b",
+        r"\b(south korea|korea|korean|kospi|kosdaq|bok|bank of korea|seoul|ktb|kofia|kofr|samsung|sk hynix|krw|national assembly|moef|fsc|fss)\b",
         re.I,
     )
     macro_context_pattern = re.compile(
         r"\b(bok|bank of korea|central bank|inflation|cpi|rate|rates|yield|yields|bond|bonds|ktb|kofia|kofr|"
         r"kospi|kosdaq|stocks|equities|market|markets|blue chips|foreign selling|rout|rebound|sell-off|rally|"
         r"won|krw|currency|forex|fx|exports|imports|current account|surplus|gdp|economy|economic|"
-        r"semiconductor|chip|chips|ai|loans|lme|savings banks|credit|corporate reforms|value-up)\b",
+        r"semiconductor|chip|chips|ai|loans|lme|savings banks|credit|corporate reforms|value-up|commercial code|"
+        r"budget|fiscal|tax|tariff|tariffs|trade|national assembly|parliament|pension|nps|wgbi|fsc)\b",
         re.I,
     )
     return bool(korea_pattern.search(title) and macro_context_pattern.search(title))
 
 
-def score_korea_macro_priority(title: str, source: str) -> int:
-    """Prioritize BOK, inflation, KTB bonds, KOSPI/semiconductors, credit/loans, and current account stories."""
+def get_korea_topic_cluster(title: str) -> str:
+    """Group Korea headlines by underlying story cluster so no single event occupies multiple slots."""
     low = title.lower()
-    score = 0
-    if source in ("Bloomberg", "Reuters", "WSJ", "The Korea Herald", "The Korea Times", "KED Global", "Seoul Economic Daily", "Yonhap"):
-        score += 4
+    if any(k in low for k in ["kospi", "kosdaq", "stocks", "equities", "seoul shares", "korean shares", "shares soar", "blue chips", "foreign selling", "rout", "rebound", "rollercoaster", "sell-off"]):
+        return "kr_kospi_equities"
+    if any(k in low for k in ["inflation", "cpi", "bok", "bank of korea", "base rate", "rate cut", "rate hold"]):
+        return "kr_bok_inflation"
+    if any(k in low for k in ["current account", "surplus", "exports", "semiconductor", "chip", "samsung", "hynix"]):
+        return "kr_chips_exports"
+    if any(k in low for k in ["tariff", "trade deal", "trump", "u.s.", "us-korea", "defense", "subsidy"]):
+        return "kr_us_trade_geopolitics"
+    if any(k in low for k in ["national assembly", "budget", "fiscal", "tax", "commercial code", "value-up", "corporate reform", "pension", "nps"]):
+        return "kr_pol_fiscal_reform"
+    if any(k in low for k in ["loans", "lme", "savings banks", "credit", "project financing", "pf ", "household debt"]):
+        return "kr_credit_loans"
+    if any(k in low for k in ["won", "krw", "forex", "fx", "ktb", "wgbi", "bond"]):
+        return "kr_krw_ktb_bonds"
+    return "kr_" + re.sub(r"[^a-z0-9]", "", low)[:26]
+
+
+def score_korea_macro_priority(title: str, source: str, pub_dt: datetime, now_utc: datetime) -> float:
+    """Combine strong recency boost (<12h/<24h), institutional source authority, and macro + political-economic impact."""
+    low = title.lower()
+    score = 0.0
+    age_hours = max(0.0, (now_utc - pub_dt).total_seconds() / 3600.0)
+
+    if age_hours <= 12:
+        score += 12.0
+    elif age_hours <= 24:
+        score += 8.0
+    elif age_hours <= 36:
+        score += 4.5
+    elif age_hours <= 48:
+        score += 2.0
+
+    src_low = (source or "").lower()
+    if any(s in src_low for s in ["bloomberg", "reuters", "wsj", "korea herald", "korea times", "ked global", "seoul economic", "yonhap", "pulse", "nikkei", "cnbc"]):
+        score += 4.0
+
     tier1 = [
-        "bank of korea", "inflation", "current account", "kospi", "semiconductor", "chip",
-        "loans", "savings banks", "foreign selling", "corporate reforms", "bond", "ktb", "won",
+        "bank of korea", "bok", "inflation", "current account", "kospi", "semiconductor", "chip",
+        "loans", "savings banks", "foreign selling", "corporate reforms", "value-up", "commercial code",
+        "budget", "fiscal", "tariff", "trade", "bond", "ktb", "won", "wgbi",
     ]
     for k in tier1:
         if k in low:
-            score += 4
+            score += 3.5
     return score
 
 
@@ -1733,10 +2017,18 @@ def build_korea_significance(
     kospi_lvl: float,
     used_sigs: set,
 ) -> str:
-    """Generate a distinct, non-duplicated, headline-specific Market Significance for each Korea macro story."""
+    """Generate a distinct, non-duplicated, headline-specific Market Significance for each Korea macro & political-economic story."""
     low = title.lower()
     candidates = []
 
+    if any(k in low for k in ["national assembly", "budget", "fiscal", "tax", "commercial code", "value-up", "corporate reform", "fsc"]):
+        candidates.append(
+            f"Legislative and fiscal policy developments in Seoul shape KTB issuance supply expectations (10Y KTB at {ktb_10y:.3f}%) and Corporate Value-Up governance re-rating across KOSPI ({kospi_lvl:,.2f})."
+        )
+    if any(k in low for k in ["tariff", "trade deal", "u.s.", "us-korea", "trump", "subsidy"]):
+        candidates.append(
+            f"Bilateral US-Korea trade and tariff negotiations directly impact Korean automotive and chip export margins, driving USD/KRW (₩{krw_spot:,.2f}) and foreign KOSPI positioning."
+        )
     if any(k in low for k in ["inflation", "cpi", "price", "above target", "bok", "bank of korea", "rate"]):
         candidates.append(
             f"Reinforces the Bank of Korea's cautious calibration with the Base Rate at {bok_base:.2f}% and KOFR/SOFIA overnight repo at {kofr_rate:.3f}%, anchoring 3Y KTB yields near {ktb_3y:.3f}%."
@@ -1782,7 +2074,7 @@ def build_korea_significance(
 
 
 def fetch_live_korea_sofia_and_macro(data: dict):
-    """Fetch KOFIA / SOFIA Korea Treasury Bond (KTB) yields, KOFR/CD/Call/Corp AA- money rates, USD/KRW, KOSPI, and Korea news."""
+    """Fetch KOFIA / SOFIA Korea Treasury Bond (KTB) yields, KOFR/CD/Call/Corp AA- money rates, USD/KRW, KOSPI, and Korea macro & political-economic news."""
     ust_10y = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
         4.86,
@@ -1926,11 +2218,12 @@ def fetch_live_korea_sofia_and_macro(data: dict):
 
     ndf_1m = round(krw_spot - 2.24, 2)
 
-    # 3. Fetch live Korea macro headlines with strict filtering & distinct Market Significance per item
+    # 3. Fetch live Korea macro & political-economic headlines with recency boost & topic-cluster deduplication
     korea_headlines = []
     rss_urls = [
-        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:wsj.com+OR+site:en.yna.co.kr+OR+site:koreaherald.com+OR+site:koreatimes.co.kr+OR+site:kedglobal.com)+(Bank+of+Korea+OR+KOSPI+OR+Korean+won+OR+Korea+bonds+OR+Korea+economy+OR+Korea+exports+OR+Korea+inflation+OR+Korea+rates)+when:72h&hl=en-US&gl=US&ceid=US:en",
-        "https://news.google.com/rss/search?q=(%22Bank+of+Korea%22+OR+%22South+Korea+Inflation%22+OR+%22KOSPI%22+OR+%22South+Korea%E2%80%99s+Market%22+OR+%22Korean+Stocks%22+OR+%22Savings+Banks%22)+when:48h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:wsj.com+OR+site:en.yna.co.kr+OR+site:koreaherald.com+OR+site:koreatimes.co.kr+OR+site:kedglobal.com+OR+site:pulsenews.co.kr)+(%22South+Korea%22+OR+Korea+OR+Seoul)+(economy+OR+KOSPI+OR+%22Bank+of+Korea%22+OR+won+OR+tariff+OR+budget+OR+fiscal+OR+exports+OR+semiconductor+OR+%22Value-Up%22+OR+%22National+Assembly%22)+when:24h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:wsj.com+OR+site:en.yna.co.kr+OR+site:koreaherald.com+OR+site:koreatimes.co.kr+OR+site:kedglobal.com)+(Bank+of+Korea+OR+KOSPI+OR+Korean+won+OR+Korea+bonds+OR+Korea+economy+OR+Korea+exports+OR+Korea+inflation+OR+Korea+rates+OR+Korea+tariff)+when:72h&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=(%22Bank+of+Korea%22+OR+%22South+Korea+Inflation%22+OR+%22KOSPI%22+OR+%22Korean+Stocks%22+OR+%22Savings+Banks%22+OR+%22South+Korea+exports%22+OR+%22Korea+Value-Up%22)+when:48h&hl=en-US&gl=US&ceid=US:en",
     ]
     now_utc = datetime.now(timezone.utc)
     cutoff_72h = now_utc - timedelta(hours=72)
@@ -1968,7 +2261,8 @@ def fetch_live_korea_sofia_and_macro(data: dict):
                 norm_src = normalize_source_name(raw_source, link)
                 korea_headlines.append({
                     "pub_dt": pub_dt,
-                    "priority": score_korea_macro_priority(clean_title, norm_src),
+                    "cluster": get_korea_topic_cluster(clean_title),
+                    "priority": score_korea_macro_priority(clean_title, norm_src, pub_dt, now_utc),
                     "title": clean_title,
                     "headline": clean_title,
                     "source": norm_src,
@@ -1978,8 +2272,25 @@ def fetch_live_korea_sofia_and_macro(data: dict):
         except Exception as e:
             print(f"Warn: Korea RSS fetch error: {e}")
 
+    # Sort by recency-weighted priority and deduplicate by topic cluster so each of the 5 slots covers a distinct event
     korea_headlines.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
-    selected_kr = sorted(korea_headlines[:5], key=lambda x: x["pub_dt"], reverse=True)
+    deduped_kr = []
+    used_kr_clusters = set()
+    for item in korea_headlines:
+        if item["cluster"] in used_kr_clusters:
+            continue
+        used_kr_clusters.add(item["cluster"])
+        deduped_kr.append(item)
+        if len(deduped_kr) >= 5:
+            break
+    if len(deduped_kr) < 5:
+        for item in korea_headlines:
+            if item not in deduped_kr:
+                deduped_kr.append(item)
+            if len(deduped_kr) >= 5:
+                break
+
+    selected_kr = sorted(deduped_kr[:5], key=lambda x: x["pub_dt"], reverse=True)
 
     used_kr_sigs = set()
     top_kr_news = []
@@ -2154,45 +2465,82 @@ def fetch_live_korea_sofia_and_macro(data: dict):
 
 
 def is_valid_india_macro_headline(title: str) -> bool:
-    """Strictly require genuine India macro, RBI, CCIL/G-Sec bonds, INR, Nifty/Sensex, inflation, or trade relevance."""
+    """Strictly require genuine India macro, RBI, CCIL/G-Sec bonds, INR, Nifty/Sensex, inflation, or New Delhi political-economic relevance."""
     low = title.lower()
     exclude_words = [
         "stock price", "check out ", "cricket", "bollywood", "ipl", "horoscope",
         "lottery", "share price target", "multibagger", "penny stock", "astrology",
-        "celebrity", "wedding", "box office", "Section 35A", "sahakara bank",
-        "co-operative bank", "taliban sanctions", "al-qaida sanctions",
+        "celebrity", "wedding", "box office", "section 35a", "sahakara bank",
+        "co-operative bank", "taliban sanctions", "al-qaida sanctions", "t20", "rohit", "kohli",
     ]
     if any(w in low for w in exclude_words):
         return False
 
     india_pattern = re.compile(
-        r"\b(india|indian|rbi|reserve bank of india|rupee|inr|g-sec|sensex|nifty|mumbai|new delhi|sebi|ccil|fbil|mospi|nbfc)\b",
+        r"\b(india|indian|rbi|reserve bank of india|rupee|inr|g-sec|sensex|nifty|mumbai|new delhi|sebi|ccil|fbil|mospi|nbfc|modi|sitharaman|union cabinet)\b",
         re.I,
     )
     macro_context_pattern = re.compile(
         r"\b(rbi|reserve bank|repo|reverse repo|vrr|vrrr|laf|sdf|msf|liquidity|monetary|rate|rates|"
         r"g-sec|government stock|treasury bill|t-bill|t-bills|bond|bonds|yield|yields|auction|"
-        r"inflation|cpi|wpi|gdp|economy|economic|growth|fiscal|deficit|forex|reserve|reserves|statistical supplement|"
-        r"rupee|inr|currency|fx|sensex|nifty|stocks|equities|market|markets|fpi|inflows|outflows|credit|banks|banking|trade|exports)\b",
+        r"inflation|cpi|wpi|gdp|economy|economic|growth|fiscal|deficit|budget|capex|pli|gst|tax|"
+        r"forex|reserve|reserves|statistical supplement|rupee|inr|currency|fx|"
+        r"sensex|nifty|stocks|equities|market|markets|fpi|inflows|outflows|sebi|credit|banks|banking|"
+        r"trade|tariff|tariffs|exports|imports|cabinet|ministry|bilateral|fta|energy|oil|investment)\b",
         re.I,
     )
     return bool(india_pattern.search(title) and macro_context_pattern.search(title))
 
 
-def score_india_macro_priority(title: str, source: str) -> int:
-    """Prioritize RBI monetary policy, G-Sec/T-Bill auctions, CPI inflation, Forex Reserves, Rupee, and Nifty/Sensex macro."""
+def get_india_topic_cluster(title: str) -> str:
+    """Group India headlines by underlying topic cluster so no single event occupies multiple slots."""
     low = title.lower()
-    score = 0
-    if source in ("RBI Official RSS", "Reuters", "Bloomberg", "Economic Times", "Mint", "Business Standard", "NDTV Profit", "The Hindu"):
-        score += 4
+    if any(k in low for k in ["variable rate", "vrr", "vrrr", "laf", "treasury bill", "t-bill", "government stock", "cut-off", "weekly statistical supplement"]):
+        return "in_rbi_official_ops"
+    if any(k in low for k in ["rupee", "inr", "forex reserve", "foreign exchange reserve", "fbil", "dollar"]):
+        return "in_rupee_fx_reserves"
+    if any(k in low for k in ["inflation", "cpi", "wpi", "food price", "mpc", "repo rate", "monetary policy"]):
+        return "in_cpi_mpc_rates"
+    if any(k in low for k in ["nifty", "sensex", "stocks", "equities", "fpi", "foreign investors", "sebi"]):
+        return "in_equities_fpi_sebi"
+    if any(k in low for k in ["tariff", "trade deal", "trade talks", "trade facilitation", "customs", "fta", "bilateral", "india-us", "us-india", "exports", "u.s.", "trump"]):
+        return "in_trade_tariffs"
+    if any(k in low for k in ["cabinet", "modi", "sitharaman", "budget", "fiscal", "capex", "pli", "gst", "tax", "infrastructure"]):
+        return "in_pol_fiscal_cabinet"
+    if any(k in low for k in ["g-sec", "bond yield", "sovereign bond", "ccil", "far "]):
+        return "in_gsec_bonds"
+    if any(k in low for k in ["bank", "banking", "nbfc", "credit", "loans", "lending"]):
+        return "in_banking_credit"
+    return "in_" + re.sub(r"[^a-z0-9]", "", low)[:26]
+
+
+def score_india_macro_priority(title: str, source: str, pub_dt: datetime, now_utc: datetime) -> float:
+    """Combine strong recency boost (<12h/<24h), institutional source authority, and macro + political-economic impact."""
+    low = title.lower()
+    score = 0.0
+    age_hours = max(0.0, (now_utc - pub_dt).total_seconds() / 3600.0)
+
+    if age_hours <= 12:
+        score += 12.0
+    elif age_hours <= 24:
+        score += 8.0
+    elif age_hours <= 36:
+        score += 4.5
+    elif age_hours <= 48:
+        score += 2.0
+
+    src_low = (source or "").lower()
+    if any(s in src_low for s in ["rbi official", "reuters", "bloomberg", "economic times", "mint", "livemint", "business standard", "ndtv profit", "moneycontrol", "the hindu", "financial express", "cnbc"]):
+        score += 4.0
+
     tier1 = [
-        "rbi", "reserve bank of india", "variable rate repo", "vrr", "vrrr", "treasury bill",
-        "government stock", "auction", "inflation", "cpi", "forex", "statistical supplement",
-        "rupee", "g-sec", "yield", "repo rate", "sensex", "nifty",
+        "rbi", "reserve bank of india", "inflation", "cpi", "forex", "rupee", "inr",
+        "g-sec", "bond", "yield", "repo", "sensex", "nifty", "fpi", "sebi",
+        "tariff", "trade", "cabinet", "fiscal", "budget", "capex", "gdp", "economy",
     ]
     for k in tier1:
         if k in low:
-            score += 4
+            score += 3.0
     return score
 
 
@@ -2213,15 +2561,27 @@ def build_india_significance(
     nifty_lvl: float,
     used_sigs: set,
 ) -> str:
-    """Generate a distinct, non-duplicated, headline-specific Market Significance for each India macro story."""
+    """Generate a distinct, non-duplicated, headline-specific Market Significance for each India macro & political-economic story."""
     low = title.lower()
     candidates = []
 
+    if any(k in low for k in ["cabinet", "modi", "sitharaman", "budget", "fiscal", "capex", "pli", "gst", "tax", "infrastructure"]):
+        candidates.append(
+            f"Union Cabinet and Finance Ministry fiscal-capex policy anchors sovereign borrowing discipline, supporting institutional demand for 10Y 6.94% GS 2036 ({gsec_10y:.3f}%) and domestic cyclical equities (Nifty {nifty_lvl:,.2f})."
+        )
+    if any(k in low for k in ["tariff", "trade", "fta", "exports", "imports", "bilateral", "u.s.", "trump"]):
+        candidates.append(
+            f"Bilateral trade and tariff developments shape India's current account trajectory and exporter USD flows alongside USD/INR at ₹{inr_spot:.4f} (FBIL Reference ₹{rbi_ref_usd:.4f})."
+        )
     if any(k in low for k in ["vrr", "vrrr", "variable rate", "laf", "liquidity", "repo"]):
         candidates.append(
             f"Fine-tunes banking system liquidity under the RBI LAF corridor, anchoring interbank Call Money ({call_range}) near the {repo_rate:.2f}% Policy Repo Rate and supporting short-end 1Y–5Y G-Secs ({gsec_5y:.3f}%)."
         )
-    if any(k in low for k in ["inflation", "cpi", "food", "price", "target"]):
+    if any(k in low for k in ["statistical supplement", "reserve", "reserves", "foreign exchange", "rupee", "inr", "fema", "crude oil"]):
+        candidates.append(
+            f"Bolsters RBI's US${fx_reserves_bn:.2f}B foreign exchange reserve buffer and external terms-of-trade to smooth onshore USD/INR volatility around ₹{inr_spot:.4f} (FBIL Reference Rate ₹{rbi_ref_usd:.4f})."
+        )
+    if any(k in low for k in ["inflation", "cpi", "food", "consumer price", "wholesale price", "target"]):
         candidates.append(
             f"Near-term CPI food price pressure reinforces the RBI MPC hold at {repo_rate:.2f}% Repo and caps bull-flattening below 7.10% on the 10Y 6.94% GS 2036 benchmark ({gsec_10y:.3f}%)."
         )
@@ -2233,17 +2593,13 @@ def build_india_significance(
         candidates.append(
             f"Sets front-end sovereign money-market benchmarks where 91-Day and 364-Day T-Bills clear at {tbill_91d:.3f}% and {tbill_364d:.3f}% relative to the {repo_rate:.2f}% RBI Repo Rate."
         )
-    if any(k in low for k in ["statistical supplement", "reserve", "reserves", "foreign exchange", "rupee", "inr", "fema"]):
-        candidates.append(
-            f"Bolsters RBI's US${fx_reserves_bn:.2f}B foreign exchange reserve buffer to smooth onshore USD/INR volatility around ₹{inr_spot:.4f} (FBIL Reference Rate ₹{rbi_ref_usd:.4f})."
-        )
     if any(k in low for k in ["nbfc", "credit", "sectoral", "bank", "lending"]):
         candidates.append(
             f"Tracks domestic non-bank and commercial bank credit transmission alongside RBI's 3.00% CRR / 18.00% SLR statutory reserve requirements."
         )
-    if any(k in low for k in ["sensex", "nifty", "stocks", "market", "reliance", "diwali"]):
+    if any(k in low for k in ["sensex", "nifty", "stocks", "market", "fpi", "sebi", "equities"]):
         candidates.append(
-            f"Resilient equity momentum in Nifty 50 ({nifty_lvl:,.2f}) supports foreign portfolio inflows (FPI) and onshore INR capital account stability."
+            f"Shapes foreign portfolio investment (FPI) positioning across NSE Nifty 50 ({nifty_lvl:,.2f}) and onshore INR capital account stability."
         )
 
     candidates.extend([
@@ -2273,7 +2629,7 @@ def fetch_live_india_rbi_and_macro(data: dict):
        + automatic extraction of Weekly Statistical Supplement (WSS) Forex Reserves & Friday G-Sec Auction Cut-Offs
     3. Refinitiv / Naver real-time Indian G-Sec bond curve (IN3MT=RR .. IN30YT=RR)
     4. Yahoo Finance live USD/INR (INR=X), Nifty 50 (^NSEI), and BSE Sensex (^BSESN)
-    5. Live India Macro, RBI & G-Sec Market News RSS feed with strict filtering and unique Market Significance.
+    5. Live India Macro, RBI & Political-Economic News RSS feed with recency boost and topic-cluster deduplication.
     """
     ust_10y = next(
         (float(t["yield"]) for t in data["globalMacro"]["yieldCurve"]["tenors"] if t["label"] == "10Y"),
@@ -2401,7 +2757,6 @@ def fetch_live_india_rbi_and_macro(data: dict):
     gsec_curve = []
     for tenor_lbl, rc, series_name, def_y, def_chg, cpn, rbi_bench_y in gsec_specs:
         live_y, live_chg = naver_ind_bonds.get(rc, (def_y, def_chg))
-        # Prefer official RBI homepage benchmark yield when available for the 3Y/5Y/10Y/15Y/30Y on-the-run series
         final_y = round(rbi_bench_y if rbi_bench_y is not None else live_y, 3)
         entry = {
             "tenor": tenor_lbl,
@@ -2421,7 +2776,7 @@ def fetch_live_india_rbi_and_macro(data: dict):
     gsec_30y = next((b["yield"] for b in gsec_curve if b["tenor"].startswith("30Y")), 7.619)
     spread_10y = round((gsec_10y - ust_10y) * 100)
 
-    # 3. Parse Official RBI Press Releases RSS (https://rbi.org.in/pressreleases_rss.xml) & Notifications RSS
+    # 3. Parse Official RBI Press Releases RSS (https://rbi.org.in/pressreleases_rss.xml)
     rbi_official_releases = []
     rbi_rss_headlines_for_macro = []
     fx_reserves_usd_bn = 717.06
@@ -2431,6 +2786,7 @@ def fetch_live_india_rbi_and_macro(data: dict):
         "06 Nov 2026 (PR #63936): 7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881%; "
         "7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% · PD Devolvement: NIL."
     )
+    now_utc = datetime.now(timezone.utc)
 
     try:
         req = urllib.request.Request("https://rbi.org.in/pressreleases_rss.xml", headers=HEADERS)
@@ -2450,9 +2806,7 @@ def fetch_live_india_rbi_and_macro(data: dict):
             if any(k in low_t for k in ["section 35a", "sahakara", "co-operative bank", "monetary penalty"]):
                 continue
 
-            # Format pubDate nicely
             pub_short = pub_raw
-            time_ago_str = "Recent"
             m_dt = re.search(r"(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s+(\d{2}:\d{2})", pub_raw)
             if m_dt:
                 pub_short = f"{m_dt.group(1)}, {m_dt.group(2)} IST"
@@ -2492,9 +2846,25 @@ def fetch_live_india_rbi_and_macro(data: dict):
                     "url": link,
                 })
 
-            # Also add top high-signal RBI releases into candidate pool for main macro news
-            if any(k in low_t for k in ["variable rate repo", "treasury bills", "cut-off", "weekly statistical supplement"]):
-                rbi_rss_headlines_for_macro.append((8, datetime.now(timezone.utc), raw_title, "RBI Official RSS", "Recent", link))
+            # Parse actual RBI pubDate and include at most 1 recent RBI release in macro candidates
+            if len(rbi_rss_headlines_for_macro) < 1 and any(k in low_t for k in ["variable rate repo", "treasury bills", "cut-off", "weekly statistical supplement"]):
+                try:
+                    rbi_dt = email.utils.parsedate_to_datetime(pub_raw)
+                    if rbi_dt.tzinfo is None:
+                        rbi_dt = rbi_dt.replace(tzinfo=timezone.utc)
+                    else:
+                        rbi_dt = rbi_dt.astimezone(timezone.utc)
+                except Exception:
+                    rbi_dt = now_utc - timedelta(hours=36)
+                rbi_rss_headlines_for_macro.append({
+                    "pub_dt": rbi_dt,
+                    "cluster": "in_rbi_official_ops",
+                    "priority": score_india_macro_priority(raw_title, "RBI Official RSS", rbi_dt, now_utc),
+                    "title": raw_title,
+                    "source": "RBI Official RSS",
+                    "timeAgo": format_time_ago(rbi_dt, now_utc),
+                    "url": link,
+                })
     except Exception as e:
         print(f"Warn: RBI Press Releases RSS error: {e}")
 
@@ -2522,20 +2892,21 @@ def fetch_live_india_rbi_and_macro(data: dict):
         except Exception as e:
             print(f"Warn: India quote fetch failed for {sym}: {e}")
 
-    # 5. Fetch live India Macro, RBI & G-Sec Market News RSS feed
+    # 5. Fetch live India Macro, RBI, G-Sec & Political-Economic News RSS feed (prioritizing <24h/<48h)
     in_rss_urls = [
-        "https://news.google.com/rss/search?q=(%22Reserve+Bank+of+India%22+OR+%22RBI%22+OR+%22Indian+rupee%22+OR+%22G-Sec%22+OR+%22India+bond+yield%22+OR+%22India+inflation%22+OR+%22India+GDP%22)+when:7d&hl=en-IN&gl=IN&ceid=IN:en",
-        "https://news.google.com/rss/search?q=(%22Nifty+50%22+OR+%22Sensex%22+OR+%22RBI+repo%22+OR+%22India+forex+reserves%22)+when:7d&hl=en-IN&gl=IN&ceid=IN:en",
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:economictimes.indiatimes.com+OR+site:livemint.com+OR+site:business-standard.com+OR+site:ndtvprofit.com+OR+site:moneycontrol.com)+(India+OR+RBI+OR+%22Reserve+Bank+of+India%22)+(economy+OR+rupee+OR+G-Sec+OR+inflation+OR+bond+OR+Nifty+OR+Sensex+OR+tariff+OR+trade+OR+fiscal+OR+Modi+OR+Sitharaman+OR+SEBI)+when:24h&hl=en-IN&gl=IN&ceid=IN:en",
+        "https://news.google.com/rss/search?q=(%22Reserve+Bank+of+India%22+OR+%22RBI%22+OR+%22Indian+rupee%22+OR+%22G-Sec%22+OR+%22India+bond+yield%22+OR+%22India+inflation%22+OR+%22India+GDP%22+OR+%22India+trade%22+OR+%22Union+Cabinet%22)+when:48h&hl=en-IN&gl=IN&ceid=IN:en",
+        "https://news.google.com/rss/search?q=(%22Nifty+50%22+OR+%22Sensex%22+OR+%22RBI+repo%22+OR+%22India+forex+reserves%22+OR+%22FPI+inflows%22+OR+%22SEBI%22)+when:48h&hl=en-IN&gl=IN&ceid=IN:en",
     ]
     in_candidates = list(rbi_rss_headlines_for_macro)
-    seen_in_titles = {x[2].lower()[:45] for x in in_candidates}
-    now_utc = datetime.now(timezone.utc)
+    seen_in_titles = {re.sub(r"[^a-z0-9]", "", x["title"].lower())[:45] for x in in_candidates}
+    cutoff_72h = now_utc - timedelta(hours=72)
 
     for rss_url in in_rss_urls:
         try:
             xml_text = http_get_text(rss_url, timeout=10)
             root = ET.fromstring(xml_text)
-            for item in root.findall("./channel/item")[:20]:
+            for item in root.findall("./channel/item")[:25]:
                 raw_title = html.unescape(item.findtext("title") or "").strip()
                 link = (item.findtext("link") or "").strip()
                 pub_date_str = (item.findtext("pubDate") or "").strip()
@@ -2557,27 +2928,59 @@ def fetch_live_india_rbi_and_macro(data: dict):
                 norm_key = re.sub(r"[^a-z0-9]", "", clean_title.lower())[:45]
                 if norm_key in seen_in_titles:
                     continue
-                seen_in_titles.add(norm_key)
 
                 try:
-                    pub_dt = parsedate_to_datetime(pub_date_str)
+                    pub_dt = email.utils.parsedate_to_datetime(pub_date_str)
                     if pub_dt.tzinfo is None:
                         pub_dt = pub_dt.replace(tzinfo=timezone.utc)
+                    else:
+                        pub_dt = pub_dt.astimezone(timezone.utc)
                 except Exception:
-                    pub_dt = now_utc - timedelta(hours=4)
+                    continue
 
-                prio = score_india_macro_priority(clean_title, source_name)
-                in_candidates.append((prio, pub_dt, clean_title, source_name, format_time_ago(pub_dt, now_utc), link))
+                if pub_dt < cutoff_72h or pub_dt > now_utc + timedelta(minutes=10):
+                    continue
+
+                seen_in_titles.add(norm_key)
+                prio = score_india_macro_priority(clean_title, source_name, pub_dt, now_utc)
+                in_candidates.append({
+                    "pub_dt": pub_dt,
+                    "cluster": get_india_topic_cluster(clean_title),
+                    "priority": prio,
+                    "title": clean_title,
+                    "source": source_name,
+                    "timeAgo": format_time_ago(pub_dt, now_utc),
+                    "url": link,
+                })
         except Exception as e:
             print(f"Warn: India RSS error: {e}")
 
-    in_candidates.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    # Sort by recency-weighted priority and deduplicate by topic cluster so each of the 5 slots covers a distinct event
+    in_candidates.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
+    deduped_in = []
+    used_in_clusters = set()
+    for item in in_candidates:
+        if item["cluster"] in used_in_clusters:
+            continue
+        used_in_clusters.add(item["cluster"])
+        deduped_in.append(item)
+        if len(deduped_in) >= 5:
+            break
+    if len(deduped_in) < 5:
+        for item in in_candidates:
+            if item not in deduped_in:
+                deduped_in.append(item)
+            if len(deduped_in) >= 5:
+                break
+
+    selected_in = sorted(deduped_in[:5], key=lambda x: x["pub_dt"], reverse=True)
+
     used_in_sigs = set()
     top_in_news = []
-    for idx, (_, _, clean_title, source_name, time_ago, link) in enumerate(in_candidates[:5]):
+    for idx, item in enumerate(selected_in):
         sig = build_india_significance(
-            clean_title,
-            source_name,
+            item["title"],
+            item["source"],
             idx,
             gsec_5y,
             gsec_10y,
@@ -2593,12 +2996,12 @@ def fetch_live_india_rbi_and_macro(data: dict):
             used_in_sigs,
         )
         top_in_news.append({
-            "title": clean_title,
-            "headline": clean_title,
-            "source": source_name,
-            "timeAgo": time_ago,
+            "title": item["title"],
+            "headline": item["headline"] if "headline" in item else item["title"],
+            "source": item["source"],
+            "timeAgo": item["timeAgo"],
             "significance": sig,
-            "url": link,
+            "url": item["url"],
         })
 
     data["india"] = {
@@ -3745,14 +4148,34 @@ def fetch_live_us_equities_spx500(data: dict):
             "marketCapBn": r["marketCapBn"],
         })
 
-    # Fetch live S&P 500 equity & valuation news via RSS
+    # Fetch live S&P 500 equity, valuation & US policy/political-economic news via RSS
     eq_headlines = []
     eq_rss_urls = [
+        "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com+OR+site:ft.com+OR+site:marketwatch.com)+(%22S%26P+500%22+OR+%22Wall+Street%22+OR+%22US+stocks%22+OR+%22corporate+earnings%22)+(tariff+OR+tax+OR+Fed+OR+Treasury+OR+valuation+OR+dividend+OR+%22free+cash+flow%22+OR+buyback+OR+guidance+OR+policy)+when:24h&hl=en-US&gl=US&ceid=US:en",
         "https://news.google.com/rss/search?q=(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com+OR+site:marketwatch.com)+(%22S%26P+500%22+OR+%22Wall+Street%22+OR+%22US+stocks%22+OR+%22earnings+yield%22+OR+%22dividend+stocks%22+OR+%22free+cash+flow%22)+when:48h&hl=en-US&gl=US&ceid=US:en",
+        "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
     ]
     now_utc = datetime.now(timezone.utc)
     cutoff_48h = now_utc - timedelta(hours=48)
     seen_eq = set()
+
+    def get_eq_cluster(title: str) -> str:
+        low_t = title.lower()
+        if any(k in low_t for k in ["coreweave", "anthropic", "ipo"]):
+            return "eq_ai_ipo_earnings"
+        if any(k in low_t for k in ["tariff", "trade", "white house", "trump", "congress", "senate", "tax", "deregulation", "antitrust", "policy"]):
+            return "eq_pol_tariff_tax"
+        if any(k in low_t for k in ["fed", "powell", "bowman", "waller", "treasury", "yield", "rate", "inflation", "cpi"]):
+            return "eq_fed_rates_erp"
+        if any(k in low_t for k in ["dividend", "buyback", "capital return", "income"]):
+            return "eq_div_buyback"
+        if any(k in low_t for k in ["energy", "oil", "exxon", "chevron", "conocophillips", "free cash flow", "cash flow"]):
+            return "eq_fcf_energy"
+        if any(k in low_t for k in ["nvidia", "tech", "ai", "semiconductor", "megacap", "nasdaq", "multiple", "valuation"]):
+            return "eq_tech_multiples"
+        if any(k in low_t for k in ["s&p 500", "wall st", "wall street", "dow", "stocks", "equities", "earnings"]):
+            return "eq_spx_broad_" + re.sub(r"[^a-z0-9]", "", low_t)[:14]
+        return "eq_" + re.sub(r"[^a-z0-9]", "", low_t)[:24]
 
     for rss_url in eq_rss_urls:
         try:
@@ -3762,11 +4185,16 @@ def fetch_live_us_equities_spx500(data: dict):
                 raw_title = html.unescape(item.findtext("title") or "").strip()
                 pub_str = (item.findtext("pubDate") or "").strip()
                 link = (item.findtext("link") or "").strip()
-                raw_source = (item.findtext("source") or "Bloomberg").strip()
+                raw_source = (item.findtext("source") or "CNBC").strip()
                 clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
                 if not clean_title or len(clean_title) < 24:
                     continue
-                key = re.sub(r"[^a-z0-9]", "", clean_title.lower())[:42]
+                low_c = clean_title.lower()
+                if any(ex in low_c for ex in ["biggest moves premarket", "biggest moves midday", "here are ", "check out ", "lottery", "horoscope", "sports", "roundup: market talk", "how much you can make", "personal finance", "401(k)", "roth ira"]):
+                    continue
+                if not any(k in low_c for k in ["s&p", "wall st", "stock", "equit", "market", "dow", "nasdaq", "earning", "dividend", "cash flow", "tariff", "tax", "fed", "treasury", "yield", "buyback", "investor"]):
+                    continue
+                key = re.sub(r"[^a-z0-9]", "", low_c)[:42]
                 if key in seen_eq:
                     continue
                 try:
@@ -3781,8 +4209,14 @@ def fetch_live_us_equities_spx500(data: dict):
                     continue
                 seen_eq.add(key)
                 norm_src = normalize_source_name(raw_source, link)
+                age_h = max(0.0, (now_utc - pub_dt).total_seconds() / 3600.0)
+                prio = (12.0 if age_h <= 12 else (8.0 if age_h <= 24 else 3.5))
+                if any(k in low_c for k in ["s&p 500", "wall street", "earnings", "valuation", "tariff", "tax", "dividend", "free cash flow", "fed", "treasury"]):
+                    prio += 4.0
                 eq_headlines.append({
                     "pub_dt": pub_dt,
+                    "cluster": get_eq_cluster(clean_title),
+                    "priority": prio,
                     "title": clean_title,
                     "headline": clean_title,
                     "source": norm_src,
@@ -3792,8 +4226,24 @@ def fetch_live_us_equities_spx500(data: dict):
         except Exception as e:
             print(f"Warn: S&P 500 RSS fetch error: {e}")
 
-    eq_headlines.sort(key=lambda x: x["pub_dt"], reverse=True)
-    selected_eq = eq_headlines[:5]
+    eq_headlines.sort(key=lambda x: (x["priority"], x["pub_dt"]), reverse=True)
+    deduped_eq = []
+    used_eq_clusters = set()
+    for item in eq_headlines:
+        if item["cluster"] in used_eq_clusters:
+            continue
+        used_eq_clusters.add(item["cluster"])
+        deduped_eq.append(item)
+        if len(deduped_eq) >= 5:
+            break
+    if len(deduped_eq) < 5:
+        for item in eq_headlines:
+            if item not in deduped_eq:
+                deduped_eq.append(item)
+            if len(deduped_eq) >= 5:
+                break
+
+    selected_eq = sorted(deduped_eq[:5], key=lambda x: x["pub_dt"], reverse=True)
     used_eq_sigs = set()
     top_eq_news = []
 
@@ -3806,10 +4256,27 @@ def fetch_live_us_equities_spx500(data: dict):
     ]
 
     for idx, item in enumerate(selected_eq):
-        sig = sig_templates[idx % len(sig_templates)]
-        if sig in used_eq_sigs:
-            sig = f"{sig.rstrip('.')} (#{idx + 1})."
-        used_eq_sigs.add(sig)
+        low_t = item["title"].lower()
+        cand_sigs = []
+        if any(k in low_t for k in ["tariff", "trade", "white house", "trump", "congress", "tax", "policy", "regulation"]):
+            cand_sigs.append(
+                f"US trade, tariff, and fiscal-tax policy shifts drive sector dispersion between domestic cash-flow compounders ({top_fcf_ev[0]['ticker']} {top_fcf_ev[0]['fcfToEvPct']:.2f}% FCF/EV) and global multinationals."
+            )
+        if any(k in low_t for k in ["fed", "powell", "treasury", "yield", "rate", "inflation"]):
+            cand_sigs.append(
+                f"Directly impacts the S&P 500 equity risk premium ({erp_bps:+d} bps over {ust_10y:.2f}% 10Y UST), favoring low-duration Forward P/E leaders ({top_forward_pe[0]['ticker']} {top_forward_pe[0]['forwardPe']:.2f}x)."
+            )
+        cand_sigs.extend(sig_templates)
+        sig = cand_sigs[0]
+        for cs in cand_sigs:
+            if cs not in used_eq_sigs:
+                sig = cs
+                used_eq_sigs.add(cs)
+                break
+        else:
+            sig = f"{sig_templates[idx % len(sig_templates)].rstrip('.')} (#{idx + 1})."
+            used_eq_sigs.add(sig)
+
         top_eq_news.append({
             "title": item["title"],
             "headline": item["headline"],

@@ -529,11 +529,11 @@ export const UsEquitiesTab: React.FC<UsEquitiesTabProps> = ({
               <div className="flex items-center gap-2">
                 <Newspaper className="w-4 h-4 text-sky-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
-                  NOTEWORTHY S&P 500 EARNINGS & FACTOR DEVELOPMENTS
+                  NOTEWORTHY S&P 500 EARNINGS, POLICY & FACTOR DEVELOPMENTS
                 </h3>
               </div>
               <span className="text-[10px] font-mono text-sky-300">
-                LIVE RSS
+                LIVE RSS FEED
               </span>
             </div>
 

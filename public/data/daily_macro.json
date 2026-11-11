@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-09T16:42:24.642093+08:00",
-    "lastUpdatedSGT": "09 Nov 2026, 04:42 PM SGT",
-    "nextRefreshSGT": "10 Nov 2026, 05:00 AM SGT",
+    "lastUpdated": "2026-11-11T07:41:24.803410+08:00",
+    "lastUpdatedSGT": "11 Nov 2026, 07:41 AM SGT",
+    "nextRefreshSGT": "12 Nov 2026, 05:00 AM SGT",
     "edition": "Daily Macro Close & Pre-Asia Open",
     "timezone": "Asia/Singapore (UTC+8)"
   },
@@ -10,113 +10,113 @@
     "topNews": [
       {
         "id": "gn-01",
-        "headline": "Nvidia Board to Probe Spying Case After CEO Admits Affair",
+        "headline": "Falling Oil Prices and Bond Yields Offer Investors Some Relief",
         "source": "Bloomberg",
-        "timeAgo": "30m ago",
-        "category": "Geopolitics",
-        "summary": "Bloomberg coverage on \"Nvidia Board to Probe Spying Case After CEO Admits Affair\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.88%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOeU5sZExFMm9PT0FDekcxMEVUWTFWVEJVNUNBcmx0bFlzNkI2SnZYLWVlanJfdEtxN0lMV1RMZ2lfRHlYVHMwMm05dU1lNlQzS21OQlJwY1J2VThCVUpxZU5hcmxRWE8yTUNaVzlnZzRCTUJUNFFfSERTZ0RQaU9QdmRTMUZ1dEwxVDR5MzFOOXNBVmt4eW0zbHlEaWVRWWdFQUYydXVXWFIxcE5scC05YlZ4ckw1VkNtUDd1UXBGa2I2cjg?oc=5"
+        "timeAgo": "32m ago",
+        "category": "Inflation",
+        "summary": "Bloomberg coverage on \"Falling Oil Prices and Bond Yields Offer Investors Some Relief\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Prompts de-risking in high-beta growth multiples and increases defensive demand for short-duration Treasuries (US2Y at 4.75%).",
+        "impact": "Risk-Off",
+        "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOamZXX2dXT3BmY3J3eGdZVFBGdFZhZm5Obks2MDJhLWtJbjFLdjZOQUN5Z1JwemQ2MnBmckVhQjZxa3VfZ3BHYk8yR2FhaXJZVHlPTUhfVDZ2OWFPVzQtaTVKWjZ1eHZiS2tPUFhRN1RIS1JCTThoUjlrb3ROYlRLd2hDT0ZWbmNVRnBwUGxHQW9SODcyR3dUbEdrdlBOcGtRc2xQSWxoaHdXekZOTUFlLXJ1MDVPVkk?oc=5"
       },
       {
         "id": "gn-02",
-        "headline": "Brazil's Lula, worried about high interest rates, pledges budget discipline",
+        "headline": "Trump administration finalizes $480 million loan to Arena, in first such aid to oil and gas",
         "source": "Reuters",
-        "timeAgo": "43m ago",
-        "category": "Geopolitics",
-        "summary": "Reuters coverage on \"Brazil's Lula, worried about high interest rates, pledges budget discipline\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.88%) and G10 currency pairs.",
+        "timeAgo": "1h ago",
+        "category": "Inflation",
+        "summary": "Reuters coverage on \"Trump administration finalizes $480 million loan to Arena, in first such aid to oil and gas\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "US executive and legislative fiscal policy expectations directly shape Treasury term premia across the 2Y/10Y curve (+25.0 bps).",
         "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOTmRxVlVzb3VXRTFVRFRoNi12OFZQMDRRNGpoQWJNckR5R0p0SFU3VHRwVDZCTkdGZnRra3lueG5maDl0bVRMQkxKVGg2dU1uMjhFMV81bTVSc01HYW1USWo5bGRXZXRES1I1MkhNckRTMThqLTV0M0UwSVkyVHhJZEQ2c0JNekZXcDZPTWg1dktPcXdYZThtWk56ZTNJbW5ORGl6NGlVeDFDcVZWem1EeTZDX0Ywam1jbEJTZUZMR1I?oc=5"
+        "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQRktLNWo1UVNPc3A4Yy0zWDFESVl1TDVwRnluOXVDY2w0RmF1OGFWb05icUx2ckVJLWViRy1Ra0ZUUXFCdndHNjVjdzNkY3hSTEl1WWtReGs3N3Y0ZUZTNDBkMy1ORFRQaVFWR0lVOHR3VE81bnQ2U3pqaHV3MzNPWmdmd252bTNPV25wdkNfWnhJUEFDSWxJU1JSWWg3YTRZaFY3cGk4dDVSUEU1SWlfYkpTUS14MUtJVHF0OHpVZTFNa0k?oc=5"
       },
       {
         "id": "gn-03",
-        "headline": "Data Center CFOs Prepare for Tougher Road Ahead After Democrats Sweep Congress",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Fiscal & Debt",
-        "summary": "Bloomberg coverage on \"Data Center CFOs Prepare for Tougher Road Ahead After Democrats Sweep Congress\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.88%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOQjNVcTNta01WTC1STG05b3RmVlcwYS1DME1IMUc0VkluYjd6LWFodzVsa3g1NjlCTmxjWVFyTVpuRlVVYnJCWUQ2UXBHMlN3MWlLNE1aRVMwdTBJZnM4MnNwUGRXaFJMZmZYUlZBZ19XZXZJYkVhckd1LXJ3WGJEQ3prWktHWmQzWHlBVDFMbG9VR0xHOEJERjExa2lfeXhYWkdMZ0l3SmJCeGJ6T1ByNlZmbmhzcHhzekhtYkRRZUg?oc=5"
-      },
-      {
-        "id": "gn-04",
-        "headline": "COMMENTARY: Gold's short-term volatility contrasts with long-term bullishness",
-        "source": "Reuters",
-        "timeAgo": "1h ago",
-        "category": "Inflation",
-        "summary": "Reuters coverage on \"COMMENTARY: Gold's short-term volatility contrasts with long-term bullishness\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.88%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPckFmSmFBN0lNeTlPeWtKck51aVVZVW5qeXEwVXRxT1Z1MHV1NjYxa0F1ekZPeWxWUHNydG1JU2ZKZzQyazFidjlrc25wVHY0TVZkWFk2eFJDSDNaOTNiQkNlVXdmUEF1QzNSeHliUm1pcmstRW9vZXNqNVAweGpMWnBaTlZWSFBmX2pxTVdwdzlJbmczZFpIeko4RWVNVlE0QUVOUHZYTVgyOWdBdUFxR3BiWko2cEtpOEowZDhkWlo3Q1RaUGFFend2bHdHUQ?oc=5"
-      },
-      {
-        "id": "gn-05",
-        "headline": "UBS CEO Ermotti Says Midterms Create Uncertainty for AI Buildout",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Fiscal & Debt",
-        "summary": "Bloomberg coverage on \"UBS CEO Ermotti Says Midterms Create Uncertainty for AI Buildout\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.88%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQNGxnS0lucE5XdkY3QlRJdkNLVG00R09GX3czZ2dMRnZhNzNEblF2bElCbzdyeDNkdXFFdDNtVVJqSVNKVWxaeEI4ZUIydWM4ZlFfaTd4bHFWQTdFSE0zdG9MLWhZZDR1SXIxSjhnTlUyeFNfM3JWb1JrZnEwc0dLR1lxUGxNUWhGRmtqR1FySS1SUm9GNURlOXo4YW56UTBuLUV2dUpDTFU4TzRBQlMtOVpkWmRJQQ?oc=5"
-      },
-      {
-        "id": "gn-06",
-        "headline": "Oil falls on open as Trump says fresh Iran attacks 'unlikely'",
-        "source": "Reuters",
-        "timeAgo": "1h ago",
-        "category": "Inflation",
-        "summary": "Reuters coverage on \"Oil falls on open as Trump says fresh Iran attacks 'unlikely'\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.53%).",
-        "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNWnV4VENDNkFNVllVVEpoVTJLcC13SlhHREstWFZZQ252QTRiU3dKeW5EYWYxVUJjNnQzVzh1M1FsWjNGTmRKMVFEYjhxT3M2VmF4aVpERWwwczh6dV9OTG5NcFJCMFVZZ0toWEEyMnRRTnBZUm9iQVVzblIzcmJMOTR4V29sUDFVME1jcFQ5VVhoMHVUM0YzWHM2bmE1b3VCV0s0R2JmUUQ?oc=5"
-      },
-      {
-        "id": "gn-07",
-        "headline": "Trump Backs Huang as Nvidia CEO After He Admits Affair With Spy",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Geopolitics",
-        "summary": "Bloomberg coverage on \"Trump Backs Huang as Nvidia CEO After He Admits Affair With Spy\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Desk participants are assessing secondary transmission into the US Treasury curve (10Y 4.88%) and G10 currency pairs.",
-        "impact": "Neutral",
-        "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPZGwxSGd5R0JaY3pOaG9xSkUtdU5iUnA0eHRNc0YycTliRm5SdmFoREZ5SlhMOHM5d3JsTEdCT1ZkNE82YjE3YWtieE91OXU5WjFSaDRHdjZHM1dBLWNqRGdDSXZ6cG5VbER1V1pzZmZGejZqdVpoUlhMaUJ4LVVBMXMyU2JjZDhuUkU0RDY4cHFoT2xENS1nSXFsUlUyMFljMlk2dWFPU3N6aE9iNUFsLQ?oc=5"
-      },
-      {
-        "id": "gn-08",
-        "headline": "Gold Holds Decline as US Jobs Data Fan December Rate Hike Bets",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Inflation",
-        "summary": "Bloomberg coverage on \"Gold Holds Decline as US Jobs Data Fan December Rate Hike Bets\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Keeps front-end US2Y yields anchored near 4.53% and tempers expectations for aggressive near-term easing.",
-        "impact": "Hawkish",
-        "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOalBuZXBLSkx6bEJtdVU0djlRbHRwdlVRNWdTbWJDM2NrRmZVcGg4SV9mdEVONXVWeml3OFgxZWRKMEoxenRCLXVaSXhDdUdRNG55V3ZWS0drMzJwaUJYN3A5cFlpWEt5anBMMEtoa0R1LTIxa3BnS3luNUdPWFIweTY0NEJhS2thcnpqY0YyVEJwZHhxclFyQ3c0OTNETy1aQlFaeHN2R1A3dXg1T0NDU21ycw?oc=5"
-      },
-      {
-        "id": "gn-09",
-        "headline": "Asian Markets at Risk of Pressure on Nvidia Probe: Markets Wrap",
-        "source": "Bloomberg",
-        "timeAgo": "1h ago",
-        "category": "Fiscal & Debt",
-        "summary": "Bloomberg coverage on \"Asian Markets at Risk of Pressure on Nvidia Probe: Markets Wrap\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.53%).",
-        "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQR1JWME4tcFN3Vlh6UlhVeEN3c2FlRUFkUWRrczJ6OUZ1QWRkRndtMy1nZFhBaU5Lc0dzaXU2ZjJnNUtwN2RSa3dyLXlwUV9QanZmaC1Wb2xhbUVZekZhaXdXZkpSazFDVnJqZWIweWtvdGczQi0xTnB1aEhiSy00aVFsMWdYaE1sRkN3NlU2YmVJdzhv?oc=5"
-      },
-      {
-        "id": "gn-10",
-        "headline": "Oil Extends Biggest Weekly Drop Since 2020 With Focus on Iran",
+        "headline": "Dollar Set for Best Day Since September as CPI Lifts Hike Bets",
         "source": "Bloomberg",
         "timeAgo": "2h ago",
         "category": "Inflation",
-        "summary": "Bloomberg coverage on \"Oil Extends Biggest Weekly Drop Since 2020 With Focus on Iran\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 4.88%.",
-        "macroTakeaway": "Prompts de-risking in high-beta growth and tech multiples, increasing defensive demand for short-duration Treasuries (4.53%).",
+        "summary": "Bloomberg coverage on \"Dollar Set for Best Day Since September as CPI Lifts Hike Bets\" highlights shifting institutional positioning across inflation and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Keeps front-end US2Y yields anchored near 4.75% and tempers market pricing for aggressive near-term policy easing.",
+        "impact": "Hawkish",
+        "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQTnFlNTgybjJDT2dpTXUyYV9MWGR2bS1ET0E5VlF3Z3VyRHV6c1FyX296QnhGUmNFNTJraVFfVklZSjRXVXEyMHIxUnhQU1VTdlg1dkxTT1g1Q2V3cGotM2FQZ2hvazdBVm1VLXEtSmVidnBla3JTZXlSVFdvM1l5X0NKZ20xWlY2WE1xaFl2UER2Z2YzY3J4MkluclhlLVdUVFhEZWZZellrRWJWRFlvMXREOA?oc=5"
+      },
+      {
+        "id": "gn-04",
+        "headline": "Nvidia selloff deepens, adding to AI jitters",
+        "source": "Reuters",
+        "timeAgo": "2h ago",
+        "category": "Geopolitics",
+        "summary": "Reuters coverage on \"Nvidia selloff deepens, adding to AI jitters\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Reported by Reuters; institutional desks are recalibrating US Treasury curve positioning (2Y 4.75%, 10Y 5.00%) and DXY dollar exposure.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOOG9OZzJuZm1xMUpsNTF6M2dFN2VIbG1PaTRBU25xdUNtRnk2ZDg2c05UdERqUHQwcjN6OGhuZUoxajU0aFNGVWhLekxITjdwV1BwUFNucUdMaHp1N1UwWmhVYXI1Q3ZQUUFjVTBGbG1IUXVHTWlTQUU5TUlJc1RMYWREUkhwaFpKWFNyMW83a0k5dw?oc=5"
+      },
+      {
+        "id": "gn-05",
+        "headline": "Fed’s Bowman Warns of Stock Correction If AI Bets Don’t Pan Out",
+        "source": "Bloomberg",
+        "timeAgo": "3h ago",
+        "category": "Fed Policy",
+        "summary": "Bloomberg coverage on \"Fed’s Bowman Warns of Stock Correction If AI Bets Don’t Pan Out\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Reported by Bloomberg; institutional desks are recalibrating US Treasury curve positioning (2Y 4.75%, 10Y 5.00%) and DXY dollar exposure.",
         "impact": "Risk-Off",
-        "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxObUNGR2lBYkJramVOVjNteUMtWXNxZVBGWmEteFM5WG5Yb0pPYnpXTUZLM2ZVc280ampyejdfTkgzckNob1gzcUFyY293SnRVbWhlOHJmQ2Rzck05YVRwSlpKb0xXMVZKZUp5MVZjTmVWNjB5cjVSWWQxNmREUjNpTGdlY3FjcFhBY1VKLWhQdHBzaEFYaWNMeDRYUDE?oc=5"
+        "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNZnFNTUx0RzRjMFpzM1FBRlh5TVFiT1dBSm0ybWx1cngzVW9UVllIOHl5OFNKckRDdGZybDRMYjh5dWZiQ3JTYlFsaGZsaFdYTURmdUZ5MldUa2ZDMmlBbEZWMk9KV2ZoSU1sOUx1UnV4d0JZMjJpa2ZybHJmSzlYT3hXenhYelM0ZmNrV2NEMjM3T055UF9iSUJsa2xKQ0Q5S2M2SWlSeW5ZMUpfN1BoekJvbGI?oc=5"
+      },
+      {
+        "id": "gn-06",
+        "headline": "GE Vernova sellers have it all wrong — plus, why Fed rate hike odds are soaring",
+        "source": "CNBC",
+        "timeAgo": "3h ago",
+        "category": "Fed Policy",
+        "summary": "CNBC coverage on \"GE Vernova sellers have it all wrong — plus, why Fed rate hike odds are soaring\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Reported by CNBC; institutional desks are recalibrating US Treasury curve positioning (2Y 4.75%, 10Y 5.00%) and DXY dollar exposure.",
+        "impact": "Hawkish",
+        "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNQnlZWlVGdHVqSnZHN0NXeFg3Qk80RFNMY3pyVGt2aGVjUE9OU3liMW9KTUxmMEZOZkpsR05ZbldOb040UGZhTkF3b0hrS3A2OVVoTFdJaXBkU2FnZmROY3N1cy14LWhIVzA0cEtGWU5ZU1NFX09nWDhjSWE3cC11SXltQ1dqQ2s0VVhJdmJ5VngzUlB2REE2LXp1LS1mVk5OTnFpN0N5anFYbHJWd1RkN1VUWUFQRTZTMVpmTndUUmVKWUNLT0E?oc=5"
+      },
+      {
+        "id": "gn-07",
+        "headline": "Rep. Jim Jordan, Sen. John Thune elected GOP leaders in Congress",
+        "source": "CNBC",
+        "timeAgo": "3h ago",
+        "category": "Fiscal & Debt",
+        "summary": "CNBC coverage on \"Rep. Jim Jordan, Sen. John Thune elected GOP leaders in Congress\" highlights shifting institutional positioning across fiscal & debt and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Tracked by CNBC; shapes cross-asset volatility and sovereign term-premium expectations with the 2Y/10Y slope at +25.0 bps.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQWUJPeE5oVHVkM0hGRF9jMmJ0eGF1X2dBQ2JXRWVtMTNZSFNMbUhtUlJEUzBxbUdzZ1R6SHc4VFRMV196SmphMk9TM2FkaU5fU2NtTmNjS0JkekR1VXRqaFpLNVJRQ1V1UzNQR2xkc3laSVRjdWFaUWQ3U3lQLVlsU0dn?oc=5"
+      },
+      {
+        "id": "gn-08",
+        "headline": "Rubio says no need for major combat operations against Iran given US economic campaign",
+        "source": "Reuters",
+        "timeAgo": "4h ago",
+        "category": "Geopolitics",
+        "summary": "Reuters coverage on \"Rubio says no need for major combat operations against Iran given US economic campaign\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Bolsters institutional equity positioning and cross-border cyclical rotation while US10Y trades at 5.00%.",
+        "impact": "Risk-On",
+        "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOek5yNnd3UkRRS2RHYjY5MlR1NU9KQnFWcW43RGV1VHI5Yzhxc3RseUstNnVCbXVlUTN3T1hTcE9RUEFGT0R6Q0JUTmQxNW1aX2lZM0RXZkNjLTgwdWQ5aFN1OGM2LTBLcV91MlBkdDE0a2VCQk5nNUdDOGo1ZHI2TW9Pa010QjlrcjQwU0htVjlTMlVOUXJ2cThHQ0JHY09rSHFyYVgtNzNhMXNVVzJ3UTZTb1R6cmM?oc=5"
+      },
+      {
+        "id": "gn-09",
+        "headline": "Homeowners tap equity as HELOC balances post biggest jump since 2005: New York Fed report",
+        "source": "CNBC",
+        "timeAgo": "4h ago",
+        "category": "Fed Policy",
+        "summary": "CNBC coverage on \"Homeowners tap equity as HELOC balances post biggest jump since 2005: New York Fed report\" highlights shifting institutional positioning across fed policy and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Highlighted by CNBC; influences global central bank rate-path expectations and real yield differentials anchored by US10Y at 5.00%.",
+        "impact": "Risk-On",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE01VDZQRldWb3JxdWFCcWk0MU5mdFNGTnZhQjJCY0lhcVlhU2VJZjh2UjhJN0plaDFmdzM2M20wRmxkRkRUd3hkdi1FRGJyVThiWnV5UDBFNWZkODExaGFQeTZrUDFMcmxmYTRUUWdMQXVCQQ?oc=5"
+      },
+      {
+        "id": "gn-10",
+        "headline": "Inside the White House debate over Pete Hegseth’s future",
+        "source": "CNN",
+        "timeAgo": "5h ago",
+        "category": "Geopolitics",
+        "summary": "CNN coverage on \"Inside the White House debate over Pete Hegseth’s future\" highlights shifting institutional positioning across geopolitics and global rate markets as benchmark 10Y US Treasuries trade near 5.00%.",
+        "macroTakeaway": "Reported by CNN; institutional desks are recalibrating US Treasury curve positioning (2Y 4.75%, 10Y 5.00%) and DXY dollar exposure.",
+        "impact": "Neutral",
+        "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOOTQ1eGY3YVRoMU05R0VCZ1ppZ1NKTXJDTTM5ZDhKcXk0QWJfdzVmbDNtbFdhWVVucmdmbVdjNlhqT0RQZXdtNFptRDBEXzZFWlVwRVFJODNSMXFSSmZMZDVlWlVTazNBZEtJRmxyMkhRNlc2OVRCblhSVG5JX1hteHhpY1FkdmFVdEVKUzEwdDkxUmVOcndGY2pQdGpyZlg2cXVkbnV3?oc=5"
       }
     ],
     "yieldCurve": {
@@ -124,86 +124,86 @@
         {
           "label": "1M",
           "years": 0.08,
-          "yield": 3.96,
-          "changeBps": 1.6,
-          "priorClose": 3.94
+          "yield": 3.95,
+          "changeBps": -0.9,
+          "priorClose": 3.96
         },
         {
           "label": "3M",
           "years": 0.25,
-          "yield": 4.13,
-          "changeBps": 2.1,
-          "priorClose": 4.11
+          "yield": 4.22,
+          "changeBps": 6.2,
+          "priorClose": 4.16
         },
         {
           "label": "6M",
           "years": 0.5,
-          "yield": 4.28,
-          "changeBps": 1.8,
-          "priorClose": 4.26
+          "yield": 4.41,
+          "changeBps": 11.9,
+          "priorClose": 4.29
         },
         {
           "label": "1Y",
           "years": 1.0,
-          "yield": 4.34,
-          "changeBps": 1.9,
-          "priorClose": 4.32
+          "yield": 4.55,
+          "changeBps": 18.8,
+          "priorClose": 4.37
         },
         {
           "label": "2Y",
           "years": 2.0,
-          "yield": 4.52,
-          "changeBps": 6.0,
-          "priorClose": 4.46
+          "yield": 4.75,
+          "changeBps": 20.1,
+          "priorClose": 4.55
         },
         {
           "label": "3Y",
           "years": 3.0,
-          "yield": 4.59,
-          "changeBps": 6.0,
-          "priorClose": 4.53
+          "yield": 4.79,
+          "changeBps": 18.2,
+          "priorClose": 4.61
         },
         {
           "label": "5Y",
           "years": 5.0,
-          "yield": 4.64,
-          "changeBps": -0.3,
-          "priorClose": 4.65
+          "yield": 4.83,
+          "changeBps": 16.9,
+          "priorClose": 4.66
         },
         {
           "label": "7Y",
           "years": 7.0,
-          "yield": 4.74,
-          "changeBps": -0.6,
-          "priorClose": 4.74
+          "yield": 4.9,
+          "changeBps": 15.3,
+          "priorClose": 4.75
         },
         {
           "label": "10Y",
           "years": 10.0,
-          "yield": 4.86,
-          "changeBps": -0.4,
+          "yield": 5.0,
+          "changeBps": 13.8,
           "priorClose": 4.86
         },
         {
           "label": "20Y",
           "years": 20.0,
-          "yield": 5.29,
-          "changeBps": -0.4,
+          "yield": 5.4,
+          "changeBps": 11.4,
           "priorClose": 5.29
         },
         {
           "label": "30Y",
           "years": 30.0,
-          "yield": 5.25,
-          "changeBps": -0.5,
+          "yield": 5.36,
+          "changeBps": 10.2,
           "priorClose": 5.26
         }
       ],
       "spreads": {
-        "twoTenSpread": 34.0,
-        "fiveTenSpread": 22.0,
-        "threeMonthTenSpread": 73.0,
-        "fiveThirtySpread": 61.0,
+        "twoTenSpread": 25.0,
+        "fiveTenSpread": 17.0,
+        "threeMonthTenSpread": 78.0,
+        "fiveThirtySpread": 53.0,
         "isInverted": false
       }
     },
@@ -211,160 +211,160 @@
       {
         "symbol": "ES=F",
         "name": "S&P 500 E-mini",
-        "price": 7414.5,
-        "change": 12.5,
-        "changePct": 0.17
+        "price": 7561.5,
+        "change": -12.75,
+        "changePct": -0.17
       },
       {
         "symbol": "NQ=F",
         "name": "Nasdaq 100 E-mini",
-        "price": 26983.25,
-        "change": -102.0,
-        "changePct": -0.38
+        "price": 27956.0,
+        "change": -58.5,
+        "changePct": -0.21
       },
       {
         "symbol": "YM=F",
         "name": "Dow Jones Mini",
-        "price": 51665.0,
-        "change": 280.0,
-        "changePct": 0.54
+        "price": 52401.0,
+        "change": -97.0,
+        "changePct": -0.18
       },
       {
         "symbol": "RTY=F",
         "name": "Russell 2000 Mini",
-        "price": 2784.7,
-        "change": 24.2,
-        "changePct": 0.88
+        "price": 2833.6,
+        "change": -15.1,
+        "changePct": -0.53
       },
       {
         "symbol": "DX=F",
         "name": "US Dollar Index",
-        "price": 101.89,
-        "change": -0.41,
-        "changePct": -0.4
+        "price": 102.22,
+        "change": 0.57,
+        "changePct": 0.56
       }
     ],
     "fxRates": [
       {
         "pair": "EUR/USD",
         "name": "Euro / US Dollar",
-        "rate": 1.1191,
-        "change": -0.0038,
-        "changePct": -0.33
+        "rate": 1.1172,
+        "change": 0.0025,
+        "changePct": 0.22
       },
       {
         "pair": "USD/JPY",
         "name": "US Dollar / Japanese Yen",
-        "rate": 158.04,
-        "change": 0.54,
-        "changePct": 0.34
+        "rate": 158.73,
+        "change": 0.44,
+        "changePct": 0.28
       },
       {
         "pair": "GBP/USD",
         "name": "British Pound / US Dollar",
-        "rate": 1.3411,
-        "change": -0.0045,
-        "changePct": -0.33
+        "rate": 1.3348,
+        "change": -0.0012,
+        "changePct": -0.09
       },
       {
         "pair": "USD/CNH",
         "name": "US Dollar / Offshore Yuan",
-        "rate": 6.6723,
-        "change": -0.0157,
-        "changePct": -0.23
+        "rate": 6.6683,
+        "change": -0.0077,
+        "changePct": -0.12
       },
       {
         "pair": "AUD/USD",
         "name": "Australian Dollar / USD",
-        "rate": 0.6898,
-        "change": -0.0033,
-        "changePct": -0.47
+        "rate": 0.6871,
+        "change": 0.0002,
+        "changePct": 0.03
       },
       {
         "pair": "USD/SGD",
         "name": "US Dollar / Singapore Dollar",
-        "rate": 1.28,
-        "change": 0.002,
-        "changePct": 0.16
+        "rate": 1.2817,
+        "change": -0.0008,
+        "changePct": -0.06
       }
     ],
     "commodities": [
       {
         "symbol": "CL=F",
         "name": "WTI Crude Oil",
-        "price": 89.87,
+        "price": 86.27,
         "unit": "$/bbl",
-        "change": -0.96,
-        "changePct": -1.06
+        "change": -0.58,
+        "changePct": -0.67
       },
       {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "price": 96.69,
+        "price": 91.82,
         "unit": "$/bbl",
-        "change": -1.63,
-        "changePct": -1.66
+        "change": -0.75,
+        "changePct": -0.81
       },
       {
         "symbol": "GC=F",
         "name": "Gold Futures",
-        "price": 4102.9,
+        "price": 4043.8,
         "unit": "$/t.oz",
-        "change": 28.0,
-        "changePct": 0.69
+        "change": -70.7,
+        "changePct": -1.72
       },
       {
         "symbol": "SI=F",
         "name": "Silver Futures",
-        "price": 52.35,
+        "price": 51.56,
         "unit": "$/t.oz",
-        "change": 0.54,
-        "changePct": 1.05
+        "change": -1.0,
+        "changePct": -1.91
       },
       {
         "symbol": "HG=F",
         "name": "Copper Futures",
-        "price": 6.3,
+        "price": 6.27,
         "unit": "$/lb",
-        "change": 0.09,
-        "changePct": 1.4
+        "change": -0.06,
+        "changePct": -0.97
       }
     ],
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST",
-      "regimeBadge": "BEAR/BULL STEEPENING (+34.0 bps 2s10s)",
-      "conviction": "Constructive Cyclicals · Short-Duration Fixed Income Tilt",
-      "synthesis": "Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at 4.52%, 5Y at 4.64%, 10Y at 4.86%, and 30Y at 5.25% (2Y/10Y at +34.0 bps; 5Y/10Y at +22.0 bps). With the US Dollar Index (DXY) trading near 101.89 and WTI Crude at $89.87/bbl, headline energy-driven inflation risk remains contained, allowing S&P 500 E-mini futures (7,414.50, +0.17%) and Gold ($4,102.90/oz) to absorb elevated long-end term premia. Lead desk catalyst: \"Nvidia Board to Probe Spying Case After CEO Admits Affair\".",
-      "positioningTakeaway": "Favor 2Y–5Y belly duration (4.52%–4.64%) over unhedged 30Y long bonds (5.25%) until term-premium supply clears; watch 5.01% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (26,983) constituents.",
+      "regimeBadge": "BEAR/BULL STEEPENING (+25.0 bps 2s10s)",
+      "conviction": "Defensive Quality · Curve Steepener Bias",
+      "synthesis": "Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at 4.75%, 5Y at 4.83%, 10Y at 5.00%, and 30Y at 5.36% (2Y/10Y at +25.0 bps; 5Y/10Y at +17.0 bps). With the US Dollar Index (DXY) trading near 102.22 and WTI Crude at $86.27/bbl, headline energy-driven inflation risk remains contained, allowing S&P 500 E-mini futures (7,561.50, -0.17%) and Gold ($4,043.80/oz) to absorb elevated long-end term premia. Lead desk catalyst: \"Falling Oil Prices and Bond Yields Offer Investors Some Relief\".",
+      "positioningTakeaway": "Favor 2Y–5Y belly duration (4.75%–4.83%) over unhedged 30Y long bonds (5.36%) until term-premium supply clears; watch 5.15% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (27,956) constituents.",
       "criticalLevels": [
         {
           "asset": "US 10Y Treasury Yield",
-          "current": "4.86%",
-          "support": "4.72%",
-          "resistance": "5.02%",
-          "implication": "Break above 5.02% pressures equity multiples & EM FX; move below 4.72% fuels duration rally."
+          "current": "5.00%",
+          "support": "4.86%",
+          "resistance": "5.16%",
+          "implication": "Break above 5.16% pressures equity multiples & EM FX; move below 4.86% fuels duration rally."
         },
         {
           "asset": "S&P 500 E-mini (ES=F)",
-          "current": "7,414.50",
-          "support": "7,303",
-          "resistance": "7,526",
-          "implication": "Holding above 7,303 keeps institutional dip-buying intact across financials and AI capex leaders."
+          "current": "7,561.50",
+          "support": "7,448",
+          "resistance": "7,675",
+          "implication": "Holding above 7,448 keeps institutional dip-buying intact across financials and AI capex leaders."
         },
         {
           "asset": "US Dollar Index (DXY)",
-          "current": "101.89",
-          "support": "100.74",
-          "resistance": "103.14",
-          "implication": "Reclaiming 103.14 tightens global USD funding; sub-100.74 accelerates flows into Gold & Asian FX."
+          "current": "102.22",
+          "support": "101.07",
+          "resistance": "103.47",
+          "implication": "Reclaiming 103.47 tightens global USD funding; sub-101.07 accelerates flows into Gold & Asian FX."
         },
         {
           "asset": "WTI Crude / USD/JPY",
-          "current": "$89.87 · ¥158.04",
-          "support": "$85.37 · ¥156.04",
-          "resistance": "$94.87 · ¥159.54",
-          "implication": "WTI sub-$95/bbl caps inflation breakevens; USD/JPY above ¥159.5 raises BoJ intervention risk."
+          "current": "$86.27 · ¥158.73",
+          "support": "$81.77 · ¥156.73",
+          "resistance": "$91.27 · ¥160.23",
+          "implication": "WTI sub-$91/bbl caps inflation breakevens; USD/JPY above ¥160.2 raises BoJ intervention risk."
         }
       ],
       "eventsToWatch": [
@@ -372,19 +372,19 @@
           "event": "Federal Reserve FOMC Rate Guidance & Senior Loan Officer Survey",
           "timing": "Next 24–72 Hours",
           "impact": "Critical",
-          "watchFor": "Any hawkish pushback on front-end cuts that lifts US 2Y above 4.64% or flattens the 2Y/10Y spread from +34.0 bps."
+          "watchFor": "Any hawkish pushback on front-end cuts that lifts US 2Y above 4.87% or flattens the 2Y/10Y spread from +25.0 bps."
         },
         {
           "event": "US Treasury 10Y & 30Y Refunding Auction Bid-to-Cover & Tail",
           "timing": "This Week · NY 1:00 PM ET",
           "impact": "High",
-          "watchFor": "Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near 5.37%."
+          "watchFor": "Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near 5.48%."
         },
         {
           "event": "US CPI / PCE Disinflation Trajectory & Energy Pass-Through",
           "timing": "Upcoming Macro Window",
           "impact": "High",
-          "watchFor": "Core services stickiness vs softer energy ($89.87/bbl WTI) dictating real yield direction and Gold ($4,103/oz) momentum."
+          "watchFor": "Core services stickiness vs softer energy ($86.27/bbl WTI) dictating real yield direction and Gold ($4,044/oz) momentum."
         }
       ]
     }
@@ -392,8 +392,8 @@
   "indonesia": {
     "commentary": {
       "title": "Bank Indonesia Macro Commentary & Fixed Income Outlook",
-      "date": "09 Nov 2026",
-      "executiveSummary": "Bank Indonesia maintains its stability-oriented monetary stance with the BI-Rate at 5.75% (Headline CPI at 3.28% YoY), supported by official JISDOR fixing at Rp 18,103 (9 November 2026) and spot USD/IDR at 18,070. In the 23 Oct 2026 SRBI auction on bi.go.id, 12M SRBI cleared at a 6.601% weighted average winner rate (WAR) on IDR 41.81 T nominal bids, while 5Y benchmark FR0109 trades at 7.35% and 10Y benchmark FR0108 yields 7.69% (+283 bps over 10Y UST).",
+      "date": "11 Nov 2026",
+      "executiveSummary": "Bank Indonesia maintains its stability-oriented monetary stance with the BI-Rate at 5.75% (Headline CPI at 3.28% YoY), supported by official JISDOR fixing at Rp 18,059 (10 November 2026) and spot USD/IDR at 18,045. In the 23 Oct 2026 SRBI auction on bi.go.id, 12M SRBI cleared at a 6.601% weighted average winner rate (WAR) on IDR 41.81 T nominal bids, while 5Y benchmark FR0109 trades at 7.32% and 10Y benchmark FR0108 yields 7.55% (+255 bps over 10Y UST).",
       "macroPillars": [
         {
           "heading": "Monetary & Liquidity Operations (23 Oct 2026 SRBI Auction on bi.go.id)",
@@ -401,54 +401,54 @@
         },
         {
           "heading": "Sovereign Debt Curve (DJPPR 2026 Benchmark SUN: FR0109 & FR0108)",
-          "analysis": "IndoGB yields reflect active secondary market repricing across DJPPR's official 2026 benchmark series. The 5Y benchmark (FR0109, 5.875% due Mar 2031) trades at 7.35% while the 10Y benchmark (FR0108, 6.500% due Apr 2036) trades at 7.69%, establishing a +283 bps sovereign spread over 10Y US Treasuries."
+          "analysis": "IndoGB yields reflect active secondary market repricing across DJPPR's official 2026 benchmark series. The 5Y benchmark (FR0109, 5.875% due Mar 2031) trades at 7.32% while the 10Y benchmark (FR0108, 6.500% due Apr 2036) trades at 7.55%, establishing a +255 bps sovereign spread over 10Y US Treasuries."
         },
         {
-          "heading": "Currency Dynamics (JISDOR Rp 18,103 & Offshore NDF)",
-          "analysis": "Bank Indonesia's official JISDOR reference rate fixed at Rp 18,103 per USD on 9 November 2026 (following Rp 18,130 on 6 November 2026). Offshore 1-Month NDFs trade at 18,105 (+35 IDR spread / 2.32% p.a. basis), while IDX Composite (IHSG) closed at 5,075.13 (+0.49%)."
+          "heading": "Currency Dynamics (JISDOR Rp 18,059 & Offshore NDF)",
+          "analysis": "Bank Indonesia's official JISDOR reference rate fixed at Rp 18,059 per USD on 10 November 2026 (following Rp 18,103 on 9 November 2026). Offshore 1-Month NDFs trade at 18,079 (+34 IDR spread / 2.26% p.a. basis), while IDX Composite (IHSG) closed at 5,073.77 (+0.46%)."
         }
       ],
       "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 5.75% · Headline CPI 3.28% YoY)",
       "noteworthyHeadlines": [
         {
-          "title": "Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks",
-          "headline": "Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks",
-          "source": "Kompas.id",
-          "timeAgo": "18h ago",
-          "significance": "Strengthens OJK prudential supervision and institutional governance across Indonesian banks and capital markets (IHSG 5,050.43).",
-          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPMGltd29yTGp2dUZYdVpWdGRjUWUwLVIwYTctOEFlWE9BNTBoeFplaThHNFVsaHpVVWhDZjZpaXhGa2JwUVl2QnBSNjJCcHE1bTNoV0xBNU9WUURBd3RtU0pnaDcxNkhCdEFCbWJvdHZqVGNIVXFUWFBaQjFqaUpKZzJ3dS1oVDhrZHJjWmJuaERCUlJhcU9mdmdXYklLRWI0eF8yQVcwM3otUkU?oc=5"
+          "title": "JCI, Rupiah Close Stronger as VP Gibran Offers to Resign",
+          "headline": "JCI, Rupiah Close Stronger as VP Gibran Offers to Resign",
+          "source": "Tempo.co English",
+          "timeAgo": "11h ago",
+          "significance": "High-profile executive and constitutional development closely watched by foreign institutional desks for cabinet policy continuity, sovereign risk premia on 10Y FR0108 IndoGBs (7.55%), and onshore USD/IDR (18,045) stability.",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPaEwtRHJvbkwwMGNGZVViT3h6LUkxdmM0Uk42OTVjUUQxQVV1RGxSX3RONzBSQWxHOUZLblo4NnI0WmRPU3BobThjU3FNZE92ZnRuUUN5aUdNbkFaUG1Fb1FUSHJqV2dacnprbm1qbGpKOGZKUm9iYnAzc242NG1oRXZjMFJmTnhwQ3B5WFc2WmdSQQ?oc=5"
         },
         {
-          "title": "At 80, the rupiah needs credibility, not ceremony",
-          "headline": "At 80, the rupiah needs credibility, not ceremony",
-          "source": "The Jakarta Post",
-          "timeAgo": "1d ago",
-          "significance": "Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp 18,130 and the 06 Nov 12M SRBI WAR clearing at 6.675%.",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOWUpaSkZqR0ZYLUdHZEJ6UnFWZkhNcl93TXJYNUFmcGFfSlJtRlFWWlZiaWRJby16blNHdEtCTkxUQVF3Y2hQVkdacGRJUHNIZjk5M1k5bE1ueU5QU0RNSXAwUC1iMkNWZEE1eUFlSDNqWnIzX0Z4VzI4V3lVeG4xWG1xQVhKOHpxZGlKQmhqX3RERFNxSlZNc3dUODlZZw?oc=5"
+          "title": "Indonesia Urges Banks to Boost Cyber Defense as Global Attack Surges",
+          "headline": "Indonesia Urges Banks to Boost Cyber Defense as Global Attack Surges",
+          "source": "Tempo.co English",
+          "timeAgo": "11h ago",
+          "significance": "Strengthens OJK prudential supervision and operational resilience across Indonesian commercial banks and domestic money markets (IHSG 5,073.77).",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNMmlPSkRmUEtPcWEwZmRFWVZtRUhCcWpZb0Y1M3RlaVJTUW5zX0IwQUxVV0hmVldjNlRjX0t4RTFuMWlSeDV2SGh6dlRCV1ZSTDRFWlJnanpsbEFzUnBCNEh6QTZWdDZHbzdiNXEtbzRnTkQ1S2NTeG5Yakd3aEo0ZnNXMlM0dkhmeExLZkl4OGIxSjF3SUR3NVlQQVk0bmlRS0Q0?oc=5"
         },
         {
-          "title": "Govt prepares 100 pct rupiah conversion for resource export earnings",
-          "headline": "Govt prepares 100 pct rupiah conversion for resource export earnings",
+          "title": "Indonesia courts Austrian investment for transport infrastructure",
+          "headline": "Indonesia courts Austrian investment for transport infrastructure",
           "source": "ANTARA News",
-          "timeAgo": "2d ago",
-          "significance": "Mandatory onshore conversion of natural resource export proceeds (DHE SDA) structurally deepens domestic USD liquidity and anchors spot USD/IDR near 18,080.",
-          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQWFpiMS1HV3BkdW13c3kyUHN2ckVGUDNlcXZKYnVGUVJyelZfNVBRaVU4WGt5QWZObU9uUGRRMGpvbkxsRDN0aFRGQnluLXd1RW04dFRMS0xVMGR5ZC1ySHJVN2hUVGkzNi1rU1RrMnVQU19qUk9RUTZoRW5ybDRfTGRjcG1KbjlDRHBJcGlRS0dnNU4xbnpoLUhLQjRIZ0dCVXU3c0toME1RZ9IBrwFBVV95cUxORWhPVGhwa1l1WEdvd3VJNHNabUZpdWZLQ1pzaV9EQ1ZtYVpmdXpCdFVmZTgxTWJoRlZZVWpVeFJ4Z1FSd0NmRjRtaUdwbkhwY0llTmtaMEFRY2h3cHA2VTZxX3BUVjFlYVBYcDdLQlctNm1DU1h5bVZmQXJaWEJJNjlNSUVGajZFTFl1Nnp1OFUtRXJRRjIzekpOaldxdk4zLWd5WkdVV0xtcXl5eVBR?oc=5"
+          "timeAgo": "11h ago",
+          "significance": "Bolsters bilateral foreign direct investment (FDI) into Indonesian transport and green infrastructure, strengthening the capital account buffer supporting USD/IDR near 18,045.",
+          "url": "https://en.antaranews.com/news/441655/indonesia-courts-austrian-investment-for-transport-infrastructure"
         },
         {
-          "title": "Bank Indonesia expects export retention policy to boost forex reserves",
-          "headline": "Bank Indonesia expects export retention policy to boost forex reserves",
+          "title": "Indonesia vows to continue capital market reforms ahead of MSCI review",
+          "headline": "Indonesia vows to continue capital market reforms ahead of MSCI review",
           "source": "ANTARA News",
-          "timeAgo": "2d ago",
-          "significance": "Reinforces Bank Indonesia's US$146.8B external reserve buffer to defend JISDOR (Rp 18,130) alongside the 06 Nov SRBI issuance (12M WAR at 6.675%).",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPX0RaNGIxa3FiM0J1ZTRXbE1yX1d0NW1UZDZ2NHE5UzZmd2YwWjJEclh5UEZXVEg2dFdNZnJLTjRENjlveEtuSWRJWGViQWRJcU9DcEFXc1pSLU9PdUtrYkM3ZDhuMTN6MEtfaTN2cHk1MzRvNnN3UG56LUV5YWQtdjFHQ2pHTnlsNjdsWGtwZ2ZmSUtLcE5GQXVMYTJmVU1UM2VPdUNVUGVBc1ExZUhsMDVR0gGyAUFVX3lxTE9fRFo0YjFrcWIzQnVlNFdsTXJfV3Q1bVRkNnY0cTlTNmZ3ZjBaMkRyWHlQRldUSDZ0V01mcktONEQ2OW94S25JZElYZWJBZElxT0NwQVdzWlItT091S2tiQzdkOG4xM3owS19pM3ZweTUzNG82c3dQbnotRXlhZC12MUdDakdOeWw2N2xYa3BnZmZJS0twTkZBdUxhMmZVTVQzZU91Q1VQZUFzUTFlSGwwNVE?oc=5"
+          "timeAgo": "13h ago",
+          "significance": "Structural IDX/OJK equity market reforms address free-float and investability criteria to defend Indonesia's MSCI EM index weight and catalyze foreign inflows into IHSG (5,073.77).",
+          "url": "https://en.antaranews.com/news/441595/indonesia-vows-to-continue-capital-market-reforms-ahead-of-msci-review"
         },
         {
-          "title": "Indonesia's foreign exchange reserves hit US$146.8 bln in October: BI",
-          "headline": "Indonesia's foreign exchange reserves hit US$146.8 bln in October: BI",
+          "title": "OJK warns rogue investors to stop stock manipulation",
+          "headline": "OJK warns rogue investors to stop stock manipulation",
           "source": "ANTARA News",
-          "timeAgo": "2d ago",
-          "significance": "Reported by ANTARA News; shapes onshore institutional allocation across Jakarta equities (IHSG 5,050.43) and Rupiah money markets.",
-          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQLUxTZHdRM1ZrbWdwd1pVWXRnUE9TLUx3SEgyeXZEb2xQUE9JYWZxeEx2UndSTHhWRk5vT09ERzZFNmU4R1lINWlocTZlSnFlZVl6a3JLUEY3a241cXNNZ0Q2eERKaEtwdG1PeHNKcnl6cWF0Q21EWDVlMlB1S0t1MkpUUC1JNFpDY0VUNWlDYkU5N0NidGs2cmNzNnFoYnRmc29XcEVR?oc=5"
+          "timeAgo": "15h ago",
+          "significance": "Reported by ANTARA News; shapes onshore institutional allocation across Jakarta equities (IHSG 5,073.77) and Rupiah money markets.",
+          "url": "https://en.antaranews.com/news/441571/ojk-warns-rogue-investors-to-stop-stock-manipulation"
         }
       ]
     },
@@ -458,16 +458,16 @@
           "tenor": "5Y (Benchmark)",
           "code": "FR0109",
           "maturity": "15 Mar 2031",
-          "yield": 7.35,
-          "changeBps": 0.1,
+          "yield": 7.32,
+          "changeBps": -2.7,
           "coupon": 5.875
         },
         {
           "tenor": "10Y (Benchmark)",
           "code": "FR0108",
           "maturity": "15 Apr 2036",
-          "yield": 7.69,
-          "changeBps": 0.1,
+          "yield": 7.55,
+          "changeBps": -14.2,
           "coupon": 6.5
         },
         {
@@ -516,17 +516,21 @@
           "awardedVolumeIDR": "IDR 12.87 T"
         }
       ],
-      "sovereignSpread10Y": 283,
+      "sovereignSpread10Y": 255,
       "biRate": 5.75,
       "cpiInflationYoY": 3.28
     },
     "fxAndNdf": {
-      "spotRate": 18070,
-      "spotChange": -10,
-      "spotChangePct": -0.06,
-      "jisdorRate": 18103,
-      "jisdorChange": -27,
+      "spotRate": 18045,
+      "spotChange": -25,
+      "spotChangePct": -0.14,
+      "jisdorRate": 18059,
+      "jisdorChange": -44,
       "jisdorHistory": [
+        {
+          "date": "10 November 2026",
+          "rate": 18059
+        },
         {
           "date": "9 November 2026",
           "rate": 18103
@@ -542,45 +546,41 @@
         {
           "date": "4 November 2026",
           "rate": 18140
-        },
-        {
-          "date": "3 November 2026",
-          "rate": 18148
         }
       ],
-      "ndf1M": 18105,
-      "ndf3M": 18175,
-      "ndfSpread1M": 35,
-      "annualizedBasis1M": 2.32,
+      "ndf1M": 18079,
+      "ndf3M": 18146,
+      "ndfSpread1M": 34,
+      "annualizedBasis1M": 2.26,
       "ihsgIndex": {
-        "level": 5075.13,
-        "change": 24.7,
-        "changePct": 0.49
+        "level": 5073.77,
+        "change": 23.34,
+        "changePct": 0.46
       },
-      "foreignFlowsDaily": "+IDR 120.0 Billion",
+      "foreignFlowsDaily": "+IDR 112.7 Billion",
       "foreignFlowsYTD": "+IDR 38.2 Trillion"
     },
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
-      "regimeBadge": "BI-RATE 5.75% · REAL BUFFER +2.47% · SPREAD +283 BPS",
+      "regimeBadge": "BI-RATE 5.75% · REAL BUFFER +2.47% · SPREAD +255 BPS",
       "conviction": "Overweight 12M SRBI (6.601% WAR) & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry",
-      "synthesis": "Indonesia's macro-financial framework offers a +2.47% real policy rate buffer (BI-Rate at 5.75% vs Headline CPI at 3.28% YoY) alongside a +283 bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (7.69% vs US 10Y at 4.86%, with 5Y FR0109 at 7.35%). In Bank Indonesia's completed Friday 23 Oct 2026 SRBI issuance (bi.go.id), total incoming bids reached IDR 36.90 T across tenors while BI awarded IDR 7.50 T (4.92x bid-to-cover), with Winner WAR clearing at 6.491% (6M), 6.530% (9M), and 6.601% (12M: IDR 12.87 T awarded from IDR 41.81 T bids). Onshore USD/IDR spot (18,070) and JISDOR (Rp 18,103) remain well-anchored with 1M NDFs at 18,105 (+35 IDR basis) and IHSG at 5,075.13 (+0.49%). Lead domestic development: \"Amidst Cyber ​​Threats in Indonesia, OJK Strengthens Coordination with Banks\".",
-      "positioningTakeaway": "Following Friday 23 Oct 2026's SRBI issuance (12M WAR at 6.601%), capture front-end Rupiah carry via 12M SRBI and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (7.35%–7.69%) while monitoring the 1M NDF-Spot basis (+35 IDR) as an early-warning barometer for offshore USD demand.",
+      "synthesis": "Indonesia's macro-financial framework offers a +2.47% real policy rate buffer (BI-Rate at 5.75% vs Headline CPI at 3.28% YoY) alongside a +255 bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (7.55% vs US 10Y at 5.00%, with 5Y FR0109 at 7.32%). In Bank Indonesia's completed Friday 23 Oct 2026 SRBI issuance (bi.go.id), total incoming bids reached IDR 36.90 T across tenors while BI awarded IDR 7.50 T (4.92x bid-to-cover), with Winner WAR clearing at 6.491% (6M), 6.530% (9M), and 6.601% (12M: IDR 12.87 T awarded from IDR 41.81 T bids). Onshore USD/IDR spot (18,045) and JISDOR (Rp 18,059) remain well-anchored with 1M NDFs at 18,079 (+34 IDR basis) and IHSG at 5,073.77 (+0.46%). Lead domestic development: \"JCI, Rupiah Close Stronger as VP Gibran Offers to Resign\".",
+      "positioningTakeaway": "Following Friday 23 Oct 2026's SRBI issuance (12M WAR at 6.601%), capture front-end Rupiah carry via 12M SRBI and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (7.32%–7.55%) while monitoring the 1M NDF-Spot basis (+34 IDR) as an early-warning barometer for offshore USD demand.",
       "criticalLevels": [
         {
           "asset": "USD/IDR Spot & JISDOR",
-          "current": "18,070 (JISDOR 18,103)",
-          "support": "17,945",
-          "resistance": "18,195",
-          "implication": "Break above 18,195 triggers active BI DNDF/spot intervention; move below 17,945 invites foreign bond inflows."
+          "current": "18,045 (JISDOR 18,059)",
+          "support": "17,920",
+          "resistance": "18,170",
+          "implication": "Break above 18,170 triggers active BI DNDF/spot intervention; move below 17,920 invites foreign bond inflows."
         },
         {
           "asset": "10Y IndoGB (FR0108)",
-          "current": "7.69% (+283 bps)",
-          "support": "7.55%",
-          "resistance": "7.85%",
-          "implication": "Yields near 7.85% attract domestic pension/bank buying; compression below 7.55% requires lower UST yields."
+          "current": "7.55% (+255 bps)",
+          "support": "7.41%",
+          "resistance": "7.71%",
+          "implication": "Yields near 7.71% attract domestic pension/bank buying; compression below 7.41% requires lower UST yields."
         },
         {
           "asset": "12M SRBI (23 Oct 2026 Issued)",
@@ -591,10 +591,10 @@
         },
         {
           "asset": "IDX Composite (IHSG)",
-          "current": "5,075.13",
-          "support": "4,974",
-          "resistance": "5,177",
-          "implication": "Reclaiming 5,177 confirms foreign institutional rotation back into big-cap Jakarta banks and infrastructure."
+          "current": "5,073.77",
+          "support": "4,972",
+          "resistance": "5,175",
+          "implication": "Reclaiming 5,175 confirms foreign institutional rotation back into big-cap Jakarta banks and infrastructure."
         }
       ],
       "eventsToWatch": [
@@ -608,13 +608,13 @@
           "event": "100% DHE Export Earnings Conversion & Daily 15:15 WIB JISDOR Fixing",
           "timing": "Daily · 15:15 WIB (16:15 SGT)",
           "impact": "High",
-          "watchFor": "Onshore USD supply from exporter retention alongside any widening of the 1M NDF spread beyond +100 IDR (currently +35 IDR) over spot (18,070)."
+          "watchFor": "Onshore USD supply from exporter retention alongside any widening of the 1M NDF spread beyond +100 IDR (currently +34 IDR) over spot (18,045)."
         },
         {
           "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting",
           "timing": "Bi-Weekly / Monthly Policy Cycle",
           "impact": "High",
-          "watchFor": "Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, 7.35%), FR0108 (10Y, 7.69%), FR0106 (15Y), and FR0107 (20Y)."
+          "watchFor": "Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, 7.32%), FR0108 (10Y, 7.55%), FR0106 (15Y), and FR0107 (20Y)."
         }
       ]
     }
@@ -622,123 +622,139 @@
   "china": {
     "commentary": {
       "title": "PBoC & CCDC ChinaBond Sovereign Fixed Income Outlook",
-      "date": "09 Nov 2026",
-      "executiveSummary": "People's Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, 1Y LPR at 3.00%, and 5Y LPR at 3.50% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. (CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on 2026-11-06, 1Y CGB cleared at 1.1683% (-0.3 bps), 5Y benchmark at 1.3115% (-1.2 bps), 10Y benchmark at 1.5868% (-1.7 bps), and 30Y ultra-long CGB at 2.0275% (-1.5 bps), establishing a -327 bps 10Y spread vs US Treasuries.",
+      "date": "11 Nov 2026",
+      "executiveSummary": "People's Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, 1Y LPR at 3.00%, and 5Y LPR at 3.50% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. (CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on 2026-11-10, 1Y CGB cleared at 1.1775% (+1.1 bps), 5Y benchmark at 1.3097% (+0.4 bps), 10Y benchmark at 1.5965% (+0.9 bps), and 30Y ultra-long CGB at 2.0363% (+0.8 bps), establishing a -340 bps 10Y spread vs US Treasuries.",
       "macroPillars": [
         {
-          "heading": "CCDC ChinaBond CGB Yield Curve (yield.chinabond.com.cn · 2026-11-06)",
-          "analysis": "Official CCDC ChinaBond CGB yields compressed across all maturities on 2026-11-06: 1Y at 1.1683%, 3Y at 1.2291%, 5Y at 1.3115%, 10Y at 1.5868%, and 30Y at 2.0275%, keeping the 2s10s slope at +37 bps."
+          "heading": "CCDC ChinaBond CGB Yield Curve (yield.chinabond.com.cn · 2026-11-10)",
+          "analysis": "Official CCDC ChinaBond CGB yields compressed across all maturities on 2026-11-10: 1Y at 1.1775%, 3Y at 1.2382%, 5Y at 1.3097%, 10Y at 1.5965%, and 30Y at 2.0363%, keeping the 2s10s slope at +38 bps."
         },
         {
           "heading": "PBoC Open Market Operations, DR007 Repo & CCDC CDB Policy Bank Curve",
-          "analysis": "With the 7-Day Reverse Repo policy anchor at 1.50%, 1Y/5Y LPR at 3.00%/3.50%, and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and official CCDC 10Y China Development Bank (CDB) policy bank bonds (1.771%, +18.4 bps over 10Y CGB)."
+          "analysis": "With the 7-Day Reverse Repo policy anchor at 1.50%, 1Y/5Y LPR at 3.00%/3.50%, and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and official CCDC 10Y China Development Bank (CDB) policy bank bonds (1.780%, +18.4 bps over 10Y CGB)."
         },
         {
           "heading": "Renminbi Central Parity Fixing (CFETS), SSEC & CSI 300 Positioning",
-          "analysis": "Onshore USD/CNY trades at 6.6728 (-0.05%) alongside offshore USD/CNH at 6.6713 and the PBoC daily central parity fixing at 6.6703, while the Shanghai Composite sits at 3,660.79 (+0.32%) and CSI 300 at 4,054.28 (-1.44%)."
+          "analysis": "Onshore USD/CNY trades at 6.6703 (-0.04%) alongside offshore USD/CNH at 6.6759 and the PBoC daily central parity fixing at 6.6678, while the Shanghai Composite sits at 3,660.79 (+0.32%) and CSI 300 at 4,054.28 (-1.44%)."
         }
       ],
       "policyPosture": "Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.00% · 5Y LPR 3.50%)",
       "noteworthyHeadlines": [
         {
-          "title": "CCDC ChinaBond 10-Year CGB Yield Fixes at 1.5868% Amid Accommodative PBoC Liquidity",
-          "headline": "CCDC ChinaBond 10-Year CGB Yield Fixes at 1.5868% Amid Accommodative PBoC Liquidity",
-          "source": "ChinaBond (CCDC)",
-          "timeAgo": "4h ago",
-          "significance": "Official CCDC valuation confirms commercial bank demand across 5Y (1.3115%) and 10Y (1.5868%) CGB benchmarks.",
-          "url": "https://yield.chinabond.com.cn/cbweb-mn/yc/ycYz?locale=en_US"
-        },
-        {
-          "title": "China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan",
-          "headline": "China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan",
-          "source": "WSJ",
+          "title": "‘Adding fuel to fire’: how Nvidia CEO’s troubles could tighten China chip curbs",
+          "headline": "‘Adding fuel to fire’: how Nvidia CEO’s troubles could tighten China chip curbs",
+          "source": "South China Morning Post",
           "timeAgo": "6h ago",
-          "significance": "Directly anchors PBoC daily central parity fixing (6.6703) and narrows the offshore-onshore CNH/CNY basis (CNY 6.6728).",
-          "url": "https://www.wsj.com/economy/central-banking"
+          "significance": "Informs state strategic capex and policy bank financing demand across the CCDC 30Y CGB (2.0363%) and 10Y CDB policy bank curve (1.780%).",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPTzV1Tng4S1JURUhDd1FZRXE1LTRGY1lsTFRqSUl3UHRmRURoXzIwVnRHUVBiU3A5VVZFUC1ibS02UmFnbXdWOHVzdWE2aE5pOUtBNWJNaWMtcTkwZ1ByUEt4Rk1mQXRzejQxS3Jadzh1c0hQdEg4SVlaejNwQ1pTZWN4eG1sM1ZqX1c4N3c3b0laNThfQXJkVk8xMTFzVVkydUtTcWlsSG1pWDVKRXFtb2lfWWg1cEJ6R1dEbWtQUzR0VV84SVMxREEtM3lHUdIBzgFBVV95cUxQeEYwVmNGY00tcnFCSnpIMFVOVXJINnp5SnFORWpXcXFJblBWMzdBOGVic2RpSjExT3JOVlZBck42TWc1TkNnRmNuN2xIS2ZHWmxHUWVIaURzMzVzVHRXc05KbGI4UjQzNEtmZ1pTZ1ZFNkRLTGNaWkpzZXlTR1lzeTlwQlRjLThhM04yQURLalkzdDI3a2RzWkY1dTl1bkhLVFVkdDc2dmdLbzUxS0MzZl9vRkFKYnZWWXF3NWlGMVhyZUc0czlwWDl0b2dKQQ?oc=5"
         },
         {
-          "title": "People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
-          "headline": "People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
-          "source": "Bloomberg",
-          "timeAgo": "9h ago",
-          "significance": "Reinforces PBoC reserve diversification alongside sovereign CCDC CGB curve stability (30Y at 2.0275%).",
-          "url": "https://www.bloomberg.com/markets"
+          "title": "COMMENTARY: China's crude oil imports recover, fuel exports not so much",
+          "headline": "COMMENTARY: China's crude oil imports recover, fuel exports not so much",
+          "source": "Reuters",
+          "timeAgo": "6h ago",
+          "significance": "Geopolitical and bilateral trade-tariff dynamics shape China's external surplus and CFETS USD/CNY conversion flows (6.6703), a primary catalyst for PBoC liquidity and rate calibration.",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPazhScG1vNWotRURNakQ0YTRxZ2JXY180M3hPQ2VpdDF3UnBRXy1RSHcxSWRvOFJqTERXSDMteGZuSGVOYzI5Y0x3c1VPQlZpSDBJN255X3UxdGQybXFPNWw2N1BfR2l3azB4ang1Z29LMzU4MXo5RVNrMFR2XzRndDdqU3BfOHNWZ0xfNGhJOXZPV3ROXzBJWW9XSUtfWW9ja1VrU0RZQ2ZKVG9Pa0Frc0lSbnoxUkYwTFhLTnBfc05sTUxm?oc=5"
+        },
+        {
+          "title": "Alibaba chip unit T-Head files for Hong Kong IPO amid China’s AI push",
+          "headline": "Alibaba chip unit T-Head files for Hong Kong IPO amid China’s AI push",
+          "source": "South China Morning Post",
+          "timeAgo": "10h ago",
+          "significance": "Reported by South China Morning Post; influences onshore bank duration appetite across 10Y CCDC CGB (1.5965%) and 10Y CDB policy bank bonds (1.780%).",
+          "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPZUJHVlpyRkNPSWRKNUFKWGdGVVFBdnl3YzluMm9MdDM5UHFvdFFJVUlwanNlaTFscXo4N3Y3S0pzQ0pFb21oV2l4SjB2bzFicEdmY19rZW1FOXFvcXQ4cXl2Q19fbkNPejZhXzdJQ1g2MnY1bDI0V3I1bHUyWHJKT2lCZEl3WHVGdDRPNzlFRzhQX3FTNFlmTGZhSElZa0xuUkN6eDRnNDV1b2FBOVRsSE5ldFo5YlI4NExScTlCZ1lCQ2RJLTBGTDA5THhRcmlsUDFNNVBjWjhZdkU?oc=5"
+        },
+        {
+          "title": "On the right track: Beijing, Ottawa ramp up trade ties as CEOs plan China trip for Apec",
+          "headline": "On the right track: Beijing, Ottawa ramp up trade ties as CEOs plan China trip for Apec",
+          "source": "South China Morning Post",
+          "timeAgo": "11h ago",
+          "significance": "External tariff and diplomatic negotiations influence China's industrial export outlook, keeping PBoC policy supportive with 5Y CCDC CGB yields anchored at 1.3097%.",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNclFEUzR4emFlZ0NpeUh3dTNkQWpBOFlHeTJSc0NpS3pkX0kyNGtyRUZFYW9SUEFxakVxOENOelVyclNfcndHR0RIZF9hcVBrb2l1YllFaF90VHowV0d0R3VEaXRSYm11TVVmYXZnc1RrbVcxM3FmNlNBd0otalBiTm16VkJvMW16ankzZVc1Y1Z1NjFMSnhwbEYwM05qTDRIa2JfQjVpRzhhcF9wT0ljblZtZHFsTmRoZ0RwOA?oc=5"
+        },
+        {
+          "title": "PBOC Sets Stronger Yuan Daily Reference Rate at 6.7167",
+          "headline": "PBOC Sets Stronger Yuan Daily Reference Rate at 6.7167",
+          "source": "TradingPedia",
+          "timeAgo": "16h ago",
+          "significance": "Guides interbank DR007 repo funding conditions and commercial bank duration demand across 5Y (1.3097%) and 10Y (1.5965%) CCDC ChinaBond benchmarks.",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNNmprSGJzNUFMZC1GZnlzZktaaUVneFV3ek5iOXlrOUJTMVMtbFYyTU9mY0M5LVMyNVZLbGVJTk9JaGRBTGJ3TTZrRmhTN3BhVWt4MDduTzlZQXNsd0RTYW1CMXhEbmVnNWk4Z2tnRy1JRmY2c1dxY2RKRVVPdjBKdy1VVHpvU3ZvTGtXQmVvVVRsMUlFbEZXZEdsNA?oc=5"
         }
       ]
     },
     "bonds": {
-      "curveDate": "2026-11-06",
+      "curveDate": "2026-11-10",
       "ccdcCgb": [
         {
           "tenor": "1Y",
           "code": "260019.IB",
-          "yield": 1.1683,
-          "priorYield": 1.171,
-          "changeBps": -0.3,
+          "yield": 1.1775,
+          "priorYield": 1.1667,
+          "changeBps": 1.1,
           "coupon": 1.35
         },
         {
           "tenor": "2Y",
           "code": "260020.IB",
-          "yield": 1.2155,
-          "priorYield": 1.2214,
-          "changeBps": -0.6,
+          "yield": 1.2206,
+          "priorYield": 1.2157,
+          "changeBps": 0.5,
           "coupon": 1.42
         },
         {
           "tenor": "3Y",
           "code": "260016.IB",
-          "yield": 1.2291,
-          "priorYield": 1.2397,
-          "changeBps": -1.1,
+          "yield": 1.2382,
+          "priorYield": 1.2297,
+          "changeBps": 0.8,
           "coupon": 1.55
         },
         {
           "tenor": "5Y (Benchmark)",
           "code": "260014.IB",
-          "yield": 1.3115,
-          "priorYield": 1.3236,
-          "changeBps": -1.2,
+          "yield": 1.3097,
+          "priorYield": 1.3053,
+          "changeBps": 0.4,
           "coupon": 1.75
         },
         {
           "tenor": "7Y",
           "code": "260018.IB",
-          "yield": 1.3996,
-          "priorYield": 1.4161,
-          "changeBps": -1.6,
+          "yield": 1.4186,
+          "priorYield": 1.4094,
+          "changeBps": 0.9,
           "coupon": 1.92
         },
         {
           "tenor": "10Y (Benchmark)",
           "code": "260011.IB",
-          "yield": 1.5868,
-          "priorYield": 1.6038,
-          "changeBps": -1.7,
+          "yield": 1.5965,
+          "priorYield": 1.5874,
+          "changeBps": 0.9,
           "coupon": 2.04
         },
         {
           "tenor": "15Y",
           "code": "260015.IB",
-          "yield": 1.8609,
-          "priorYield": 1.879,
-          "changeBps": -1.8,
+          "yield": 1.8695,
+          "priorYield": 1.8612,
+          "changeBps": 0.8,
           "coupon": 2.28
         },
         {
           "tenor": "20Y",
           "code": "260017.IB",
-          "yield": 2.0139,
-          "priorYield": 2.0332,
-          "changeBps": -1.9,
+          "yield": 2.0215,
+          "priorYield": 2.0139,
+          "changeBps": 0.8,
           "coupon": 2.39
         },
         {
           "tenor": "30Y (Ultra-Long)",
           "code": "2600001.IB",
-          "yield": 2.0275,
-          "priorYield": 2.0425,
-          "changeBps": -1.5,
+          "yield": 2.0363,
+          "priorYield": 2.028,
+          "changeBps": 0.8,
           "coupon": 2.47
         }
       ],
@@ -760,7 +776,7 @@
         {
           "instrument": "10Y CDB Policy Bank (CCDC)",
           "code": "260210.IB",
-          "rate": 1.771,
+          "rate": 1.78,
           "changeBps": -1.7,
           "description": "CCDC ChinaBond CDB 10Y (+18.4 bps over 10Y CGB)"
         },
@@ -783,18 +799,18 @@
       "lpr1Y": 3.0,
       "lpr5Y": 3.5,
       "cpiInflationYoY": 0.6,
-      "sovereignSpread10Y": -327
+      "sovereignSpread10Y": -340
     },
     "fxAndEquities": {
-      "cnySpot": 6.6728,
-      "cnyChange": -0.0032,
-      "cnyChangePct": -0.05,
-      "cnhSpot": 6.6713,
-      "cnhChange": -0.0023,
-      "cnhChangePct": -0.03,
-      "pbocFixing": 6.6703,
+      "cnySpot": 6.6703,
+      "cnyChange": -0.0024,
+      "cnyChangePct": -0.04,
+      "cnhSpot": 6.6759,
+      "cnhChange": -0.0004,
+      "cnhChangePct": -0.01,
+      "pbocFixing": 6.6678,
       "pbocFixingChange": -0.0115,
-      "cnhCnySpreadPips": -15,
+      "cnhCnySpreadPips": 56,
       "shanghaiComposite": {
         "level": 3660.79,
         "change": 11.61,
@@ -810,30 +826,30 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS",
-      "regimeBadge": "7D OMO 1.50% · CCDC 10Y 1.587% · US-CN SPREAD -327 BPS",
+      "regimeBadge": "7D OMO 1.50% · CCDC 10Y 1.597% · US-CN SPREAD -340 BPS",
       "conviction": "Belly CGB Receive (3Y–5Y CCDC Curve) · FX-Hedged Total Return · Watch 30Y Ultra-Long Supply",
-      "synthesis": "Official China Central Depository & Clearing (CCDC · yield.chinabond.com.cn) ChinaBond CGB valuations (2026-11-06) show an accommodative sovereign curve with 1Y CGB at 1.168%, 5Y benchmark at 1.312%, 10Y benchmark at 1.587%, and 30Y ultra-long CGB at 2.027% (10s30s slope at +44 bps; -327 bps vs US 10Y Treasuries). With the PBoC 7-Day Reverse Repo anchored at 1.50% (1Y/5Y LPR at 3.00%/3.50%), commercial bank wealth-management demand continues to compress front-end and belly yields. In currency markets, onshore USD/CNY (6.6728) and offshore USD/CNH (6.6713) track closely around the PBoC daily central parity fixing (6.6703), while the Shanghai Composite trades at 3,660.79 (+0.32%). Lead China macro development: \"CCDC ChinaBond 10-Year CGB Yield Fixes at 1.5868% Amid Accommodative PBoC Liquidity\".",
-      "positioningTakeaway": "Express bullish China rates views via 3Y–5Y CCDC CGB benchmarks (1.312%) where PBoC DR007 funding carry is positive, while avoiding unhedged duration chases below 1.50% on 10Y CGB (1.587%) where PBoC bond-lending intervention risk rises.",
+      "synthesis": "Official China Central Depository & Clearing (CCDC · yield.chinabond.com.cn) ChinaBond CGB valuations (2026-11-10) show an accommodative sovereign curve with 1Y CGB at 1.177%, 5Y benchmark at 1.310%, 10Y benchmark at 1.597%, and 30Y ultra-long CGB at 2.036% (10s30s slope at +44 bps; -340 bps vs US 10Y Treasuries). With the PBoC 7-Day Reverse Repo anchored at 1.50% (1Y/5Y LPR at 3.00%/3.50%), commercial bank wealth-management demand continues to compress front-end and belly yields. In currency markets, onshore USD/CNY (6.6703) and offshore USD/CNH (6.6759) track closely around the PBoC daily central parity fixing (6.6678), while the Shanghai Composite trades at 3,660.79 (+0.32%). Lead China macro development: \"‘Adding fuel to fire’: how Nvidia CEO’s troubles could tighten China chip curbs\".",
+      "positioningTakeaway": "Express bullish China rates views via 3Y–5Y CCDC CGB benchmarks (1.310%) where PBoC DR007 funding carry is positive, while avoiding unhedged duration chases below 1.50% on 10Y CGB (1.597%) where PBoC bond-lending intervention risk rises.",
       "criticalLevels": [
         {
           "asset": "CCDC 10Y ChinaBond CGB",
-          "current": "1.587%",
+          "current": "1.597%",
           "support": "1.500%",
           "resistance": "1.720%",
           "implication": "Yields approaching 1.500% risk PBoC secondary bond sales; backup toward 1.720% triggers domestic bank buying."
         },
         {
           "asset": "CCDC 30Y Ultra-Long CGB",
-          "current": "2.027% (+44 bps 10s30s)",
+          "current": "2.036% (+44 bps 10s30s)",
           "support": "1.920%",
           "resistance": "2.150%",
           "implication": "Ultra-long special Treasury issuance supply tests 2.150% ceiling; rural bank duration demand supports 1.920%."
         },
         {
           "asset": "USD/CNH & PBoC Fixing",
-          "current": "6.6713 (Fix 6.6703)",
-          "support": "6.6063",
-          "resistance": "6.7463",
+          "current": "6.6759 (Fix 6.6678)",
+          "support": "6.6109",
+          "resistance": "6.7509",
           "implication": "PBoC FX reserve requirement adjustments and counter-cyclical fixing factor cap rapid one-way Yuan swings."
         },
         {
@@ -855,13 +871,13 @@
           "event": "Ministry of Finance (MoF) Ultra-Long Special CGB Auction & LPR Fixing",
           "timing": "20th of Month · 09:15 CST",
           "impact": "High",
-          "watchFor": "Primary auction bid-to-cover on 10Y (1.587%) and 30Y (2.027%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR (3.00% / 3.50%)."
+          "watchFor": "Primary auction bid-to-cover on 10Y (1.597%) and 30Y (2.036%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR (3.00% / 3.50%)."
         },
         {
           "event": "PBoC USD/CNY Central Parity Fixing & Northbound Bond Connect Flows",
           "timing": "Daily · 09:15 CST",
           "impact": "High",
-          "watchFor": "Deviation between PBoC central parity (6.6703) and offshore CNH (6.6713) dictating FX-hedged foreign inflows into CCDC-custodied CGBs."
+          "watchFor": "Deviation between PBoC central parity (6.6678) and offshore CNH (6.6759) dictating FX-hedged foreign inflows into CCDC-custodied CGBs."
         }
       ]
     }
@@ -869,107 +885,123 @@
   "korea": {
     "commentary": {
       "title": "Bank of Korea & KOFIA / SOFIA Fixed Income Outlook",
-      "date": "09 Nov 2026",
-      "executiveSummary": "The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) while Korea Overnight Financing Repo (KOFR / SOFIA) fixes at 3.045% (+3.3 bps), 1-day BOK Call Rate trades at 3.048%, and 91-day KOFIA CD rates sit at 3.340%. Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve (09 Nov 2026), the benchmark 3Y KTB trades at 3.634% (+1.2 bps), 5Y KTB at 3.728% (+1.2 bps), 10Y KTB at 3.858% (+0.6 bps, -100 bps vs 10Y UST), and 30Y KTB at 3.980% (+0.5 bps).",
+      "date": "11 Nov 2026",
+      "executiveSummary": "The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) while Korea Overnight Financing Repo (KOFR / SOFIA) fixes at 3.041% (-1.9 bps), 1-day BOK Call Rate trades at 3.037%, and 91-day KOFIA CD rates sit at 3.360%. Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve (10 Nov 2026), the benchmark 3Y KTB trades at 3.626% (-0.8 bps), 5Y KTB at 3.716% (-1.2 bps), 10Y KTB at 3.851% (-0.7 bps, -115 bps vs 10Y UST), and 30Y KTB at 3.961% (-1.9 bps).",
       "macroPillars": [
         {
-          "heading": "KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr · 09 Nov 2026)",
-          "analysis": "Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at 3.602%, 2Y KTB at 3.621%, 3Y benchmark KTB at 3.634%, 5Y KTB at 3.728%, 10Y benchmark KTB at 3.858%, and 30Y KTB at 3.980%, supported by passive FTSE World Government Bond Index (WGBI) allocations."
+          "heading": "KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr · 10 Nov 2026)",
+          "analysis": "Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at 3.602%, 2Y KTB at 3.632%, 3Y benchmark KTB at 3.626%, 5Y KTB at 3.716%, 10Y benchmark KTB at 3.851%, and 30Y KTB at 3.961%, supported by passive FTSE World Government Bond Index (WGBI) allocations."
         },
         {
           "heading": "SOFIA / KOFR Overnight Repo, KOFIA CD 91D, Call Rate & AA- Corporate Spreads",
-          "analysis": "Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 3.045% (+3.3 bps) and 1-day Call Rate at 3.048% against the 3.00% BOK Base Rate, while KOFIA 91-day CD final quotation sits at 3.340%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.550%, and 3Y AA- corporate bonds at 4.358% (+72.4 bps over 3Y KTB)."
+          "analysis": "Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 3.041% (-1.9 bps) and 1-day Call Rate at 3.037% against the 3.00% BOK Base Rate, while KOFIA 91-day CD final quotation sits at 3.360%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.550%, and 3Y AA- corporate bonds at 4.332% (+70.6 bps over 3Y KTB)."
         },
         {
           "heading": "USD/KRW FX Dynamics, Semiconductor Cycle & KOSPI Positioning",
-          "analysis": "Onshore USD/KRW trades at ₩1,350.33 (-0.99%) with 1M offshore NDFs at ₩1,348.09, while KOSPI closed at 5,018.85 (-0.81%) and KOSDAQ at 638.97 (-0.82%)."
+          "analysis": "Onshore USD/KRW trades at ₩1,342.17 (+0.00%) with 1M offshore NDFs at ₩1,339.93, while KOSPI closed at 5,018.85 (-0.81%) and KOSDAQ at 638.97 (-0.82%)."
         }
       ],
-      "policyPosture": "Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 3.045% · CD 91D 3.34%)",
+      "policyPosture": "Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 3.041% · CD 91D 3.36%)",
       "noteworthyHeadlines": [
-        {
-          "title": "KOFIA / SOFIA 3Y (3.634%) and 10Y (3.858%) Korea Treasury Bond Yields Rally on Safe-Haven Flows",
-          "headline": "KOFIA / SOFIA 3Y (3.634%) and 10Y (3.858%) Korea Treasury Bond Yields Rally on Safe-Haven Flows",
-          "source": "KOFIA Bond Information Service",
-          "timeAgo": "3h ago",
-          "significance": "Drives 3Y KTB down 4.9 bps to 3.634% and 10Y KTB down 4.0 bps to 3.858% on active KTB futures receiving.",
-          "url": "https://www.kofiabond.or.kr"
-        },
         {
           "title": "South Korea Inflation Remained Above Target in October",
           "headline": "South Korea Inflation Remained Above Target in October",
           "source": "WSJ",
-          "timeAgo": "6h ago",
-          "significance": "Reinforces the Bank of Korea's cautious calibration with the Base Rate at 3.00% and KOFR/SOFIA overnight repo at 3.045%.",
-          "url": "https://www.wsj.com/economy/central-banking"
+          "timeAgo": "2h ago",
+          "significance": "Reinforces the Bank of Korea's cautious calibration with the Base Rate at 3.00% and KOFR/SOFIA overnight repo at 3.041%, anchoring 3Y KTB yields near 3.626%.",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOMHNoTTBBOVlvWk1iWVVQbHNOakVTTUlybkM5Z3h3NkFncTBnNVB1YzBPOWJ1bXNOV1IxRDVBR3lHY0t0SjJJbko3anFVaEE3MGV6OW1xTTA5UlVtdVdKdmNlR2hPSkRzRVV4dGNTNncyVkptT2Z3aVZ3TjdBaHQ4ZXR5cXJIRXJGQWk4blB6V3ZzZTl3S211V0Via3hBajV3UVdZ?oc=5"
         },
         {
-          "title": "South Korea’s Current Account Surplus Hits Record on Chip Boom",
-          "headline": "South Korea’s Current Account Surplus Hits Record on Chip Boom",
-          "source": "Bloomberg",
-          "timeAgo": "9h ago",
-          "significance": "Record semiconductor-led trade surpluses bolster Korea's external balances, cushioning USD/KRW (₩1,350.33) and supporting 10Y KTBs (3.858%).",
-          "url": "https://www.bloomberg.com/markets/rates-bonds"
+          "title": "SK hynix Stocks Jump 6.69% as Seoul Chip Rally Lifts KOSPI 4.39%",
+          "headline": "SK hynix Stocks Jump 6.69% as Seoul Chip Rally Lifts KOSPI 4.39%",
+          "source": "TradingView",
+          "timeAgo": "6h ago",
+          "significance": "Supports Korean semiconductor export earnings and foreign equity inflows into KOSPI (5,018.85), helping stabilize onshore USD/KRW around ₩1,342.17.",
+          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNZXhLY0tBcG9FTFcwdFN1d3JnNWNSSXZRMDNIMWZiY0VTQzBjUW90RG1kaFc5UE5nRjNVdlNKR0s5NW94ejRWdUFid0d1SVJ1VEdDTVVrVDFkWU1fWGxGVmU0ejQxQjNmamN5ZkdFcF93WlFJb2lWMkFfSC1GQjNSbFZsZGF2ZzVzLTBHcVdhY0UzVWJvSjdGM1oyQjNoX2UyYlhSVHFrTG91XzExa3A0ZUhySnNMb2NCUU9GTVRQRQ?oc=5"
+        },
+        {
+          "title": "FSS Urges Savings Banks to Cut Loan Rates for Small Businesses",
+          "headline": "FSS Urges Savings Banks to Cut Loan Rates for Small Businesses",
+          "source": "Seoul Economic Daily",
+          "timeAgo": "16h ago",
+          "significance": "Highlights domestic non-bank credit and funding dynamics monitored by BOK and KOFIA, where 91-day CD fixes at 3.360% and 3Y AA- corporate bonds yield 4.332%.",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQcTRsOGtfVlR3SzJ6ZEZtTmoxUlV3REp0X01ldzh3eW1pWUF0bDV0WVlsYzZwSnNWdFM3TVdnb0xNNmtSeXY1T3EwVGxTWUJabjFnUW82MGNEYkJRbjZvaFIzNGZ6OGVLQVJ1eG5KdXQxODlRSkViUDZYWVhBSklZZlNmaXJkZ0VhMWt1aTVOTkhFalJkSk5jVw?oc=5"
+        },
+        {
+          "title": "Top 10 firms take up over 60% of Korea's exports in Q3 amid chip boom",
+          "headline": "Top 10 firms take up over 60% of Korea's exports in Q3 amid chip boom",
+          "source": "The Korea Times",
+          "timeAgo": "20h ago",
+          "significance": "Record semiconductor-led trade surpluses bolster Korea's external balances, cushioning USD/KRW (₩1,342.17) and supporting foreign WGBI demand for 10Y KTBs (3.851%).",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNU0luZjNjazAyY1FJVU50VlRMMjBqWDc3YTJGdkRnclJWWWlEX0dEcFUtMm1KakNxQW9UQUpCempZOXJPSkltd3lFNy1XaTRsMkd0aWRkOGljanFMQmNocUZxQVItRURsVGdmRXJaTXlybmsxWFNsLWJQd1NGUFh1STlhMndaM0JfZnc5bFc1UFB6Q0xDSVVubFJ6ZGp1ZTNXSXNOU3V5eG9DbGtNTFpZOHZYZ9IBuAFBVV95cUxNN2dJRjFBUjE5SzZYZ3U2STJJVnJiS0ZNX29KcXduTlNWVUQ0UnNfd28tU1BiTnI0TmxTX1JFUmllMnl1VXNfdFRtbE9VNTJTd1pDV0k3MDVjeVBsNU5oc0d1MEdXU2NsRGUwWDVtMHRSTFBmcTRfOTBuOW4tOWxpQXBYQlJwSDd5VjZoSTZ3Qmd0R3Rsd211R0lZV2N0NVJFV0JtSjJkZUJzR1lPTWI4OXUwclZzZHFt?oc=5"
+        },
+        {
+          "title": "Korea's economy is booming. Why isn't President Lee's popularity?",
+          "headline": "Korea's economy is booming. Why isn't President Lee's popularity?",
+          "source": "The Korea Times",
+          "timeAgo": "1d ago",
+          "significance": "Reported by The Korea Times; shapes foreign institutional positioning across 3Y (3.626%) and 10Y (3.851%) KOFIA KTB futures.",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPYmdmOURzMUUyLW5kQ1luVzhiLXdlVHZfOGljTktGRkd4QnQ5UEpSWVVyYzAyNHZxa25IcjlYVUpva25lYm94LUpESlFZcDR6WC1JTndxd1pzMzV1NEtIeF9qZzZJOG1uY1VhbDM0YXY3VFVhNmExV2dOSUl1UzBhM2NybHZIbzBPdWJoc1NHS1VtVF81VUZLUjdsdUxmLVQwVGt6WVBjMDJYQdIBrwFBVV95cUxQVzJSN1l4ajNjVnR6ZEpPMzI4Q0FJYmtEMGFFZDlSdFIxaE9HNDJibnZlVU5XMEFkaE5CczJFMW1sLUNNSzNFd1p0VE8zczdSVU5ZeHZFODRReWpxUzNIWDVGbFp0M1dIZS12aHljV3FSVGNoclhxZGhqSVBSM3lwZ3RrSGhRLXV2OFhoYW1nc2k2WmNCazI1Wnd5a0hPcTQwdWtCN0JZSndlNnpkVDNr?oc=5"
         }
       ]
     },
     "bonds": {
-      "quotationDate": "09 Nov 2026",
+      "quotationDate": "10 Nov 2026",
       "kofiaKtb": [
         {
           "tenor": "1Y KTB",
           "code": "KR1YT=RR",
           "series": "KTB 03500-2709",
           "yield": 3.602,
-          "changeBps": 1.5,
+          "changeBps": 0.0,
           "coupon": 3.5
         },
         {
           "tenor": "2Y KTB",
           "code": "KR2YT=RR",
           "series": "KTB 03625-2809",
-          "yield": 3.621,
-          "changeBps": 2.3,
+          "yield": 3.632,
+          "changeBps": 1.1,
           "coupon": 3.625
         },
         {
           "tenor": "3Y KTB (Benchmark)",
           "code": "KR3YT=RR",
           "series": "KTB 03250-2906",
-          "yield": 3.634,
-          "changeBps": 1.2,
+          "yield": 3.626,
+          "changeBps": -0.8,
           "coupon": 3.25
         },
         {
           "tenor": "5Y KTB",
           "code": "KR5YT=RR",
           "series": "KTB 03375-3109",
-          "yield": 3.728,
-          "changeBps": 1.2,
+          "yield": 3.716,
+          "changeBps": -1.2,
           "coupon": 3.375
         },
         {
           "tenor": "10Y KTB (Benchmark)",
           "code": "KR10YT=RR",
           "series": "KTB 03500-3606",
-          "yield": 3.858,
-          "changeBps": 0.6,
+          "yield": 3.851,
+          "changeBps": -0.7,
           "coupon": 3.5
         },
         {
           "tenor": "20Y KTB",
           "code": "KR20YT=RR",
           "series": "KTB 03625-4609",
-          "yield": 3.98,
-          "changeBps": 1.2,
+          "yield": 3.974,
+          "changeBps": -0.6,
           "coupon": 3.625
         },
         {
           "tenor": "30Y KTB",
           "code": "KR30YT=RR",
           "series": "KTB 03250-5603",
-          "yield": 3.98,
-          "changeBps": 0.5,
+          "yield": 3.961,
+          "changeBps": -1.9,
           "coupon": 3.25
         }
       ],
@@ -977,8 +1009,8 @@
         {
           "instrument": "KOFR / SOFIA (Overnight Repo)",
           "code": "KOFR-ON",
-          "rate": 3.045,
-          "changeBps": 3.3,
+          "rate": 3.041,
+          "changeBps": -1.9,
           "description": "Korea Overnight Financing Repo Rate (KSD / KOFIA)"
         },
         {
@@ -991,43 +1023,43 @@
         {
           "instrument": "Call Rate 1-Day (콜금리)",
           "code": "KRCALLBOKK",
-          "rate": 3.048,
-          "changeBps": 0.9,
+          "rate": 3.037,
+          "changeBps": 0.3,
           "description": "Onshore Interbank Uncollateralized 1D Call Rate"
         },
         {
           "instrument": "CD 91-Day (KOFIA Final)",
           "code": "KFIA114000",
-          "rate": 3.34,
-          "changeBps": 0.0,
+          "rate": 3.36,
+          "changeBps": 2.0,
           "description": "Negotiable Certificate of Deposit 91D Quotation"
         },
         {
           "instrument": "MSB 1-Year (BOK 통안증권)",
           "code": "KOFIA-MSB1Y",
           "rate": 3.55,
-          "changeBps": 1.5,
+          "changeBps": 0.0,
           "description": "Bank of Korea Monetary Stabilization Bond 1Y"
         },
         {
           "instrument": "Corp Bond 3Y (AA- KOFIA)",
           "code": "KFIA103009",
-          "rate": 4.358,
-          "changeBps": -4.2,
-          "description": "Unsubordinated AA- Corporate 3Y (+72.4 bps over 3Y KTB)"
+          "rate": 4.332,
+          "changeBps": 1.9,
+          "description": "Unsubordinated AA- Corporate 3Y (+70.6 bps over 3Y KTB)"
         }
       ],
       "bokBaseRate": 3.0,
-      "kofrOvernightRate": 3.045,
-      "cd91dRate": 3.34,
+      "kofrOvernightRate": 3.041,
+      "cd91dRate": 3.36,
       "cpiInflationYoY": 2.1,
-      "sovereignSpread10Y": -100
+      "sovereignSpread10Y": -115
     },
     "fxAndEquities": {
-      "krwSpot": 1350.33,
-      "krwChange": -13.31,
-      "krwChangePct": -0.99,
-      "ndf1M": 1348.09,
+      "krwSpot": 1342.17,
+      "krwChange": 0.02,
+      "krwChangePct": 0.0,
+      "ndf1M": 1339.93,
       "ndfSpread1M": -2.24,
       "kospiIndex": {
         "level": 5018.85,
@@ -1044,31 +1076,31 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS",
-      "regimeBadge": "BOK BASE 3.00% · KOFR/SOFIA 3.045% · 10Y KTB 3.858%",
+      "regimeBadge": "BOK BASE 3.00% · KOFR/SOFIA 3.041% · 10Y KTB 3.851%",
       "conviction": "Long 3Y–10Y KTB (KOFIA Benchmark) on WGBI Inflows · Receive 3s10s Box · Watch USD/KRW 1,380",
-      "synthesis": "Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) final OTC bond quotations place the benchmark 3Y KTB at 3.634%, 10Y KTB at 3.858%, and 30Y KTB at 3.980% (3s10s slope at +22 bps; -100 bps vs 10Y US Treasuries). With the Bank of Korea (BOK) Base Rate at 3.00% (Headline CPI at 2.10% YoY, real policy buffer +0.90%), short-term SOFIA / KOFR overnight repo fixes at 3.045% and 91-day KOFIA CD rates trade at 3.34%. In FX and equity markets, onshore USD/KRW trades at ₩1,350.33 (1M NDF at ₩1,348.09) while KOSPI sits at 5,018.85 (-0.81%). Lead Korea macro catalyst: \"KOFIA / SOFIA 3Y (3.634%) and 10Y (3.858%) Korea Treasury Bond Yields Rally on Safe-Haven Flows\".",
-      "positioningTakeaway": "Accumulate 3Y and 10Y KTB benchmarks (3.634% / 3.858%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding (3.045%) anchor domestic duration demand.",
+      "synthesis": "Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) final OTC bond quotations place the benchmark 3Y KTB at 3.626%, 10Y KTB at 3.851%, and 30Y KTB at 3.961% (3s10s slope at +23 bps; -115 bps vs 10Y US Treasuries). With the Bank of Korea (BOK) Base Rate at 3.00% (Headline CPI at 2.10% YoY, real policy buffer +0.90%), short-term SOFIA / KOFR overnight repo fixes at 3.041% and 91-day KOFIA CD rates trade at 3.36%. In FX and equity markets, onshore USD/KRW trades at ₩1,342.17 (1M NDF at ₩1,339.93) while KOSPI sits at 5,018.85 (-0.81%). Lead Korea macro catalyst: \"South Korea Inflation Remained Above Target in October\".",
+      "positioningTakeaway": "Accumulate 3Y and 10Y KTB benchmarks (3.626% / 3.851%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding (3.041%) anchor domestic duration demand.",
       "criticalLevels": [
         {
           "asset": "KOFIA 3Y & 10Y KTB Yield",
-          "current": "3Y 3.634% · 10Y 3.858%",
-          "support": "3.708% (10Y)",
-          "resistance": "4.008% (10Y)",
-          "implication": "10Y KTB above 4.01% draws pension/insurer duration buying; sub-3.71% prices in an additional BOK rate cut."
+          "current": "3Y 3.626% · 10Y 3.851%",
+          "support": "3.701% (10Y)",
+          "resistance": "4.001% (10Y)",
+          "implication": "10Y KTB above 4.00% draws pension/insurer duration buying; sub-3.70% prices in an additional BOK rate cut."
         },
         {
           "asset": "KOFR / SOFIA & 91D CD Rate",
-          "current": "KOFR 3.045% · CD 3.34%",
+          "current": "KOFR 3.041% · CD 3.36%",
           "support": "2.85%",
           "resistance": "3.50%",
           "implication": "Tight KOFR-to-BOK Base Rate spread confirms ample overnight RP liquidity across Korean securities dealers."
         },
         {
           "asset": "USD/KRW Spot & 1M NDF",
-          "current": "₩1350.33 (NDF ₩1348.09)",
-          "support": "₩1328",
-          "resistance": "₩1375",
-          "implication": "Sustained move above ₩1375 delays BOK easing and prompts NPS/BOK FX smoothing operations."
+          "current": "₩1342.17 (NDF ₩1339.93)",
+          "support": "₩1320",
+          "resistance": "₩1367",
+          "implication": "Sustained move above ₩1367 delays BOK easing and prompts NPS/BOK FX smoothing operations."
         },
         {
           "asset": "KOSPI Composite Index",
@@ -1083,19 +1115,19 @@
           "event": "KOFIA 11:30 & 16:00 KST Final OTC Quotation Yield Fixing & KTB Futures",
           "timing": "Daily · 11:30 & 16:00 KST (15:00 SGT)",
           "impact": "Critical",
-          "watchFor": "Foreign institutional net buying in 3Y (3.634%) and 10Y (3.858%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads."
+          "watchFor": "Foreign institutional net buying in 3Y (3.626%) and 10Y (3.851%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads."
         },
         {
           "event": "Bank of Korea (BOK) Monetary Policy Board Rate Decision & MSB Auctions",
           "timing": "Monthly BOK Cycle · Weekly MSB Tender",
           "impact": "High",
-          "watchFor": "Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA (3.045%) repo transmission."
+          "watchFor": "Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA (3.041%) repo transmission."
         },
         {
           "event": "MOEF Monthly KTB Issuance Plan & FTSE WGBI Foreign Custody Inflows",
           "timing": "Monthly · Ministry of Economy and Finance",
           "impact": "High",
-          "watchFor": "Competitive auction takedown on 10Y (3.858%) and 30Y (3.980%) KTB supply and Euroclear/Clearstream omnibus inflows."
+          "watchFor": "Competitive auction takedown on 10Y (3.851%) and 30Y (3.961%) KTB supply and Euroclear/Clearstream omnibus inflows."
         }
       ]
     }
@@ -1103,92 +1135,100 @@
   "india": {
     "commentary": {
       "title": "Reserve Bank of India (RBI) & CCIL Sovereign G-Sec Outlook",
-      "date": "09 Nov 2026",
-      "executiveSummary": "The Reserve Bank of India (RBI · rbi.org.in) Monetary Policy Committee maintains the Policy Repo Rate at 5.50% (Standing Deposit Facility floor at 5.25%, Marginal Standing Facility & Bank Rate at 5.75%, CRR at 3.00%, SLR at 18.00%). Across official RBI / CCIL NDS-OM on-the-run Government of India Dated Securities (G-Sec), the 3Y benchmark (6.20% GS 2029 (RBI)) yields 6.881%, 5Y benchmark (6.53% GS 2031 (RBI)) trades at 6.975%, 10Y benchmark (6.94% GS 2036 (RBI)) yields 7.193% (+233 bps over 10Y UST), and 30Y benchmark (7.63% GS 2056 (RBI)) closes at 7.676%. Per RBI's Weekly Statistical Supplement, India's Foreign Exchange Reserves stand at US$717.06B, anchoring spot USD/INR at ₹93.9480 (FBIL Reference Rate ₹93.8579).",
+      "date": "11 Nov 2026",
+      "executiveSummary": "The Reserve Bank of India (RBI · rbi.org.in) Monetary Policy Committee maintains the Policy Repo Rate at 5.50% (Standing Deposit Facility floor at 5.25%, Marginal Standing Facility & Bank Rate at 5.75%, CRR at 3.00%, SLR at 18.00%). Across official RBI / CCIL NDS-OM on-the-run Government of India Dated Securities (G-Sec), the 3Y benchmark (6.20% GS 2029 (RBI)) yields 6.881%, 5Y benchmark (6.53% GS 2031 (RBI)) trades at 6.975%, 10Y benchmark (6.94% GS 2036 (RBI)) yields 7.193% (+219 bps over 10Y UST), and 30Y benchmark (7.63% GS 2056 (RBI)) closes at 7.676%. Per RBI's Weekly Statistical Supplement, India's Foreign Exchange Reserves stand at US$717.06B, anchoring spot USD/INR at ₹93.9180 (FBIL Reference Rate ₹93.8579).",
       "macroPillars": [
         {
           "heading": "RBI / CCIL Sovereign G-Sec Curve & Friday ₹36,000 Cr Primary Auction (rbi.org.in · 09 Nov 2026)",
-          "analysis": "Official RBI/CCIL G-Sec benchmarks remain well-bid across the curve: 1Y at 6.451%, 2Y at 6.866%, 3Y (6.20% GS 2029 (RBI)) at 6.881%, 5Y (6.53% GS 2031 (RBI)) at 6.975%, 10Y (6.94% GS 2036 (RBI)) at 7.193%, 15Y (7.06% GS 2041 (RBI)) at 7.376%, and 30Y (7.63% GS 2056 (RBI)) at 7.676%. 06 Nov 2026 (PR #63936): 7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881%; 7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% · PD Devolvement: NIL."
+          "analysis": "Official RBI/CCIL G-Sec benchmarks remain well-bid across the curve: 1Y at 6.452%, 2Y at 6.870%, 3Y (6.20% GS 2029 (RBI)) at 6.881%, 5Y (6.53% GS 2031 (RBI)) at 6.975%, 10Y (6.94% GS 2036 (RBI)) at 7.193%, 15Y (7.06% GS 2041 (RBI)) at 7.376%, and 30Y (7.63% GS 2056 (RBI)) at 7.676%. 06 Nov 2026 (PR #63936): 7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881%; 7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% · PD Devolvement: NIL."
         },
         {
           "heading": "RBI LAF Corridor (Repo 5.50% / SDF 5.25% / MSF 5.75%), VRR/VRRR & T-Bill Cut-Offs",
-          "analysis": "RBI actively manages banking system liquidity via fine-tuning Variable Rate Repo (4-day VRR) and Variable Rate Reverse Repo (3-day VRRR) operations, keeping interbank Call Money within 4.30% - 5.75%. Meanwhile, 91-Day, 182-Day, and 364-Day Treasury Bills yield 5.897%, 6.370%, and 6.649% ahead of RBI's ₹23,000 Cr weekly T-Bill tender."
+          "analysis": "RBI actively manages banking system liquidity via fine-tuning Variable Rate Repo (4-day VRR) and Variable Rate Reverse Repo (3-day VRRR) operations, keeping interbank Call Money within 4.30% - 5.75%. Meanwhile, 91-Day, 182-Day, and 364-Day Treasury Bills yield 5.897%, 6.320%, and 6.649% ahead of RBI's ₹23,000 Cr weekly T-Bill tender."
         },
         {
           "heading": "Indian Rupee (FBIL Reference ₹93.8579), US$717.06B FX Reserves & Nifty 50 / Sensex",
-          "analysis": "Onshore USD/INR spot trades at ₹93.9480 (-0.54%) alongside the official RBI/FBIL Reference Rate at ₹93.8579, backed by US$717.06B in total RBI Forex Reserves. In equities, Nifty 50 stands at 24,951.15 (-0.32%) and S&P BSE Sensex at 80,831.61 (-0.24%)."
+          "analysis": "Onshore USD/INR spot trades at ₹93.9180 (+0.02%) alongside the official RBI/FBIL Reference Rate at ₹93.8579, backed by US$717.06B in total RBI Forex Reserves. In equities, Nifty 50 stands at 25,044.65 (+0.06%) and S&P BSE Sensex at 81,106.65 (+0.10%)."
         }
       ],
       "policyPosture": "Neutral Calibration (RBI Repo 5.50% · SDF 5.25% · MSF 5.75% · CRR 3.00%)",
       "noteworthyHeadlines": [
         {
-          "title": "Reserve Bank of India – Bulletin Weekly Statistical Supplement – Extract",
-          "headline": "Reserve Bank of India – Bulletin Weekly Statistical Supplement – Extract",
-          "source": "RBI Official RSS",
-          "timeAgo": "Recent",
-          "significance": "Bolsters RBI's US$717.06B foreign exchange reserve buffer to smooth onshore USD/INR volatility around ₹93.9480 (FBIL Reference Rate ₹93.8579).",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63939"
+          "title": "RBI Bond Valuation Shift May Hit Bank Dividends",
+          "headline": "RBI Bond Valuation Shift May Hit Bank Dividends",
+          "source": "BW Businessworld",
+          "timeAgo": "2h ago",
+          "significance": "Tracks domestic non-bank and commercial bank credit transmission alongside RBI's 3.00% CRR / 18.00% SLR statutory reserve requirements.",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQWjFqMGEzMGc3dGtpS2gxR1ZYVzZXRUlVZWhocU1NZWdNQW44blJyWXpVMVp0NGtEOVluNGhJWVY2dW45RG1VTkVILVJ5RGV6NUFrOGhxMDVac2I1RmFrVVNJbHo0cjlzaVhlalZKckphbHB4WVZwTUt6cU9leVhnalN4dVFvc2xsS2pBeUk4STBQakM0MFE?oc=5"
         },
         {
-          "title": "Auction of 91-Day, 182-Day and 364-Day Treasury Bills",
-          "headline": "Auction of 91-Day, 182-Day and 364-Day Treasury Bills",
-          "source": "RBI Official RSS",
-          "timeAgo": "Recent",
-          "significance": "Sets front-end sovereign money-market benchmarks where 91-Day and 364-Day T-Bills clear at 5.897% and 6.649% relative to the 5.50% RBI Repo Rate.",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63942"
+          "title": "Trump's midterm poll setback won't derail India-US trade talks: Official",
+          "headline": "Trump's midterm poll setback won't derail India-US trade talks: Official",
+          "source": "The Economic Times",
+          "timeAgo": "4h ago",
+          "significance": "Bilateral trade and tariff developments shape India's current account trajectory and exporter USD flows alongside USD/INR at ₹93.9180 (FBIL Reference ₹93.8579).",
+          "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPNVRtT0YtTXdkRGc1LWU3T1oxRS1McC1IRTA1dWh2TllVNHlINU42RWkwVlNuVGxzZzR6UlBnUzBLUjZ3YnFranYyN2l0OFBJdDlRS2ZMMFdIRlB6QURrUWlUN1ZNY0x4aXBYSkRRb1hSQ1o0SzZ3U2phS2pzMERqNWlySThQSDlYLVFqNkp2emNTcXVwbFh3dGFSVkIyWHBVRFVLUG1pdVh5SDhEeWtMSk5TdVlLUkFUVmNNU3I4THY5TXJNc29TX1N2RXpua3o5dEpwSFdTc0pxWUtwLVB4TGVFRWcwS0tGUmZyYjZCckTSAeoBQVVfeXFMUG1MbGlXc2RjLWRzWEF4ZTNjSVZlVXZDTzlYcGFNb2NtekR3eUFiZXQyT0NIZHJaVW16NG85d09ldnU1LTJzSnNaLWxYR0pnY3VjeEtPMHB5bVozLWdMRXREZGVXTmhwQkNydm55am4zSXAtbHlyZTJnR3o3em9FUUd4WmpKd3Eyc0JFa2h2OFBwLUJndWFBSkRUYWJtSTVSWmFxN196NEsydHhmWFhUOWRtRjI1T2lFal9QdXlWX0Y3a1IyT1huMFZZQmp3Wkw0bmNRU1poN0dJZW5JakFyZXBGUDNxdkVfUHdR?oc=5"
         },
         {
-          "title": "RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026",
-          "headline": "RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026",
-          "source": "RBI Official RSS",
-          "timeAgo": "Recent",
-          "significance": "Fine-tunes banking system liquidity under the RBI LAF corridor, anchoring interbank Call Money (4.30% - 5.75%) near the 5.50% Policy Repo Rate and supporting short-end 1Y–5Y G-Secs (6.975%).",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63943"
+          "title": "Easing global headwinds, lower crude oil prices may further lift rupee in coming months: Economists",
+          "headline": "Easing global headwinds, lower crude oil prices may further lift rupee in coming months: Economists",
+          "source": "The Economic Times",
+          "timeAgo": "8h ago",
+          "significance": "Bolsters RBI's US$717.06B foreign exchange reserve buffer and external terms-of-trade to smooth onshore USD/INR volatility around ₹93.9180 (FBIL Reference Rate ₹93.8579).",
+          "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxQZ0F5SDd2QWhLejJIc05VTHF3U0JHeVdnSTlMYy1SOFktTGJ5c0JVTjFaVnVWaGd2OTI1NG1kTHpwSV85aHdOd3B0QTR3UXJEOHpHWk9adlhnS1AwUi1pelhxN2toTVRXemlIZjVGOVozcXpPd3oxMnludEJDTVNyRm9vUWd2YVJoQklmeE1TM2tWUVdYb0o2QTAwY2tod3NNN1VISS1vVDE2UjNIMkM5QnUxX21tT2l4bE9QV1V4NG5pU0x5ZG5qazg4WFBIOXhHcVpEby14MVJpZ191dDNncDdPcjgxaGNnbEc5NFFZV0tkOEg3ZVBKNkJpemY5UDRndVJjb1hn0gGLAkFVX3lxTE05QmVaVVJ4d25RWVd1UFc4ZGdzY0JjMUNWM0JLMEtpTUtEbkZZUnZJb215b0lMLUVxdTNSRkpHX3ZEc1NkZDFBYm9mem9yN01aOVpmd2lFR2RFenpxemtFSjJjSGc3WWNiOVhqaU9lSS1CWWJOREUtQy1aTWNkTHpmbDMwV1NKX2lXUlgwd3pLQk9vekN4OTVYOTZyMjFZa2JBUm84R2RzZ195Tnhma1UySHVTd0ljMHd6blAtMU9PSE83NFhidlp3UU9XT2VSQ1d2cWIzX1FMSmtQOTQ2QlgwUWRyRzV6QjdYLVFsdjQtMklXcTRSTjdiaTB5UEluMDI3Qm5hdXlzMTJtZw?oc=5"
         },
         {
-          "title": "Result of the 4-day Variable Rate Repo (VRR) auction held on November 09, 2026",
-          "headline": "Result of the 4-day Variable Rate Repo (VRR) auction held on November 09, 2026",
-          "source": "RBI Official RSS",
-          "timeAgo": "Recent",
-          "significance": "Published by RBI Official RSS; guides institutional duration positioning across CCIL 5Y (6.975%) and 10Y (7.193%) Indian G-Sec benchmarks.",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63945"
+          "title": "Sensex, Nifty 50 rise over 6% in past 5 sessions: More rally from tomorrow or profit booking will dent returns hopes?",
+          "headline": "Sensex, Nifty 50 rise over 6% in past 5 sessions: More rally from tomorrow or profit booking will dent returns hopes?",
+          "source": "Livemint",
+          "timeAgo": "16h ago",
+          "significance": "Shapes foreign portfolio investment (FPI) positioning across NSE Nifty 50 (25,044.65) and onshore INR capital account stability.",
+          "url": "https://news.google.com/rss/articles/CBMikAJBVV95cUxNU2JaVU1faHREb1BSVUFrZ0hzNnU2TE1DTmV1MEd1NlZHQ3RJYnZNWGNnVGFxZ3h5Rm5wdWIzVmxkS1h4VGdSVndCZ3dDTjZ6d1MxWG5JRlpRTnMtTGRBaFZ6b2lZcmo0dEtGckFqR09Yd0FkendCYnRvM2w5WDA3X3ZlWnVPZXRqd3NidWkxRHd6RHJHS3ZHTGR5ZmgwQVlDcEtYQXpxNUdMME01SE83Qlp4cGdRaHRmcUZGbVNqM3cxS3FpbDBaQzdiN2ZvQmw3UDdMWl80a0hHdzR2ZThzV3I4eHZsY1RDQmZmOWpLNml6OXk2SGdtdmJDbnF0RTdUUTNhZzJVbGlFdkN5LVUzWdIBlgJBVV95cUxPTGV3VkxMRU5yR3FPRVdfT0NEVnFqMno4TzdEWExzUUJLNXMwRlNHQk51M25XSlh0QWFzdFBtbFFXeFVpVmdWR2ZJT3RLLURrRDkxWkpqRl9TOENDQXI1R1l6WHBEU1R2WDNwMHhCbGdLQ1VLd2lfNVYxQ3g1bUw2NVJKRElaTndZX3F1T05HWVRaQkhZajF5S2FJSWxBOVV5Umxtb0tZVDNnVVp4TFRwWlRKOEltNlRxTnV4NXdzaEk4YjJpbmJGTUtfa25FcXdFV1pHSC05ekkzODhjdXFYTE9xQXdHbHNSV2dSRzc5eVpYdUxUWTduU1JseVhEY0pkU0Z0a2JqeFZTN3dFd2Ztc0hFYlJGZw?oc=5"
+        },
+        {
+          "title": "Easing oil, bond yields to support bank margins, RBI rate hikes likely in Dec: Jefferies",
+          "headline": "Easing oil, bond yields to support bank margins, RBI rate hikes likely in Dec: Jefferies",
+          "source": "BusinessLine",
+          "timeAgo": "17h ago",
+          "significance": "Published by BusinessLine; guides institutional duration positioning across CCIL 5Y (6.975%) and 10Y (7.193%) Indian G-Sec benchmarks.",
+          "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQd2FjdHFtVm9pNzdrNUJwTC0tWnZZV0x2UURPU2JiaV9kUXZ3aFN0X1kxU3JUV0x3WE9IaTdsRzBORUlKQ0c1dEZ4SE96UUxlWHQ3ank3akNKbnZFajhKaFYxWkNRSlVxbU1DYS1GWmFwVFphQnlHVTNXYWJKUVRkbGt2SWpseWhrNlZQbkRKVGJGb2dkTHNubVRPTEUzbHJOcTRQWnVWdXlEd2dZbk0xVnlJSm5TcndGQm5hZ0lIeTcyQ1YxTlZBeWZQRjhTWmdEUWZlQTBLNDExdURkeHBSREtTb0w1cGdDZTM5Q1c2ZVowZ9IB-AFBVV95cUxPM2xsc0kwWW00XzVNZGgtWnA3bEk1NktTZG5NZm5GNTNiWWdhSWJVT2dBOF9kSjdFWkh6cHRVRjA3S0h1ZzZvRHFlWXF6X1dGVmVpY2RFSndnOXZiQktJTllvaDNNVmx0S1pMRjRoNGZPeV80dXRxX1JBS0ppSFZOajJadnVJS2l5TnQzSDhmTkdENXhIOE5hRjI1LVZ4SXd5WnFNaFMteHotaENRdmZCYzNmN2o0WUFYNWFmZXU5NHk1dEo2eFF5eVpzNngtX1FjYUdDTXFyMTNndWNrVDdEQm12SEFjUXc4RXV1REI0OXh2TUw3el9Ecw?oc=5"
         }
       ],
       "rbiOfficialReleases": [
+        {
+          "title": "Auction of Government of India Dated Security",
+          "category": "RBI Monetary Release",
+          "pubDate": "09 Nov 2026, 18:55 IST",
+          "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
+          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63952"
+        },
+        {
+          "title": "State Government Securities - Full Auction Result",
+          "category": "RBI Monetary Release",
+          "pubDate": "09 Nov 2026, 16:25 IST",
+          "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
+          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63950"
+        },
+        {
+          "title": "Reserve Bank cancels Certificate of Registration of Gandhinagar Leasing and Finance Ltd.",
+          "category": "RBI Monetary Release",
+          "pubDate": "09 Nov 2026, 16:10 IST",
+          "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
+          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63949"
+        },
+        {
+          "title": "Result of Yield/Price Based Auction of State Government Securities",
+          "category": "RBI Monetary Release",
+          "pubDate": "09 Nov 2026, 14:55 IST",
+          "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
+          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63948"
+        },
         {
           "title": "Money Market Operations as on November 08, 2026",
           "category": "RBI Monetary Release",
           "pubDate": "09 Nov 2026, 11:40 IST",
           "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
           "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63947"
-        },
-        {
-          "title": "Money Market Operations as on November 07, 2026",
-          "category": "RBI Monetary Release",
-          "pubDate": "09 Nov 2026, 11:35 IST",
-          "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63946"
-        },
-        {
-          "title": "Result of the 4-day Variable Rate Repo (VRR) auction held on November 09, 2026",
-          "category": "LAF Liquidity Operation",
-          "pubDate": "09 Nov 2026, 10:45 IST",
-          "summary": "Fine-tuning Variable Rate Repo operation under LAF to align interbank Call Money (4.30% - 5.75%) with the 5.50% Repo Rate.",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63945"
-        },
-        {
-          "title": "Money Market Operations as on November 06, 2026",
-          "category": "RBI Monetary Release",
-          "pubDate": "09 Nov 2026, 09:00 IST",
-          "summary": "Official Reserve Bank of India monetary and financial market regulatory communication.",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63944"
-        },
-        {
-          "title": "RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026",
-          "category": "LAF Liquidity Operation",
-          "pubDate": "06 Nov 2026, 19:10 IST",
-          "summary": "Fine-tuning Variable Rate Repo operation under LAF to align interbank Call Money (4.30% - 5.75%) with the 5.50% Repo Rate.",
-          "url": "https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63943"
         }
       ]
     },
@@ -1199,16 +1239,16 @@
           "tenor": "1Y G-Sec",
           "code": "IN1YT=RR",
           "series": "6.99% GS 2027",
-          "yield": 6.451,
-          "changeBps": -6.9,
+          "yield": 6.452,
+          "changeBps": 0.1,
           "coupon": 6.99
         },
         {
           "tenor": "2Y G-Sec",
           "code": "IN2YT=RR",
           "series": "7.06% GS 2028",
-          "yield": 6.866,
-          "changeBps": -0.5,
+          "yield": 6.87,
+          "changeBps": -0.2,
           "coupon": 7.06
         },
         {
@@ -1216,7 +1256,7 @@
           "code": "IN3YT=RR",
           "series": "6.20% GS 2029 (RBI)",
           "yield": 6.881,
-          "changeBps": -1.5,
+          "changeBps": -6.6,
           "coupon": 6.2,
           "rbiBenchmarkYield": 6.8812
         },
@@ -1225,7 +1265,7 @@
           "code": "IN5YT=RR",
           "series": "6.53% GS 2031 (RBI)",
           "yield": 6.975,
-          "changeBps": -1.2,
+          "changeBps": -2.7,
           "coupon": 6.53,
           "rbiBenchmarkYield": 6.9753
         },
@@ -1233,8 +1273,8 @@
           "tenor": "7Y G-Sec",
           "code": "IN7YT=RR",
           "series": "7.10% GS 2033",
-          "yield": 7.176,
-          "changeBps": -2.3,
+          "yield": 7.153,
+          "changeBps": -4.6,
           "coupon": 7.1
         },
         {
@@ -1242,7 +1282,7 @@
           "code": "IN10YT=RR",
           "series": "6.94% GS 2036 (RBI)",
           "yield": 7.193,
-          "changeBps": -1.5,
+          "changeBps": -3.5,
           "coupon": 6.94,
           "rbiBenchmarkYield": 7.193
         },
@@ -1251,7 +1291,7 @@
           "code": "IN15YT=RR",
           "series": "7.06% GS 2041 (RBI)",
           "yield": 7.376,
-          "changeBps": -1.8,
+          "changeBps": -4.5,
           "coupon": 7.06,
           "rbiBenchmarkYield": 7.3759
         },
@@ -1291,14 +1331,14 @@
           "instrument": "91-Day Treasury Bill (RBI)",
           "code": "IN3MT=RR",
           "rate": 5.897,
-          "changeBps": -8.0,
+          "changeBps": 0.0,
           "description": "Government of India 91D T-Bill Primary Cut-Off Yield"
         },
         {
           "instrument": "182-Day Treasury Bill (RBI)",
           "code": "IN6MT=RR",
-          "rate": 6.37,
-          "changeBps": 5.0,
+          "rate": 6.32,
+          "changeBps": 0.0,
           "description": "Government of India 182D T-Bill Secondary/Cut-Off Yield"
         },
         {
@@ -1316,16 +1356,16 @@
       "slrRate": 18.0,
       "callRateRange": "4.30% - 5.75%",
       "tbill91dRate": 5.897,
-      "tbill182dRate": 6.37,
+      "tbill182dRate": 6.32,
       "tbill364dRate": 6.6485,
       "cpiInflationYoY": 4.85,
-      "sovereignSpread10Y": 233,
+      "sovereignSpread10Y": 219,
       "latestGsecAuctionSummary": "06 Nov 2026 (PR #63936): 7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881%; 7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% · PD Devolvement: NIL."
     },
     "fxAndEquities": {
-      "inrSpot": 93.948,
-      "inrChange": -0.5109,
-      "inrChangePct": -0.54,
+      "inrSpot": 93.918,
+      "inrChange": 0.015,
+      "inrChangePct": 0.02,
       "rbiReferenceUsd": 93.8579,
       "rbiReferenceEur": 104.7683,
       "rbiReferenceGbp": 125.6125,
@@ -1334,14 +1374,14 @@
       "forexReservesWeeklyChgUsdBn": -2.69,
       "forexReservesDate": "30 Oct 2026 (WSS)",
       "nifty50Index": {
-        "level": 24951.15,
-        "change": -79.2,
-        "changePct": -0.32
+        "level": 25044.65,
+        "change": 14.3,
+        "changePct": 0.06
       },
       "sensexIndex": {
-        "level": 80831.61,
-        "change": -196.41,
-        "changePct": -0.24
+        "level": 81106.65,
+        "change": 78.62,
+        "changePct": 0.1
       },
       "farIndexInflows": "+US$ 18.4 Billion YTD (JPM GBI-EM / FAR G-Secs)"
     },
@@ -1349,13 +1389,13 @@
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS",
       "regimeBadge": "RBI REPO 5.50% (SDF 5.25% / MSF 5.75%) · 10Y G-SEC 7.193%",
-      "conviction": "Long 5Y–10Y FAR G-Secs (6.53% GS 2031 / 6.94% GS 2036) · Positive Carry +233 bps vs UST · Watch RBI VRR/VRRR",
-      "synthesis": "Reserve Bank of India (RBI · rbi.org.in) and CCIL/NDS-OM sovereign fixings (09 Nov 2026) place the 3Y G-Sec benchmark (6.20% GS 2029) at 6.881%, 5Y benchmark (6.53% GS 2031) at 6.975%, 10Y benchmark (6.94% GS 2036) at 7.193%, and 30Y G-Sec (7.63% GS 2056) at 7.676% (5s10s slope at +22 bps; +233 bps over 10Y US Treasuries). With the RBI Monetary Policy Committee maintaining the Policy Repo Rate at 5.50% (SDF floor at 5.25%, MSF ceiling at 5.75%, CRR at 3.00%) and 91D/364D T-Bills clearing at 5.897%/6.649%, RBI's US$717.06B Foreign Exchange Reserves cushion spot USD/INR around ₹93.9480 (FBIL Reference Rate ₹93.8579) as Nifty 50 trades at 24,951.15 (-0.32%). Lead India macro catalyst: \"Reserve Bank of India – Bulletin Weekly Statistical Supplement – Extract\".",
-      "positioningTakeaway": "Overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs (6.975%–7.193%) to capture +233 bps sovereign spread over USTs and low FX volatility backed by RBI's US$717.06B reserve war chest; monitor RBI fine-tuning VRR/VRRR LAF operations keeping overnight call rates (4.30% - 5.75%) aligned with the 5.50% Repo anchor.",
+      "conviction": "Long 5Y–10Y FAR G-Secs (6.53% GS 2031 / 6.94% GS 2036) · Positive Carry +219 bps vs UST · Watch RBI VRR/VRRR",
+      "synthesis": "Reserve Bank of India (RBI · rbi.org.in) and CCIL/NDS-OM sovereign fixings (09 Nov 2026) place the 3Y G-Sec benchmark (6.20% GS 2029) at 6.881%, 5Y benchmark (6.53% GS 2031) at 6.975%, 10Y benchmark (6.94% GS 2036) at 7.193%, and 30Y G-Sec (7.63% GS 2056) at 7.676% (5s10s slope at +22 bps; +219 bps over 10Y US Treasuries). With the RBI Monetary Policy Committee maintaining the Policy Repo Rate at 5.50% (SDF floor at 5.25%, MSF ceiling at 5.75%, CRR at 3.00%) and 91D/364D T-Bills clearing at 5.897%/6.649%, RBI's US$717.06B Foreign Exchange Reserves cushion spot USD/INR around ₹93.9180 (FBIL Reference Rate ₹93.8579) as Nifty 50 trades at 25,044.65 (+0.06%). Lead India macro catalyst: \"RBI Bond Valuation Shift May Hit Bank Dividends\".",
+      "positioningTakeaway": "Overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs (6.975%–7.193%) to capture +219 bps sovereign spread over USTs and low FX volatility backed by RBI's US$717.06B reserve war chest; monitor RBI fine-tuning VRR/VRRR LAF operations keeping overnight call rates (4.30% - 5.75%) aligned with the 5.50% Repo anchor.",
       "criticalLevels": [
         {
           "asset": "10Y G-Sec (6.94% GS 2036)",
-          "current": "7.193% (+233 bps)",
+          "current": "7.193% (+219 bps)",
           "support": "7.073%",
           "resistance": "7.333%",
           "implication": "Yields near 7.33% attract PSU bank SLR & foreign FAR inflows; sub-7.07% requires softer food CPI."
@@ -1369,16 +1409,16 @@
         },
         {
           "asset": "USD/INR Spot & FBIL Ref",
-          "current": "₹93.95 (Ref ₹93.86)",
-          "support": "₹93.30",
-          "resistance": "₹94.60",
-          "implication": "RBI two-way FX intervention backed by US$717.1B reserves caps rupee volatility near ₹94.60."
+          "current": "₹93.92 (Ref ₹93.86)",
+          "support": "₹93.27",
+          "resistance": "₹94.57",
+          "implication": "RBI two-way FX intervention backed by US$717.1B reserves caps rupee volatility near ₹94.57."
         },
         {
           "asset": "NIFTY 50 & BSE SENSEX",
-          "current": "24,951",
-          "support": "24,327",
-          "resistance": "25,575",
+          "current": "25,045",
+          "support": "24,419",
+          "resistance": "25,671",
           "implication": "Domestic SIP inflows and banking earnings offset foreign equity rotation and support INR capital account stability."
         }
       ],
@@ -1405,15 +1445,15 @@
     }
   },
   "equities": {
-    "asOfDate": "09 Nov 2026",
+    "asOfDate": "11 Nov 2026",
     "indexSummary": {
-      "spxLevel": 7376.86,
-      "spxChange": 23.13,
-      "spxChangePct": 0.31,
-      "spxForwardPe": 21.8,
-      "spxEarningsYieldPct": 4.59,
-      "us10YYieldPct": 4.86,
-      "equityRiskPremiumBps": -27,
+      "spxLevel": 7520.93,
+      "spxChange": -29.01,
+      "spxChangePct": -0.38,
+      "spxForwardPe": 22.2,
+      "spxEarningsYieldPct": 4.5,
+      "us10YYieldPct": 5.0,
+      "equityRiskPremiumBps": -50,
       "spxDividendYieldPct": 1.24,
       "spxFcfYieldPct": 3.85
     },
@@ -1423,11 +1463,11 @@
         "ticker": "CAG",
         "company": "Conagra Brands, Inc.",
         "sector": "Consumer Staples",
-        "price": 15.24,
-        "changePct": -1.74,
-        "forwardPe": 5.98,
+        "price": 15.19,
+        "changePct": -0.65,
+        "forwardPe": 5.96,
         "forwardEps": 2.55,
-        "earningsYieldPct": 16.73,
+        "earningsYieldPct": 16.79,
         "marketCapBn": 7.2
       },
       {
@@ -1435,108 +1475,108 @@
         "ticker": "GM",
         "company": "General Motors Co.",
         "sector": "Consumer Discretionary",
-        "price": 86.16,
-        "changePct": -3.55,
-        "forwardPe": 6.73,
+        "price": 88.69,
+        "changePct": -1.07,
+        "forwardPe": 6.93,
         "forwardEps": 12.8,
-        "earningsYieldPct": 14.86,
-        "marketCapBn": 81.9
+        "earningsYieldPct": 14.43,
+        "marketCapBn": 84.3
       },
       {
         "rank": 3,
         "ticker": "SYF",
         "company": "Synchrony Financial",
         "sector": "Financials",
-        "price": 73.74,
-        "changePct": -0.45,
-        "forwardPe": 7.45,
+        "price": 71.7,
+        "changePct": -2.08,
+        "forwardPe": 7.24,
         "forwardEps": 9.9,
-        "earningsYieldPct": 13.43,
-        "marketCapBn": 27.6
+        "earningsYieldPct": 13.81,
+        "marketCapBn": 26.8
       },
       {
         "rank": 4,
         "ticker": "DOW",
         "company": "Dow Inc.",
         "sector": "Materials",
-        "price": 31.4,
-        "changePct": -1.81,
-        "forwardPe": 7.66,
+        "price": 31.48,
+        "changePct": 1.68,
+        "forwardPe": 7.68,
         "forwardEps": 4.1,
-        "earningsYieldPct": 13.06,
-        "marketCapBn": 22.0
+        "earningsYieldPct": 13.02,
+        "marketCapBn": 22.1
       },
       {
         "rank": 5,
         "ticker": "APA",
         "company": "APA Corporation",
         "sector": "Energy",
-        "price": 44.63,
-        "changePct": 2.64,
-        "forwardPe": 7.69,
+        "price": 45.12,
+        "changePct": 1.28,
+        "forwardPe": 7.78,
         "forwardEps": 5.8,
-        "earningsYieldPct": 13.0,
-        "marketCapBn": 16.5
+        "earningsYieldPct": 12.85,
+        "marketCapBn": 16.7
       },
       {
         "rank": 6,
-        "ticker": "UAL",
-        "company": "United Airlines Holdings",
-        "sector": "Industrials",
-        "price": 112.74,
-        "changePct": 2.04,
-        "forwardPe": 8.05,
-        "forwardEps": 14.0,
-        "earningsYieldPct": 12.42,
-        "marketCapBn": 37.1
-      },
-      {
-        "rank": 7,
-        "ticker": "HPQ",
-        "company": "HP Inc.",
-        "sector": "Information Technology",
-        "price": 28.46,
-        "changePct": -3.33,
-        "forwardPe": 8.13,
-        "forwardEps": 3.5,
-        "earningsYieldPct": 12.3,
-        "marketCapBn": 26.8
-      },
-      {
-        "rank": 8,
-        "ticker": "LYB",
-        "company": "LyondellBasell Industries",
-        "sector": "Materials",
-        "price": 60.72,
-        "changePct": -1.48,
-        "forwardPe": 8.15,
-        "forwardEps": 7.45,
-        "earningsYieldPct": 12.27,
-        "marketCapBn": 19.6
-      },
-      {
-        "rank": 9,
         "ticker": "KHC",
         "company": "The Kraft Heinz Company",
         "sector": "Consumer Staples",
-        "price": 24.61,
-        "changePct": -2.8,
-        "forwardPe": 8.15,
+        "price": 24.24,
+        "changePct": -0.74,
+        "forwardPe": 8.03,
         "forwardEps": 3.02,
-        "earningsYieldPct": 12.27,
-        "marketCapBn": 29.8
+        "earningsYieldPct": 12.46,
+        "marketCapBn": 29.3
       },
       {
-        "rank": 10,
+        "rank": 7,
         "ticker": "F",
         "company": "Ford Motor Company",
         "sector": "Consumer Discretionary",
-        "price": 12.44,
-        "changePct": -0.72,
-        "forwardPe": 8.18,
+        "price": 12.28,
+        "changePct": -1.92,
+        "forwardPe": 8.08,
         "forwardEps": 1.52,
-        "earningsYieldPct": 12.22,
-        "marketCapBn": 49.5
+        "earningsYieldPct": 12.38,
+        "marketCapBn": 48.9
+      },
+      {
+        "rank": 8,
+        "ticker": "HPQ",
+        "company": "HP Inc.",
+        "sector": "Information Technology",
+        "price": 28.42,
+        "changePct": 0.6,
+        "forwardPe": 8.12,
+        "forwardEps": 3.5,
+        "earningsYieldPct": 12.32,
+        "marketCapBn": 26.8
+      },
+      {
+        "rank": 9,
+        "ticker": "LYB",
+        "company": "LyondellBasell Industries",
+        "sector": "Materials",
+        "price": 60.6,
+        "changePct": 1.85,
+        "forwardPe": 8.13,
+        "forwardEps": 7.45,
+        "earningsYieldPct": 12.29,
+        "marketCapBn": 19.6
+      },
+      {
+        "rank": 10,
+        "ticker": "CMCSA",
+        "company": "Comcast Corporation",
+        "sector": "Communication Services",
+        "price": 24.75,
+        "changePct": 0.98,
+        "forwardPe": 8.53,
+        "forwardEps": 2.9,
+        "earningsYieldPct": 11.72,
+        "marketCapBn": 93.8
       }
     ],
     "topFcfToEv": [
@@ -1545,12 +1585,12 @@
         "ticker": "APA",
         "company": "APA Corporation",
         "sector": "Energy",
-        "price": 44.63,
-        "changePct": 2.64,
-        "fcfToEvPct": 12.69,
+        "price": 45.12,
+        "changePct": 1.28,
+        "fcfToEvPct": 12.58,
         "fcfTtmBn": 2.78,
-        "enterpriseValueBn": 21.9,
-        "marketCapBn": 16.5,
+        "enterpriseValueBn": 22.1,
+        "marketCapBn": 16.7,
         "netDebtBn": 5.4
       },
       {
@@ -1558,12 +1598,12 @@
         "ticker": "DVN",
         "company": "Devon Energy Corporation",
         "sector": "Energy",
-        "price": 42.21,
-        "changePct": -1.56,
-        "fcfToEvPct": 11.75,
+        "price": 43.41,
+        "changePct": 2.38,
+        "fcfToEvPct": 11.52,
         "fcfTtmBn": 4.02,
-        "enterpriseValueBn": 34.2,
-        "marketCapBn": 26.6,
+        "enterpriseValueBn": 34.9,
+        "marketCapBn": 27.3,
         "netDebtBn": 7.6
       },
       {
@@ -1571,8 +1611,8 @@
         "ticker": "HPQ",
         "company": "HP Inc.",
         "sector": "Information Technology",
-        "price": 28.46,
-        "changePct": -3.33,
+        "price": 28.42,
+        "changePct": 0.6,
         "fcfToEvPct": 10.29,
         "fcfTtmBn": 3.55,
         "enterpriseValueBn": 34.5,
@@ -1584,12 +1624,12 @@
         "ticker": "CMCSA",
         "company": "Comcast Corporation",
         "sector": "Communication Services",
-        "price": 24.39,
-        "changePct": -2.24,
-        "fcfToEvPct": 9.81,
+        "price": 24.75,
+        "changePct": 0.98,
+        "fcfToEvPct": 9.73,
         "fcfTtmBn": 18.2,
-        "enterpriseValueBn": 185.6,
-        "marketCapBn": 92.4,
+        "enterpriseValueBn": 187.0,
+        "marketCapBn": 93.8,
         "netDebtBn": 93.2
       },
       {
@@ -1597,12 +1637,12 @@
         "ticker": "FANG",
         "company": "Diamondback Energy, Inc.",
         "sector": "Energy",
-        "price": 178.96,
-        "changePct": -0.35,
-        "fcfToEvPct": 9.61,
+        "price": 178.08,
+        "changePct": -0.05,
+        "fcfToEvPct": 9.66,
         "fcfTtmBn": 6.18,
-        "enterpriseValueBn": 64.3,
-        "marketCapBn": 52.1,
+        "enterpriseValueBn": 64.0,
+        "marketCapBn": 51.8,
         "netDebtBn": 12.2
       },
       {
@@ -1610,42 +1650,29 @@
         "ticker": "BMY",
         "company": "Bristol-Myers Squibb Co.",
         "sector": "Health Care",
-        "price": 62.14,
-        "changePct": -1.57,
-        "fcfToEvPct": 9.21,
+        "price": 62.8,
+        "changePct": 1.06,
+        "fcfToEvPct": 9.13,
         "fcfTtmBn": 15.4,
-        "enterpriseValueBn": 167.3,
-        "marketCapBn": 126.1,
+        "enterpriseValueBn": 168.6,
+        "marketCapBn": 127.4,
         "netDebtBn": 41.2
       },
       {
         "rank": 7,
-        "ticker": "DAL",
-        "company": "Delta Air Lines, Inc.",
-        "sector": "Industrials",
-        "price": 87.2,
-        "changePct": 2.16,
-        "fcfToEvPct": 8.81,
-        "fcfTtmBn": 6.45,
-        "enterpriseValueBn": 73.2,
-        "marketCapBn": 56.2,
-        "netDebtBn": 17.0
-      },
-      {
-        "rank": 8,
         "ticker": "VLO",
         "company": "Valero Energy Corporation",
         "sector": "Energy",
-        "price": 346.45,
-        "changePct": -1.36,
-        "fcfToEvPct": 8.7,
+        "price": 350.71,
+        "changePct": -1.69,
+        "fcfToEvPct": 8.59,
         "fcfTtmBn": 9.95,
-        "enterpriseValueBn": 114.4,
-        "marketCapBn": 108.4,
+        "enterpriseValueBn": 115.8,
+        "marketCapBn": 109.8,
         "netDebtBn": 6.0
       },
       {
-        "rank": 9,
+        "rank": 8,
         "ticker": "CTRA",
         "company": "Coterra Energy Inc.",
         "sector": "Energy",
@@ -1658,12 +1685,25 @@
         "netDebtBn": 2.6
       },
       {
+        "rank": 9,
+        "ticker": "DAL",
+        "company": "Delta Air Lines, Inc.",
+        "sector": "Industrials",
+        "price": 92.2,
+        "changePct": 0.44,
+        "fcfToEvPct": 8.44,
+        "fcfTtmBn": 6.45,
+        "enterpriseValueBn": 76.4,
+        "marketCapBn": 59.4,
+        "netDebtBn": 17.0
+      },
+      {
         "rank": 10,
         "ticker": "CAG",
         "company": "Conagra Brands, Inc.",
         "sector": "Consumer Staples",
-        "price": 15.24,
-        "changePct": -1.74,
+        "price": 15.19,
+        "changePct": -0.65,
         "fcfToEvPct": 8.37,
         "fcfTtmBn": 1.28,
         "enterpriseValueBn": 15.3,
@@ -1677,9 +1717,9 @@
         "ticker": "CAG",
         "company": "Conagra Brands, Inc.",
         "sector": "Consumer Staples",
-        "price": 15.24,
-        "changePct": -1.74,
-        "dividendYieldPct": 9.19,
+        "price": 15.19,
+        "changePct": -0.65,
+        "dividendYieldPct": 9.22,
         "annualDividendPerShare": 1.4,
         "fcfPayoutRatioPct": 52.0,
         "marketCapBn": 7.2
@@ -1689,21 +1729,21 @@
         "ticker": "DOW",
         "company": "Dow Inc.",
         "sector": "Materials",
-        "price": 31.4,
-        "changePct": -1.81,
-        "dividendYieldPct": 8.92,
+        "price": 31.48,
+        "changePct": 1.68,
+        "dividendYieldPct": 8.89,
         "annualDividendPerShare": 2.8,
         "fcfPayoutRatioPct": 72.0,
-        "marketCapBn": 22.0
+        "marketCapBn": 22.1
       },
       {
         "rank": 3,
         "ticker": "LYB",
         "company": "LyondellBasell Industries",
         "sector": "Materials",
-        "price": 60.72,
-        "changePct": -1.48,
-        "dividendYieldPct": 7.71,
+        "price": 60.6,
+        "changePct": 1.85,
+        "dividendYieldPct": 7.72,
         "annualDividendPerShare": 4.68,
         "fcfPayoutRatioPct": 68.0,
         "marketCapBn": 19.6
@@ -1713,84 +1753,84 @@
         "ticker": "KHC",
         "company": "The Kraft Heinz Company",
         "sector": "Consumer Staples",
-        "price": 24.61,
-        "changePct": -2.8,
-        "dividendYieldPct": 6.5,
+        "price": 24.24,
+        "changePct": -0.74,
+        "dividendYieldPct": 6.6,
         "annualDividendPerShare": 1.6,
         "fcfPayoutRatioPct": 55.0,
-        "marketCapBn": 29.8
+        "marketCapBn": 29.3
       },
       {
         "rank": 5,
         "ticker": "UPS",
         "company": "United Parcel Service, Inc.",
         "sector": "Industrials",
-        "price": 108.3,
-        "changePct": -2.47,
-        "dividendYieldPct": 6.06,
+        "price": 111.05,
+        "changePct": 0.08,
+        "dividendYieldPct": 5.91,
         "annualDividendPerShare": 6.56,
         "fcfPayoutRatioPct": 69.0,
-        "marketCapBn": 92.6
+        "marketCapBn": 94.9
       },
       {
         "rank": 6,
-        "ticker": "VZ",
-        "company": "Verizon Communications",
-        "sector": "Communication Services",
-        "price": 45.69,
-        "changePct": -0.93,
-        "dividendYieldPct": 5.93,
-        "annualDividendPerShare": 2.71,
-        "fcfPayoutRatioPct": 58.0,
-        "marketCapBn": 192.3
-      },
-      {
-        "rank": 7,
         "ticker": "PFE",
         "company": "Pfizer Inc.",
         "sector": "Health Care",
-        "price": 29.39,
-        "changePct": -1.64,
-        "dividendYieldPct": 5.85,
+        "price": 29.36,
+        "changePct": 0.44,
+        "dividendYieldPct": 5.86,
         "annualDividendPerShare": 1.72,
         "fcfPayoutRatioPct": 59.0,
-        "marketCapBn": 166.6
+        "marketCapBn": 166.4
+      },
+      {
+        "rank": 7,
+        "ticker": "VZ",
+        "company": "Verizon Communications",
+        "sector": "Communication Services",
+        "price": 46.31,
+        "changePct": 0.54,
+        "dividendYieldPct": 5.85,
+        "annualDividendPerShare": 2.71,
+        "fcfPayoutRatioPct": 58.0,
+        "marketCapBn": 194.9
       },
       {
         "rank": 8,
-        "ticker": "CMCSA",
-        "company": "Comcast Corporation",
-        "sector": "Communication Services",
-        "price": 24.39,
-        "changePct": -2.24,
-        "dividendYieldPct": 5.41,
-        "annualDividendPerShare": 1.32,
-        "fcfPayoutRatioPct": 31.0,
-        "marketCapBn": 92.4
-      },
-      {
-        "rank": 9,
         "ticker": "MO",
         "company": "Altria Group, Inc.",
         "sector": "Consumer Staples",
-        "price": 76.12,
-        "changePct": -1.88,
-        "dividendYieldPct": 5.36,
+        "price": 76.34,
+        "changePct": 0.7,
+        "dividendYieldPct": 5.34,
         "annualDividendPerShare": 4.08,
         "fcfPayoutRatioPct": 76.0,
-        "marketCapBn": 129.0
+        "marketCapBn": 129.4
+      },
+      {
+        "rank": 9,
+        "ticker": "CMCSA",
+        "company": "Comcast Corporation",
+        "sector": "Communication Services",
+        "price": 24.75,
+        "changePct": 0.98,
+        "dividendYieldPct": 5.33,
+        "annualDividendPerShare": 1.32,
+        "fcfPayoutRatioPct": 31.0,
+        "marketCapBn": 93.8
       },
       {
         "rank": 10,
         "ticker": "F",
         "company": "Ford Motor Company",
         "sector": "Consumer Discretionary",
-        "price": 12.44,
-        "changePct": -0.72,
-        "dividendYieldPct": 4.82,
+        "price": 12.28,
+        "changePct": -1.92,
+        "dividendYieldPct": 4.89,
         "annualDividendPerShare": 0.6,
         "fcfPayoutRatioPct": 35.0,
-        "marketCapBn": 49.5
+        "marketCapBn": 48.9
       }
     ],
     "forwardPeSubNote": {
@@ -1813,79 +1853,79 @@
     },
     "noteworthyHeadlines": [
       {
-        "title": "S&P 500 Trades at 21.8x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate",
-        "headline": "S&P 500 Trades at 21.8x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate",
-        "source": "Bloomberg",
-        "timeAgo": "2h ago",
-        "significance": "With S&P 500 (7,376.86) trading at 21.8x NTM EPS (4.59% E/P vs 4.86% 10Y UST), institutional flows favor low-multiple leaders led by CAG (5.98x).",
-        "url": "https://finance.yahoo.com/quote/%5EGSPC/"
-      },
-      {
-        "title": "Energy & Free Cash Flow Leaders Outperform on Disciplined Capex and Buyback Execution",
-        "headline": "Energy & Free Cash Flow Leaders Outperform on Disciplined Capex and Buyback Execution",
-        "source": "Reuters",
-        "timeAgo": "4h ago",
-        "significance": "Highlights cross-sectional dispersion between cap-weighted S&P 500 multiples and unlevered FCF/EV leaders led by APA (12.69%) and DVN (11.75%).",
-        "url": "https://www.reuters.com/markets/us/"
-      },
-      {
-        "title": "US Corporate Dividend Aristocrats & High-Yield Value See Inflows Amid Rate Volatility",
-        "headline": "US Corporate Dividend Aristocrats & High-Yield Value See Inflows Amid Rate Volatility",
-        "source": "CNBC",
-        "timeAgo": "5h ago",
-        "significance": "Reinforces institutional rotation into FCF-covered S&P 500 dividend compounders led by CAG (9.19%) and DOW (8.92%).",
-        "url": "https://www.cnbc.com/us-markets/"
-      },
-      {
-        "title": "Airlines & Detroit Automakers Lead S&P 500 Forward Earnings Yield Screen on Resilient Travel & Truck Demand",
-        "headline": "Airlines & Detroit Automakers Lead S&P 500 Forward Earnings Yield Screen on Resilient Travel & Truck Demand",
+        "title": "CoreWeave Meets Wall Street Expectations, Shares Rise",
+        "headline": "CoreWeave Meets Wall Street Expectations, Shares Rise",
         "source": "WSJ",
-        "timeAgo": "7h ago",
-        "significance": "Guides equity risk premium (-27 bps vs 10Y Treasury) positioning across S&P 500 Value, Free Cash Flow Yield, and Shareholder Yield factor baskets.",
-        "url": "https://www.wsj.com/finance/stocks"
+        "timeAgo": "1h ago",
+        "significance": "With S&P 500 (7,520.93) trading at 22.2x NTM EPS (4.50% E/P vs 5.00% 10Y UST), institutional flows favor low-multiple leaders led by CAG (5.96x).",
+        "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxORXZHb0p5N004NFVNNVA1OU9JSDVseExtMURtc3plQk9pU3o3ZGd1enh3UEtLSHhQMndCQTR5aE4wREd3WUV2am81c1FuMDh1bnl6S0pCYmVPRlVMYWxWRk8zM2x5T2ZWWWktT1ZuV1FzUTZLeHJKaU9adlBVakliRUt4TWRwajJIc2cyV0hfR0F5TG9ucmc?oc=5"
       },
       {
-        "title": "Telecom & Cable De-Leveraging Boosts Free Cash Flow Conversion for Comcast and Verizon",
-        "headline": "Telecom & Cable De-Leveraging Boosts Free Cash Flow Conversion for Comcast and Verizon",
+        "title": "Broad Price Pressures Firm Up Case for Fed Rate Increase in December",
+        "headline": "Broad Price Pressures Firm Up Case for Fed Rate Increase in December",
+        "source": "WSJ",
+        "timeAgo": "4h ago",
+        "significance": "Directly impacts the S&P 500 equity risk premium (-50 bps over 5.00% 10Y UST), favoring low-duration Forward P/E leaders (CAG 5.96x).",
+        "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBTM0hlaW1Oc0FQRUY5YXRsYlgyQVZIMDhlUnpob3ZiZU9DbF9LdE5ocmRGaXNrXzhSU3BDVmhyalFqSXp0WU1WamlZcTAyWUR1U2FEN1h5N1hvNVR6a1ZpeVhVZFktVDRIYXdDSzh0UXRVRVc3RUZMdGZ3?oc=5"
+      },
+      {
+        "title": "Wall Street Bonuses Projected to Climb Before Prospects Weaken",
+        "headline": "Wall Street Bonuses Projected to Climb Before Prospects Weaken",
+        "source": "Bloomberg",
+        "timeAgo": "7h ago",
+        "significance": "Highlights cross-sectional dispersion between cap-weighted S&P 500 multiples and unlevered FCF/EV leaders led by APA (12.58%) and DVN (11.52%).",
+        "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOZGQxbXkxc1NibHAxMFlkcFVKWklmV25jYmhENXJETzFLNmpGWFhhTmZhWTB2SWx2VndjWWNGVHMyYVRJRG9TMmE1ZE5YMmtOTldNUnJQM3NuT2t4UmRVQUd4cWR6ZXB6LW1sUjQ4NFZCN0lOMTAzLWpEYmZLSmpYZFNITDFMRFl0RFh1cWNBSGNVQnVhUmJnRlVRUGNjeXhTS3ZZYVJ3bERUd2xFYUlRMnFJWQ?oc=5"
+      },
+      {
+        "title": "Here’s what Nvidia investors should be focusing on now. Hint: It’s not Jensen Huang’s affair.",
+        "headline": "Here’s what Nvidia investors should be focusing on now. Hint: It’s not Jensen Huang’s affair.",
         "source": "MarketWatch",
-        "timeAgo": "9h ago",
-        "significance": "Shapes quarterly capital-return expectations as S&P 500 buyback and cash-dividend leaders outperform high-beta growth on rate volatility.",
-        "url": "https://www.marketwatch.com/markets"
+        "timeAgo": "10h ago",
+        "significance": "Reinforces institutional rotation into FCF-covered S&P 500 dividend compounders led by CAG (9.22%) and DOW (8.89%).",
+        "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOMkVQSlh1ZXZRdExFYWVxX1I3UlE2T2EtXy1KNjluRGVsVDlhOUtqUlNKbENxNTdpTTVMZ2pxRUZiV1BrczUyamt6TGdvOUQtczB0djY0MlJTTTE1ekd3TkY0b2U4aXA4TWR6bG5PaVNKSWxHX2FiR1BDV0sxWEFHM1VKWmlyR2pZaUZxLWFPWWJEYktvaEJYdm1TWXVZb3FoRmxHZG5ERF9PWUpUWmNEdnZhUUQ5dHo4elFheDE0eDZETE9wNWowY2JR?oc=5"
+      },
+      {
+        "title": "Polymarket says annualized revenue has topped $1.8 billion",
+        "headline": "Polymarket says annualized revenue has topped $1.8 billion",
+        "source": "CNBC",
+        "timeAgo": "10h ago",
+        "significance": "Guides equity risk premium (-50 bps vs 10Y Treasury) positioning across S&P 500 Value, Free Cash Flow Yield, and Shareholder Yield factor baskets.",
+        "url": "https://www.cnbc.com/2026/11/10/polymarket-annualized-revenue-us-growth.html"
       }
     ],
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · US S&P 500 (SPX500) VALUATION, CASH FLOW & DIVIDEND FACTOR SYNTHESIS",
-      "regimeBadge": "SPX 7,376.86 · FWD P/E 21.8x · ERP -27 bps VS 10Y UST",
-      "conviction": "Overweight High FCF/EV (APA 12.7%) & Low Fwd P/E (CAG 6.0x) Over Cap-Weighted Index",
-      "synthesis": "The S&P 500 (SPX500) trades at 7,376.86 (+0.31%) on a cap-weighted consensus Next-12-Month (NTM) Forward P/E of 21.8x, translating into an implied S&P 500 Forward Earnings Yield (E/P) of 4.59% and an Equity Risk Premium (ERP) of -27 bps relative to the benchmark 10Y US Treasury yield (4.86%). With index-level ERP compressed and dividend yield at 1.24%, cross-sectional dispersion across the S&P 500 creates compelling factor alpha in fundamental value and cash-return leaders: the Top 10 Forward P/E screen is led by CAG at 5.98x (16.73% forward earnings yield), the Top 10 Enterprise FCF Yield (FCF/EV) screen is led by APA at 12.69% ($2.78B TTM FCF), and the Top 10 FCF-covered Dividend/Price screen is led by CAG at 9.19% ($1.40/sh annual dividend). Lead US equity theme: \"S&P 500 Trades at 21.8x NTM Forward P/E as 10Y Treasury Yield Anchors Equity Risk Premium Debate\".",
-      "positioningTakeaway": "In a 4.86% 10Y Treasury environment where cap-weighted S&P 500 ERP sits at -27 bps, rotate incremental equity risk out of crowded >30x multiple mega-caps into S&P 500 constituents generating 8.5%–12.7% Enterprise FCF/EV yields and sub-9.5x Forward P/E multiples with active share buybacks and covered cash dividends.",
+      "regimeBadge": "SPX 7,520.93 · FWD P/E 22.2x · ERP -50 bps VS 10Y UST",
+      "conviction": "Overweight High FCF/EV (APA 12.6%) & Low Fwd P/E (CAG 6.0x) Over Cap-Weighted Index",
+      "synthesis": "The S&P 500 (SPX500) trades at 7,520.93 (-0.38%) on a cap-weighted consensus Next-12-Month (NTM) Forward P/E of 22.2x, translating into an implied S&P 500 Forward Earnings Yield (E/P) of 4.50% and an Equity Risk Premium (ERP) of -50 bps relative to the benchmark 10Y US Treasury yield (5.00%). With index-level ERP compressed and dividend yield at 1.24%, cross-sectional dispersion across the S&P 500 creates compelling factor alpha in fundamental value and cash-return leaders: the Top 10 Forward P/E screen is led by CAG at 5.96x (16.79% forward earnings yield), the Top 10 Enterprise FCF Yield (FCF/EV) screen is led by APA at 12.58% ($2.78B TTM FCF), and the Top 10 FCF-covered Dividend/Price screen is led by CAG at 9.22% ($1.40/sh annual dividend). Lead US equity theme: \"CoreWeave Meets Wall Street Expectations, Shares Rise\".",
+      "positioningTakeaway": "In a 5.00% 10Y Treasury environment where cap-weighted S&P 500 ERP sits at -50 bps, rotate incremental equity risk out of crowded >30x multiple mega-caps into S&P 500 constituents generating 8.5%–12.7% Enterprise FCF/EV yields and sub-9.5x Forward P/E multiples with active share buybacks and covered cash dividends.",
       "criticalLevels": [
         {
           "asset": "S&P 500 Cash Index (SPX)",
-          "current": "7,376.86 (+0.31%)",
-          "support": "7,170",
-          "resistance": "7,561",
-          "implication": "Break above 7,561 requires 10Y UST stability below 5.01%; pullback tests 50-DMA near 7,170."
+          "current": "7,520.93 (-0.38%)",
+          "support": "7,310",
+          "resistance": "7,709",
+          "implication": "Break above 7,709 requires 10Y UST stability below 5.15%; pullback tests 50-DMA near 7,310."
         },
         {
           "asset": "S&P 500 Equity Risk Premium",
-          "current": "-27 bps (E/P 4.59% vs 4.86%)",
+          "current": "-50 bps (E/P 4.50% vs 5.00%)",
           "support": "-65 bps",
           "resistance": "+50 bps",
           "implication": "Negative ERP favors high free-cash-flow yielders (FCF/EV > 8.5%) and short-duration value equities over long-duration growth."
         },
         {
           "asset": "Top 10 Fwd P/E Value Basket",
-          "current": "6.7x – 9.0x (Led by CAG 5.98x)",
+          "current": "6.7x – 9.0x (Led by CAG 5.96x)",
           "support": "6.2x Floor",
           "resistance": "10.5x Re-Rating",
           "implication": "Consensus NTM EPS upward revisions and share count reductions drive multiple expansion toward 10.5x."
         },
         {
           "asset": "Top 10 FCF / EV & Div Basket",
-          "current": "FCF/EV 12.7% · Div 9.19%",
-          "support": "+783 bps FCF Spread",
+          "current": "FCF/EV 12.6% · Div 9.22%",
+          "support": "+758 bps FCF Spread",
           "resistance": "85% FCF Payout Cap",
           "implication": "Unlevered FCF/EV > 2x the 10Y Treasury yield insulates capital-return leaders against higher-for-longer discount rates."
         }
@@ -1895,13 +1935,13 @@
           "event": "S&P 500 Quarterly Earnings Guidance Revisions & NTM Consensus EPS Drift",
           "timing": "Weekly FactSet / S&P Capital IQ Aggregate",
           "impact": "Critical",
-          "watchFor": "Whether bottom-up S&P 500 NTM operating EPS (~$338/sh) expands fast enough to compress the index Forward P/E below 21.0x from 21.8x."
+          "watchFor": "Whether bottom-up S&P 500 NTM operating EPS (~$338/sh) expands fast enough to compress the index Forward P/E below 21.0x from 22.2x."
         },
         {
           "event": "US 10Y Treasury Auction Supply & Real TIPS Yield Transmission to Equity Multiples",
           "timing": "US Treasury Refunding & CPI Release Cycle",
           "impact": "High",
-          "watchFor": "Any backup in 10Y UST above 5.04% which historically triggers +250 bps outperformance in the Top 10 FCF/EV and Dividend/Price factor baskets."
+          "watchFor": "Any backup in 10Y UST above 5.18% which historically triggers +250 bps outperformance in the Top 10 FCF/EV and Dividend/Price factor baskets."
         },
         {
           "event": "Corporate Share Repurchase Blackout Windows & Ex-Dividend Dates",

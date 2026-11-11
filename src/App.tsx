@@ -44,49 +44,49 @@ const DEFAULT_CHINA_DATA: ChinaMacroData = {
     policyPosture: 'Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.00% · 5Y LPR 3.50%)',
     noteworthyHeadlines: [
       {
-        title: 'SSE Composite Weekly Review: Shanghai Rises 1.39% to 3,649.18 and Ends a Six-Week Losing Streak on Beijing Support',
-        headline: 'SSE Composite Weekly Review: Shanghai Rises 1.39% to 3,649.18 and Ends a Six-Week Losing Streak on Beijing Support',
-        source: 'BBN Times',
-        timeAgo: '3h ago',
+        title: '‘Adding fuel to fire’: how Nvidia CEO’s troubles could tighten China chip curbs',
+        headline: '‘Adding fuel to fire’: how Nvidia CEO’s troubles could tighten China chip curbs',
+        source: 'SCMP',
+        timeAgo: '6h ago',
         significance:
-          'Drives onshore asset-allocation rotation between domestic equities (Shanghai Composite 3,649.18, CSI 300 4,054.28) and long-duration 10Y–30Y CCDC CGB benchmarks (1.5868%–2.0275%).',
-        url: 'https://www.bloomberg.com/markets',
+          'US-China semiconductor export controls and bilateral tariff policy directly impact Chinese tech capex, external trade balances, and onshore USD/CNY (6.7279).',
+        url: 'https://www.scmp.com/economy',
       },
       {
-        title: "Buying the Dip? People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
-        headline: "Buying the Dip? People's Bank of China Extends Gold Purchases for 24th Consecutive Month",
-        source: 'Bloomberg',
-        timeAgo: '5h ago',
-        significance:
-          'Reinforces PBoC balance-sheet diversification alongside US$3.2T+ FX reserves, supporting sovereign credit quality across the CCDC CGB curve (10Y at 1.5868%).',
-        url: 'https://www.bloomberg.com/markets',
-      },
-      {
-        title: 'Bessent, Greer Raise Concerns on China Trade Deal Actions',
-        headline: 'Bessent, Greer Raise Concerns on China Trade Deal Actions',
-        source: 'Bloomberg',
-        timeAgo: '7h ago',
-        significance:
-          'Shapes external trade-surplus expectations and exporter USD conversion flows on CFETS (USD/CNY 6.6760), a key driver for PBoC domestic liquidity injections.',
-        url: 'https://www.bloomberg.com/markets',
-      },
-      {
-        title: 'China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan',
-        headline: 'China’s Central Bank Tweaks Forex Reserve Rules to Steady Yuan',
-        source: 'WSJ',
-        timeAgo: '9h ago',
-        significance:
-          'Directly anchors PBoC daily central parity fixing (6.6735) and narrows the offshore-onshore CNH/CNY basis (CNY 6.6760 vs CNH 6.6713), stabilizing FX-hedged inflows into CCDC ChinaBond CGBs.',
-        url: 'https://www.wsj.com/economy/central-banking',
-      },
-      {
-        title: "China's yuan dilemma: too weak abroad and too strong at home",
-        headline: "China's yuan dilemma: too weak abroad and too strong at home",
+        title: "COMMENTARY: China's crude oil imports recover, fuel exports not so much",
+        headline: "COMMENTARY: China's crude oil imports recover, fuel exports not so much",
         source: 'Reuters',
-        timeAgo: '12h ago',
+        timeAgo: '6h ago',
         significance:
-          'Reflects PBoC FX management between domestic monetary easing (10Y CCDC CGB at 1.5868%) and external Renminbi stability near 6.6760.',
-        url: 'https://www.reuters.com/markets/currencies/',
+          'Shapes external trade-surplus expectations and exporter USD conversion flows on CFETS (USD/CNY 6.7279), a key driver for PBoC domestic liquidity injections.',
+        url: 'https://www.reuters.com/markets/',
+      },
+      {
+        title: 'Alibaba chip unit T-Head files for Hong Kong IPO amid China’s AI push',
+        headline: 'Alibaba chip unit T-Head files for Hong Kong IPO amid China’s AI push',
+        source: 'SCMP',
+        timeAgo: '10h ago',
+        significance:
+          'Drives onshore asset-allocation rotation between domestic equities (Shanghai Composite 3,669.92, CSI 300 4,098.60) and long-duration 10Y–30Y CCDC CGB benchmarks (1.5868%–2.0275%).',
+        url: 'https://www.scmp.com/business',
+      },
+      {
+        title: 'On the right track: Beijing, Ottawa ramp up trade ties as CEOs plan China trip for Apec',
+        headline: 'On the right track: Beijing, Ottawa ramp up trade ties as CEOs plan China trip for Apec',
+        source: 'SCMP',
+        timeAgo: '11h ago',
+        significance:
+          'Bilateral trade and diplomatic engagement around APEC influences cross-border FDI sentiment and offshore USD/CNH (6.7243) stability.',
+        url: 'https://www.scmp.com/economy',
+      },
+      {
+        title: 'PBOC Sets Stronger Yuan Daily Reference Rate at 6.7167',
+        headline: 'PBOC Sets Stronger Yuan Daily Reference Rate at 6.7167',
+        source: 'TradingPedia',
+        timeAgo: '16h ago',
+        significance:
+          'Directly anchors PBoC daily central parity fixing (6.7167) and narrows the offshore-onshore CNH/CNY basis (CNY 6.7279 vs CNH 6.7243), stabilizing FX-hedged inflows into CCDC ChinaBond CGBs.',
+        url: 'https://www.chinamoney.com.cn/english/',
       },
     ],
   },
@@ -196,49 +196,49 @@ const DEFAULT_KOREA_DATA: KoreaMacroData = {
     policyPosture: 'Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 3.045% · CD 91D 3.34%)',
     noteworthyHeadlines: [
       {
-        title: 'U.S. Semiconductor Rebound Raises Hopes for South Korea’s Market',
-        headline: 'U.S. Semiconductor Rebound Raises Hopes for South Korea’s Market',
-        source: '조선일보',
-        timeAgo: '1h ago',
-        significance:
-          'Supports Korean semiconductor export earnings and foreign equity inflows into KOSPI (5,059.69), helping stabilize onshore USD/KRW around ₩1,363.27.',
-        url: 'https://www.chosun.com',
-      },
-      {
-        title: "Savings Banks' LME Loans Surge 50% to 5.3T",
-        headline: "Savings Banks' LME Loans Surge 50% to 5.3T",
-        source: '조선일보',
-        timeAgo: '1h ago',
-        significance:
-          'Highlights domestic non-bank credit and funding dynamics monitored by BOK and KOFIA, where 91-day CD fixes at 3.340% and 3Y AA- corporate bonds yield 4.358%.',
-        url: 'https://www.chosun.com',
-      },
-      {
-        title: '"Rollercoaster" KOSPI Seeks Relief Following U.S. Rebound',
-        headline: '"Rollercoaster" KOSPI Seeks Relief Following U.S. Rebound',
-        source: 'SBS 뉴스',
-        timeAgo: '2h ago',
-        significance:
-          'Heightened equity volatility in KOSPI (5,059.69) accelerates domestic institutional rotation into safe-haven KOFIA 3Y (3.622%) and 10Y (3.852%) Korea Treasury Bonds.',
-        url: 'https://news.sbs.co.kr',
-      },
-      {
-        title: 'Even Blue Chips Slide as 844 Korean Stocks Hit Yearly Lows',
-        headline: 'Even Blue Chips Slide as 844 Korean Stocks Hit Yearly Lows',
-        source: 'Seoul Economic Daily',
-        timeAgo: '3h ago',
-        significance:
-          'Prompts Korean pension and insurance desks to rebalance toward long-duration 10Y–30Y KTB benchmarks (3.852%–3.975%) amid tech multiple compression.',
-        url: 'https://www.sedaily.com',
-      },
-      {
         title: 'South Korea Inflation Remained Above Target in October',
         headline: 'South Korea Inflation Remained Above Target in October',
         source: 'WSJ',
-        timeAgo: '9h ago',
+        timeAgo: '2h ago',
         significance:
           'Reinforces the Bank of Korea’s cautious calibration with the Base Rate at 3.00% and KOFR/SOFIA overnight repo at 3.045%, anchoring 3Y KTB yields near 3.622%.',
         url: 'https://www.wsj.com/economy/central-banking',
+      },
+      {
+        title: 'SK hynix Stocks Jump 6.69% as Seoul Chip Rally Lifts KOSPI 4.39%',
+        headline: 'SK hynix Stocks Jump 6.69% as Seoul Chip Rally Lifts KOSPI 4.39%',
+        source: 'TradingView',
+        timeAgo: '6h ago',
+        significance:
+          'Supports Korean semiconductor export earnings and foreign equity inflows into KOSPI (5,472.20), helping stabilize onshore USD/KRW around ₩1,375.94.',
+        url: 'https://www.tradingview.com/news/',
+      },
+      {
+        title: 'FSS Urges Savings Banks to Cut Loan Rates for Small Businesses',
+        headline: 'FSS Urges Savings Banks to Cut Loan Rates for Small Businesses',
+        source: 'Seoul Economic Daily',
+        timeAgo: '16h ago',
+        significance:
+          'Highlights domestic non-bank credit and funding dynamics monitored by BOK and KOFIA, where 91-day CD fixes at 3.340% and 3Y AA- corporate bonds yield 4.358%.',
+        url: 'https://en.sedaily.com',
+      },
+      {
+        title: "Top 10 firms take up over 60% of Korea's exports in Q3 amid chip boom",
+        headline: "Top 10 firms take up over 60% of Korea's exports in Q3 amid chip boom",
+        source: 'The Korea Times',
+        timeAgo: '20h ago',
+        significance:
+          'Trade and export policy dynamics directly shape Korea’s current-account surplus and exporter USD selling across onshore Seoul FX markets (₩1,375.94).',
+        url: 'https://www.koreatimes.co.kr',
+      },
+      {
+        title: "Korea's economy is booming. Why isn't President Lee's popularity?",
+        headline: "Korea's economy is booming. Why isn't President Lee's popularity?",
+        source: 'The Korea Times',
+        timeAgo: '1d ago',
+        significance:
+          'Executive and National Assembly legislative developments shape Korea’s fiscal budget trajectory, corporate Value-Up governance reforms, and long-end KTB supply (10Y 3.852%).',
+        url: 'https://www.koreatimes.co.kr',
       },
     ],
   },
@@ -349,49 +349,49 @@ const DEFAULT_INDIA_DATA: IndiaMacroData = {
     policyPosture: 'Neutral Calibration (RBI Repo 5.50% · SDF 5.25% · MSF 5.75% · CRR 3.00%)',
     noteworthyHeadlines: [
       {
-        title: 'RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026',
-        headline: 'RBI to conduct 4-day Variable Rate Repo (VRR) auction under LAF on November 09, 2026',
-        source: 'RBI Official RSS',
+        title: 'RBI Bond Valuation Shift May Hit Bank Dividends',
+        headline: 'RBI Bond Valuation Shift May Hit Bank Dividends',
+        source: 'BW Businessworld',
+        timeAgo: '2h ago',
+        significance:
+          'RBI prudential norms on bank investment portfolio valuation directly shape commercial bank SLR demand for 5Y–10Y G-Secs (7.023%–7.162%) and bank equity dividend payouts.',
+        url: 'https://www.businessworld.in',
+      },
+      {
+        title: "Trump's midterm poll setback won't derail India-US trade talks: Official",
+        headline: "Trump's midterm poll setback won't derail India-US trade talks: Official",
+        source: 'The Economic Times',
         timeAgo: '4h ago',
         significance:
-          'Injects short-term banking liquidity to keep interbank Call Money (4.30%–5.75%) anchored near the 5.50% Policy Repo Rate and supports front-end 1Y–3Y G-Secs (6.451%–6.958%).',
-        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63943',
+          'Bilateral trade and tariff negotiations directly influence India’s external merchandise balance, IT services exports, and medium-term USD/INR (₹94.6850) stability.',
+        url: 'https://economictimes.indiatimes.com',
       },
       {
-        title: "India's October consumer inflation likely nears top of RBI target on food costs",
-        headline: "India's October consumer inflation likely nears top of RBI target on food costs",
-        source: 'Reuters',
-        timeAgo: '6h ago',
-        significance:
-          'Near-term food CPI stickiness reinforces the RBI MPC hold at 5.50% Repo and caps aggressive bull-flattening below 7.10% on the 10Y 6.94% GS 2036 benchmark (7.162%).',
-        url: 'https://www.reuters.com/world/india/',
-      },
-      {
-        title: 'Government Stock Auction Results: ₹23,000 Cr 7.06% GS 2041 at 7.3881% & ₹13,000 Cr 7.43% GS 2076 at 7.7708%',
-        headline: 'Government Stock Auction Results: ₹23,000 Cr 7.06% GS 2041 at 7.3881% & ₹13,000 Cr 7.43% GS 2076 at 7.7708%',
-        source: 'RBI Official RSS',
+        title: 'Easing global headwinds, lower crude oil prices may further lift rupee in coming months: Economists',
+        headline: 'Easing global headwinds, lower crude oil prices may further lift rupee in coming months: Economists',
+        source: 'The Economic Times',
         timeAgo: '8h ago',
         significance:
-          'Full ₹36,000 Cr absorption with NIL Primary Dealer devolvement confirms robust domestic insurance and provident fund demand for long-duration 15Y–50Y G-Secs.',
-        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63936',
+          'Softer global crude prices and US$717.06B in RBI FX reserves ease imported inflation and narrow India’s current account deficit, supporting USD/INR around ₹94.6850.',
+        url: 'https://economictimes.indiatimes.com',
       },
       {
-        title: 'RBI Weekly Statistical Supplement: India Foreign Exchange Reserves Stand at US$717.06 Billion',
-        headline: 'RBI Weekly Statistical Supplement: India Foreign Exchange Reserves Stand at US$717.06 Billion',
-        source: 'RBI Official RSS',
-        timeAgo: '9h ago',
+        title: 'Sensex, Nifty 50 rise over 6% in past 5 sessions: More rally from tomorrow or profit booking will dent returns hopes?',
+        headline: 'Sensex, Nifty 50 rise over 6% in past 5 sessions: More rally from tomorrow or profit booking will dent returns hopes?',
+        source: 'Livemint',
+        timeAgo: '16h ago',
         significance:
-          'Provides the Reserve Bank of India with an ample US$717.06B buffer (US$591.12B FCA, US$102.59B Gold) to smooth USD/INR volatility around ₹93.8950 (FBIL Ref ₹94.1402).',
-        url: 'https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63939',
+          'Resilient domestic equity momentum in Nifty 50 (24,998.45) and Sensex (81,028.02) attracts FPI capital inflows and supports onshore INR stability.',
+        url: 'https://www.livemint.com/market',
       },
       {
-        title: 'Sensex Jumps 8.82% to 81,028, Nifty Reclaims 25,000 as ₹28.7 Lakh Crore Added in Best Week Since 2021',
-        headline: 'Sensex Jumps 8.82% to 81,028, Nifty Reclaims 25,000 as ₹28.7 Lakh Crore Added in Best Week Since 2021',
-        source: 'HDFC Sky',
-        timeAgo: '11h ago',
+        title: 'Easing oil, bond yields to support bank margins, RBI rate hikes likely in Dec: Jefferies',
+        headline: 'Easing oil, bond yields to support bank margins, RBI rate hikes likely in Dec: Jefferies',
+        source: 'BusinessLine',
+        timeAgo: '17h ago',
         significance:
-          'Resilient domestic equity momentum in Nifty 50 (24,986.40) and Sensex (80,999.40) attracts FPI capital inflows and supports onshore INR stability.',
-        url: 'https://www.nseindia.com',
+          'Anchors interbank Call Money (4.30% - 5.75%) near the 5.50% RBI Policy Repo Rate and shapes institutional positioning across 5Y–10Y G-Sec benchmarks.',
+        url: 'https://www.thehindubusinessline.com',
       },
     ],
     rbiOfficialReleases: [
@@ -1207,48 +1207,48 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
       biPolicyPosture: 'Vigilant FX Stabilization (BI-Rate 5.75% · Headline CPI 3.28% YoY)',
       noteworthyHeadlines: [
         {
-          title: 'Amidst Cyber Threats in Indonesia, OJK Strengthens Coordination with Banks',
-          headline: 'Amidst Cyber Threats in Indonesia, OJK Strengthens Coordination with Banks',
-          source: 'Kompas.id',
-          timeAgo: '3h ago',
+          title: 'JCI, Rupiah Close Stronger as VP Gibran Offers to Resign',
+          headline: 'JCI, Rupiah Close Stronger as VP Gibran Offers to Resign',
+          source: 'Tempo.co English',
+          timeAgo: '10h ago',
           significance:
-            'Strengthens OJK prudential supervision and institutional governance across Indonesian banks and capital markets (IHSG 5,050.43).',
-          url: 'https://www.kompas.id',
+            'High-profile executive and constitutional development closely watched by foreign institutional desks for cabinet policy continuity, sovereign risk premia on 10Y FR0108 IndoGBs (7.69%), and onshore USD/IDR (18,070) stability.',
+          url: 'https://en.tempo.co',
         },
         {
-          title: 'At 80, the rupiah needs credibility, not ceremony',
-          headline: 'At 80, the rupiah needs credibility, not ceremony',
-          source: 'The Jakarta Post',
+          title: 'Indonesia Urges Banks to Boost Cyber Defense as Global Attack Surges',
+          headline: 'Indonesia Urges Banks to Boost Cyber Defense as Global Attack Surges',
+          source: 'Tempo.co English',
+          timeAgo: '11h ago',
+          significance:
+            'Strengthens OJK prudential supervision and operational resilience across Indonesian commercial banks and domestic money markets (IHSG 5,075.13).',
+          url: 'https://en.tempo.co',
+        },
+        {
+          title: 'Indonesia courts Austrian investment for transport infrastructure',
+          headline: 'Indonesia courts Austrian investment for transport infrastructure',
+          source: 'ANTARA News',
+          timeAgo: '11h ago',
+          significance:
+            'Bolsters bilateral foreign direct investment (FDI) into Indonesian transport and green infrastructure, strengthening the capital account buffer supporting USD/IDR near 18,070.',
+          url: 'https://en.antaranews.com',
+        },
+        {
+          title: 'Indonesia vows to continue capital market reforms ahead of MSCI review',
+          headline: 'Indonesia vows to continue capital market reforms ahead of MSCI review',
+          source: 'ANTARA News',
           timeAgo: '12h ago',
           significance:
-            "Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp 18,130 and the 06 Nov 12M SRBI WAR clearing at 6.675%.",
-          url: 'https://www.thejakartapost.com',
-        },
-        {
-          title: 'Govt prepares 100 pct rupiah conversion for resource export earnings',
-          headline: 'Govt prepares 100 pct rupiah conversion for resource export earnings',
-          source: 'ANTARA News',
-          timeAgo: '1d ago',
-          significance:
-            'Mandatory onshore conversion of natural resource export proceeds (DHE SDA) structurally deepens domestic USD liquidity and anchors spot USD/IDR near 18,080.',
+            "Structural IDX/OJK equity market reforms address free-float and investability criteria to defend Indonesia's MSCI EM index weight and catalyze foreign inflows into IHSG (5,075.13).",
           url: 'https://en.antaranews.com',
         },
         {
-          title: 'Bank Indonesia expects export retention policy to boost forex reserves',
-          headline: 'Bank Indonesia expects export retention policy to boost forex reserves',
+          title: 'OJK warns rogue investors to stop stock manipulation',
+          headline: 'OJK warns rogue investors to stop stock manipulation',
           source: 'ANTARA News',
-          timeAgo: '1d ago',
+          timeAgo: '14h ago',
           significance:
-            "Reinforces Bank Indonesia's US$146.8B external reserve buffer to defend JISDOR (Rp 18,130) alongside the 06 Nov SRBI issuance (12M WAR at 6.675%).",
-          url: 'https://en.antaranews.com',
-        },
-        {
-          title: 'Indonesias foreign exchange reserves hit US$146.8 bln in October: BI',
-          headline: 'Indonesias foreign exchange reserves hit US$146.8 bln in October: BI',
-          source: 'ANTARA News',
-          timeAgo: '1d ago',
-          significance:
-            'Reported by ANTARA News; shapes onshore institutional allocation across Jakarta equities (IHSG 5,050.43) and Rupiah money markets.',
+            'Reinforces OJK capital-market enforcement and retail/institutional investor protection across Indonesia Stock Exchange (IDX) listings.',
           url: 'https://en.antaranews.com',
         },
       ],
@@ -1342,10 +1342,23 @@ const DJPPR_2026_BENCHMARKS = [
 ];
 
 function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
-  const headlines = snap.indonesia?.commentary?.noteworthyHeadlines || [];
+  const rawIndoHeadlines = snap.indonesia?.commentary?.noteworthyHeadlines || [];
+  // Detect if remote snapshot has stale (>24h old) or duplicate OJK cyberattack stories from older script
+  const cyberDuplicates = rawIndoHeadlines.filter((h) =>
+    (h.title || h.headline || '').toLowerCase().includes('cyber')
+  ).length;
+  const allStaleDays =
+    rawIndoHeadlines.length > 0 &&
+    rawIndoHeadlines.every((h) => (h.timeAgo || '').endsWith('d ago'));
+  const headlines =
+    rawIndoHeadlines.length < 3 || cyberDuplicates > 1 || allStaleDays
+      ? DEFAULT_SNAPSHOT.indonesia.commentary.noteworthyHeadlines
+      : rawIndoHeadlines;
+
   const usedSigs = new Set<string>();
   const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18130;
-  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 5050.43;
+  const spotRate = snap.indonesia?.fxAndNdf?.spotRate ?? 18070;
+  const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 5075.13;
 
   const normalizedHeadlines = headlines.map((item, idx) => {
     const rawTitle = (item.title || item.headline || 'Indonesia Market Disclosure').replace(
@@ -1355,18 +1368,31 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     let sig = (item.significance || '').replace(/6\.601%/g, '6.675%');
     if (!sig || usedSigs.has(sig)) {
       const low = rawTitle.toLowerCase();
-      if (low.includes('reserve') || low.includes('146.8') || low.includes('forex') || low.includes('export')) {
+      if (low.includes('gibran') || low.includes('vice president') || low.includes('resign') || low.includes('step down')) {
+        sig = `High-profile executive and constitutional development closely watched by foreign institutional desks for cabinet policy continuity, sovereign risk premia on 10Y FR0108 IndoGBs, and onshore USD/IDR (${spotRate.toLocaleString()}) stability.`;
+      } else if (low.includes('dpr') || low.includes('wiretap') || low.includes('parliament')) {
+        sig = `Parliamentary (DPR) oversight and executive security inquiries influence domestic political-risk sentiment across Jakarta equities (IHSG ${ihsg.toLocaleString()}) and sovereign credit spreads.`;
+      } else if (low.includes('austrian') || low.includes('infrastructure') || low.includes('transport')) {
+        sig = `Bolsters bilateral foreign direct investment (FDI) into Indonesian transport and green infrastructure, strengthening the capital account buffer supporting USD/IDR near ${spotRate.toLocaleString()}.`;
+      } else if (low.includes('msci') || low.includes('capital market reform') || low.includes('equity market reform')) {
+        sig = `Structural IDX/OJK equity market reforms address free-float and investability criteria to defend Indonesia's MSCI EM index weight and catalyze foreign inflows into IHSG (${ihsg.toLocaleString()}).`;
+      } else if (low.includes('manipulation') || low.includes('rogue investor')) {
+        sig = `Reinforces OJK capital-market enforcement and retail/institutional investor protection across Indonesia Stock Exchange (IDX) listings.`;
+      } else if (low.includes('reserve') || low.includes('146.8') || low.includes('forex') || low.includes('export')) {
         sig =
           'Bolsters Bank Indonesia’s external reserve buffer and onshore USD supply alongside the 6 Nov SRBI issuance (12M WAR at 6.675%).';
       } else if (low.includes('ojk') || low.includes('bank') || low.includes('cyber') || low.includes('reform')) {
         sig =
-          'Strengthens OJK regulatory enforcement and institutional confidence across Jakarta financials and domestic money markets.';
+          'Strengthens OJK prudential supervision and operational resilience across Indonesian commercial banks and domestic money markets.';
       } else if (low.includes('rupiah') || low.includes('credibility') || low.includes('dollar')) {
         sig = `Underscores Bank Indonesia's FX stability focus with JISDOR at Rp ${jisdor.toLocaleString()} and 12M SRBI clearing at 6.675% on 6 Nov.`;
       } else if (low.includes('gdp') || low.includes('economy') || low.includes('growth')) {
         sig = `Frames Indonesia's Q3 GDP expansion against domestic purchasing power and anchors demand for 10Y FR0108 IndoGBs.`;
       } else {
         sig = `Reported by ${item.source}; shapes onshore institutional allocation across Jakarta equities (IHSG ${ihsg.toLocaleString()}) and Rupiah debt (#${idx + 1}).`;
+      }
+      if (usedSigs.has(sig)) {
+        sig = `${sig.replace(/\.$/, '')} (Desk Note #${idx + 1}).`;
       }
     }
     usedSigs.add(sig);
@@ -1672,7 +1698,86 @@ export default function App() {
       if (localJson && remoteJson) {
         const localTime = Date.parse(localJson.metadata?.lastUpdated || '') || 0;
         const remoteTime = Date.parse(remoteJson.metadata?.lastUpdated || '') || 0;
-        const chosen = remoteTime > localTime ? remoteJson : localJson;
+        const chosen: DailyMacroSnapshot = remoteTime > localTime ? { ...remoteJson } : { ...localJson };
+
+        // Helper: returns true if candidate list has fresher (<24h, 'm ago' or 'h ago') items than current list
+        const countSub24h = (list: Array<{ timeAgo?: string }> | undefined) =>
+          (list || []).filter((item) => {
+            const t = (item.timeAgo || '').trim();
+            return t.endsWith('m ago') || t.endsWith('h ago');
+          }).length;
+
+        if (remoteTime > localTime) {
+          if (countSub24h(localJson.globalMacro?.topNews) > countSub24h(remoteJson.globalMacro?.topNews) && localJson.globalMacro?.topNews?.length) {
+            chosen.globalMacro = { ...chosen.globalMacro, topNews: localJson.globalMacro.topNews };
+          }
+          if (
+            countSub24h(localJson.indonesia?.commentary?.noteworthyHeadlines) >
+              countSub24h(remoteJson.indonesia?.commentary?.noteworthyHeadlines) &&
+            localJson.indonesia?.commentary?.noteworthyHeadlines?.length
+          ) {
+            chosen.indonesia = {
+              ...chosen.indonesia,
+              commentary: {
+                ...chosen.indonesia.commentary,
+                noteworthyHeadlines: localJson.indonesia.commentary.noteworthyHeadlines,
+              },
+            };
+          }
+          if (
+            countSub24h(localJson.china?.commentary?.noteworthyHeadlines) >
+              countSub24h(remoteJson.china?.commentary?.noteworthyHeadlines) &&
+            localJson.china?.commentary?.noteworthyHeadlines?.length &&
+            chosen.china
+          ) {
+            chosen.china = {
+              ...chosen.china,
+              commentary: {
+                ...chosen.china.commentary,
+                noteworthyHeadlines: localJson.china.commentary.noteworthyHeadlines,
+              },
+            };
+          }
+          if (
+            countSub24h(localJson.korea?.commentary?.noteworthyHeadlines) >
+              countSub24h(remoteJson.korea?.commentary?.noteworthyHeadlines) &&
+            localJson.korea?.commentary?.noteworthyHeadlines?.length &&
+            chosen.korea
+          ) {
+            chosen.korea = {
+              ...chosen.korea,
+              commentary: {
+                ...chosen.korea.commentary,
+                noteworthyHeadlines: localJson.korea.commentary.noteworthyHeadlines,
+              },
+            };
+          }
+          if (
+            countSub24h(localJson.india?.commentary?.noteworthyHeadlines) >
+              countSub24h(remoteJson.india?.commentary?.noteworthyHeadlines) &&
+            localJson.india?.commentary?.noteworthyHeadlines?.length &&
+            chosen.india
+          ) {
+            chosen.india = {
+              ...chosen.india,
+              commentary: {
+                ...chosen.india.commentary,
+                noteworthyHeadlines: localJson.india.commentary.noteworthyHeadlines,
+              },
+            };
+          }
+          if (
+            countSub24h(localJson.equities?.noteworthyHeadlines) >
+              countSub24h(remoteJson.equities?.noteworthyHeadlines) &&
+            localJson.equities?.noteworthyHeadlines?.length &&
+            chosen.equities
+          ) {
+            chosen.equities = {
+              ...chosen.equities,
+              noteworthyHeadlines: localJson.equities.noteworthyHeadlines,
+            };
+          }
+        }
         setData(normalizeSnapshot(chosen));
       } else {
         setData(normalizeSnapshot((remoteJson || localJson) as DailyMacroSnapshot));

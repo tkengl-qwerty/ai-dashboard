@@ -182,11 +182,11 @@ export const KoreaTab: React.FC<KoreaTabProps> = ({
               <div className="flex items-center gap-2">
                 <Newspaper className="w-4 h-4 text-sky-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
-                  NOTEWORTHY KOREA MACRO, BOK & KOFIA / SOFIA DEVELOPMENTS
+                  NOTEWORTHY KOREA MACRO, POLICY, BOK & KOFIA / SOFIA DEVELOPMENTS
                 </h3>
               </div>
               <span className="text-[10px] font-mono text-sky-300 bg-sky-950/60 px-2 py-0.5 border border-sky-800/60 rounded-xs font-semibold">
-                LIVE FEED
+                LIVE RSS FEED
               </span>
             </div>
 
