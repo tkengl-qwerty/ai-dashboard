@@ -6,7 +6,7 @@ export interface MarketMetadata {
   timezone: string;
 }
 
-export type MacroTabId = 'global' | 'indonesia' | 'china' | 'korea' | 'india' | 'equities';
+export type MacroTabId = 'global' | 'indonesia' | 'indonesiaNews' | 'china' | 'korea' | 'india' | 'equities';
 
 export interface MacroNewsItem {
   id: string;
@@ -444,6 +444,32 @@ export interface ArgonCommentary {
   eventsToWatch: ArgonWatchEvent[];
 }
 
+export interface IndonesiaTranslatedNewsItem {
+  rank: number;
+  id: string;
+  titleEn: string;
+  titleId: string;
+  source: string;
+  feedSection: string;
+  timeAgo: string;
+  category: string;
+  impactDirection: 'Market-Moving' | 'Supportive' | 'Risk-Off' | 'Policy Watch' | string;
+  impactScore: number;
+  readPopularityBadge: string;
+  summaryEn: string;
+  marketSignificance: string;
+  url: string;
+}
+
+export interface IndonesiaLocalNewsData {
+  asOfDate: string;
+  sourcesMonitored: string[];
+  translationEngine: string;
+  argonCommentary?: ArgonCommentary;
+  topImportant: IndonesiaTranslatedNewsItem[];
+  topRead: IndonesiaTranslatedNewsItem[];
+}
+
 export interface DailyMacroSnapshot {
   metadata: MarketMetadata;
   globalMacro: {
@@ -460,8 +486,10 @@ export interface DailyMacroSnapshot {
     bonds: IndonesiaBonds;
     fxAndNdf: IndonesiaFxAndNdf;
   };
+  indonesiaLocalNews?: IndonesiaLocalNewsData;
   china?: ChinaMacroData;
   korea?: KoreaMacroData;
   india?: IndiaMacroData;
   equities?: UsEquitiesData;
 }
+

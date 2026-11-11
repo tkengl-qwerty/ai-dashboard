@@ -638,3 +638,93 @@ export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonC
     eventsToWatch,
   };
 }
+
+export function buildIndonesiaLocalNewsArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
+  const loc = snap.indonesiaLocalNews;
+  const fx = snap.indonesia.fxAndNdf;
+  const bonds = snap.indonesia.bonds;
+
+  const spot = fx.spotRate ?? 18070;
+  const jisdor = fx.jisdorRate ?? 18059;
+  const ihsg = fx.ihsgIndex.level ?? 5075.13;
+  const indo10Y = bonds.indoGB.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.55;
+  const srbi12M =
+    bonds.srbi.find((s) => s.tenor === '12M')?.weightedAvgYield ??
+    bonds.srbi.find((s) => s.tenor === '12M')?.cutOffYield ??
+    6.675;
+
+  const leadImp =
+    loc?.topImportant?.[0]?.titleEn ||
+    'Bank Indonesia Disburses IDR 149.3 T of Liquidity to Support MSMEs and Housing';
+  const leadRead =
+    loc?.topRead?.[0]?.titleEn ||
+    "Dynamics of MK and Supreme Court Decisions Behind VP Gibran's Intention to Resign";
+
+  return {
+    modelLabel: 'GEMINI 4 ARGON',
+    title: 'GEMINI 4 ARGON · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS',
+    regimeBadge: `10 BAHASA PORTALS TRANSLATED · USD/IDR Rp ${spot.toLocaleString('en-US')} · IHSG ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+    conviction: 'Monitor IDX 300-HSC Free-Float Purge & DPR/MK Constitutional Headlines · Fade Noise via 5Y–10Y IndoGBs',
+    synthesis:
+      `Real-time Bahasa Indonesia media aggregation and English translation across 10 onshore portals (CNBC Indonesia, Kontan.co.id, Bisnis Indonesia, Kompas.com, detikFinance, Tempo.co, ANTARA News) ` +
+      `reveals a clear distinction between high-velocity domestic political readership and constructive underlying monetary/banking fundamentals. ` +
+      `On the Top 10 Most Important macro-policy board, onshore coverage is anchored by "${leadImp}", Bank Indonesia's Rp149.3T Macroprudential Liquidity Incentive (KLM) for MSMEs and housing, ` +
+      `BRI's Rp48.2T net profit, and the Indonesia Stock Exchange (IDX/BEI) removing 300 High Shareholder Concentration (HSC) issuers from IHSG (${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}) calculations ahead of the MSCI review. ` +
+      `On the Top 10 Most Read (Terpopuler) national board, readership is led by "${leadRead}" alongside DPR faction consultations and executive security inquiries — ` +
+      `yet onshore USD/IDR remains well-anchored at Rp ${spot.toLocaleString('en-US')} (JISDOR Rp ${jisdor.toLocaleString('en-US')}) and 10Y FR0108 IndoGBs trade at ${indo10Y.toFixed(2)}%.`,
+    positioningTakeaway:
+      `Use the translated Bahasa Indonesia news feed to separate domestic political headline velocity from structural market-structure reforms: ` +
+      `the IDX 300-issuer HSC free-float cleanup and Bank Indonesia's Rp149.3T KLM liquidity support constructive positioning in liquid LQ45 banks (BRI Rp48.2T profit) and 5Y–10Y IndoGBs (FR0109/FR0108 at ${indo10Y.toFixed(2)}%).`,
+    criticalLevels: [
+      {
+        asset: 'IHSG (JCI) & LQ45 Free-Float',
+        current: ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        support: '5,000.00',
+        resistance: '5,165.00',
+        implication: 'Removal of 300 HSC stocks reduces speculative index distortion and strengthens MSCI EM investability weight.',
+      },
+      {
+        asset: 'BI KLM Liquidity & 12M SRBI',
+        current: `Rp149.3T KLM · ${srbi12M.toFixed(3)}% WAR`,
+        support: '5.75% BI-Rate',
+        resistance: '6.80% SRBI Cap',
+        implication: 'Targeted Rp149.3T KLM incentives support bank loan growth while 12M SRBI defends Rupiah carry.',
+      },
+      {
+        asset: 'USD/IDR Spot & JISDOR',
+        current: `Rp ${spot.toLocaleString('en-US')} (JISDOR ${jisdor.toLocaleString('en-US')})`,
+        support: `Rp ${(spot - 120).toLocaleString('en-US')}`,
+        resistance: `Rp ${(spot + 150).toLocaleString('en-US')}`,
+        implication: 'Orderly onshore FX trading despite high-readership DPR/MK political headlines confirms KSSK and BI credibility.',
+      },
+      {
+        asset: '10Y IndoGB (FR0108)',
+        current: `${indo10Y.toFixed(2)}%`,
+        support: '7.45%',
+        resistance: '7.85%',
+        implication: 'Domestic bank and pension demand absorbs APBN fiscal issuance whenever 10Y FR0108 approaches 7.75%–7.85%.',
+      },
+    ],
+    eventsToWatch: [
+      {
+        event: 'IDX (BEI) Friday Implementation of 300 HSC Issuers Exclusion & MSCI November Rebalancing',
+        timing: 'Effective Friday · BEI / MSCI Review',
+        impact: 'Critical',
+        watchFor: 'Passive and active institutional rebalancing out of High Shareholder Concentration (HSC) names into liquid LQ45/BUMN constituents.',
+      },
+      {
+        event: 'DPR Leadership HMP Consultation & Constitutional Court (MK) / Supreme Court (MA) Rulings',
+        timing: 'Ongoing · Jakarta Parliamentary Session',
+        impact: 'High',
+        watchFor: 'Whether parliamentary faction consultations on VP Gibran remain procedural without disrupting APBN fiscal execution or cabinet continuity.',
+      },
+      {
+        event: 'Bank Indonesia Rp149.3T KLM Liquidity Disbursement & KSSK Quarterly Coordination',
+        timing: 'Nov 2026 · Bank Indonesia / Kemenkeu / OJK',
+        impact: 'High',
+        watchFor: 'Transmission of BI Rp149.3T macroprudential liquidity incentives into SOE bank (BRI, Mandiri, BNI) credit growth and SBN demand.',
+      },
+    ],
+  };
+}
+

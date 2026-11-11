@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe2, Landmark, Building2, Layers, TrendingUp } from 'lucide-react';
+import { Globe2, Landmark, Building2, Layers, TrendingUp, Languages } from 'lucide-react';
 import { DailyMacroSnapshot, MacroTabId } from '../types/market';
 
 interface NavigationTabsProps {
@@ -49,7 +49,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 1. Global Macro Tab */}
           <button
             onClick={() => onTabChange('global')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'global'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -62,7 +62,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
           {/* 2. Indonesia Market Tab */}
           <button
             onClick={() => onTabChange('indonesia')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'indonesia'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
@@ -72,56 +72,69 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
             <span>2. INDONESIA</span>
           </button>
 
-          {/* 3. China Market (CCDC) Tab */}
+          {/* 3. Indonesia Local News (ID -> EN) Tab */}
+          <button
+            onClick={() => onTabChange('indonesiaNews')}
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+              activeTab === 'indonesiaNews'
+                ? 'border-blue-500 text-sky-300 bg-[#192436]'
+                : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
+            }`}
+          >
+            <Languages className={`w-3.5 h-3.5 ${activeTab === 'indonesiaNews' ? 'text-blue-400' : 'text-slate-500'}`} />
+            <span>3. ID LOCAL NEWS (ID→EN)</span>
+          </button>
+
+          {/* 4. China Market (CCDC) Tab */}
           <button
             onClick={() => onTabChange('china')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'china'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
             }`}
           >
             <Building2 className={`w-3.5 h-3.5 ${activeTab === 'china' ? 'text-blue-400' : 'text-slate-500'}`} />
-            <span>3. CHINA (CCDC)</span>
+            <span>4. CHINA (CCDC)</span>
           </button>
 
-          {/* 4. Korea Market (SOFIA / KOFIA) Tab */}
+          {/* 5. Korea Market (SOFIA / KOFIA) Tab */}
           <button
             onClick={() => onTabChange('korea')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'korea'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
             }`}
           >
             <Layers className={`w-3.5 h-3.5 ${activeTab === 'korea' ? 'text-blue-400' : 'text-slate-500'}`} />
-            <span>4. KOREA (SOFIA / KOFIA)</span>
+            <span>5. KOREA (SOFIA / KOFIA)</span>
           </button>
 
-          {/* 5. India Market (RBI / CCIL) Tab */}
+          {/* 6. India Market (RBI / CCIL) Tab */}
           <button
             onClick={() => onTabChange('india')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'india'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
             }`}
           >
             <Landmark className={`w-3.5 h-3.5 ${activeTab === 'india' ? 'text-blue-400' : 'text-slate-500'}`} />
-            <span>5. INDIA (RBI / CCIL)</span>
+            <span>6. INDIA (RBI / CCIL)</span>
           </button>
 
-          {/* 6. US Equities (S&P 500) Tab */}
+          {/* 7. US Equities (S&P 500) Tab */}
           <button
             onClick={() => onTabChange('equities')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-3.5 py-2.5 text-xs font-semibold tracking-wider transition-all border-b-2 cursor-pointer uppercase whitespace-nowrap shrink-0 ${
               activeTab === 'equities'
                 ? 'border-blue-500 text-sky-300 bg-[#192436]'
                 : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-[#162030]/60'
             }`}
           >
             <TrendingUp className={`w-3.5 h-3.5 ${activeTab === 'equities' ? 'text-blue-400' : 'text-slate-500'}`} />
-            <span>6. US EQUITIES (S&P 500)</span>
+            <span>7. US EQUITIES (S&P 500)</span>
           </button>
         </div>
 
@@ -148,7 +161,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
             </>
           )}
 
-          {activeTab === 'indonesia' && (
+          {(activeTab === 'indonesia' || activeTab === 'indonesiaNews') && (
             <>
               <div className="flex items-center gap-1.5">
                 <span className="text-slate-400 text-[10px]">IndoGB 10Y (FR0108):</span>

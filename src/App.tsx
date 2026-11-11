@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DailyMacroSnapshot, MacroTabId, ChinaMacroData, KoreaMacroData, IndiaMacroData, UsEquitiesData } from './types/market';
+import {
+  DailyMacroSnapshot,
+  MacroTabId,
+  ChinaMacroData,
+  KoreaMacroData,
+  IndiaMacroData,
+  UsEquitiesData,
+  IndonesiaLocalNewsData,
+} from './types/market';
 import { Header } from './components/Header';
 import { NavigationTabs } from './components/NavigationTabs';
 import { GlobalMacroTab } from './components/GlobalMacroTab';
 import { IndonesiaTab } from './components/IndonesiaTab';
+import { IndonesiaLocalNewsTab } from './components/IndonesiaLocalNewsTab';
 import { ChinaTab } from './components/ChinaTab';
 import { KoreaTab } from './components/KoreaTab';
 import { IndiaTab } from './components/IndiaTab';
@@ -12,6 +21,7 @@ import { AlertCircle } from 'lucide-react';
 import {
   buildGlobalArgonCommentary,
   buildIndonesiaArgonCommentary,
+  buildIndonesiaLocalNewsArgonCommentary,
   buildChinaArgonCommentary,
   buildKoreaArgonCommentary,
   buildIndiaArgonCommentary,
@@ -1328,10 +1338,397 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
       foreignFlowsYTD: '+IDR 38.2 Trillion',
     },
   },
+  indonesiaLocalNews: undefined,
   china: DEFAULT_CHINA_DATA,
   korea: DEFAULT_KOREA_DATA,
   india: DEFAULT_INDIA_DATA,
   equities: DEFAULT_EQUITIES_DATA,
+};
+
+const DEFAULT_INDONESIA_LOCAL_NEWS: IndonesiaLocalNewsData = {
+  asOfDate: '11 Nov 2026, 03:46 PM SGT',
+  sourcesMonitored: [
+    'CNBC Indonesia',
+    'Kontan.co.id',
+    'Bisnis Indonesia',
+    'Kompas.com',
+    'detikFinance & detikNews',
+    'Tempo.co',
+    'ANTARA News (Bahasa)',
+    'CNN Indonesia',
+    'Katadata.co.id',
+    'Investor.id',
+  ],
+  translationEngine:
+    'Live Bahasa Indonesia RSS Aggregator → Neural English Translation (ID→EN) + Institutional BI/OJK/IDX Glossary',
+  topImportant: [
+    {
+      rank: 1,
+      id: 'id-imp-01',
+      titleEn:
+        'The DPR leadership held a meeting to receive HMP (Parliamentary Inquiry Right) proposers from all party factions',
+      titleId: 'Pimpinan DPR gelar rapat terima pengusul HMP dari semua fraksi partai',
+      source: 'ANTARA News',
+      feedSection: 'ANTARA · Top News (Terpopuler)',
+      timeAgo: '57m ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 99,
+      readPopularityBadge: 'Trending Across 19 ID Portals · #1 in Feed',
+      summaryEn:
+        'Translated from ANTARA News (Executive & Politics): "The DPR leadership held a meeting to receive HMP (Parliamentary Inquiry Right) proposers from all party factions" — originally reported in Bahasa Indonesia.',
+      marketSignificance:
+        'High-attention constitutional and parliamentary (DPR/MK/MA) development monitored by onshore and foreign institutional desks for executive policy continuity and 10Y FR0108 IndoGB (7.55%) risk premia.',
+      url: 'https://www.antaranews.com',
+    },
+    {
+      rank: 2,
+      id: 'id-imp-02',
+      titleEn: 'BI Disburses IDR 149.3 T of Liquidity to Support MSMEs and Housing',
+      titleId: 'BI Gelontorkan Likuiditas Rp149,3 T untuk Dukung UMKM dan Perumahan',
+      source: 'CNBC Indonesia',
+      feedSection: 'CNBC Indonesia · News RSS',
+      timeAgo: '20m ago',
+      category: 'BI & Monetary',
+      impactDirection: 'Market-Moving',
+      impactScore: 99,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #3 in Feed',
+      summaryEn:
+        'Translated from CNBC Indonesia (BI & Monetary): "BI Disburses IDR 149.3 T of Liquidity to Support MSMEs and Housing".',
+      marketSignificance:
+        "Bank Indonesia's Rp149.3T Macroprudential Liquidity Incentive (KLM) expands credit to MSMEs and housing while keeping the headline BI-Rate at 5.75% and 12M SRBI at 6.675%.",
+      url: 'https://www.cnbcindonesia.com/news',
+    },
+    {
+      rank: 3,
+      id: 'id-imp-03',
+      titleEn: '154 People Arrested Due to Riotous Action at DIY DPRD',
+      titleId: '154 Orang Diamankan Terkait Aksi Ricuh di DPRD DIY',
+      source: 'detikNews',
+      feedSection: 'Google News ID · Top Stories',
+      timeAgo: '2h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 99,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #6 in Feed',
+      summaryEn:
+        'Translated from detikNews (Executive & Politics): "154 People Arrested Due to Riotous Action at DIY DPRD".',
+      marketSignificance:
+        'High-attention regional parliamentary and public-order development monitored by domestic institutional desks alongside Yogyakarta police and DPR oversight.',
+      url: 'https://news.detik.com',
+    },
+    {
+      rank: 4,
+      id: 'id-imp-04',
+      titleEn: 'MSCI Rebalancing, 30 Shares Out, Three Downgraded',
+      titleId: 'Rebalancing MSCI, 30 Saham Out, Tiga Turun Kelas',
+      source: 'Emitennews.com',
+      feedSection: 'Google News ID · Top Business',
+      timeAgo: '6h ago',
+      category: 'IDX & MSCI',
+      impactDirection: 'Market-Moving',
+      impactScore: 98,
+      readPopularityBadge: 'Trending Across 4 ID Portals · #6 in Feed',
+      summaryEn:
+        'Translated from Emitennews.com (IDX & MSCI): "MSCI Rebalancing, 30 Shares Out, Three Downgraded".',
+      marketSignificance:
+        'Captures onshore Jakarta desk focus on MSCI index rebalancing across IHSG (5,075.13) constituents and foreign passive equity reallocation.',
+      url: 'https://www.emitennews.com',
+    },
+    {
+      rank: 5,
+      id: 'id-imp-05',
+      titleEn: 'DPR Commission II Working Committee involves academics to discuss the revision of the Election Law',
+      titleId: 'Panja Komisi II DPR libatkan akademisi bahas revisi UU Pemilu',
+      source: 'ANTARA News',
+      feedSection: 'ANTARA · Top News (Terpopuler)',
+      timeAgo: '4h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 98,
+      readPopularityBadge: '#6 Top Read · Top News (Terpopuler)',
+      summaryEn:
+        'Translated from ANTARA News (Executive & Politics): "DPR Commission II Working Committee involves academics to discuss the revision of the Election Law".',
+      marketSignificance:
+        'Parliamentary Election Law (UU Pemilu) framework revisions shape medium-term institutional governance and coalition dynamics in DPR.',
+      url: 'https://www.antaranews.com',
+    },
+    {
+      rank: 6,
+      id: 'id-imp-06',
+      titleEn: "Consistently Supporting the People's Economy, BRI Posts Net Profit of IDR 48.2 Trillion",
+      titleId: 'Konsisten Dukung Ekonomi Kerakyatan, BRI Cetak Laba Rp48,2 Triliun',
+      source: 'CNBC Indonesia',
+      feedSection: 'CNBC Indonesia · Market RSS',
+      timeAgo: '50m ago',
+      category: 'Banking & BUMN',
+      impactDirection: 'Supportive',
+      impactScore: 97,
+      readPopularityBadge: '#2 in CNBC Indonesia · Market RSS',
+      summaryEn:
+        'Translated from CNBC Indonesia (Banking & BUMN): "Consistently Supporting the People\'s Economy, BRI Posts Net Profit of IDR 48.2 Trillion".',
+      marketSignificance:
+        "Demonstrates resilient Indonesian commercial bank profitability and NIM stability under Bank Indonesia's 5.75% policy rate and OJK prudential supervision.",
+      url: 'https://www.cnbcindonesia.com/market',
+    },
+    {
+      rank: 7,
+      id: 'id-imp-07',
+      titleEn: 'Nagan Raya Regent Supports Prabowo for 2 Periods',
+      titleId: 'Bupati Nagan Raya Dukung Prabowo 2 Periode',
+      source: 'detikNews',
+      feedSection: 'Google News ID · Top National',
+      timeAgo: '2h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 96,
+      readPopularityBadge: 'Trending Across 9 ID Portals · #3 in Feed',
+      summaryEn:
+        'Translated from detikNews (Executive & Politics): "Nagan Raya Regent Supports Prabowo for 2 Periods".',
+      marketSignificance:
+        'Key national executive political headline driving domestic media readership and coalition realignment discussions.',
+      url: 'https://news.detik.com',
+    },
+    {
+      rank: 8,
+      id: 'id-imp-08',
+      titleEn: 'Deputy Minister of Investment Admits that Vietnam is a tough opponent for Indonesia in ASEAN',
+      titleId: 'Wamen Investasi Akui Vietnam Lawan Tangguh RI di ASEAN',
+      source: 'CNBC Indonesia',
+      feedSection: 'CNBC Indonesia · News RSS',
+      timeAgo: '18m ago',
+      category: 'Investment & Trade',
+      impactDirection: 'Supportive',
+      impactScore: 96,
+      readPopularityBadge: 'Trending Across 6 ID Portals · #2 in Feed',
+      summaryEn:
+        'Translated from CNBC Indonesia (Investment & Trade): "Deputy Minister of Investment Admits that Vietnam is a tough opponent for Indonesia in ASEAN".',
+      marketSignificance:
+        "Highlights Indonesia's regional ASEAN foreign direct investment (FDI) competitiveness and industrial downstreaming inflows supporting the USD/IDR (Rp 18,070) capital account.",
+      url: 'https://www.cnbcindonesia.com/news',
+    },
+    {
+      rank: 9,
+      id: 'id-imp-09',
+      titleEn: 'Entering the HSC List, Tahir Releases 33.89 Million MPRO Shares IDR 400 Billion',
+      titleId: 'Masuk Daftar HSC, Tahir Lepas 33,89 Juta Saham MPRO Rp400 M',
+      source: 'CNBC Indonesia',
+      feedSection: 'CNBC Indonesia · Market RSS',
+      timeAgo: '1h ago',
+      category: 'IDX & MSCI',
+      impactDirection: 'Market-Moving',
+      impactScore: 96,
+      readPopularityBadge: 'Trending Across 4 ID Portals · #4 in Feed',
+      summaryEn:
+        'Translated from CNBC Indonesia (IDX & MSCI): "Entering the HSC List, Tahir Releases 33.89 Million MPRO Shares IDR 400 Billion".',
+      marketSignificance:
+        'Major controlling shareholders are actively increasing public free-float in response to IDX (BEI) High Shareholder Concentration (HSC) rules.',
+      url: 'https://www.cnbcindonesia.com/market',
+    },
+    {
+      rank: 10,
+      id: 'id-imp-10',
+      titleEn: '300 HSC Issuers Kicked from IHSG (JCI) Calculation Starting Friday',
+      titleId: '300 Emiten HSC Ditendang dari Perhitungan IHSG Mulai Jumat',
+      source: 'detikFinance',
+      feedSection: 'Google News ID · Top Business',
+      timeAgo: '3h ago',
+      category: 'IDX & MSCI',
+      impactDirection: 'Market-Moving',
+      impactScore: 96,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #2 in Feed',
+      summaryEn:
+        'Translated from detikFinance (IDX & MSCI): "300 HSC Issuers Kicked from IHSG (JCI) Calculation Starting Friday".',
+      marketSignificance:
+        'Structural IDX (BEI) methodology reform removing 300 High Shareholder Concentration (HSC) issuers from IHSG (5,075.13) index weighting to align with MSCI free-float investability standards.',
+      url: 'https://finance.detik.com',
+    },
+  ],
+  topRead: [
+    {
+      rank: 1,
+      id: 'id-read-01',
+      titleEn: "Dynamics of MK and Supreme Court Decisions Behind Gibran's Intention to Resign",
+      titleId: 'Dinamika Putusan MK hingga MA di Balik Niat Gibran Mundur',
+      source: 'detikNews',
+      feedSection: 'Google News ID · Top Stories',
+      timeAgo: '4h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 99,
+      readPopularityBadge: 'Trending Across 19 ID Portals · #1 in Feed',
+      summaryEn:
+        'Translated from detikNews (Executive & Politics): "Dynamics of MK and Supreme Court Decisions Behind Gibran\'s Intention to Resign".',
+      marketSignificance:
+        'High-attention constitutional and parliamentary (DPR/MK/MA) development monitored by onshore and foreign institutional desks for executive policy continuity.',
+      url: 'https://news.detik.com',
+    },
+    {
+      rank: 2,
+      id: 'id-read-02',
+      titleEn:
+        'Raising the red and white flag 24 KM in Nagan Raya, Minister of Home Affairs: Strengthening the Republic of Indonesia from Aceh',
+      titleId: 'Pengibaran bendera merah putih 24 KM di Nagan Raya, Mendagri: Perkuat NKRI dari Aceh',
+      source: 'ANTARA News',
+      feedSection: 'ANTARA · Top News (Terpopuler)',
+      timeAgo: '7h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 98,
+      readPopularityBadge: 'Trending Across 9 ID Portals · #3 in Feed',
+      summaryEn:
+        'Translated from ANTARA News (Executive & Politics): "Raising the red and white flag 24 KM in Nagan Raya, Minister of Home Affairs: Strengthening the Republic of Indonesia from Aceh".',
+      marketSignificance:
+        'Presidential and Cabinet outreach in Aceh highlights regional infrastructure and national unity priorities.',
+      url: 'https://www.antaranews.com',
+    },
+    {
+      rank: 3,
+      id: 'id-read-03',
+      titleEn: 'Official: Polri Fires Inspector General Ahrie Sonta Nasution, Proven to Wiretapping Prabowo',
+      titleId: 'Sah! Polri Pecat Irjen Ahrie Sonta Nasution, Terbukti Menyadap Prabowo',
+      source: 'CNBC Indonesia',
+      feedSection: 'Google News ID · Top Stories',
+      timeAgo: '5h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 97,
+      readPopularityBadge: 'Trending Across 4 ID Portals · #4 in Feed',
+      summaryEn:
+        'Translated from CNBC Indonesia (Executive & Politics): "Official: Polri Fires Inspector General Ahrie Sonta Nasution, Proven to Wiretapping Prabowo".',
+      marketSignificance:
+        'Key national security, governance, and institutional law-enforcement headline driving domestic media readership and political-stability sentiment.',
+      url: 'https://www.cnbcindonesia.com/news',
+    },
+    {
+      rank: 4,
+      id: 'id-read-04',
+      titleEn: 'Hidayat Nur Wahid Reveals Reasons for Resigning from Position as Deputy Chair of the MPR',
+      titleId: 'Hidayat Nur Wahid Ungkap Alasan Mundur dari Jabatan Wakil Ketua MPR',
+      source: 'detikNews',
+      feedSection: 'Google News ID · Top Stories',
+      timeAgo: '4h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 96,
+      readPopularityBadge: 'Trending Across 4 ID Portals · #5 in Feed',
+      summaryEn:
+        'Translated from detikNews (Executive & Politics): "Hidayat Nur Wahid Reveals Reasons for Resigning from Position as Deputy Chair of the MPR".',
+      marketSignificance:
+        "People's Consultative Assembly (MPR) leadership transitions are closely tracked amidst ongoing parliamentary constitutional debates.",
+      url: 'https://news.detik.com',
+    },
+    {
+      rank: 5,
+      id: 'id-read-05',
+      titleEn: 'Indonesia Surrounded by 3 Storms: Heated Politics, MSCI Drama & Threats from Fed-US',
+      titleId: 'RI Dikepung 3 Badai: Politik Memanas, Drama MSCI & Ancaman dari Fed-AS',
+      source: 'CNBC Indonesia',
+      feedSection: 'Google News ID · Top Business',
+      timeAgo: '4h ago',
+      category: 'BI & Monetary',
+      impactDirection: 'Market-Moving',
+      impactScore: 96,
+      readPopularityBadge: '#1 Top Read · Google News ID Business',
+      summaryEn:
+        'Translated from CNBC Indonesia (BI & Monetary): "Indonesia Surrounded by 3 Storms: Heated Politics, MSCI Drama & Threats from Fed-US".',
+      marketSignificance:
+        'Captures onshore Jakarta desk focus on three converging catalysts: domestic political dynamics, MSCI index free-float review on IHSG (5,075.13), and Federal Reserve rate transmission into USD/IDR (Rp 18,070).',
+      url: 'https://www.cnbcindonesia.com/market',
+    },
+    {
+      rank: 6,
+      id: 'id-read-06',
+      titleEn: 'KPK examines Hercules as witness in bribery case for ATR/BPN officials',
+      titleId: 'KPK Periksa Hercules Jadi Saksi Kasus Suap Pejabat ATR/BPN',
+      source: 'detikNews',
+      feedSection: 'Google News ID · Top Stories',
+      timeAgo: '1h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 95,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #12 in Feed',
+      summaryEn:
+        'Translated from detikNews (Executive & Politics): "KPK examines Hercules as witness in bribery case for ATR/BPN officials".',
+      marketSignificance:
+        'Anti-corruption enforcement in Ministry of Agrarian Affairs and Spatial Planning (ATR/BPN) supports land-permit transparency for industrial FDI.',
+      url: 'https://news.detik.com',
+    },
+    {
+      rank: 7,
+      id: 'id-read-07',
+      titleEn:
+        'Responding to local government concerns regarding the appointment of full-time PPPK, DJPK Ministry of Finance responds',
+      titleId: 'Jawab Keresahan Pemda Soal Pengangkatan PPPK Penuh Waktu, DJPK Kemenkeu Buka Suara',
+      source: 'JPNN.com',
+      feedSection: 'Google News ID · Top National',
+      timeAgo: '22h ago',
+      category: 'Fiscal & APBN',
+      impactDirection: 'Policy Watch',
+      impactScore: 94,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #22 in Feed',
+      summaryEn:
+        'Translated from JPNN.com (Fiscal & APBN): "Responding to local government concerns regarding the appointment of full-time PPPK, DJPK Ministry of Finance responds".',
+      marketSignificance:
+        'Directly shapes Ministry of Finance (Kemenkeu) regional transfer allocations (TKDD) and civil-service payroll discipline within the APBN.',
+      url: 'https://www.jpnn.com',
+    },
+    {
+      rank: 8,
+      id: 'id-read-08',
+      titleEn: "BSSN reveals Indonesia's mitigation against millions of cyber attacks",
+      titleId: 'BSSN ungkap mitigasi Indonesia hadapi jutaan serangan siber',
+      source: 'ANTARA News',
+      feedSection: 'ANTARA · Top News (Terpopuler)',
+      timeAgo: '23h ago',
+      category: 'Banking & BUMN',
+      impactDirection: 'Supportive',
+      impactScore: 93,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #25 in Feed',
+      summaryEn:
+        'Translated from ANTARA News (Banking & BUMN): "BSSN reveals Indonesia\'s mitigation against millions of cyber attacks".',
+      marketSignificance:
+        'National Cyber and Crypto Agency (BSSN) and OJK cyber-defense coordination safeguards Indonesian banking and payment infrastructure.',
+      url: 'https://www.antaranews.com',
+    },
+    {
+      rank: 9,
+      id: 'id-read-09',
+      titleEn:
+        "The Corruption Eradication Commission responded to ICW's findings regarding IDR 14.7 billion government influencer procurement",
+      titleId: 'KPK respons temuan ICW soal pengadaan pemengaruh Rp14,7 miliar',
+      source: 'ANTARA News',
+      feedSection: 'ANTARA · Top News (Terpopuler)',
+      timeAgo: '3h ago',
+      category: 'Executive & Politics',
+      impactDirection: 'Policy Watch',
+      impactScore: 92,
+      readPopularityBadge: '#5 Top Read · Top News (Terpopuler)',
+      summaryEn:
+        'Translated from ANTARA News (Executive & Politics): "The Corruption Eradication Commission responded to ICW\'s findings regarding IDR 14.7 billion government influencer procurement".',
+      marketSignificance:
+        'Highlights KPK procurement oversight and public budget scrutiny across Indonesian ministries.',
+      url: 'https://www.antaranews.com',
+    },
+    {
+      rank: 10,
+      id: 'id-read-10',
+      titleEn: "Antam's gold price is getting brighter to IDR 2.56 million per gram today",
+      titleId: 'Harga Emas Antam Kian Berkilau ke Level Rp2,560 Juta Hari Ini',
+      source: 'CNN Indonesia',
+      feedSection: 'Google News ID · Top Business',
+      timeAgo: '1d ago',
+      category: 'Commodities & Energy',
+      impactDirection: 'Market-Moving',
+      impactScore: 91,
+      readPopularityBadge: 'Trending Across 3 ID Portals · #3 in Feed',
+      summaryEn:
+        'Translated from CNN Indonesia (Commodities & Energy): "Antam\'s gold price is getting brighter to IDR 2.56 million per gram today".',
+      marketSignificance:
+        'Reflects domestic retail and institutional inflation-hedging demand in Aneka Tambang (ANTM) physical gold bars.',
+      url: 'https://www.cnnindonesia.com/ekonomi',
+    },
+  ],
 };
 
 const DJPPR_2026_BENCHMARKS = [
@@ -1618,6 +2015,23 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     noteworthyHeadlines: normalizedEqHeadlines,
   };
 
+  const rawIndoLocalNews = snap.indonesiaLocalNews;
+  const indonesiaLocalNewsData: IndonesiaLocalNewsData = {
+    asOfDate: rawIndoLocalNews?.asOfDate || DEFAULT_INDONESIA_LOCAL_NEWS.asOfDate,
+    sourcesMonitored: rawIndoLocalNews?.sourcesMonitored?.length
+      ? rawIndoLocalNews.sourcesMonitored
+      : DEFAULT_INDONESIA_LOCAL_NEWS.sourcesMonitored,
+    translationEngine: rawIndoLocalNews?.translationEngine || DEFAULT_INDONESIA_LOCAL_NEWS.translationEngine,
+    topImportant:
+      rawIndoLocalNews?.topImportant && rawIndoLocalNews.topImportant.length >= 5
+        ? rawIndoLocalNews.topImportant
+        : DEFAULT_INDONESIA_LOCAL_NEWS.topImportant,
+    topRead:
+      rawIndoLocalNews?.topRead && rawIndoLocalNews.topRead.length >= 5
+        ? rawIndoLocalNews.topRead
+        : DEFAULT_INDONESIA_LOCAL_NEWS.topRead,
+  };
+
   const withNormalizedBondsAndHeadlines: DailyMacroSnapshot = {
     ...snap,
     indonesia: {
@@ -1632,6 +2046,7 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
         noteworthyHeadlines: normalizedHeadlines,
       },
     },
+    indonesiaLocalNews: indonesiaLocalNewsData,
     china: chinaData,
     korea: koreaData,
     india: indiaData,
@@ -1647,6 +2062,10 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     indonesia: {
       ...withNormalizedBondsAndHeadlines.indonesia,
       argonCommentary: buildIndonesiaArgonCommentary(withNormalizedBondsAndHeadlines),
+    },
+    indonesiaLocalNews: {
+      ...indonesiaLocalNewsData,
+      argonCommentary: buildIndonesiaLocalNewsArgonCommentary(withNormalizedBondsAndHeadlines),
     },
     china: {
       ...chinaData,
@@ -1777,6 +2196,14 @@ export default function App() {
               noteworthyHeadlines: localJson.equities.noteworthyHeadlines,
             };
           }
+          if (
+            (!remoteJson.indonesiaLocalNews?.topImportant?.length ||
+              countSub24h(localJson.indonesiaLocalNews?.topImportant) >
+                countSub24h(remoteJson.indonesiaLocalNews?.topImportant)) &&
+            localJson.indonesiaLocalNews?.topImportant?.length
+          ) {
+            chosen.indonesiaLocalNews = localJson.indonesiaLocalNews;
+          }
         }
         setData(normalizeSnapshot(chosen));
       } else {
@@ -1841,6 +2268,14 @@ export default function App() {
             us10YYield={us10Y}
           />
         )}
+        {activeTab === 'indonesiaNews' && data.indonesiaLocalNews && (
+          <IndonesiaLocalNewsTab
+            localNews={data.indonesiaLocalNews}
+            bonds={data.indonesia.bonds}
+            fxAndNdf={data.indonesia.fxAndNdf}
+            lastUpdatedSGT={data.metadata.lastUpdatedSGT}
+          />
+        )}
         {activeTab === 'china' && data.china && (
           <ChinaTab
             china={data.china}
@@ -1880,7 +2315,7 @@ export default function App() {
             <span>Daily Market Intelligence refreshed at 05:00 AM SGT (21:00 UTC)</span>
           </div>
           <div className="text-slate-400">
-            <span>Global Macro · Indonesia (BI/DJPPR) · China (CCDC) · Korea (SOFIA/KOFIA) · India (RBI/CCIL) · US Equities (S&P 500)</span>
+            <span>Global Macro · Indonesia (BI/DJPPR & ID→EN Local News) · China (CCDC) · Korea (SOFIA/KOFIA) · India (RBI/CCIL) · US Equities (S&P 500)</span>
           </div>
         </div>
       </footer>
