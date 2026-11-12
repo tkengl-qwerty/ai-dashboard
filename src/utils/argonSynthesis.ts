@@ -46,6 +46,20 @@ function formatSgtDate(sgtDate: Date): string {
   return `${dow}, ${day} ${mon} ${yr}`;
 }
 
+function resolveUpdatedSGT(snap: DailyMacroSnapshot, sgtNow: Date): string {
+  if (snap.metadata?.lastUpdatedSGT && snap.metadata.lastUpdatedSGT.trim().length > 0) {
+    return snap.metadata.lastUpdatedSGT.trim();
+  }
+  const day = String(sgtNow.getUTCDate()).padStart(2, '0');
+  const mon = MONTHS_SHORT[sgtNow.getUTCMonth()];
+  const yr = sgtNow.getUTCFullYear();
+  const h24 = sgtNow.getUTCHours();
+  const mins = String(sgtNow.getUTCMinutes()).padStart(2, '0');
+  const ampm = h24 >= 12 ? 'PM' : 'AM';
+  const h12 = String(h24 % 12 || 12).padStart(2, '0');
+  return `${day} ${mon} ${yr}, ${h12}:${mins} ${ampm} SGT`;
+}
+
 /**
  * Finds the next occurrence of targetDow (0=Sun..6=Sat) on or after sgtBase
  * (or strictly after if includeToday is false).
@@ -81,17 +95,38 @@ function truncateHeadline(text: string | undefined, maxLen = 96): string {
   return cleaned.length > maxLen ? `${cleaned.slice(0, maxLen - 1)}…` : cleaned;
 }
 
+function fmtBps(bps: number | undefined): string {
+  const v = bps ?? 0;
+  return `${v >= 0 ? '+' : ''}${v.toFixed(1)} bps`;
+}
+
+function fmtPct(pct: number | undefined): string {
+  const v = pct ?? 0;
+  return `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
+}
+
 export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const nextFri = getNextWeekdaySgt(todayBiz, 5, true);
   const cpiDate = getNextMonthlyDaySgt(todayBiz, 12);
 
   const yc = snap.globalMacro.yieldCurve;
-  const y2 = yc.tenors.find((t) => t.label === '2Y')?.yield ?? 4.47;
-  const y5 = yc.tenors.find((t) => t.label === '5Y')?.yield ?? 4.61;
-  const y10 = yc.tenors.find((t) => t.label === '10Y')?.yield ?? 4.84;
-  const y30 = yc.tenors.find((t) => t.label === '30Y')?.yield ?? 5.26;
+  const t2 = yc.tenors.find((t) => t.label === '2Y');
+  const t5 = yc.tenors.find((t) => t.label === '5Y');
+  const t10 = yc.tenors.find((t) => t.label === '10Y');
+  const t30 = yc.tenors.find((t) => t.label === '30Y');
+
+  const y2 = t2?.yield ?? 4.47;
+  const y5 = t5?.yield ?? 4.61;
+  const y10 = t10?.yield ?? 4.84;
+  const y30 = t30?.yield ?? 5.26;
+  const y2Chg = t2?.changeBps ?? 0.0;
+  const y10Chg = t10?.changeBps ?? 0.0;
+  const y30Chg = t30?.changeBps ?? 0.0;
+
   const twoTen = yc.spreads.twoTenSpread ?? Number(((y10 - y2) * 100).toFixed(1));
   const fiveTen = yc.spreads.fiveTenSpread ?? Number(((y10 - y5) * 100).toFixed(1));
 
@@ -105,39 +140,57 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
   const spxPrice = spx?.price ?? 6887.0;
   const spxPct = spx?.changePct ?? 0.36;
   const ndxPrice = ndx?.price ?? 25144.25;
+  const ndxPct = ndx?.changePct ?? 0.42;
   const dxyPrice = dxy?.price ?? 98.81;
+  const dxyPct = dxy?.changePct ?? 0.15;
   const wtiPrice = wti?.price ?? 86.65;
+  const wtiPct = wti?.changePct ?? -0.45;
   const goldPrice = gold?.price ?? 4651.5;
+  const goldPct = gold?.changePct ?? 0.25;
   const jpyRate = jpy?.rate ?? 158.95;
 
+  const n1 = snap.globalMacro.topNews[0];
+  const n2 = snap.globalMacro.topNews[1];
   const topHeadline =
-    snap.globalMacro.topNews[0]?.headline ||
+    n1?.headline ||
     'Cross-asset positioning adjusts to US Treasury curve steepening and FOMC guidance';
+  const topSource = n1?.source ? `${n1.source}${n1.timeAgo ? ` · ${n1.timeAgo}` : ''}` : 'Live Desk Feed';
   const secondHeadline =
-    snap.globalMacro.topNews[1]?.headline ||
+    n2?.headline ||
     'Primary dealer duration supply and G10 FX rate differentials drive sovereign bond flows';
+  const secondSource = n2?.source ? `${n2.source}${n2.timeAgo ? ` · ${n2.timeAgo}` : ''}` : 'Wire Feed';
 
   const isSteep = twoTen > 0;
   const regimeBadge = isSteep
-    ? `BEAR/BULL STEEPENING (+${twoTen.toFixed(1)} bps 2s10s)`
-    : `INVERTED CURVE (${twoTen.toFixed(1)} bps 2s10s)`;
+    ? `UST 2s10s +${twoTen.toFixed(1)} BPS · 10Y ${y10.toFixed(2)}% (${fmtBps(y10Chg)})`
+    : `INVERTED 2s10s (${twoTen.toFixed(1)} BPS) · 10Y ${y10.toFixed(2)}% (${fmtBps(y10Chg)})`;
 
-  const conviction =
-    spxPct >= 0
-      ? 'Constructive Cyclicals · Short-Duration Fixed Income Tilt'
-      : 'Defensive Quality · Curve Steepener Bias';
+  const rateDirectionLabel =
+    y10Chg >= 3
+      ? `Defensive Belly Duration (2Y–5Y ${y2.toFixed(2)}%–${y5.toFixed(2)}%) Amid +${y10Chg.toFixed(1)} bps 10Y Backup`
+      : y10Chg <= -3
+      ? `Extend Belly-to-10Y Duration (${y10.toFixed(2)}%, ${fmtBps(y10Chg)}) on Bull Flattening/Receiving`
+      : `2Y–5Y Belly Carry (${y2.toFixed(2)}%–${y5.toFixed(2)}%) vs ${y30.toFixed(2)}% 30Y Supply`;
+
+  const equityDirectionLabel =
+    spxPct >= 0.15
+      ? `Constructive SPX (${fmtPct(spxPct)}) Cyclical & Quality Tilt`
+      : spxPct <= -0.15
+      ? `Quality Cash-Flow Hedge as ES=F Trades ${fmtPct(spxPct)}`
+      : `Balanced SPX (${spxPrice.toLocaleString('en-US', { maximumFractionDigits: 0 })}) Value/Quality Barbell`;
+
+  const conviction = `${rateDirectionLabel} · ${equityDirectionLabel}`;
 
   const synthesis =
-    `Global macro price action is anchored by an upward-sloping US Treasury curve where the 2Y sits at ${y2.toFixed(2)}%, ` +
-    `5Y at ${y5.toFixed(2)}%, 10Y at ${y10.toFixed(2)}%, and 30Y at ${y30.toFixed(2)}% (2Y/10Y at +${twoTen.toFixed(1)} bps; 5Y/10Y at +${fiveTen.toFixed(1)} bps). ` +
-    `With the US Dollar Index (DXY) trading near ${dxyPrice.toFixed(2)} and WTI Crude at $${wtiPrice.toFixed(2)}/bbl, headline energy-driven inflation risk remains contained, ` +
-    `allowing S&P 500 E-mini futures (${spxPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}, ${spxPct >= 0 ? '+' : ''}${spxPct.toFixed(2)}%) ` +
-    `and Gold ($${goldPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/oz) to absorb elevated long-end term premia. ` +
-    `Lead desk catalyst: "${topHeadline}".`;
+    `[${sessionDateStr} Session] US Treasury yields are pricing a ${twoTen >= 0 ? `+${twoTen.toFixed(1)} bps upward-sloping` : `${twoTen.toFixed(1)} bps inverted`} 2s10s curve with the 2Y at ${y2.toFixed(2)}% (${fmtBps(y2Chg)} 1D), ` +
+    `5Y at ${y5.toFixed(2)}%, 10Y benchmark at ${y10.toFixed(2)}% (${fmtBps(y10Chg)} 1D), and 30Y long bond at ${y30.toFixed(2)}% (${fmtBps(y30Chg)} 1D; 5s10s at +${fiveTen.toFixed(1)} bps). ` +
+    `Across cross-asset futures, S&P 500 E-minis trade at ${spxPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(spxPct)}) and Nasdaq 100 at ${ndxPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ndxPct)}), ` +
+    `while the US Dollar Index sits at ${dxyPrice.toFixed(2)} (${fmtPct(dxyPct)}), WTI Crude at $${wtiPrice.toFixed(2)}/bbl (${fmtPct(wtiPct)}), and Gold at $${goldPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/oz (${fmtPct(goldPct)}). ` +
+    `Top desk catalysts: (1) "${topHeadline}" (${topSource}); and (2) "${secondHeadline}" (${secondSource}).`;
 
   const positioningTakeaway =
-    `Favor 2Y–5Y belly duration (${y2.toFixed(2)}%–${y5.toFixed(2)}%) over unhedged 30Y long bonds (${y30.toFixed(2)}%) until term-premium supply clears; ` +
-    `watch ${(y10 + 0.15).toFixed(2)}% on US10Y as the primary valuation ceiling for high-multiple Nasdaq 100 (${ndxPrice.toLocaleString('en-US', { maximumFractionDigits: 0 })}) constituents.`;
+    `With 10Y UST at ${y10.toFixed(2)}% (${fmtBps(y10Chg)} today) and 2s10s at +${twoTen.toFixed(1)} bps, favor 2Y–5Y belly duration (${y2.toFixed(2)}%–${y5.toFixed(2)}%) over unhedged 30Y exposure (${y30.toFixed(2)}%). ` +
+    `In equities and FX, watch ${(y10 + 0.15).toFixed(2)}% on US10Y and ${dxyPrice.toFixed(2)} on DXY (${fmtPct(dxyPct)}) as institutional desks digest "${truncateHeadline(topHeadline, 72)}".`;
 
   const criticalLevels = [
     {
@@ -175,7 +228,7 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
       event: 'US BLS Consumer Price Index (CPI) Print & Fed Front-End Rate Cut Pricing',
       timing: `${formatSgtDate(cpiDate)} · 21:30 SGT (08:30 ET)`,
       impact: 'Critical' as const,
-      watchFor: `Core services stickiness vs softer energy ($${wtiPrice.toFixed(2)}/bbl WTI) and whether US 2Y (${y2.toFixed(2)}%) breaks ${(y2 + 0.12).toFixed(2)}% following "${truncateHeadline(topHeadline, 85)}".`,
+      watchFor: `Core services stickiness vs energy ($${wtiPrice.toFixed(2)}/bbl WTI) and whether US 2Y (${y2.toFixed(2)}%) breaks ${(y2 + 0.12).toFixed(2)}% following "${truncateHeadline(topHeadline, 85)}".`,
     },
     {
       event: 'US Treasury 10Y / 30Y Refunding Auction Settlement & Primary Dealer Takedown',
@@ -195,6 +248,7 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST',
     regimeBadge,
+    updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
@@ -205,7 +259,9 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
 
 export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const nextSrbiFri = getNextWeekdaySgt(todayBiz, 5, true);
   const nextDjpprTue = getNextWeekdaySgt(todayBiz, 2, false);
   const biRdgDate = getNextMonthlyDaySgt(todayBiz, 18);
@@ -216,8 +272,12 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
 
   const biRate = bonds.biRate ?? 5.75;
   const cpi = bonds.cpiInflationYoY ?? 3.28;
-  const indo5Y = bonds.indoGB.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 7.35;
-  const indo10Y = bonds.indoGB.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.69;
+  const b5 = bonds.indoGB.find((b) => b.tenor.startsWith('5Y'));
+  const b10 = bonds.indoGB.find((b) => b.tenor.startsWith('10Y'));
+  const indo5Y = b5?.yield ?? 7.35;
+  const indo5YChg = b5?.changeBps ?? 0.0;
+  const indo10Y = b10?.yield ?? 7.69;
+  const indo10YChg = b10?.changeBps ?? 0.0;
   const spread10Y = Math.round((indo10Y - ust10Y) * 100);
 
   const srbi6M = bonds.srbi.find((s) => s.tenor === '6M')?.weightedAvgYield ?? 6.566;
@@ -228,36 +288,50 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
   const srbi12MAwarded = bonds.srbi.find((s) => s.tenor === '12M')?.awardedVolumeIDR ?? 'IDR 3.00 T';
 
   const spot = fx.spotRate ?? 18080;
+  const spotChg = fx.spotChange ?? 0;
+  const spotPct = fx.spotChangePct ?? 0.0;
   const jisdor = fx.jisdorRate ?? 18130;
+  const jisdorChg = fx.jisdorChange ?? 0;
   const ndf1M = fx.ndf1M ?? 18116;
   const ndfSpread = fx.ndfSpread1M ?? 36;
   const ihsg = fx.ihsgIndex.level ?? 5050.43;
   const ihsgPct = fx.ihsgIndex.changePct ?? 0.40;
 
   const realPolicyBuffer = (biRate - cpi).toFixed(2);
+  const h1 = snap.indonesia.commentary.noteworthyHeadlines[0];
+  const h2 = snap.indonesia.commentary.noteworthyHeadlines[1];
   const leadIndoNews =
-    snap.indonesia.commentary.noteworthyHeadlines[0]?.title ||
-    snap.indonesia.commentary.noteworthyHeadlines[0]?.headline ||
+    h1?.title ||
+    h1?.headline ||
     'Bank Indonesia reports US$146.8B FX reserves and prepares 100% Rupiah conversion for resource export earnings';
+  const leadIndoMeta = h1?.source ? `${h1.source}${h1.timeAgo ? ` · ${h1.timeAgo}` : ''}` : 'Jakarta Desk';
   const secondIndoNews =
-    snap.indonesia.commentary.noteworthyHeadlines[1]?.title ||
-    snap.indonesia.commentary.noteworthyHeadlines[1]?.headline ||
+    h2?.title ||
+    h2?.headline ||
     'KSSK and Ministry of Finance anchor SBN issuance discipline and onshore Rupiah liquidity';
+  const secondIndoMeta = h2?.source ? `${h2.source}${h2.timeAgo ? ` · ${h2.timeAgo}` : ''}` : 'Onshore Feed';
 
   const regimeBadge = `BI-RATE ${biRate.toFixed(2)}% · REAL BUFFER +${realPolicyBuffer}% · SPREAD +${spread10Y} BPS`;
-  const conviction = 'Overweight 12M SRBI (6.675% WAR) & 5Y–10Y IndoGB (FR0109/FR0108) · Hedged NDF Carry';
+
+  const fxRegimeNote =
+    spot >= 18100 || spotChg > 25
+      ? `Onshore USD/IDR trades at Rp ${spot.toLocaleString('en-US')} (${spotChg >= 0 ? `+${spotChg}` : spotChg} IDR / ${fmtPct(spotPct)} 1D) alongside BI JISDOR at Rp ${jisdor.toLocaleString('en-US')} (${jisdorChg >= 0 ? `+${jisdorChg}` : jisdorChg} IDR) and 1M NDF at Rp ${ndf1M.toLocaleString('en-US')} (+${ndfSpread} IDR basis), keeping Bank Indonesia active across spot, DNDF, and secondary SBN triple-intervention`
+      : `Onshore USD/IDR spot trades at Rp ${spot.toLocaleString('en-US')} (${fmtPct(spotPct)} 1D) with BI JISDOR at Rp ${jisdor.toLocaleString('en-US')} and 1M NDFs at Rp ${ndf1M.toLocaleString('en-US')} (+${ndfSpread} IDR basis)`;
+
+  const conviction =
+    spot >= 18150 || indo10YChg >= 3.0
+      ? `Defensive 12M SRBI (${srbi12M.toFixed(3)}%) & 5Y FR0109 (${indo5Y.toFixed(2)}%) Carry · NDF-Hedged Duration (USD/IDR ${spot.toLocaleString('en-US')})`
+      : `Overweight 5Y–10Y IndoGB (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%, +${spread10Y} bps vs UST) & 12M SRBI (${srbi12M.toFixed(3)}%)`;
 
   const synthesis =
-    `Indonesia's macro-financial framework offers a +${realPolicyBuffer}% real policy rate buffer (BI-Rate at ${biRate.toFixed(2)}% vs Headline CPI at ${cpi.toFixed(2)}% YoY) ` +
-    `alongside a +${spread10Y} bps sovereign yield pickup on 10Y IndoGB benchmark FR0108 (${indo10Y.toFixed(2)}% vs US 10Y at ${ust10Y.toFixed(2)}%, with 5Y FR0109 at ${indo5Y.toFixed(2)}%). ` +
-    `In Bank Indonesia's completed Friday ${srbiDate} SRBI issuance (bi.go.id), total incoming bids reached IDR 36.90 T across tenors while BI awarded IDR 7.50 T (4.92x bid-to-cover), ` +
-    `with Winner WAR clearing at ${srbi6M.toFixed(3)}% (6M), ${srbi9M.toFixed(3)}% (9M), and ${srbi12M.toFixed(3)}% (12M: ${srbi12MAwarded} awarded from ${srbi12MBids} bids). ` +
-    `Onshore USD/IDR spot (${spot.toLocaleString('en-US')}) and JISDOR (Rp ${jisdor.toLocaleString('en-US')}) remain well-anchored with 1M NDFs at ${ndf1M.toLocaleString('en-US')} (+${ndfSpread} IDR basis) and IHSG at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ihsgPct >= 0 ? '+' : ''}${ihsgPct.toFixed(2)}%). ` +
-    `Lead domestic development: "${leadIndoNews}".`;
+    `[${sessionDateStr} Jakarta Desk] Indonesia's sovereign curve prices 10Y benchmark FR0108 at ${indo10Y.toFixed(2)}% (${fmtBps(indo10YChg)} 1D; +${spread10Y} bps over US 10Y at ${ust10Y.toFixed(2)}%) ` +
+    `and 5Y benchmark FR0109 at ${indo5Y.toFixed(2)}% (${fmtBps(indo5YChg)} 1D), backed by a +${realPolicyBuffer}% real policy buffer (BI-Rate ${biRate.toFixed(2)}% vs Headline CPI ${cpi.toFixed(2)}% YoY) and 12M SRBI clearing at ${srbi12M.toFixed(3)}% WAR (${srbiDate} tender: IDR 7.50 T awarded from IDR 36.90 T total bids). ` +
+    `${fxRegimeNote}, while the IDX Composite (IHSG) trades at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)}). ` +
+    `Key Indonesia catalysts: (1) "${leadIndoNews}" (${leadIndoMeta}); and (2) "${secondIndoNews}" (${secondIndoMeta}).`;
 
   const positioningTakeaway =
-    `Following Friday ${srbiDate}'s SRBI issuance (12M WAR at ${srbi12M.toFixed(3)}%), capture front-end Rupiah carry via 12M SRBI and 5Y–10Y DJPPR benchmarks FR0109/FR0108 (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) ` +
-    `while monitoring the 1M NDF-Spot basis (+${ndfSpread} IDR) as an early-warning barometer for offshore USD demand.`;
+    `As of ${sessionDateStr}, with 10Y FR0108 at ${indo10Y.toFixed(2)}% (${fmtBps(indo10YChg)} 1D) and USD/IDR at Rp ${spot.toLocaleString('en-US')} (1M NDF spread +${ndfSpread} IDR), ` +
+    `pair front-end 12M SRBI (${srbi12M.toFixed(3)}% WAR) with 5Y–10Y DJPPR benchmarks (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) on dips while hedging offshore USD tail risk ahead of the ${formatSgtDate(nextSrbiFri)} SRBI tender and "${truncateHeadline(leadIndoNews, 68)}".`;
 
   const criticalLevels = [
     {
@@ -315,6 +389,7 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS',
     regimeBadge,
+    updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
@@ -325,7 +400,9 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
 
 export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const nextFri = getNextWeekdaySgt(todayBiz, 5, true);
   const nextWed = getNextWeekdaySgt(todayBiz, 3, false);
   const lprDate = getNextMonthlyDaySgt(todayBiz, 20);
@@ -333,46 +410,65 @@ export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const china = snap.china;
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
 
-  const cgb1Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('1Y'))?.yield ?? 1.168;
-  const cgb5Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 1.312;
-  const cgb10Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 1.587;
-  const cgb30Y = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('30Y'))?.yield ?? 2.028;
+  const b1 = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('1Y'));
+  const b5 = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('5Y'));
+  const b10 = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('10Y'));
+  const b30 = china?.bonds.ccdcCgb.find((b) => b.tenor.startsWith('30Y'));
+
+  const cgb1Y = b1?.yield ?? 1.168;
+  const cgb5Y = b5?.yield ?? 1.312;
+  const cgb5YChg = b5?.changeBps ?? -1.2;
+  const cgb10Y = b10?.yield ?? 1.587;
+  const cgb10YChg = b10?.changeBps ?? -1.7;
+  const cgb30Y = b30?.yield ?? 2.028;
+  const cgb30YChg = b30?.changeBps ?? -1.5;
   const curveDate = china?.bonds.curveDate ?? '2026-11-06';
 
   const omo7d = china?.bonds.pbocOmo7dRate ?? 1.50;
-  const lpr1Y = china?.bonds.lpr1Y ?? 3.10;
-  const lpr5Y = china?.bonds.lpr5Y ?? 3.60;
+  const lpr1Y = china?.bonds.lpr1Y ?? 3.00;
+  const lpr5Y = china?.bonds.lpr5Y ?? 3.50;
   const cpi = china?.bonds.cpiInflationYoY ?? 0.60;
   const spread10Y = Math.round((cgb10Y - ust10Y) * 100);
   const slope10s30s = Math.round((cgb30Y - cgb10Y) * 100);
 
   const cny = china?.fxAndEquities.cnySpot ?? 6.6710;
+  const cnyPct = china?.fxAndEquities.cnyChangePct ?? 0.12;
   const cnh = china?.fxAndEquities.cnhSpot ?? 6.6736;
   const fixing = china?.fxAndEquities.pbocFixing ?? 6.6685;
   const ssec = china?.fxAndEquities.shanghaiComposite.level ?? 3649.18;
   const ssecPct = china?.fxAndEquities.shanghaiComposite.changePct ?? -1.10;
+  const csi300 = china?.fxAndEquities.csi300Index.level ?? 4054.28;
+  const csiPct = china?.fxAndEquities.csi300Index.changePct ?? -1.44;
 
+  const h1 = china?.commentary.noteworthyHeadlines[0];
+  const h2 = china?.commentary.noteworthyHeadlines[1];
   const leadHeadline =
-    china?.commentary.noteworthyHeadlines[0]?.title ||
-    china?.commentary.noteworthyHeadlines[0]?.headline ||
+    h1?.title ||
+    h1?.headline ||
     'PBoC maintains accommodative liquidity operations as CCDC 10Y ChinaBond CGB yield trades near 1.587%';
+  const leadMeta = h1?.source ? `${h1.source}${h1.timeAgo ? ` · ${h1.timeAgo}` : ''}` : 'Beijing Desk';
   const secondHeadline =
-    china?.commentary.noteworthyHeadlines[1]?.title ||
-    china?.commentary.noteworthyHeadlines[1]?.headline ||
+    h2?.title ||
+    h2?.headline ||
     'Ministry of Finance special sovereign bond issuance and Northbound Bond Connect allocations shape CGB curve';
+  const secondMeta = h2?.source ? `${h2.source}${h2.timeAgo ? ` · ${h2.timeAgo}` : ''}` : 'Wire Feed';
 
-  const regimeBadge = `7D OMO ${omo7d.toFixed(2)}% · CCDC 10Y ${cgb10Y.toFixed(3)}% · US-CN SPREAD ${spread10Y} BPS`;
-  const conviction = 'Belly CGB Receive (3Y–5Y CCDC Curve) · FX-Hedged Total Return · Watch 30Y Ultra-Long Supply';
+  const regimeBadge = `7D OMO ${omo7d.toFixed(2)}% · CCDC 10Y ${cgb10Y.toFixed(3)}% (${fmtBps(cgb10YChg)}) · US-CN ${spread10Y} BPS`;
+
+  const conviction =
+    ssecPct >= 0.5
+      ? `Barbell 3Y–5Y CCDC CGB (${cgb5Y.toFixed(3)}%) + Domestic A-Share Momentum (SSEC ${fmtPct(ssecPct)}) · FX-Hedged`
+      : `Receive 3Y–5Y CCDC CGB Belly (${cgb5Y.toFixed(3)}%, ${fmtBps(cgb5YChg)}) · FX-Hedged Carry vs SSEC (${fmtPct(ssecPct)})`;
 
   const synthesis =
-    `Official China Central Depository & Clearing (CCDC · yield.chinabond.com.cn) ChinaBond CGB valuations (${curveDate}) show an accommodative sovereign curve with 1Y CGB at ${cgb1Y.toFixed(3)}%, ` +
-    `5Y benchmark at ${cgb5Y.toFixed(3)}%, 10Y benchmark at ${cgb10Y.toFixed(3)}%, and 30Y ultra-long CGB at ${cgb30Y.toFixed(3)}% (10s30s slope at +${slope10s30s} bps; ${spread10Y} bps vs US 10Y Treasuries). ` +
-    `With the PBoC 7-Day Reverse Repo anchored at ${omo7d.toFixed(2)}% (1Y/5Y LPR at ${lpr1Y.toFixed(2)}%/${lpr5Y.toFixed(2)}% and CPI at ${cpi.toFixed(2)}% YoY), commercial bank wealth-management demand continues to compress front-end and belly yields. ` +
-    `In currency markets, onshore USD/CNY (${cny.toFixed(4)}) and offshore USD/CNH (${cnh.toFixed(4)}) track closely around the PBoC daily central parity fixing (${fixing.toFixed(4)}), while the Shanghai Composite trades at ${ssec.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${ssecPct >= 0 ? '+' : ''}${ssecPct.toFixed(2)}%). ` +
-    `Lead China macro development: "${leadHeadline}".`;
+    `[${sessionDateStr} Beijing/Shanghai Desk] Official CCDC ChinaBond CGB fixings (${curveDate}) price 1Y CGB at ${cgb1Y.toFixed(3)}%, ` +
+    `5Y benchmark at ${cgb5Y.toFixed(3)}% (${fmtBps(cgb5YChg)} 1D), 10Y benchmark at ${cgb10Y.toFixed(3)}% (${fmtBps(cgb10YChg)} 1D), and 30Y ultra-long CGB at ${cgb30Y.toFixed(3)}% (${fmtBps(cgb30YChg)} 1D; 10s30s slope +${slope10s30s} bps, ${spread10Y} bps vs 10Y UST). ` +
+    `With PBoC 7D Reverse Repo at ${omo7d.toFixed(2)}% and 1Y/5Y LPR at ${lpr1Y.toFixed(2)}%/${lpr5Y.toFixed(2)}% (Headline CPI ${cpi.toFixed(2)}% YoY), onshore USD/CNY trades at ${cny.toFixed(4)} (${fmtPct(cnyPct)}) and offshore USD/CNH at ${cnh.toFixed(4)} around the ${fixing.toFixed(4)} PBoC parity fixing, while Shanghai Composite sits at ${ssec.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ssecPct)}) and CSI 300 at ${csi300.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(csiPct)}). ` +
+    `Top China catalysts: (1) "${leadHeadline}" (${leadMeta}); and (2) "${secondHeadline}" (${secondMeta}).`;
 
   const positioningTakeaway =
-    `Express bullish China rates views via 3Y–5Y CCDC CGB benchmarks (${cgb5Y.toFixed(3)}%) where PBoC DR007 funding carry is positive, while avoiding unhedged duration chases below 1.50% on 10Y CGB (${cgb10Y.toFixed(3)}%) where PBoC bond-lending intervention risk rises.`;
+    `As of ${sessionDateStr}, express constructive China rates positioning via 3Y–5Y CCDC CGB benchmarks (${cgb5Y.toFixed(3)}%, ${fmtBps(cgb5YChg)} 1D) where DR007 repo funding carry remains positive, ` +
+    `while taking profits on 10Y CGB (${cgb10Y.toFixed(3)}%) approaches toward 1.500% and monitoring "${truncateHeadline(leadHeadline, 70)}" for PBoC fixing (${fixing.toFixed(4)}) and CSI 300 (${fmtPct(csiPct)}) spillover.`;
 
   const criticalLevels = [
     {
@@ -430,6 +526,7 @@ export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS',
     regimeBadge,
+    updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
@@ -440,17 +537,26 @@ export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
 
 export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const nextMon = getNextWeekdaySgt(todayBiz, 1, false);
   const bokMpbDate = getNextMonthlyDaySgt(todayBiz, 26);
 
   const korea = snap.korea;
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
 
-  const ktb3Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('3Y'))?.yield ?? 3.622;
-  const ktb5Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 3.716;
-  const ktb10Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 3.852;
-  const ktb30Y = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('30Y'))?.yield ?? 3.895;
+  const b3 = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('3Y'));
+  const b5 = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('5Y'));
+  const b10 = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('10Y'));
+  const b30 = korea?.bonds.kofiaKtb.find((b) => b.tenor.startsWith('30Y'));
+
+  const ktb3Y = b3?.yield ?? 3.622;
+  const ktb3YChg = b3?.changeBps ?? -4.9;
+  const ktb5Y = b5?.yield ?? 3.716;
+  const ktb10Y = b10?.yield ?? 3.852;
+  const ktb10YChg = b10?.changeBps ?? -4.0;
+  const ktb30Y = b30?.yield ?? 3.895;
   const quoteDate = korea?.bonds.quotationDate ?? '06 Nov 2026';
 
   const bokRate = korea?.bonds.bokBaseRate ?? 3.00;
@@ -461,31 +567,43 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const slope3s10s = Math.round((ktb10Y - ktb3Y) * 100);
 
   const krw = korea?.fxAndEquities.krwSpot ?? 1356.34;
+  const krwPct = korea?.fxAndEquities.krwChangePct ?? -0.03;
   const ndf1M = korea?.fxAndEquities.ndf1M ?? 1354.10;
   const kospi = korea?.fxAndEquities.kospiIndex.level ?? 5059.69;
   const kospiPct = korea?.fxAndEquities.kospiIndex.changePct ?? -6.02;
+  const kosdaq = korea?.fxAndEquities.kosdaqIndex.level ?? 644.27;
+  const kosdaqPct = korea?.fxAndEquities.kosdaqIndex.changePct ?? -5.03;
 
+  const h1 = korea?.commentary.noteworthyHeadlines[0];
+  const h2 = korea?.commentary.noteworthyHeadlines[1];
   const leadHeadline =
-    korea?.commentary.noteworthyHeadlines[0]?.title ||
-    korea?.commentary.noteworthyHeadlines[0]?.headline ||
+    h1?.title ||
+    h1?.headline ||
     'KOFIA / SOFIA Korea Treasury Bond yields rally as foreign WGBI inflows support 3Y and 10Y KTB benchmarks';
+  const leadMeta = h1?.source ? `${h1.source}${h1.timeAgo ? ` · ${h1.timeAgo}` : ''}` : 'Seoul Desk';
   const secondHeadline =
-    korea?.commentary.noteworthyHeadlines[1]?.title ||
-    korea?.commentary.noteworthyHeadlines[1]?.headline ||
+    h2?.title ||
+    h2?.headline ||
     'Bank of Korea monitors USD/KRW FX stability and semiconductor export momentum';
+  const secondMeta = h2?.source ? `${h2.source}${h2.timeAgo ? ` · ${h2.timeAgo}` : ''}` : 'Seoul Feed';
 
-  const regimeBadge = `BOK BASE ${bokRate.toFixed(2)}% · KOFR/SOFIA ${kofr.toFixed(2)}% · 10Y KTB ${ktb10Y.toFixed(3)}%`;
-  const conviction = 'Long 3Y–10Y KTB (KOFIA Benchmark) on WGBI Inflows · Receive 3s10s Box · Watch USD/KRW 1,380';
+  const regimeBadge = `BOK BASE ${bokRate.toFixed(2)}% · KOFR/SOFIA ${kofr.toFixed(3)}% · 10Y KTB ${ktb10Y.toFixed(3)}% (${fmtBps(ktb10YChg)})`;
+
+  const conviction =
+    kospiPct >= 1.0
+      ? `Long Semiconductor Equity Recovery (KOSPI ${fmtPct(kospiPct)}) & 3Y–10Y KTB (${ktb3Y.toFixed(3)}%/${ktb10Y.toFixed(3)}%) WGBI Carry`
+      : `Overweight 3Y–10Y KOFIA KTB (${ktb3Y.toFixed(3)}%/${ktb10Y.toFixed(3)}%, ${fmtBps(ktb10YChg)}) on Safe-Haven & WGBI Inflows · Watch ₩${Math.round(krw + 20)}`;
 
   const synthesis =
-    `Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) final OTC bond quotations (${quoteDate}) place the benchmark 3Y KTB at ${ktb3Y.toFixed(3)}%, ` +
-    `5Y KTB at ${ktb5Y.toFixed(3)}%, 10Y KTB at ${ktb10Y.toFixed(3)}%, and 30Y KTB at ${ktb30Y.toFixed(3)}% (3s10s slope at +${slope3s10s} bps; ${spread10Y} bps vs 10Y US Treasuries). ` +
-    `With the Bank of Korea (BOK) Base Rate at ${bokRate.toFixed(2)}% (Headline CPI at ${cpi.toFixed(2)}% YoY, real policy buffer +${(bokRate - cpi).toFixed(2)}%), short-term SOFIA / KOFR overnight repo fixes at ${kofr.toFixed(2)}% and 91-day KOFIA CD rates trade at ${cd91d.toFixed(2)}%. ` +
-    `In FX and equity markets, onshore USD/KRW trades at ₩${krw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (1M NDF at ₩${ndf1M.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}) while KOSPI sits at ${kospi.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${kospiPct >= 0 ? '+' : ''}${kospiPct.toFixed(2)}%). ` +
-    `Lead Korea macro catalyst: "${leadHeadline}".`;
+    `[${sessionDateStr} Seoul Desk] Korea Financial Investment Association (KOFIA / SOFIA) OTC bond fixings (${quoteDate}) place 3Y KTB at ${ktb3Y.toFixed(3)}% (${fmtBps(ktb3YChg)} 1D), ` +
+    `5Y KTB at ${ktb5Y.toFixed(3)}%, 10Y KTB at ${ktb10Y.toFixed(3)}% (${fmtBps(ktb10YChg)} 1D; 3s10s slope +${slope3s10s} bps, ${spread10Y} bps vs 10Y UST), and 30Y KTB at ${ktb30Y.toFixed(3)}%. ` +
+    `With the BOK Base Rate at ${bokRate.toFixed(2)}% (CPI ${cpi.toFixed(2)}% YoY, real buffer +${(bokRate - cpi).toFixed(2)}%), SOFIA/KOFR overnight repo fixes at ${kofr.toFixed(3)}% and 91D CD at ${cd91d.toFixed(2)}%. ` +
+    `In Seoul FX and equities, USD/KRW trades at ₩${krw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(krwPct)}; 1M NDF ₩${ndf1M.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}), while KOSPI is at ${kospi.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(kospiPct)}) and KOSDAQ at ${kosdaq.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(kosdaqPct)}). ` +
+    `Key Korea catalysts: (1) "${leadHeadline}" (${leadMeta}); and (2) "${secondHeadline}" (${secondMeta}).`;
 
   const positioningTakeaway =
-    `Accumulate 3Y and 10Y KTB benchmarks (${ktb3Y.toFixed(3)}% / ${ktb10Y.toFixed(3)}%) on any backup above 3.95% as passive FTSE WGBI index allocations and stable KOFR/SOFIA repo funding (${kofr.toFixed(2)}%) anchor domestic duration demand.`;
+    `As of ${sessionDateStr}, accumulate 3Y (${ktb3Y.toFixed(3)}%, ${fmtBps(ktb3YChg)}) and 10Y (${ktb10Y.toFixed(3)}%, ${fmtBps(ktb10YChg)}) KTB benchmarks as FTSE WGBI passive inflows and anchored KOFR repo funding (${kofr.toFixed(3)}%) support duration, ` +
+    `while tracking KOSPI (${fmtPct(kospiPct)}) and USD/KRW (₩${krw.toFixed(2)}) reaction to "${truncateHeadline(leadHeadline, 70)}".`;
 
   const criticalLevels = [
     {
@@ -497,7 +615,7 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     },
     {
       asset: 'KOFR / SOFIA & 91D CD Rate',
-      current: `KOFR ${kofr.toFixed(2)}% · CD ${cd91d.toFixed(2)}%`,
+      current: `KOFR ${kofr.toFixed(3)}% · CD ${cd91d.toFixed(2)}%`,
       support: `${(kofr - 0.15).toFixed(2)}%`,
       resistance: `${(cd91d + 0.12).toFixed(2)}%`,
       implication: 'Tight KOFR-to-BOK Base Rate spread confirms ample overnight RP liquidity across Korean securities dealers.',
@@ -535,7 +653,7 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
       event: 'Bank of Korea (BOK) Monetary Policy Board Base Rate Decision & MSB Tender',
       timing: `${formatSgtDate(bokMpbDate)} · 09:00 KST (08:00 SGT)`,
       impact: 'High' as const,
-      watchFor: `Governor Rhee Chang-yong's guidance on Base Rate (${bokRate.toFixed(2)}%), KOFR/SOFIA (${kofr.toFixed(2)}%) repo transmission, and USD/KRW (₩${krw.toFixed(2)}) FX smoothing.`,
+      watchFor: `Governor Rhee Chang-yong's guidance on Base Rate (${bokRate.toFixed(2)}%), KOFR/SOFIA (${kofr.toFixed(3)}%) repo transmission, and USD/KRW (₩${krw.toFixed(2)}) FX smoothing.`,
     },
   ];
 
@@ -543,6 +661,7 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS',
     regimeBadge,
+    updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
@@ -553,7 +672,9 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
 
 export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const mospiCpiDate = getNextMonthlyDaySgt(todayBiz, 12);
   const nextGsecFri = getNextWeekdaySgt(todayBiz, 5, true);
   const rbiMpcDate = getNextMonthlyDaySgt(addSgtDays(todayBiz, 15), 4);
@@ -561,10 +682,17 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const india = snap.india;
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
 
-  const gsec3Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('3Y'))?.yield ?? 6.958;
-  const gsec5Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 7.023;
-  const gsec10Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.162;
-  const gsec30Y = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('30Y'))?.yield ?? 7.619;
+  const b3 = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('3Y'));
+  const b5 = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('5Y'));
+  const b10 = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('10Y'));
+  const b30 = india?.bonds.gsecCurve.find((b) => b.tenor.startsWith('30Y'));
+
+  const gsec3Y = b3?.yield ?? 6.958;
+  const gsec5Y = b5?.yield ?? 7.023;
+  const gsec5YChg = b5?.changeBps ?? -2.2;
+  const gsec10Y = b10?.yield ?? 7.162;
+  const gsec10YChg = b10?.changeBps ?? 1.7;
+  const gsec30Y = b30?.yield ?? 7.619;
   const quoteDate = india?.bonds.quotationDate ?? '06 Nov 2026';
 
   const repoRate = india?.bonds.rbiRepoRate ?? 5.50;
@@ -577,33 +705,41 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const slope5s10s = Math.round((gsec10Y - gsec5Y) * 100);
 
   const inrSpot = india?.fxAndEquities.inrSpot ?? 93.895;
+  const inrPct = india?.fxAndEquities.inrChangePct ?? -0.60;
   const rbiRef = india?.fxAndEquities.rbiReferenceUsd ?? 94.1402;
   const fxReserves = india?.fxAndEquities.forexReservesUsdBn ?? 717.06;
   const nifty = india?.fxAndEquities.nifty50Index.level ?? 24986.40;
   const niftyPct = india?.fxAndEquities.nifty50Index.changePct ?? -0.18;
+  const sensex = india?.fxAndEquities.sensexIndex.level ?? 80999.40;
+  const sensexPct = india?.fxAndEquities.sensexIndex.changePct ?? -0.04;
 
+  const h1 = india?.commentary.noteworthyHeadlines[0];
+  const h2 = india?.commentary.noteworthyHeadlines[1];
   const leadHeadline =
-    india?.commentary.noteworthyHeadlines[0]?.title ||
-    india?.commentary.noteworthyHeadlines[0]?.headline ||
+    h1?.title ||
+    h1?.headline ||
     'RBI conducts LAF Variable Rate Repo operations as 10Y G-Sec benchmark 6.94% GS 2036 trades near 7.162%';
+  const leadMeta = h1?.source ? `${h1.source}${h1.timeAgo ? ` · ${h1.timeAgo}` : ''}` : 'Mumbai Desk';
   const secondHeadline =
-    india?.commentary.noteworthyHeadlines[1]?.title ||
-    india?.commentary.noteworthyHeadlines[1]?.headline ||
+    h2?.title ||
+    h2?.headline ||
     'Foreign FAR index inflows and RBI FX reserves support Indian sovereign bond curve stability';
+  const secondMeta = h2?.source ? `${h2.source}${h2.timeAgo ? ` · ${h2.timeAgo}` : ''}` : 'Mumbai Feed';
 
-  const regimeBadge = `RBI REPO ${repoRate.toFixed(2)}% (SDF ${sdfRate.toFixed(2)}% / MSF ${msfRate.toFixed(2)}%) · 10Y G-SEC ${gsec10Y.toFixed(3)}%`;
-  const conviction = 'Long 5Y–10Y FAR G-Secs (6.53% GS 2031 / 6.94% GS 2036) · Positive Carry +230 bps vs UST · Watch RBI VRR/VRRR';
+  const regimeBadge = `RBI REPO ${repoRate.toFixed(2)}% · 10Y G-SEC ${gsec10Y.toFixed(3)}% (${fmtBps(gsec10YChg)}) · SPREAD +${spread10Y} BPS`;
+
+  const conviction = `Long 5Y–10Y FAR G-Secs (${gsec5Y.toFixed(3)}% / ${gsec10Y.toFixed(3)}%, +${spread10Y} bps vs UST) · USD/INR ₹${inrSpot.toFixed(2)} (${fmtPct(inrPct)}) Backed by $${fxReserves.toFixed(0)}B Reserves`;
 
   const synthesis =
-    `Reserve Bank of India (RBI · rbi.org.in) and CCIL/NDS-OM sovereign fixings (${quoteDate}) place the 3Y G-Sec benchmark (6.20% GS 2029) at ${gsec3Y.toFixed(3)}%, ` +
-    `5Y benchmark (6.53% GS 2031) at ${gsec5Y.toFixed(3)}%, 10Y benchmark (6.94% GS 2036) at ${gsec10Y.toFixed(3)}%, and 30Y G-Sec (7.63% GS 2056) at ${gsec30Y.toFixed(3)}% (5s10s slope at +${slope5s10s} bps; +${spread10Y} bps over 10Y US Treasuries). ` +
-    `With the RBI Monetary Policy Committee maintaining the Policy Repo Rate at ${repoRate.toFixed(2)}% (SDF floor at ${sdfRate.toFixed(2)}%, MSF ceiling at ${msfRate.toFixed(2)}%, CRR at 3.00%) and 91D/364D T-Bills clearing at ${tbill91d.toFixed(3)}%/${tbill364d.toFixed(3)}%, ` +
-    `RBI's US$${fxReserves.toFixed(2)}B Foreign Exchange Reserves cushion spot USD/INR around ₹${inrSpot.toFixed(4)} (FBIL Reference Rate ₹${rbiRef.toFixed(4)}) as Nifty 50 trades at ${nifty.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${niftyPct >= 0 ? '+' : ''}${niftyPct.toFixed(2)}%). ` +
-    `Lead India macro catalyst: "${leadHeadline}".`;
+    `[${sessionDateStr} Mumbai Desk] Reserve Bank of India (RBI) and CCIL/NDS-OM sovereign fixings (${quoteDate}) place 3Y G-Sec (6.20% GS 2029) at ${gsec3Y.toFixed(3)}%, ` +
+    `5Y benchmark (6.53% GS 2031) at ${gsec5Y.toFixed(3)}% (${fmtBps(gsec5YChg)} 1D), 10Y benchmark (6.94% GS 2036) at ${gsec10Y.toFixed(3)}% (${fmtBps(gsec10YChg)} 1D; +${spread10Y} bps over 10Y UST, 5s10s +${slope5s10s} bps), and 30Y G-Sec at ${gsec30Y.toFixed(3)}%. ` +
+    `With the RBI Policy Repo Rate anchored at ${repoRate.toFixed(2)}% (SDF ${sdfRate.toFixed(2)}% / MSF ${msfRate.toFixed(2)}%; 91D/364D T-Bills at ${tbill91d.toFixed(3)}%/${tbill364d.toFixed(3)}%) and US$${fxReserves.toFixed(2)}B in FX Reserves, ` +
+    `spot USD/INR trades at ₹${inrSpot.toFixed(4)} (${fmtPct(inrPct)} 1D; FBIL Ref ₹${rbiRef.toFixed(4)}), while Nifty 50 sits at ${nifty.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(niftyPct)}) and Sensex at ${sensex.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(sensexPct)}). ` +
+    `Key India catalysts: (1) "${leadHeadline}" (${leadMeta}); and (2) "${secondHeadline}" (${secondMeta}).`;
 
   const positioningTakeaway =
-    `Overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs (${gsec5Y.toFixed(3)}%–${gsec10Y.toFixed(3)}%) to capture +${spread10Y} bps sovereign spread over USTs and low FX volatility backed by RBI's US$${fxReserves.toFixed(2)}B reserve war chest; ` +
-    `monitor RBI fine-tuning VRR/VRRR LAF operations keeping overnight call rates (${india?.bonds.callRateRange || '4.30% - 5.75%'}) aligned with the ${repoRate.toFixed(2)}% Repo anchor.`;
+    `As of ${sessionDateStr}, overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs (${gsec5Y.toFixed(3)}%–${gsec10Y.toFixed(3)}%, ${fmtBps(gsec10YChg)} 1D) for +${spread10Y} bps carry over USTs and RBI reserve-backed INR stability (₹${inrSpot.toFixed(2)}); ` +
+    `watch RBI VRR/VRRR LAF operations (${india?.bonds.callRateRange || '4.30% - 5.75%'}) and domestic bank/equity flows amid "${truncateHeadline(leadHeadline, 70)}".`;
 
   const criticalLevels = [
     {
@@ -629,7 +765,7 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     },
     {
       asset: 'NIFTY 50 & BSE SENSEX',
-      current: `${nifty.toLocaleString('en-US', { maximumFractionDigits: 0 })} / ${(india?.fxAndEquities.sensexIndex.level ?? 80999).toLocaleString('en-US', { maximumFractionDigits: 0 })}`,
+      current: `${nifty.toLocaleString('en-US', { maximumFractionDigits: 0 })} / ${sensex.toLocaleString('en-US', { maximumFractionDigits: 0 })}`,
       support: Math.round(nifty * 0.975).toLocaleString('en-US'),
       resistance: Math.round(nifty * 1.025).toLocaleString('en-US'),
       implication: 'Domestic SIP inflows and banking earnings offset foreign equity rotation and support INR capital account stability.',
@@ -661,6 +797,7 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS',
     regimeBadge,
+    updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
@@ -671,13 +808,17 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
 
 export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const cpiDate = getNextMonthlyDaySgt(todayBiz, 12);
   const nextFri = getNextWeekdaySgt(todayBiz, 5, true);
   const opexFri = getNextMonthlyDaySgt(todayBiz, 20);
 
   const eq = snap.equities;
-  const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
+  const t10 = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y');
+  const ust10Y = t10?.yield ?? 4.86;
+  const ust10YChg = t10?.changeBps ?? 0.0;
   const ust2Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '2Y')?.yield ?? 4.53;
 
   const spx = eq?.indexSummary.spxLevel ?? 7376.86;
@@ -687,33 +828,40 @@ export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonC
   const erpBps = Math.round((spxEy - ust10Y) * 100);
 
   const peLeader = eq?.topForwardPe[0];
+  const peSecond = eq?.topForwardPe[1];
   const fcfLeader = eq?.topFcfToEv[0];
+  const fcfSecond = eq?.topFcfToEv[1];
   const divLeader = eq?.topDividendYield[0];
 
+  const h1 = eq?.noteworthyHeadlines[0];
+  const h2 = eq?.noteworthyHeadlines[1];
   const leadHeadline =
-    eq?.noteworthyHeadlines[0]?.title ||
-    eq?.noteworthyHeadlines[0]?.headline ||
-    'S&P 500 factor dispersion widens as 10Y Treasury yields near 4.86% reward high FCF/EV and low Forward P/E constituents';
+    h1?.title ||
+    h1?.headline ||
+    'S&P 500 factor dispersion widens as 10Y Treasury yields reward high FCF/EV and low Forward P/E constituents';
+  const leadMeta = h1?.source ? `${h1.source}${h1.timeAgo ? ` · ${h1.timeAgo}` : ''}` : 'NY Equity Desk';
   const secondHeadline =
-    eq?.noteworthyHeadlines[1]?.title ||
-    eq?.noteworthyHeadlines[1]?.headline ||
+    h2?.title ||
+    h2?.headline ||
     'Corporate share buyback authorizations and NTM EPS revisions support S&P 500 value and cash-flow leaders';
+  const secondMeta = h2?.source ? `${h2.source}${h2.timeAgo ? ` · ${h2.timeAgo}` : ''}` : 'US Markets Feed';
 
-  const regimeBadge = `S&P 500 ${spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} · FWD P/E ${spxFwdPe.toFixed(1)}x (E/P ${spxEy.toFixed(2)}%) · ERP ${erpBps >= 0 ? `+${erpBps}` : erpBps} BPS VS 10Y UST`;
-  const conviction = 'Overweight High FCF/EV & Low Forward P/E Value · Quality Cash-Return Barbell vs Cap-Weighted Index';
+  const regimeBadge = `S&P 500 ${spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(spxPct)}) · FWD P/E ${spxFwdPe.toFixed(1)}x · ERP ${erpBps >= 0 ? `+${erpBps}` : erpBps} BPS`;
+
+  const conviction = `Overweight Top FCF/EV (${fcfLeader?.ticker || 'APA'} ${(fcfLeader?.fcfToEvPct ?? 12.7).toFixed(1)}%, ${fcfSecond?.ticker || 'DVN'} ${(fcfSecond?.fcfToEvPct ?? 11.8).toFixed(1)}%) & Low Fwd P/E (${peLeader?.ticker || 'GM'} ${(peLeader?.forwardPe ?? 6.7).toFixed(1)}x) vs ${spxFwdPe.toFixed(1)}x Index`;
 
   const synthesis =
-    `With the S&P 500 Index trading at ${spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${spxPct >= 0 ? '+' : ''}${spxPct.toFixed(2)}%) on a ${spxFwdPe.toFixed(1)}x consensus NTM Forward P/E ` +
-    `(implied Forward Earnings Yield of ${spxEy.toFixed(2)}% vs the ${ust10Y.toFixed(2)}% 10-Year US Treasury risk-free rate, compressing the aggregate Equity Risk Premium to ${erpBps} bps), ` +
-    `factor dispersion across the S&P 500 offers substantial valuation alpha outside mega-cap growth. ` +
-    `Our live three-factor screen highlights deep earnings value led by ${peLeader?.ticker || 'GM'} (${(peLeader?.forwardPe ?? 6.8).toFixed(2)}x Forward P/E, ${(peLeader?.earningsYieldPct ?? 14.7).toFixed(1)}% E/P), ` +
-    `unlevered cash-return leadership in ${fcfLeader?.ticker || 'DVN'} (${(fcfLeader?.fcfToEvPct ?? 12.8).toFixed(2)}% FCF/EV yield), ` +
-    `and FCF-covered cash income anchored by ${divLeader?.ticker || 'MO'} (${(divLeader?.dividendYieldPct ?? 7.4).toFixed(2)}% Dividend/Price yield). ` +
-    `Lead US equity catalyst: "${leadHeadline}".`;
+    `[${sessionDateStr} NY Equity Desk] With the S&P 500 at ${spx.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(spxPct)} 1D) on a ${spxFwdPe.toFixed(1)}x consensus NTM Forward P/E ` +
+    `(implied Forward Earnings Yield of ${spxEy.toFixed(2)}% vs the ${ust10Y.toFixed(2)}% 10Y US Treasury yield [${fmtBps(ust10YChg)} 1D], placing the Equity Risk Premium at ${erpBps >= 0 ? `+${erpBps}` : erpBps} bps), ` +
+    `cross-sectional valuation dispersion strongly favors cash-generative value constituents. ` +
+    `Today's live screen is led in Forward P/E by ${peLeader?.ticker || 'GM'} ($${(peLeader?.price ?? 86.16).toFixed(2)}, ${fmtPct(peLeader?.changePct)}, ${(peLeader?.forwardPe ?? 6.73).toFixed(2)}x Fwd P/E / ${(peLeader?.earningsYieldPct ?? 14.86).toFixed(1)}% E/P) and ${peSecond?.ticker || 'SYF'} (${(peSecond?.forwardPe ?? 7.45).toFixed(2)}x), ` +
+    `in Enterprise Cash Return by ${fcfLeader?.ticker || 'APA'} (${(fcfLeader?.fcfToEvPct ?? 12.69).toFixed(2)}% FCF/EV) and ${fcfSecond?.ticker || 'DVN'} (${(fcfSecond?.fcfToEvPct ?? 11.75).toFixed(2)}% FCF/EV), ` +
+    `and in FCF-covered Dividend Yield by ${divLeader?.ticker || 'PFG'} (${(divLeader?.dividendYieldPct ?? 6.15).toFixed(2)}% Div/Price). ` +
+    `Key US equity catalysts: (1) "${leadHeadline}" (${leadMeta}); and (2) "${secondHeadline}" (${secondMeta}).`;
 
   const positioningTakeaway =
-    `When 10Y US Treasury yields sit near ${ust10Y.toFixed(2)}% and aggregate S&P 500 ERP is ${erpBps} bps, rotate marginal equity exposure toward the Top 10 FCF/EV (>9%–13% cash yield) ` +
-    `and Top 10 Forward P/E (6.5x–9.5x NTM EPS) baskets, which provide +450 to +900 bps of positive earnings/cash-flow carry over risk-free Treasuries.`;
+    `As of ${sessionDateStr}, with 10Y UST at ${ust10Y.toFixed(2)}% (${fmtBps(ust10YChg)} 1D) and cap-weighted S&P 500 ERP at ${erpBps >= 0 ? `+${erpBps}` : erpBps} bps, rotate marginal equity exposure toward the Top 10 FCF/EV (${(fcfLeader?.fcfToEvPct ?? 12.7).toFixed(1)}% lead cash yield) ` +
+    `and Top 10 Forward P/E (${(peLeader?.forwardPe ?? 6.7).toFixed(2)}x lead NTM multiple) baskets—capturing +450 to +900 bps of cash-flow carry over Treasuries amid "${truncateHeadline(leadHeadline, 68)}".`;
 
   const criticalLevels = [
     {
@@ -771,6 +919,7 @@ export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonC
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · US EQUITIES (S&P 500) VALUATION, ERP & FACTOR SYNTHESIS',
     regimeBadge,
+    updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
@@ -781,7 +930,9 @@ export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonC
 
 export function buildIndonesiaLocalNewsArgonCommentary(snap: DailyMacroSnapshot): ArgonCommentary {
   const sgtNow = getSgtReferenceDate(snap);
+  const updatedAtSGT = snap.indonesiaLocalNews?.asOfDate || resolveUpdatedSGT(snap, sgtNow);
   const todayBiz = snapToBusinessDay(sgtNow);
+  const sessionDateStr = formatSgtDate(todayBiz);
   const nextFri = getNextWeekdaySgt(todayBiz, 5, true);
   const biRdgDate = getNextMonthlyDaySgt(todayBiz, 18);
 
@@ -790,84 +941,109 @@ export function buildIndonesiaLocalNewsArgonCommentary(snap: DailyMacroSnapshot)
   const bonds = snap.indonesia.bonds;
 
   const spot = fx.spotRate ?? 18070;
+  const spotPct = fx.spotChangePct ?? 0.0;
   const jisdor = fx.jisdorRate ?? 18059;
   const ihsg = fx.ihsgIndex.level ?? 5075.13;
+  const ihsgPct = fx.ihsgIndex.changePct ?? 0.0;
   const indo10Y = bonds.indoGB.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.55;
   const srbi12M =
     bonds.srbi.find((s) => s.tenor === '12M')?.weightedAvgYield ??
     bonds.srbi.find((s) => s.tenor === '12M')?.cutOffYield ??
     6.675;
 
+  const imp1 = loc?.topImportant?.[0];
+  const imp2 = loc?.topImportant?.[1];
+  const imp3 = loc?.topImportant?.[2];
+  const read1 = loc?.topRead?.[0];
+  const read2 = loc?.topRead?.[1];
+
   const leadImp =
-    loc?.topImportant?.[0]?.titleEn ||
-    'Bank Indonesia Disburses IDR 149.3 T of Liquidity to Support MSMEs and Housing';
+    imp1?.titleEn ||
+    'IDX (BEI) Releases List of 383 HSC Shares Excluded from IHSG Ahead of MSCI Review';
+  const leadImpMeta = imp1 ? `${imp1.source} · ${imp1.timeAgo}` : 'Onshore Feed';
+  const secondImp =
+    imp2?.titleEn ||
+    'MSCI November 2026 Rebalancing Reshapes Foreign Index Weights Across IDX Constituents';
+  const thirdImp =
+    imp3?.titleEn ||
+    'Executive and Parliamentary Policy Coordination Anchors Fiscal and Financial Stability';
+
   const leadRead =
-    loc?.topRead?.[0]?.titleEn ||
-    "Dynamics of MK and Supreme Court Decisions Behind VP Gibran's Intention to Resign";
+    read1?.titleEn ||
+    'IHSG (JCI) Consolidates as Foreign Institutional Investors Accumulate 10 Liquid Blue-Chip Shares';
+  const leadReadMeta = read1 ? `${read1.source} · ${read1.timeAgo}` : 'Terpopuler Feed';
+  const secondRead =
+    read2?.titleEn ||
+    'Domestic Political, Regulatory & Industrial Developments Dominate Onshore Readership';
+
+  const leadImpImpact =
+    imp1?.marketSignificance ||
+    `Shapes institutional positioning across IHSG (${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}) and 10Y FR0108 (${indo10Y.toFixed(2)}%).`;
+
+  const conviction = `Focus on #1 Macro Catalyst (${imp1?.category || 'Capital Markets'}) & Liquid LQ45 · Fade Headline Noise via 10Y FR0108 (${indo10Y.toFixed(2)}%) & 12M SRBI (${srbi12M.toFixed(3)}%)`;
 
   return {
     modelLabel: 'GEMINI 4 ARGON',
     title: 'GEMINI 4 ARGON · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS',
     regimeBadge: `10 BAHASA PORTALS TRANSLATED · USD/IDR Rp ${spot.toLocaleString('en-US')} · IHSG ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-    conviction: 'Monitor IDX 300-HSC Free-Float Purge & DPR/MK Constitutional Headlines · Fade Noise via 5Y–10Y IndoGBs',
+    updatedAtSGT,
+    conviction,
     synthesis:
-      `Real-time Bahasa Indonesia media aggregation and English translation across 10 onshore portals (CNBC Indonesia, Kontan.co.id, Bisnis Indonesia, Kompas.com, detikFinance, Tempo.co, ANTARA News) ` +
-      `reveals a clear distinction between high-velocity domestic political readership and constructive underlying monetary/banking fundamentals. ` +
-      `On the Top 10 Most Important macro-policy board, onshore coverage is anchored by "${leadImp}", Bank Indonesia's Rp149.3T Macroprudential Liquidity Incentive (KLM) for MSMEs and housing, ` +
-      `BRI's Rp48.2T net profit, and the Indonesia Stock Exchange (IDX/BEI) removing 300 High Shareholder Concentration (HSC) issuers from IHSG (${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}) calculations ahead of the MSCI review. ` +
-      `On the Top 10 Most Read (Terpopuler) national board, readership is led by "${leadRead}" alongside DPR faction consultations and executive security inquiries — ` +
-      `yet onshore USD/IDR remains well-anchored at Rp ${spot.toLocaleString('en-US')} (JISDOR Rp ${jisdor.toLocaleString('en-US')}) and 10Y FR0108 IndoGBs trade at ${indo10Y.toFixed(2)}%.`,
+      `[${sessionDateStr} Onshore ID→EN Media Synthesis] Live Bahasa Indonesia aggregation and English translation across 10 onshore portals ` +
+      `is led on the Top 10 Most Important board by #1 "${leadImp}" (${leadImpMeta}), #2 "${secondImp}" (${imp2?.source || 'ID Portal'}), and #3 "${thirdImp}" (${imp3?.source || 'ID Portal'}). ` +
+      `Simultaneously, the Top 10 Most Read (Terpopuler) national board is topped by #1 "${leadRead}" (${leadReadMeta}) and #2 "${secondRead}" (${read2?.source || 'ID Portal'}). ` +
+      `Across onshore Jakarta markets, USD/IDR trades at Rp ${spot.toLocaleString('en-US')} (${fmtPct(spotPct)} 1D; JISDOR Rp ${jisdor.toLocaleString('en-US')}), IHSG sits at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)}), and 10Y FR0108 IndoGB yields ${indo10Y.toFixed(2)}% (12M SRBI ${srbi12M.toFixed(3)}% WAR).`,
     positioningTakeaway:
-      `Use the translated Bahasa Indonesia news feed to separate domestic political headline velocity from structural market-structure reforms: ` +
-      `the IDX 300-issuer HSC free-float cleanup and Bank Indonesia's Rp149.3T KLM liquidity support constructive positioning in liquid LQ45 banks (BRI Rp48.2T profit) and 5Y–10Y IndoGBs (FR0109/FR0108 at ${indo10Y.toFixed(2)}%).`,
+      `As of ${sessionDateStr}, separate high-velocity domestic readership ("${truncateHeadline(leadRead, 62)}") from institutional market drivers led by "${truncateHeadline(leadImp, 68)}". ` +
+      `Desk impact: ${leadImpImpact}`,
     criticalLevels: [
       {
-        asset: 'IHSG (JCI) & LQ45 Free-Float',
-        current: ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        support: '5,000.00',
-        resistance: '5,165.00',
-        implication: 'Removal of 300 HSC stocks reduces speculative index distortion and strengthens MSCI EM investability weight.',
+        asset: 'IHSG (JCI) & LQ45 Liquidity',
+        current: `${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)})`,
+        support: Math.round(ihsg * 0.98).toLocaleString('en-US'),
+        resistance: Math.round(ihsg * 1.02).toLocaleString('en-US'),
+        implication: 'IDX free-float reforms and MSCI rebalancing concentrate institutional flows into liquid big-cap banks.',
       },
       {
-        asset: 'BI KLM Liquidity & 12M SRBI',
-        current: `Rp149.3T KLM · ${srbi12M.toFixed(3)}% WAR`,
+        asset: '12M SRBI & BI Policy Rate',
+        current: `${srbi12M.toFixed(3)}% WAR · 5.75% BI`,
         support: '5.75% BI-Rate',
         resistance: '6.80% SRBI Cap',
-        implication: 'Targeted Rp149.3T KLM incentives support bank loan growth while 12M SRBI defends Rupiah carry.',
+        implication: `12M SRBI at ${srbi12M.toFixed(3)}% WAR and BI triple-intervention defend onshore Rupiah carry.`,
       },
       {
         asset: 'USD/IDR Spot & JISDOR',
         current: `Rp ${spot.toLocaleString('en-US')} (JISDOR ${jisdor.toLocaleString('en-US')})`,
         support: `Rp ${(spot - 120).toLocaleString('en-US')}`,
         resistance: `Rp ${(spot + 150).toLocaleString('en-US')}`,
-        implication: 'Orderly onshore FX trading despite high-readership DPR/MK political headlines confirms KSSK and BI credibility.',
+        implication: 'BI DNDF and spot intervention smooth external Fed/DXY volatility and domestic political headline noise.',
       },
       {
         asset: '10Y IndoGB (FR0108)',
         current: `${indo10Y.toFixed(2)}%`,
-        support: '7.45%',
-        resistance: '7.85%',
-        implication: 'Domestic bank and pension demand absorbs APBN fiscal issuance whenever 10Y FR0108 approaches 7.75%–7.85%.',
+        support: `${(indo10Y - 0.15).toFixed(2)}%`,
+        resistance: `${(indo10Y + 0.18).toFixed(2)}%`,
+        implication: `Domestic bank and pension demand anchors 10Y FR0108 whenever yields approach ${(indo10Y + 0.15).toFixed(2)}%.`,
       },
     ],
     eventsToWatch: [
       {
-        event: 'IDX (BEI) Effective Exclusion of 300 HSC Issuers & MSCI Index Review Cut-Off',
+        event: 'IDX (BEI) HSC Free-Float Exclusion & MSCI Index Rebalancing Implementation',
         timing: `${formatSgtDate(nextFri)} · 09:00 WIB (10:00 SGT)`,
         impact: 'Critical',
-        watchFor: `Passive and active institutional rebalancing out of High Shareholder Concentration (HSC) names into liquid LQ45/SOE (BUMN) constituents following "${truncateHeadline(leadImp, 78)}".`,
+        watchFor: `Passive and active institutional rotation into liquid LQ45 constituents following "${truncateHeadline(leadImp, 78)}".`,
       },
       {
-        event: 'DPR RI Leadership Consultation on HMP Inquiry & MK / MA Constitutional Rulings',
+        event: 'DPR RI Parliamentary Working Meetings & Executive Fiscal / Governance Updates',
         timing: `${formatSgtDate(todayBiz)} · 13:30 WIB (14:30 SGT)`,
         impact: 'High',
-        watchFor: `Whether parliamentary faction consultations on "${truncateHeadline(leadRead, 75)}" remain procedural without disrupting APBN fiscal execution or cabinet continuity.`,
+        watchFor: `Onshore market reaction to "${truncateHeadline(leadRead, 75)}" and APBN budget efficiency directives.`,
       },
       {
-        event: 'Bank Indonesia Rp149.3T KLM Liquidity Allocation & KSSK Quarterly Assessment',
+        event: 'Bank Indonesia Board of Governors (RDG) & KSSK Financial Stability Assessment',
         timing: `${formatSgtDate(biRdgDate)} · 14:20 WIB (15:20 SGT)`,
         impact: 'High',
-        watchFor: `Transmission of BI's Rp149.3T macroprudential liquidity incentives into SOE bank (BRI, Mandiri, BNI) credit growth and 10Y FR0108 (${indo10Y.toFixed(2)}%) demand.`,
+        watchFor: `BI liquidity incentives, USD/IDR JISDOR (Rp ${jisdor.toLocaleString('en-US')}) stability, and 10Y FR0108 (${indo10Y.toFixed(2)}%) auction demand.`,
       },
     ],
   };

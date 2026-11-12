@@ -147,8 +147,8 @@ export const IndiaTab: React.FC<IndiaTabProps> = ({
                   {commentary.title}
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400 bg-[#0e141d] px-2 py-0.5 border border-slate-700/80 rounded-xs">
-                {commentary.date}
+              <span className="text-[10px] font-mono text-sky-300 bg-[#0e141d] px-2 py-0.5 border border-sky-800/60 rounded-xs">
+                UPDATED: {lastUpdatedSGT || commentary.date}
               </span>
             </div>
 

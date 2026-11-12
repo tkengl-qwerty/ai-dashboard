@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArgonCommentary } from '../types/market';
-import { Cpu, Crosshair, CalendarClock, TrendingUp, ShieldAlert } from 'lucide-react';
+import { Cpu, Crosshair, CalendarClock, TrendingUp, ShieldAlert, Clock } from 'lucide-react';
 
 interface ArgonCommentaryBoxProps {
   commentary: ArgonCommentary;
@@ -11,6 +11,8 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
   commentary,
   lastUpdatedSGT,
 }) => {
+  const effectiveTimestamp = commentary.updatedAtSGT || lastUpdatedSGT;
+
   return (
     <section className="bg-gradient-to-b from-[#152030] to-[#111926] border border-blue-500/40 rounded-xs p-4 shadow-md">
       {/* Top Header Row */}
@@ -29,9 +31,9 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
           <span className="text-[10px] font-mono font-semibold text-sky-300 bg-[#0e141d] border border-sky-700/60 px-2 py-0.5 rounded-xs">
             {commentary.regimeBadge}
           </span>
-          {lastUpdatedSGT && (
+          {effectiveTimestamp && (
             <span className="text-[10px] font-mono text-slate-400 bg-[#0e141d] border border-slate-800 px-2 py-0.5 rounded-xs">
-              SYNC: {lastUpdatedSGT}
+              SYNC: {effectiveTimestamp}
             </span>
           )}
         </div>
@@ -40,13 +42,20 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
       {/* Executive Synthesis & Positioning Callout */}
       <div className="mt-3 grid grid-cols-1 lg:grid-cols-12 gap-3">
         <div className="lg:col-span-8 bg-[#0e141d]/90 border border-slate-800 p-3 rounded-xs">
-          <div className="flex items-center justify-between mb-1.5">
+          <div className="flex flex-wrap items-center justify-between gap-1.5 mb-2 pb-1.5 border-b border-slate-800/80">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">
               EXECUTIVE DESK SYNTHESIS ({commentary.modelLabel})
             </span>
-            <span className="text-[10px] font-mono text-slate-400">
-              LIVE TELEMETRY DERIVED
-            </span>
+            {effectiveTimestamp ? (
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2 py-0.5 rounded-xs">
+                <Clock className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                <span>UPDATED: {effectiveTimestamp}</span>
+              </span>
+            ) : (
+              <span className="text-[10px] font-mono text-slate-400">
+                LIVE TELEMETRY DERIVED
+              </span>
+            )}
           </div>
           <p className="text-xs text-slate-200 leading-relaxed font-sans">
             {commentary.synthesis}
@@ -55,9 +64,17 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
 
         <div className="lg:col-span-4 bg-blue-950/30 border border-blue-800/50 p-3 rounded-xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-blue-300 mb-1">
-              <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
-              <span>TACTICAL STANCE & POSITIONING</span>
+            <div className="flex flex-wrap items-center justify-between gap-1.5 mb-2 pb-1.5 border-b border-blue-800/40">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-blue-300">
+                <TrendingUp className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <span>TACTICAL STANCE & POSITIONING</span>
+              </div>
+              {effectiveTimestamp && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-sky-300 bg-sky-950/60 border border-sky-700/60 px-2 py-0.5 rounded-xs">
+                  <Clock className="w-2.5 h-2.5 text-sky-400 shrink-0" />
+                  <span>UPDATED: {effectiveTimestamp}</span>
+                </span>
+              )}
             </div>
             <div className="text-xs font-semibold text-sky-200 font-mono mb-1.5">
               {commentary.conviction}

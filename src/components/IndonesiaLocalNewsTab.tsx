@@ -556,6 +556,60 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
     });
   }, [enrichedRead, selectedCategory, searchQuery]);
 
+  const liveArgonCommentary = useMemo(() => {
+    if (!argonCommentary) return undefined;
+    const imp1 = enrichedImportant[0];
+    const imp2 = enrichedImportant[1];
+    const imp3 = enrichedImportant[2];
+    const read1 = enrichedRead[0];
+    const read2 = enrichedRead[1];
+
+    if (!imp1 && !read1) return argonCommentary;
+
+    const leadImp = imp1?.finalTitleEn || 'IDX (BEI) Releases List of 383 HSC Shares Excluded from IHSG Ahead of MSCI Review';
+    const leadImpMeta = imp1 ? `${imp1.item.source} · ${imp1.item.timeAgo}` : 'Onshore Feed';
+    const secondImp = imp2?.finalTitleEn || 'MSCI November 2026 Rebalancing Reshapes Foreign Index Weights Across IDX Constituents';
+    const thirdImp = imp3?.finalTitleEn || 'Executive and Parliamentary Policy Coordination Anchors Fiscal and Financial Stability';
+
+    const leadRead = read1?.finalTitleEn || 'IHSG (JCI) Consolidates as Foreign Institutional Investors Accumulate 10 Liquid Blue-Chip Shares';
+    const leadReadMeta = read1 ? `${read1.item.source} · ${read1.item.timeAgo}` : 'Terpopuler Feed';
+    const secondRead = read2?.finalTitleEn || 'Domestic Political, Regulatory & Industrial Developments Dominate Onshore Readership';
+
+    const spot = fxAndNdf.spotRate;
+    const spotPct = fxAndNdf.spotChangePct;
+    const jisdor = fxAndNdf.jisdorRate;
+    const ihsg = fxAndNdf.ihsgIndex.level;
+    const ihsgPct = fxAndNdf.ihsgIndex.changePct;
+    const fmtPct = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
+
+    return {
+      ...argonCommentary,
+      updatedAtSGT: lastUpdatedSGT || localNews.asOfDate || argonCommentary.updatedAtSGT,
+      conviction: `Focus on #1 Macro Catalyst (${imp1?.item.category || 'Capital Markets'}) & Liquid LQ45 · Fade Headline Noise via 10Y FR0108 (${indo10Y.toFixed(2)}%) & 12M SRBI (${srbi12M.toFixed(3)}%)`,
+      synthesis:
+        `Live Bahasa Indonesia aggregation and English translation across 10 onshore portals is led on the Top 10 Most Important board by ` +
+        `#1 "${leadImp}" (${leadImpMeta}), #2 "${secondImp}" (${imp2?.item.source || 'ID Portal'}), and #3 "${thirdImp}" (${imp3?.item.source || 'ID Portal'}). ` +
+        `Simultaneously, the Top 10 Most Read (Terpopuler) national board is topped by #1 "${leadRead}" (${leadReadMeta}) and #2 "${secondRead}" (${read2?.item.source || 'ID Portal'}). ` +
+        `Across onshore Jakarta markets, USD/IDR trades at Rp ${spot.toLocaleString('en-US')} (${fmtPct(spotPct)} 1D; JISDOR Rp ${jisdor.toLocaleString('en-US')}), IHSG sits at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)}), and 10Y FR0108 IndoGB yields ${indo10Y.toFixed(2)}% (12M SRBI ${srbi12M.toFixed(3)}% WAR).`,
+      positioningTakeaway:
+        `Separate high-velocity domestic readership ("${leadRead.slice(0, 62)}") from institutional market drivers led by "${leadImp.slice(0, 68)}". ` +
+        `Desk impact: ${imp1?.impactLine || argonCommentary.positioningTakeaway}`,
+    };
+  }, [
+    argonCommentary,
+    enrichedImportant,
+    enrichedRead,
+    fxAndNdf.spotRate,
+    fxAndNdf.spotChangePct,
+    fxAndNdf.jisdorRate,
+    fxAndNdf.ihsgIndex.level,
+    fxAndNdf.ihsgIndex.changePct,
+    indo10Y,
+    srbi12M,
+    lastUpdatedSGT,
+    localNews.asOfDate,
+  ]);
+
   return (
     <div className="space-y-4">
       {/* Top 6-Card Telemetry Bar for Indonesia Local-Language News & Translation Pipeline */}
@@ -623,10 +677,10 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
       </div>
 
       {/* Gemini 4 Argon · Indonesia Local-Language Media (ID→EN) & Political-Economic Synthesis */}
-      {argonCommentary && (
+      {liveArgonCommentary && (
         <ArgonCommentaryBox
-          commentary={argonCommentary}
-          lastUpdatedSGT={lastUpdatedSGT}
+          commentary={liveArgonCommentary}
+          lastUpdatedSGT={lastUpdatedSGT || localNews.asOfDate}
         />
       )}
 

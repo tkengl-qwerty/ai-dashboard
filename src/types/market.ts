@@ -437,6 +437,7 @@ export interface ArgonCommentary {
   modelLabel: string;
   title: string;
   regimeBadge: string;
+  updatedAtSGT?: string;
   conviction: string;
   synthesis: string;
   positioningTakeaway: string;
