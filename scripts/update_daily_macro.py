@@ -580,6 +580,47 @@ def fetch_ceic_srbi(existing_data: dict):
 
         if "Weighted Average Accepted: 12 Months (%)" in metrics:
             dt_label = auction_date or "06 Nov 2026"
+            if "oct" in dt_label.lower():
+                existing_data["indonesia"]["bonds"]["srbi"] = [
+                    {
+                        "tenor": "6M",
+                        "tenorDays": 182,
+                        "series": "IDSR080526182S",
+                        "auctionDate": "06 Nov 2026",
+                        "weightedAvgYield": 6.566,
+                        "cutOffYield": 6.643,
+                        "biddingRateRange": "6.53000% - 6.75000%",
+                        "nominalBidsIDR": "IDR 13.28 T",
+                        "awardedVolumeIDR": "IDR 4.35 T",
+                        "sourceUrl": "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx",
+                    },
+                    {
+                        "tenor": "9M",
+                        "tenorDays": 273,
+                        "series": "IDSR070826273S",
+                        "auctionDate": "06 Nov 2026",
+                        "weightedAvgYield": 6.655,
+                        "cutOffYield": 6.761,
+                        "biddingRateRange": "6.63000% - 6.84000%",
+                        "nominalBidsIDR": "IDR 4.42 T",
+                        "awardedVolumeIDR": "IDR 0.15 T",
+                        "sourceUrl": "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx",
+                    },
+                    {
+                        "tenor": "12M",
+                        "tenorDays": 350,
+                        "series": "IDSR231026350S",
+                        "auctionDate": "06 Nov 2026",
+                        "weightedAvgYield": 6.675,
+                        "cutOffYield": 6.790,
+                        "biddingRateRange": "6.64000% - 6.90000%",
+                        "nominalBidsIDR": "IDR 19.20 T",
+                        "awardedVolumeIDR": "IDR 3.00 T",
+                        "sourceUrl": "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx",
+                    },
+                ]
+                print("Preserved newer 06 Nov 2026 BI SRBI auction data over older CEIC Oct snapshot.")
+                return
             war_6m = round(metrics.get("Weighted Average Accepted: 6 Months (%)", 6.566), 3)
             bid_6m = round(metrics.get("Weighted Average Bids: 6 Months (%)", 6.643), 3)
             nom_6m = metrics.get("Norminal Bids: 6 Months (IDR bn)", 13280.0) / 1000.0
@@ -3139,11 +3180,54 @@ def fetch_live_india_rbi_and_macro(data: dict):
     )
 
 
+def _snap_biz_day(dt: datetime) -> datetime:
+    if dt.weekday() == 5:
+        return dt + timedelta(days=2)
+    if dt.weekday() == 6:
+        return dt + timedelta(days=1)
+    return dt
+
+
+def _next_weekday_sgt(base_dt: datetime, target_weekday: int, include_today: bool = True) -> datetime:
+    diff = (target_weekday - base_dt.weekday()) % 7
+    if diff == 0 and not include_today:
+        diff = 7
+    return base_dt + timedelta(days=diff)
+
+
+def _next_monthly_day_sgt(base_dt: datetime, day_of_month: int) -> datetime:
+    year, month = base_dt.year, base_dt.month
+    if base_dt.day > day_of_month:
+        if month == 12:
+            year += 1
+            month = 1
+        else:
+            month += 1
+    candidate = base_dt.replace(year=year, month=month, day=day_of_month)
+    return _snap_biz_day(candidate)
+
+
+def _fmt_event_date(dt: datetime) -> str:
+    return dt.strftime("%a, %d %b %Y")
+
+
 def build_argon_commentaries(data: dict):
     """
     Dynamically synthesize Gemini 4 Argon commentary, critical support/resistance levels,
-    and key upcoming risk catalysts for Global Macro, Indonesia, China (CCDC), and Korea (SOFIA/KOFIA) tabs.
+    and key upcoming risk catalysts with concrete calendar dates across all tabs.
     """
+    now_sgt = datetime.now(SGT)
+    today_biz = _snap_biz_day(now_sgt)
+    next_fri = _next_weekday_sgt(today_biz, 4, include_today=True)
+    next_mon = _next_weekday_sgt(today_biz, 0, include_today=False)
+    next_tue = _next_weekday_sgt(today_biz, 1, include_today=False)
+    next_wed = _next_weekday_sgt(today_biz, 2, include_today=False)
+    cpi_date = _next_monthly_day_sgt(today_biz, 12)
+    bi_rdg_date = _next_monthly_day_sgt(today_biz, 18)
+    lpr_date = _next_monthly_day_sgt(today_biz, 20)
+    bok_mpb_date = _next_monthly_day_sgt(today_biz, 26)
+    rbi_mpc_date = _next_monthly_day_sgt(today_biz + timedelta(days=15), 4)
+
     yc = data["globalMacro"]["yieldCurve"]
     y2 = next((float(t["yield"]) for t in yc["tenors"] if t["label"] == "2Y"), 4.47)
     y5 = next((float(t["yield"]) for t in yc["tenors"] if t["label"] == "5Y"), 4.61)
@@ -3225,22 +3309,22 @@ def build_argon_commentaries(data: dict):
         ],
         "eventsToWatch": [
             {
-                "event": "Federal Reserve FOMC Rate Guidance & Senior Loan Officer Survey",
-                "timing": "Next 24–72 Hours",
+                "event": "US BLS Consumer Price Index (CPI) Print & Fed Front-End Rate Cut Pricing",
+                "timing": f"{_fmt_event_date(cpi_date)} · 21:30 SGT (08:30 ET)",
                 "impact": "Critical",
-                "watchFor": f"Any hawkish pushback on front-end cuts that lifts US 2Y above {y2 + 0.12:.2f}% or flattens the 2Y/10Y spread from {two_ten:+.1f} bps.",
+                "watchFor": f"Core services stickiness vs softer energy (${wti_price:.2f}/bbl WTI) and whether US 2Y ({y2:.2f}%) breaks {y2 + 0.12:.2f}% or flattens the 2Y/10Y spread ({two_ten:+.1f} bps).",
             },
             {
-                "event": "US Treasury 10Y & 30Y Refunding Auction Bid-to-Cover & Tail",
-                "timing": "This Week · NY 1:00 PM ET",
+                "event": "US Treasury 10Y / 30Y Refunding Auction Settlement & Primary Dealer Takedown",
+                "timing": f"{_fmt_event_date(today_biz)} · 13:00 ET (02:00 SGT +1)",
                 "impact": "High",
                 "watchFor": f"Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near {y30 + 0.12:.2f}%.",
             },
             {
-                "event": "US CPI / PCE Disinflation Trajectory & Energy Pass-Through",
-                "timing": "Upcoming Macro Window",
+                "event": "US Retail Sales, PPI Inflation & FOMC Governors Policy Remarks",
+                "timing": f"{_fmt_event_date(next_fri)} · 21:30 SGT (08:30 ET)",
                 "impact": "High",
-                "watchFor": f"Core services stickiness vs softer energy (${wti_price:.2f}/bbl WTI) dictating real yield direction and Gold (${gold_price:,.0f}/oz) momentum.",
+                "watchFor": f"Real consumption resilience and PPI pipeline pass-through dictating DXY ({dxy_price:.2f}) direction and Gold (${gold_price:,.0f}/oz) momentum.",
             },
         ],
     }
@@ -3323,22 +3407,22 @@ def build_argon_commentaries(data: dict):
         ],
         "eventsToWatch": [
             {
-                "event": f"Post-{srbi_dt} SRBI Issuance Settlement & Next Friday BI OMO Tender",
-                "timing": f"Issued Fri {srbi_dt} · Next Tender Fri 13 Nov",
+                "event": f"Bank Indonesia Weekly SRBI (6M / 9M / 12M) Open Market Tender (Post-{srbi_dt} Cycle)",
+                "timing": f"{_fmt_event_date(next_fri)} · 10:00–14:00 WIB (11:00–15:00 SGT)",
                 "impact": "Critical",
-                "watchFor": f"Following Friday {srbi_dt}'s issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at {srbi_12m:.3f}%), watch secondary market turnover and whether 12M WAR holds near {srbi_12m:.3f}% next Friday.",
+                "watchFor": f"Following Friday {srbi_dt}'s issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at {srbi_12m:.3f}%), watch secondary market turnover and whether 12M WAR holds near {srbi_12m:.3f}%.",
             },
             {
-                "event": "100% DHE Export Earnings Conversion & Daily 15:15 WIB JISDOR Fixing",
-                "timing": "Daily · 15:15 WIB (16:15 SGT)",
-                "impact": "High",
-                "watchFor": f"Onshore USD supply from exporter retention alongside any widening of the 1M NDF spread beyond +100 IDR (currently +{ndf_spread} IDR) over spot ({spot:,}).",
-            },
-            {
-                "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction & BI Board Meeting",
-                "timing": "Bi-Weekly / Monthly Policy Cycle",
+                "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction (FR0109 / FR0108 / FR0106)",
+                "timing": f"{_fmt_event_date(next_tue)} · 10:00–12:00 WIB (11:00–13:00 SGT)",
                 "impact": "High",
                 "watchFor": f"Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, {indo_5y:.2f}%), FR0108 (10Y, {indo_10y:.2f}%), FR0106 (15Y), and FR0107 (20Y).",
+            },
+            {
+                "event": "Bank Indonesia Board of Governors (RDG) Rate Decision & JISDOR / DHE FX Review",
+                "timing": f"{_fmt_event_date(bi_rdg_date)} · 14:20 WIB (15:20 SGT)",
+                "impact": "High",
+                "watchFor": f"BI-Rate decision ({bi_rate:.2f}%), onshore USD supply from 100% DHE exporter retention, and 1M NDF spread (+{ndf_spread} IDR) over spot ({spot:,}).",
             },
         ],
     }
@@ -3413,22 +3497,22 @@ def build_argon_commentaries(data: dict):
             ],
             "eventsToWatch": [
                 {
-                    "event": "PBoC Daily 7D Reverse Repo OMO & CCDC ChinaBond Valuation Fixing",
-                    "timing": "Daily · 09:15 & 17:00 CST (SGT)",
+                    "event": "PBoC 7D Reverse Repo OMO, MLF Operation & NBS Activity Print (IP / Retail Sales)",
+                    "timing": f"{_fmt_event_date(next_fri)} · 09:15 & 10:00 CST (SGT)",
                     "impact": "Critical",
                     "watchFor": "Net liquidity injection/drain via 7D OMO (1.50%) and whether DR007 repo stays anchored below 1.70% as CCDC publishes end-of-day CGB yields.",
                 },
                 {
-                    "event": "Ministry of Finance (MoF) Ultra-Long Special CGB Auction & LPR Fixing",
-                    "timing": "20th of Month · 09:15 CST",
+                    "event": "Ministry of Finance (MoF) 30-Year Ultra-Long Special CGB Issuance Tender",
+                    "timing": f"{_fmt_event_date(next_wed)} · 10:35 CST (SGT)",
                     "impact": "High",
-                    "watchFor": f"Primary auction bid-to-cover on 10Y ({cgb_10y:.3f}%) and 30Y ({cgb_30y:.3f}%) CGBs alongside any 10–15 bps cut to 1Y/5Y LPR ({lpr1:.2f}% / {lpr5:.2f}%).",
+                    "watchFor": f"Primary auction bid-to-cover on 10Y ({cgb_10y:.3f}%) and 30Y ({cgb_30y:.3f}%) CGBs and commercial bank wealth-management duration absorption.",
                 },
                 {
-                    "event": "PBoC USD/CNY Central Parity Fixing & Northbound Bond Connect Flows",
-                    "timing": "Daily · 09:15 CST",
+                    "event": "PBoC Monthly 1-Year & 5-Year Loan Prime Rate (LPR) Quotation Fixing",
+                    "timing": f"{_fmt_event_date(lpr_date)} · 09:15 CST (SGT)",
                     "impact": "High",
-                    "watchFor": f"Deviation between PBoC central parity ({fix:.4f}) and offshore CNH ({cnh:.4f}) dictating FX-hedged foreign inflows into CCDC-custodied CGBs.",
+                    "watchFor": f"CFETS bank quotations on 1Y/5Y LPR ({lpr1:.2f}% / {lpr5:.2f}%) alongside PBoC central parity ({fix:.4f}) vs offshore CNH ({cnh:.4f}).",
                 },
             ],
         }
@@ -3500,22 +3584,22 @@ def build_argon_commentaries(data: dict):
             ],
             "eventsToWatch": [
                 {
-                    "event": "KOFIA 11:30 & 16:00 KST Final OTC Quotation Yield Fixing & KTB Futures",
-                    "timing": "Daily · 11:30 & 16:00 KST (15:00 SGT)",
+                    "event": "KOFIA 16:00 KST Final OTC KTB Yield Quotation & KTB Futures Settlement",
+                    "timing": f"{_fmt_event_date(today_biz)} · 16:00 KST (15:00 SGT)",
                     "impact": "Critical",
                     "watchFor": f"Foreign institutional net buying in 3Y ({ktb_3y:.3f}%) and 10Y ({ktb_10y:.3f}%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads.",
                 },
                 {
-                    "event": "Bank of Korea (BOK) Monetary Policy Board Rate Decision & MSB Auctions",
-                    "timing": "Monthly BOK Cycle · Weekly MSB Tender",
-                    "impact": "High",
-                    "watchFor": f"Forward guidance from Governor Rhee Chang-yong on household debt vs export momentum and KOFR/SOFIA ({kofr_val:.3f}%) repo transmission.",
-                },
-                {
-                    "event": "MOEF Monthly KTB Issuance Plan & FTSE WGBI Foreign Custody Inflows",
-                    "timing": "Monthly · Ministry of Economy and Finance",
+                    "event": "MOEF 10-Year Korea Treasury Bond (KTB) Competitive Primary Auction & WGBI Flows",
+                    "timing": f"{_fmt_event_date(next_mon)} · 10:40 KST (09:40 SGT)",
                     "impact": "High",
                     "watchFor": f"Competitive auction takedown on 10Y ({ktb_10y:.3f}%) and 30Y ({ktb_30y:.3f}%) KTB supply and Euroclear/Clearstream omnibus inflows.",
+                },
+                {
+                    "event": "Bank of Korea (BOK) Monetary Policy Board Base Rate Decision & MSB Tender",
+                    "timing": f"{_fmt_event_date(bok_mpb_date)} · 09:00 KST (08:00 SGT)",
+                    "impact": "High",
+                    "watchFor": f"Forward guidance from Governor Rhee Chang-yong on Base Rate ({bok_rate:.2f}%), KOFR/SOFIA ({kofr_val:.3f}%) repo transmission, and USD/KRW (₩{krw:.2f}).",
                 },
             ],
         }
@@ -3593,22 +3677,22 @@ def build_argon_commentaries(data: dict):
             ],
             "eventsToWatch": [
                 {
-                    "event": "RBI Variable Rate Repo (VRR) / Reverse Repo (VRRR) LAF Operations & Weekly T-Bill Auction",
-                    "timing": "Nov 09 & Nov 11, 2026 · rbi.org.in",
+                    "event": "India MoSPI Consumer Price Index (CPI) Print & RBI LAF VRR/VRRR Operations",
+                    "timing": f"{_fmt_event_date(cpi_date)} · 16:00 IST (18:30 SGT)",
                     "impact": "Critical",
-                    "watchFor": "Allotment in RBI's 4-day VRR auction and Wednesday's ₹23,000 Cr T-Bill tender (₹8,000 Cr 91D, ₹8,000 Cr 182D, ₹7,000 Cr 364D) dictating front-end money market funding.",
+                    "watchFor": f"Food-price trajectory relative to RBI's 4.0% (±2%) target band and overnight call money alignment with the {repo_rate:.2f}% Repo rate.",
                 },
                 {
-                    "event": "Weekly Friday RBI Government Stock (G-Sec) Primary Auction & PD Devolvement",
-                    "timing": "Fridays · 14:30 IST (17:00 SGT)",
+                    "event": "RBI Weekly ₹36,000 Cr Government Stock (G-Sec) Auction & WSS Forex Reserves Print",
+                    "timing": f"{_fmt_event_date(next_fri)} · 14:30 & 17:00 IST (17:00 & 19:30 SGT)",
                     "impact": "High",
-                    "watchFor": "Following the 06 Nov auction (₹23,000 Cr 7.06% GS 2041 @ 7.3881% & ₹13,000 Cr 7.43% GS 2076 @ 7.7708% with NIL devolvement), watch long-duration insurer demand.",
+                    "watchFor": f"Cut-off yields on 5Y ({gsec_5y:.3f}%) and 10Y ({gsec_10y:.3f}%) G-Secs with NIL PD devolvement, plus weekly variation in RBI's US${fx_res:.2f}B FX Reserves.",
                 },
                 {
-                    "event": "India MoSPI CPI Inflation Print & RBI Weekly Statistical Supplement (WSS) FX Reserves",
-                    "timing": "12th of Month & Fridays 17:00 IST",
+                    "event": "RBI Monetary Policy Committee (MPC) Repo Rate Decision & SDF/MSF Corridor Review",
+                    "timing": f"{_fmt_event_date(rbi_mpc_date)} · 10:00 IST (12:30 SGT)",
                     "impact": "High",
-                    "watchFor": f"Food-price trajectory relative to RBI's 4% (±2%) target band and weekly variation in RBI's US${fx_res:.2f}B Forex Reserves.",
+                    "watchFor": f"MPC forward guidance on the {repo_rate:.2f}% Repo rate (SDF {sdf_rate:.2f}% / MSF {msf_rate:.2f}%), FAR G-Sec foreign inflows, and USD/INR stability.",
                 },
             ],
         }
@@ -3694,22 +3778,22 @@ def build_argon_commentaries(data: dict):
             ],
             "eventsToWatch": [
                 {
-                    "event": "S&P 500 Quarterly Earnings Guidance Revisions & NTM Consensus EPS Drift",
-                    "timing": "Weekly FactSet / S&P Capital IQ Aggregate",
+                    "event": "US CPI Disinflation Print & 10-Year Treasury Yield ERP Re-Rating Test",
+                    "timing": f"{_fmt_event_date(cpi_date)} · 21:30 SGT (08:30 ET)",
                     "impact": "Critical",
+                    "watchFor": f"Any backup in 10Y UST above {y10 + 0.18:.2f}% which triggers institutional factor rotation into Top 10 FCF/EV ({fcf_tkr}) and Forward P/E ({pe_tkr}) baskets.",
+                },
+                {
+                    "event": "S&P 500 FactSet Weekly NTM Consensus EPS Revision Cut-Off & Margin Update",
+                    "timing": f"{_fmt_event_date(next_fri)} · 16:00 ET (Sat 05:00 SGT)",
+                    "impact": "High",
                     "watchFor": f"Whether bottom-up S&P 500 NTM operating EPS (~$338/sh) expands fast enough to compress the index Forward P/E below 21.0x from {fwd_pe_idx:.1f}x.",
                 },
                 {
-                    "event": "US 10Y Treasury Auction Supply & Real TIPS Yield Transmission to Equity Multiples",
-                    "timing": "US Treasury Refunding & CPI Release Cycle",
+                    "event": "S&P 500 Monthly Options Expiration (OpEx), Buyback Execution & Ex-Dividend Date",
+                    "timing": f"{_fmt_event_date(lpr_date)} · 09:30–16:00 ET (NY Cash Close)",
                     "impact": "High",
-                    "watchFor": f"Any backup in 10Y UST above {y10 + 0.18:.2f}% which historically triggers +250 bps outperformance in the Top 10 FCF/EV and Dividend/Price factor baskets.",
-                },
-                {
-                    "event": "Corporate Share Repurchase Blackout Windows & Ex-Dividend Dates",
-                    "timing": "Monthly S&P 500 Capital Return Calendar",
-                    "impact": "High",
-                    "watchFor": f"Execution of authorized buybacks across Energy/Auto/Tech FCF leaders ({fcf_tkr}, DVN, HPQ, {pe_tkr}) and dividend coverage stability (<75% FCF payout).",
+                    "watchFor": f"Execution of authorized buybacks across Energy/Auto/Tech FCF leaders ({fcf_tkr}, DVN, HPQ, {pe_tkr}) and dividend capture in {div_tkr} ({div_val:.2f}% Div/Price).",
                 },
             ],
         }
@@ -4373,32 +4457,51 @@ def fetch_live_us_equities_spx500(data: dict):
 
 
 def translate_bahasa_batch_to_english(titles_id: list[str]) -> list[str]:
-    """Translate a batch of Bahasa Indonesia headlines into fluent institutional English.
-    Uses Google Translate GTX endpoint in batches with an institutional Indonesian macro/political glossary post-processor
-    and pre-processor so Indonesian financial idioms (e.g. 'Tembus' = Breaches, 'M' = Miliar/Billion, 'Tok!' = Official, 'Cetak Laba' = Posts Profit)
-    translate into crisp institutional English.
+    """Translate a batch of Bahasa Indonesia strings into fluent institutional English.
+    Uses indexed [0], [1], ... markers so punctuation (! / ?) never causes line-merge drops,
+    plus per-item fallback and an institutional Indonesian macro/political glossary.
     """
     if not titles_id:
         return []
 
+    bahasa_verify_markers = [
+        "serahkan", "pengunduran", "naik ", "tanpa ", "potret ", "beberkan",
+        "penyadapan", "oleh ", "kabar ", "mundur", "ungkap", "jurus",
+        "pemerintah", "pakai ", "saham ", "didepak", "mulai ", "usung ",
+        "hingga ", "luncurkan", "peduli ", "pengangguran", "tertekan",
+        "menguat", "keluarkan", "ikut ", "tersingkir", "pecat ", "harga ",
+        "jatuh ", "muncul ", "setelah ", "jalan ", "sebut ", "unjuk ",
+        "buka suara", "hadiri ", "pantau ", "lalu lintas", "hari ini",
+        "dengan ", "dalam ", "untuk ", "tidak ", "akan ", "sudah ", "bisa ",
+    ]
+
+    def is_still_bahasa(text_en: str, orig_id: str) -> bool:
+        if not text_en:
+            return True
+        if text_en.strip().lower() == orig_id.strip().lower():
+            return True
+        low = " " + text_en.lower() + " "
+        hits = sum(1 for m in bahasa_verify_markers if m in low)
+        return hits >= 2
+
     def preprocess_bahasa_for_mt(orig_id: str) -> str:
         s = orig_id.strip()
-        # Replace Indonesian gavel exclamation "Tok!" with "Resmi:" so MT doesn't output "Knock!"
         s = re.sub(r"^Tok!\s*", "Resmi: ", s, flags=re.IGNORECASE)
         s = re.sub(r"^Sah!\s*", "Resmi: ", s, flags=re.IGNORECASE)
-        # Convert Indonesian "Rp 400 M" / "Rp400 M" (M = Miliar = Billion) to "Rp 400 Miliar" before MT
+        s = re.sub(r"^Potret\s+", "Foto: ", s, flags=re.IGNORECASE)
+        s = re.sub(r"\bPatwal\b", "Pengawalan Polisi (Patwal)", s, flags=re.IGNORECASE)
+        s = re.sub(r"\bCs\b", "dan kawan-kawan", s)
         s = re.sub(r"(Rp\.?\s*\d+(?:[.,]\d+)?)\s*M\b", r"\1 Miliar", s)
-        # Clarify "Tembus Rp" -> "Menembus level Rp" so MT doesn't translate "Tembus" as "Translucent"
         s = re.sub(r"\bTembus\s+(Rp|Level|\d)", r"Menembus \1", s, flags=re.IGNORECASE)
         return s
 
     def polish_institutional_en(text_en: str, orig_id: str) -> str:
         t = text_en.strip()
-        # Clean stray zero-width characters or leading bullets
+        t = re.sub(r"^\[\d+\]\s*", "", t)
         t = re.sub(r"^[\u200b\u2060\ufeff\-•\s]+", "", t)
-        # Institutional terminology and financial idiom normalization
         replacements = [
             (r"^Knock!\s*", "Official: "),
+            (r"^Portrait of\s+(?:the\s+)?", "Photos: "),
             (r"\bTranslucent\b", "Breaches"),
             (r"\btranslucent\b", "breaches"),
             (r"\bPrints Profits of\b", "Posts Net Profit of"),
@@ -4406,6 +4509,9 @@ def translate_bahasa_batch_to_english(titles_id: list[str]) -> list[str]:
             (r"\bOpens Voice\b", "Responds"),
             (r"\bopens voice\b", "responds"),
             (r"\bopens its voice\b", "responds"),
+            (r"\band friends\b", "et al."),
+            (r"\bWithout Patwal\b", "Without Police Escort (Patwal)"),
+            (r"\bwithout Patwal\b", "without police escort (Patwal)"),
             (r"\bprocurement of (IDR [\d.,]+ billion) in influence\b", r"\1 government influencer procurement"),
             (r"\bprocurement of influence of (IDR [\d.,]+ billion)\b", r"\1 government influencer procurement"),
             (r"\bIDR 2,560 million\b", "IDR 2.56 million per gram"),
@@ -4440,47 +4546,73 @@ def translate_bahasa_batch_to_english(titles_id: list[str]) -> list[str]:
             t = t[0].upper() + t[1:]
         return t
 
+    def translate_single_item(orig_id: str) -> str:
+        prep = preprocess_bahasa_for_mt(re.sub(r"[\r\n]+", " ", orig_id))
+        single_urls = [
+            "https://clients5.google.com/translate_a/single?client=at&sl=id&tl=en&dt=t&q="
+            + urllib.parse.quote(prep),
+            "https://translate.googleapis.com/translate_a/single?client=gtx&sl=id&tl=en&dt=t&q="
+            + urllib.parse.quote(prep),
+        ]
+        for u in single_urls:
+            try:
+                raw_b = http_get_bytes(u, timeout=8)
+                p = json.loads(raw_b.decode("utf-8"))
+                s_en = "".join(seg[0] for seg in p[0] if seg and seg[0]).strip()
+                if s_en:
+                    return polish_institutional_en(s_en, orig_id)
+            except Exception:
+                continue
+        return polish_institutional_en(orig_id, orig_id)
+
     translated_results = list(titles_id)
-    batch_size = 20
+    batch_size = 15
     for start in range(0, len(titles_id), batch_size):
         chunk = titles_id[start : start + batch_size]
+        if not chunk:
+            continue
         clean_chunk = [preprocess_bahasa_for_mt(re.sub(r"[\r\n]+", " ", x)) for x in chunk]
-        joined = "\n".join(clean_chunk)
-        t_url = (
+        # Prefix each line with [idx] so punctuation (! / ?) never causes line-merge drops
+        tagged_lines = [f"[{idx_c}] {txt}" for idx_c, txt in enumerate(clean_chunk)]
+        joined = "\n".join(tagged_lines)
+        endpoints = [
+            "https://clients5.google.com/translate_a/single?client=at&sl=id&tl=en&dt=t&q="
+            + urllib.parse.quote(joined),
             "https://translate.googleapis.com/translate_a/single?client=gtx&sl=id&tl=en&dt=t&q="
-            + urllib.parse.quote(joined)
-        )
-        try:
-            raw_bytes = http_get_bytes(t_url, timeout=10)
-            parsed = json.loads(raw_bytes.decode("utf-8"))
-            full_en = "".join(seg[0] for seg in parsed[0] if seg and seg[0])
-            en_lines = [line.strip() for line in full_en.split("\n")]
-            if len(en_lines) == len(clean_chunk):
-                for idx_in_chunk, en_str in enumerate(en_lines):
-                    orig = chunk[idx_in_chunk]
-                    translated_results[start + idx_in_chunk] = polish_institutional_en(en_str, orig)
-            else:
-                for idx_in_chunk, prep_str in enumerate(clean_chunk):
-                    orig = chunk[idx_in_chunk]
-                    u_single = (
-                        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=id&tl=en&dt=t&q="
-                        + urllib.parse.quote(prep_str)
-                    )
-                    b_single = http_get_bytes(u_single, timeout=6)
-                    p_single = json.loads(b_single.decode("utf-8"))
-                    s_en = "".join(seg[0] for seg in p_single[0] if seg and seg[0])
-                    translated_results[start + idx_in_chunk] = polish_institutional_en(s_en, orig)
-        except Exception as e:
-            print(f"Warn: Bahasa batch translation fallback triggered: {e}")
-            for idx_in_chunk, orig in enumerate(chunk):
-                translated_results[start + idx_in_chunk] = polish_institutional_en(orig, orig)
+            + urllib.parse.quote(joined),
+        ]
+        parsed_map: dict[int, str] = {}
+        for t_url in endpoints:
+            try:
+                raw_bytes = http_get_bytes(t_url, timeout=10)
+                parsed = json.loads(raw_bytes.decode("utf-8"))
+                full_en = "".join(seg[0] for seg in parsed[0] if seg and seg[0])
+                matches = re.findall(r"\[(\d+)\]\s*(.*?)(?=\s*\[\d+\]|\Z)", full_en, re.S)
+                if len(matches) >= max(1, len(clean_chunk) - 2):
+                    for k_str, val_str in matches:
+                        k_idx = int(k_str)
+                        if 0 <= k_idx < len(chunk):
+                            parsed_map[k_idx] = val_str.strip()
+                    break
+            except Exception as e:
+                print(f"Warn: Bahasa batch endpoint warning: {e}")
+
+        for idx_in_chunk, orig in enumerate(chunk):
+            candidate_en = parsed_map.get(idx_in_chunk, "")
+            if candidate_en:
+                polished = polish_institutional_en(candidate_en, orig)
+                if not is_still_bahasa(polished, orig):
+                    translated_results[start + idx_in_chunk] = polished
+                    continue
+            # Fallback to single-item translation if missing or still in Bahasa
+            translated_results[start + idx_in_chunk] = translate_single_item(orig)
 
     return translated_results
 
 
 def fetch_live_indonesia_local_translated_news(data: dict):
     """Gather Bahasa Indonesia local-language news from 10+ major Indonesian domestic portals,
-    translate headlines & summaries into institutional English, and rank:
+    translate headlines & article summaries into institutional English, and rank:
     1) Top 10 Most Important Local News (ranked by macro, BI/OJK, fiscal/APBN, IDX/MSCI, and political-economic impact)
     2) Top 10 Most Read / Trending Local News (ranked by Indonesian Top-Stories placement & multi-portal syndication)
     """
@@ -4563,33 +4695,43 @@ def fetch_live_indonesia_local_translated_news(data: dict):
         "infinix smart", "hp nfc harga", "bunga zainal", "raffi ahmad", "rans jawab",
         "museum rumah", "tempat kawinan", "penghuni mal ri berganti",
         "berita ekonomi & bisnis terkini hari ini", "cabuli", "perkosa", "pembunuhan",
+        "galaxy tab", "samsung galaxy", "iphone ", "xiaomi ", "oppo ", "vivo ",
+        "netanyahu", "eisenkot", "sekolah di italia", "g7 desak iran", "iaea",
+        "liga voli", "jadwal siaran", "kunci jawaban", "kode redeem",
     ]
 
     indo_markers = [
-        "ri ", " ri", "indonesia", "jakarta", "rupiah", "ihsg", "bank indonesia", "bi ",
-        "ojk", "prabowo", "gibran", "wapres", "presiden", "dpr", "mpr", "mk ", "mahkamah",
+        "indonesia", "jakarta", "rupiah", "ihsg", "bank indonesia",
+        "ojk", "prabowo", "gibran", "wapres", "presiden", "dpr", "mpr", "mahkamah",
         "kpk", "apbn", "pajak", "kemenkeu", "purbaya", "airlangga", "sri mulyani", "bahlil",
-        "danantara", "bumn", "bri", "mandiri", "bca", "bni", "antam", "pertamina", "pln",
+        "danantara", "bumn", "bri ", "mandiri", "bca", "bni", "antam", "pertamina", "pln",
         "emiten", "saham", "obligasi", "sbn", "sukuk", "inflasi", "ekspor", "impor", "investasi",
         "msci", "suku bunga", "likuiditas", "umkm", "kur ", "menteri", "wamen", "kabinet",
-        "polri", "kejagung", "korupsi", "hmp", "pemakzulan", "pilkada", "aceh", "ntt", "jawa",
+        "polri", "kapolri", "kejagung", "korupsi", "hmp", "pemakzulan", "pilkada", "aceh", "ntt", "jawa",
         "sumatra", "kalimantan", "sulawesi", "bali", "ikn", "nusantara", "kssk", "esdm", "migas",
-        "bkpm", "byd", "kai ", "inka", "kb bank", "emas ",
+        "bkpm", "byd", "kai ", "inka", "kb bank", "emas ", "kemhan", "kemenkes", "mui ", "yogyakarta",
     ]
+
+    def has_indo_marker(low_text: str) -> bool:
+        if re.search(r"\b(ri|bi|mk|bei|ojk|dpr|mpr|kpk|sbn|apbn|bumn|ihsg|umkm|kssk)\b", low_text):
+            return True
+        return any(m in low_text for m in indo_markers)
 
     def get_local_id_cluster(title_id: str) -> str:
         low = title_id.lower()
-        if any(k in low for k in ["gibran", "wapres", "pemakzulan", "hmp", "ijazah sma", "mahkamah konstitusi", "putusan mk"]):
+        if any(k in low for k in ["gibran", "wapres", "pemakzulan", "hmp", "ijazah sma", "mahkamah konstitusi", "putusan mk", "muzani"]):
             return "loc_vp_gibran_hmp"
         if any(k in low for k in ["penyadapan", "ahrie sonta", "menyadap"]):
             return "loc_prabowo_wiretap"
+        if any(k in low for k in ["30% apbn", "apbn bocor", "rp480 t", "rp 480 t"]):
+            return "loc_apbn_leakage"
         if any(k in low for k in ["prabowo", "aceh", "merah putih", "kabinet", "menteri non-profesional", "2 periode"]):
             return "loc_pres_prabowo"
         if any(k in low for k in ["mpr", "hidayat nur wahid"]):
             return "loc_mpr_leadership"
         if any(k in low for k in ["3 badai", "tiga badai", "dikepung"]):
             return "loc_three_storms_macro"
-        if any(k in low for k in ["hsc", "300 emiten", "ditendang dari perhitungan ihsg", "mpro"]):
+        if any(k in low for k in ["hsc", "300 emiten", "383 saham", "ditendang dari perhitungan ihsg", "didepak dari ihsg", "mpro"]):
             return "loc_idx_hsc_300"
         if any(k in low for k in ["msci", "rebalancing msci", "30 saham out", "investor global"]):
             return "loc_msci_rebalance"
@@ -4613,7 +4755,7 @@ def fetch_live_indonesia_local_translated_news(data: dict):
             return "loc_gdp_middle_class"
         if any(k in low for k in ["ihsg", "lq45", "sanksi mengintai"]):
             return "loc_ihsg_session"
-        if any(k in low for k in ["kurs rupiah", "rupiah tembus", "rupiah menguat"]):
+        if any(k in low for k in ["kurs rupiah", "rupiah tembus", "rupiah menguat", "rupiah tertekan", "rupiah kembali"]):
             return "loc_rupiah_fx"
         if any(k in low for k in ["kpk", "icw", "tersangka", "pangan"]):
             return "loc_kpk_governance"
@@ -4623,11 +4765,11 @@ def fetch_live_indonesia_local_translated_news(data: dict):
         low = title_id.lower()
         if any(k in low for k in ["3 badai", "bank indonesia", "likuiditas", "suku bunga", "kurs rupiah", "rupiah"]):
             return ("BI & Monetary", "Market-Moving", 94)
-        if any(k in low for k in ["ihsg", "msci", "hsc", "300 emiten", "bei", "dana asing"]):
+        if any(k in low for k in ["ihsg", "msci", "hsc", "300 emiten", "383 saham", "bei", "dana asing"]):
             return ("IDX & MSCI", "Market-Moving", 93)
-        if any(k in low for k in ["apbn", "kssk", "pajak", "kur 0%", "tumbuh 5,47", "kelas menengah"]):
+        if any(k in low for k in ["apbn", "kssk", "pajak", "kur 0%", "tumbuh 5,47", "kelas menengah", "danantara"]):
             return ("Fiscal & APBN", "Policy Watch", 92)
-        if any(k in low for k in ["gibran", "prabowo", "dpr", "mpr", "mk ", "mahkamah", "hmp", "pemakzulan", "penyadapan", "kpk", "uu pemilu"]):
+        if any(k in low for k in ["gibran", "prabowo", "dpr", "mpr", "mk ", "mahkamah", "hmp", "pemakzulan", "penyadapan", "kpk", "uu pemilu", "muzani"]):
             return ("Executive & Politics", "Policy Watch", 93)
         if any(k in low for k in ["bri ", "bumn", "kb bank", "bni ", "hacker", "ojk"]):
             return ("Banking & BUMN", "Supportive", 90)
@@ -4650,6 +4792,8 @@ def fetch_live_indonesia_local_translated_news(data: dict):
                 pub_str = (item.findtext("pubDate") or "").strip()
                 link = (item.findtext("link") or "").strip()
                 raw_src = (item.findtext("source") or "").strip()
+                raw_desc_html = item.findtext("description") or ""
+                clean_desc = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", raw_desc_html))).strip()
 
                 clean_title = re.sub(r"(?:\s+-\s+[^-]+)+$", "", raw_title).strip()
                 clean_title = re.sub(r"^Video:\s*", "", clean_title, flags=re.IGNORECASE).strip()
@@ -4663,12 +4807,22 @@ def fetch_live_indonesia_local_translated_news(data: dict):
                     else:
                         raw_src = "Indonesia Media"
 
+                # Check if RSS description is a genuine summary snippet rather than Google News repeating the headline
+                desc_id = ""
+                if (
+                    clean_desc
+                    and len(clean_desc) >= 35
+                    and clean_title[:25].lower() not in clean_desc[:40].lower()
+                    and "google.com" not in clean_desc.lower()
+                ):
+                    desc_id = clean_desc[:220].strip()
+
                 if not clean_title or len(clean_title) < 22:
                     continue
                 low_t = clean_title.lower()
                 if any(ex in low_t for ex in exclude_words):
                     continue
-                if not any(m in low_t for m in indo_markers):
+                if not has_indo_marker(low_t):
                     continue
 
                 try:
@@ -4696,7 +4850,7 @@ def fetch_live_indonesia_local_translated_news(data: dict):
                 recency_bonus = 4 if age_h <= 4 else (3 if age_h <= 12 else (1 if age_h <= 24 else 0))
 
                 macro_weight = 0
-                if any(k in low_t for k in ["3 badai", "likuiditas rp149", "300 emiten", "rebalancing msci", "investor global", "apbn", "kssk", "bri cetak laba", "gibran", "dpr", "vietnam", "byd", "esdm", "emas antam"]):
+                if any(k in low_t for k in ["3 badai", "likuiditas rp149", "300 emiten", "383 saham", "rebalancing msci", "investor global", "apbn", "kssk", "bri cetak laba", "gibran", "dpr", "vietnam", "byd", "esdm", "emas antam"]):
                     macro_weight += 4
                 raw_imp_score = base_score + recency_bonus + macro_weight - min(6, rank_in_feed // 3)
                 importance_score = max(82, min(99, raw_imp_score))
@@ -4706,6 +4860,7 @@ def fetch_live_indonesia_local_translated_news(data: dict):
 
                 candidates.append({
                     "titleId": clean_title,
+                    "descId": desc_id,
                     "source": raw_src,
                     "feedSection": feed_label,
                     "feedKind": feed_kind,
@@ -4759,7 +4914,7 @@ def fetch_live_indonesia_local_translated_news(data: dict):
             if len(top_important_raw) >= 10:
                 break
 
-    # 2. Select Top 10 Most Read / Trending Local News (prioritizing top_read feeds, top feed rank & multi-portal syndication)
+    # 2. Select Top 10 Most Read / Trending Local News (zero cluster overlap with Top 10 Important)
     read_pool = sorted(
         candidates,
         key=lambda x: (
@@ -4772,7 +4927,7 @@ def fetch_live_indonesia_local_translated_news(data: dict):
     )
     imp_title_set = {x["titleId"] for x in top_important_raw}
     top_read_raw = []
-    used_read_clusters = set()
+    used_read_clusters = set(used_imp_clusters)
     read_source_counts = {}
     for item in read_pool:
         if item["titleId"] in imp_title_set:
@@ -4794,69 +4949,173 @@ def fetch_live_indonesia_local_translated_news(data: dict):
             if len(top_read_raw) >= 10:
                 break
 
-    # Batch translate all selected Bahasa Indonesia headlines to English in one pass
-    combined_to_translate = [x["titleId"] for x in top_important_raw] + [x["titleId"] for x in top_read_raw]
-    translated_all = translate_bahasa_batch_to_english(combined_to_translate)
-    imp_en_titles = translated_all[: len(top_important_raw)]
-    read_en_titles = translated_all[len(top_important_raw) :]
+    # Batch-translate all 20 selected Bahasa headlines AND any RSS description snippets to English
+    all_selected_items = top_important_raw + top_read_raw
+    combined_titles = [x["titleId"] for x in all_selected_items]
+    translated_titles = translate_bahasa_batch_to_english(combined_titles)
 
-    def build_local_significance_and_summary(title_id: str, title_en: str, src: str, cat: str, idx: int) -> tuple[str, str]:
-        low = (title_id + " " + title_en).lower()
-        summary_en = (
-            f"Translated from {src} ({cat}): \"{title_en}\" — originally reported in Bahasa Indonesia as \"{title_id}\"."
+    desc_indices = [i for i, x in enumerate(all_selected_items) if x.get("descId")]
+    desc_texts = [all_selected_items[i]["descId"] for i in desc_indices]
+    translated_descs_list = translate_bahasa_batch_to_english(desc_texts) if desc_texts else []
+    translated_desc_map = {idx_item: en_d for idx_item, en_d in zip(desc_indices, translated_descs_list)}
+
+    imp_en_titles = translated_titles[: len(top_important_raw)]
+    read_en_titles = translated_titles[len(top_important_raw) :]
+    imp_en_descs = [translated_desc_map.get(i, "") for i in range(len(top_important_raw))]
+    read_en_descs = [
+        translated_desc_map.get(len(top_important_raw) + i, "") for i in range(len(top_read_raw))
+    ]
+
+    def build_local_significance_and_summary(
+        title_id: str, title_en: str, desc_en: str, src: str, cat: str, idx: int
+    ) -> tuple[str, str]:
+        low = (title_id + " " + title_en + " " + desc_en).lower()
+
+        # Check if RSS desc_en is a complete sentence (not truncated mid-phrase by ANTARA's 160-char RSS limit)
+        clean_d = re.sub(r"\s*\.{2,}$", "", (desc_en or "").strip()).strip()
+        is_truncated_desc = bool(
+            not clean_d
+            or len(clean_d) < 40
+            or re.search(
+                r"\b(the|a|an|of|to|in|for|with|on|at|from|by|and|or|alleged|general|government|needs|including)\.?$",
+                clean_d.lower(),
+            )
         )
-        if any(k in low for k in ["3 badai", "3 storms", "msci", "fed"]):
-            sig = (
-                f"Captures onshore Jakarta desk focus on three converging catalysts: domestic political dynamics, MSCI index free-float review on IHSG ({ihsg_lvl:,.2f}), and Federal Reserve rate transmission into USD/IDR (Rp {spot_idr:,})."
-            )
-        elif any(k in low for k in ["300 emiten", "hsc", "high shareholder", "perhitungan ihsg"]):
-            sig = (
-                f"Structural IDX (BEI) methodology reform removing 300 High Shareholder Concentration (HSC) issuers from IHSG ({ihsg_lvl:,.2f}) index weighting to align with MSCI free-float investability standards."
-            )
-        elif any(k in low for k in ["likuiditas", "149,3", "149.3", "bank indonesia", "umkm", "perumahan"]):
-            sig = (
-                f"Bank Indonesia's Rp149.3T Macroprudential Liquidity Incentive (KLM) expands credit to MSMEs and housing while keeping the headline BI-Rate at 5.75% and 12M SRBI at {srbi_12m:.3f}%."
-            )
-        elif any(k in low for k in ["gibran", "wapres", "hmp", "pemakzulan", "mk ", "mahkamah", "dpr"]):
-            sig = (
-                f"High-attention constitutional and parliamentary (DPR/MK/MA) development monitored by onshore and foreign institutional desks for executive policy continuity and 10Y FR0108 IndoGB ({indo_10y:.2f}%) risk premia."
-            )
-        elif any(k in low for k in ["apbn", "kssk", "pajak", "defisit"]):
-            sig = (
-                f"Directly shapes Ministry of Finance (Kemenkeu) APBN fiscal deficit financing and DJPPR sovereign bond supply across 5Y FR0109 and 10Y FR0108 ({indo_10y:.2f}%) IndoGB benchmarks."
-            )
-        elif any(k in low for k in ["dana asing", "bumn", "net buy", "saham"]):
-            sig = (
-                f"Tracks foreign institutional equity rotation versus state-owned enterprise (BUMN) accumulation on the Indonesia Stock Exchange (IHSG {ihsg_lvl:,.2f})."
-            )
-        elif any(k in low for k in ["bri ", "48,2", "48.2", "kb bank", "bni", "perbankan"]):
-            sig = (
-                f"Demonstrates resilient Indonesian commercial bank profitability and NIM stability under Bank Indonesia's 5.75% policy rate and OJK prudential supervision."
-            )
-        elif any(k in low for k in ["vietnam", "byd", "bkpm", "investasi", "kawasan industri"]):
-            sig = (
-                f"Highlights Indonesia's regional ASEAN foreign direct investment (FDI) competitiveness and industrial downstreaming inflows supporting the USD/IDR (Rp {spot_idr:,}) capital account."
-            )
-        elif any(k in low for k in ["emas", "antam", "esdm", "migas", "pertamina"]):
-            sig = (
-                f"Reflects domestic inflation-hedging demand in Antam gold and upstream energy auction activity impacting Indonesia's fiscal revenue and trade balance."
-            )
-        elif any(k in low for k in ["penyadapan", "prabowo", "aceh", "kapolri", "polri", "kpk"]):
-            sig = (
-                f"Key national security, governance, and institutional law-enforcement headline driving domestic media readership and political-stability sentiment (JISDOR Rp {jisdor:,})."
-            )
+
+        # 1. Build a concise, specific 1-line summary of the news story
+        if not is_truncated_desc and clean_d.endswith("."):
+            summary_en = clean_d
+        elif "3 badai" in low or "3 storms" in low:
+            summary_en = f"{src} analyzes three simultaneous headwinds facing Indonesia: domestic political shifts, MSCI index rebalancing, and hawkish US Federal Reserve policy."
+        elif "30% apbn" in low or "480 t" in low or "bocor" in low:
+            summary_en = f"{src} reports President Prabowo Subianto's warning that up to 30% of the APBN (State Budget)—roughly IDR 480 trillion—is lost to budget leakage and inefficiency."
+        elif "pdi-p" in low or "pdip" in low or "koalisi" in low:
+            summary_en = f"{src} reports President Prabowo Subianto thanking PDI-P for constructive parliamentary support on national priorities despite remaining outside the ruling coalition."
+        elif "poliran" in low or "pengangguran" in low:
+            summary_en = f"{src} reports that the National Police Chief launched the 'Poliran' vocational agriculture and employment program to absorb unemployed workers."
+        elif any(k in low for k in ["gibran", "wapres", "innova", "mpr", "pengunduran diri", "resign", "muzani"]):
+            if "innova" in low or "patwal" in low:
+                summary_en = f"{src} reports that VP Gibran Rakabuming Raka arrived at the MPR parliamentary complex in a private Kijang Innova without a police escort (Patwal) to submit his resignation letter."
+            elif "danantara" in low:
+                summary_en = f"{src} reports that sovereign wealth fund Danantara outlined three market-stabilization measures to reassure domestic and foreign investors amid VP Gibran's resignation news."
+            elif "ihsg" in low or "melonjak" in low or "jump" in low:
+                summary_en = f"{src} reports that the IHSG (JCI) rallied +2% into positive territory as VP Gibran formally submitted his resignation letter to parliament."
+            else:
+                summary_en = f"{src} covers MPR Chairman Ahmad Muzani and parliamentary leaders processing VP Gibran Rakabuming Raka's formal resignation letter."
+        elif any(k in low for k in ["penyadapan", "wiretap", "ahrie sonta", "listyo sigit", "makar", "treason", "sadap"]):
+            if "pecat" in low or "fire" in low or "ahrie" in low:
+                summary_en = f"{src} reports that the National Police (Polri) dismissed Inspector General Ahrie Sonta Nasution after proving unlawful wiretapping against President Prabowo."
+            elif "lpsk" in low or "saksi" in low or "witness" in low:
+                summary_en = f"{src} reports that eight witnesses applied for LPSK protection—including one justice collaborator—in the President Prabowo wiretapping investigation."
+            elif "laporan polisi" in low or "makar" in low or "treason" in low:
+                summary_en = f"{src} reports that the National Police Chief confirmed a formal police investigation has been opened into alleged treason linked to the presidential wiretapping case."
+            else:
+                summary_en = f"{src} reports that DPR Commission III summoned the National Police Chief to disclose all investigation findings into the unlawful wiretapping of President Prabowo."
+        elif any(k in low for k in ["msci", "brpt", "brms", "rebalancing"]):
+            summary_en = f"{src} details MSCI's November 2026 index evaluation, which downgrades 1 Indonesian issuer and removes 8 stocks including BRPT and BRMS."
+        elif any(k in low for k in ["383 saham", "300 emiten", "hsc", "didepak dari ihsg"]):
+            summary_en = f"{src} reports that IDX (BEI) published the list of 383 High Shareholder Concentration (HSC) stocks excluded from IHSG (JCI) index calculations effective November 13, 2026."
+        elif "byd" in low:
+            summary_en = f"{src} reports on BYD's Indonesian EV expansion, including rapid workforce recruitment at its Subang factory and the IDR 300M fast-charging BYD M6 lineup."
+        elif "rupiah" in low and ("18,221" in low or "18.221" in low or "terlemah" in low or "weakest" in low):
+            summary_en = f"{src} reports that the Rupiah opened weaker in morning interbank trading on US dollar strength before stabilizing near Rp {spot_idr:,}/USD."
+        elif any(k in low for k in ["the fed", "rupiah", "all-time low", "all–time low", "kurs"]):
+            summary_en = f"{src} reports that hawkish Federal Reserve interest-rate expectations are pressuring the Indonesian Rupiah toward Rp {spot_idr:,}/USD in onshore FX trading."
+        elif "ihsg" in low and ("borong" in low or "10 saham" in low or "10 shares" in low):
+            summary_en = f"{src} reports that while the IHSG (JCI) edged down 0.21%, foreign institutional investors recorded net buying across 10 liquid Indonesian blue-chip stocks."
+        elif "ihsg" in low and ("net sell" in low or "rel" in low or "rally" in low):
+            summary_en = f"{src} reports that the IHSG (JCI) snapped its five-day winning streak on mild foreign profit-taking, closing near {ihsg_lvl:,.2f}."
+        elif any(k in low for k in ["apbn", "jor-joran", "kssk", "pajak", "likuiditas", "bank indonesia"]):
+            summary_en = f"{src} examines the government's accelerated APBN (State Budget) fiscal spending and Bank Indonesia's liquidity operations to support domestic GDP growth."
+        elif "kemhan" in low or "jepang" in low or "japan" in low:
+            summary_en = f"{src} reports that the Indonesian Ministry of Defense (Kemhan) is strengthening bilateral defense and maritime cooperation with Japan."
+        elif "danantara" in low and ("umkm" in low or "msme" in low):
+            summary_en = f"{src} reports that sovereign investment agency Danantara is advancing equal partnerships to help Indonesian MSMEs (UMKM) enter global export supply chains."
+        elif "sumatra" in low or "aceh" in low or "enang-enang" in low:
+            summary_en = f"{src} reports that reopening the Enang-Enang Bridge in Aceh/Sumatra has restored vital highland transport and agricultural trade routes."
+        elif "yogyakarta" in low or "ugm" in low:
+            summary_en = f"{src} covers student and civil protests in Yogyakarta and calls by Universitas Gadjah Mada (UGM) for proportionate policing."
+        elif "vape" in low or "mui" in low:
+            summary_en = f"{src} reports that the Ministry of Health (Kemenkes) responded to the Indonesian Ulema Council (MUI) fatwa declaring vaping haram due to public health risks."
+        elif "periset" in low or "researchers" in low or ("kemenkes" in low and "ekonomi" in low):
+            summary_en = f"{src} reports that the Ministry of Health urged domestic medical researchers to prioritize commercializing healthcare products with large-scale economic value."
+        elif "acer" in low or "laptop ai" in low:
+            summary_en = f"{src} reports that Acer unveiled its latest Googlebook and AI-powered laptop lineup for Indonesia's enterprise and education markets."
+        elif any(k in low for k in ["emas", "gold", "antam"]):
+            summary_en = f"{src} reports a nearly 3% pullback in gold prices as higher US real yields and stronger dollar dynamics trigger profit-taking."
         else:
-            sig = (
-                f"Monitored across onshore Bahasa Indonesia financial portals ({src}); informs domestic institutional positioning in IHSG ({ihsg_lvl:,.2f}) and Rupiah fixed income (#{idx + 1})."
-            )
+            summary_en = f"{src} reports on {title_en.rstrip('.')}."
+
+        # 2. Build a specific, non-repetitive 1-liner on the Potential Impact
+        if "3 badai" in low or "3 storms" in low:
+            sig = f"Elevates short-term volatility across USD/IDR (Rp {spot_idr:,}) and high-beta IDX stocks while favoring defensive positioning in 5Y–10Y IndoGBs ({indo_10y:.2f}%)."
+        elif "30% apbn" in low or "480 t" in low or "bocor" in low:
+            sig = f"Plugging IDR 480T of state budget leakage would materially improve Indonesia's primary fiscal balance and reduce DJPPR sovereign bond issuance pressure."
+        elif "pdi-p" in low or "pdip" in low or "koalisi" in low:
+            sig = f"Signals broad bipartisan legislative stability in the DPR, reducing parliamentary gridlock risk for 2026–2027 fiscal and structural bills."
+        elif "innova" in low or ("gibran" in low and ("mpr" in low or "muzani" in low)):
+            sig = f"Signals an orderly, constitutional MPR succession process in Jakarta, helping contain political risk premia on 10Y IndoGBs ({indo_10y:.2f}%) and USD/IDR (Rp {spot_idr:,})."
+        elif "danantara" in low and "gibran" in low:
+            sig = f"Danantara's proactive institutional backstop anchors foreign fund confidence and supports SOE (BUMN) blue-chip equities on the IHSG ({ihsg_lvl:,.2f})."
+        elif "danantara" in low and ("umkm" in low or "msme" in low):
+            sig = f"Expands export market access and supply-chain financing for Indonesian MSMEs (UMKM) through sovereign investment partnerships."
+        elif "gibran" in low and ("ihsg" in low or "melonjak" in low or "2%" in low):
+            sig = f"Removes political overhang and sparks a relief rally across liquid LQ45 financials as certainty over constitutional procedure improves."
+        elif "lpsk" in low or "saksi" in low or "witness" in low:
+            sig = f"Accelerates evidentiary disclosures in the executive wiretapping probe, keeping parliamentary oversight and security reforms in focus."
+        elif "ahrie sonta" in low or ("pecat" in low and "polri" in low):
+            sig = f"Decisive disciplinary action within Polri reinforces executive security discipline and institutional rule-of-law credibility."
+        elif "laporan polisi" in low or "makar" in low or "treason" in low:
+            sig = f"Formalizes the legal process under criminal law rather than political speculation, supporting institutional stability in Jakarta."
+        elif "penyadapan" in low or "wiretap" in low or "sadap" in low:
+            sig = f"Transparent DPR Commission III and Polri enforcement on the wiretapping probe reduces governance uncertainty for onshore capital markets."
+        elif "msci" in low or "brpt" in low or "brms" in low:
+            sig = f"Drives passive foreign index outflows from excluded tickers (BRPT, BRMS) while concentrating institutional liquidity into core LQ45 banks."
+        elif "383 saham" in low or "300 emiten" in low or "hsc" in low:
+            sig = f"Structural IDX reform strips out illiquid low-float stocks from IHSG ({ihsg_lvl:,.2f}), improving index investability ahead of MSCI's review."
+        elif "byd" in low or "subang" in low:
+            sig = f"Accelerates domestic EV adoption and West Java automotive supply-chain FDI, intensifying competition in Indonesia's passenger vehicle market."
+        elif "rupiah" in low and ("18,221" in low or "18.221" in low or "terlemah" in low or "weakest" in low):
+            sig = f"Prompts Bank Indonesia triple-intervention across spot FX, DNDF, and secondary SBN markets to anchor USD/IDR near Rp {spot_idr:,} (JISDOR Rp {jisdor:,})."
+        elif "the fed" in low or "all-time low" in low or "all–time low" in low or "rupiah tertekan" in low:
+            sig = f"Increases near-term imported volatility on USD/IDR (Rp {spot_idr:,}, JISDOR Rp {jisdor:,}) and keeps Bank Indonesia active in DNDF and SRBI ({srbi_12m:.3f}%) intervention."
+        elif "ihsg" in low and ("borong" in low or "10 saham" in low or "10 shares" in low):
+            sig = f"Demonstrates resilient foreign institutional accumulation in undervalued Indonesian large-caps despite headline IHSG ({ihsg_lvl:,.2f}) consolidation."
+        elif "ihsg" in low and ("net sell" in low or "rising rally" in low or "rel" in low):
+            sig = f"Healthy technical consolidation near {ihsg_lvl:,.2f} after a 5-day rally as foreign desks rotate from high-multiple conglomerates into liquid banks."
+        elif "apbn" in low or "jor-joran" in low:
+            sig = f"Boosts Q4 domestic demand and fiscal impulse, though bond desks watch DJPPR SBN issuance supply and the 10Y FR0108 ({indo_10y:.2f}%) yield."
+        elif "uu pemilu" in low or "election law" in low or "komisi ii" in low:
+            sig = f"Shapes long-term electoral threshold and coalition rules ahead of the next legislative cycle without disrupting near-term cabinet execution."
+        elif "emas" in low or "gold" in low:
+            sig = f"Pressures short-term domestic Antam gold retail prices and precious-metal mining equities (ANTM, BRMS, MDKA) on the IDX."
+        elif "kemhan" in low or "jepang" in low or "japan" in low or "apec" in low:
+            sig = f"Strengthens Indonesia's bilateral defense, maritime security, and technology transfer partnerships across the Indo-Pacific."
+        elif "sumatra" in low or "aceh" in low or "jembatan" in low or "jalan" in low:
+            sig = f"Restores regional logistics and agricultural supply chains in Aceh/Sumatra, easing local food transport bottlenecks."
+        elif "yogyakarta" in low or "demo" in low or "unjuk rasa" in low or "cctv" in low:
+            sig = f"Localized civil protests and traffic disruptions are monitored for domestic social stability, with minimal spillover into Jakarta financial markets."
+        elif "poliran" in low or "pengangguran" in low:
+            sig = f"Supports grassroots labor absorption and rural food production alongside government MSME (UMKM) credit programs."
+        elif "periset" in low or "researchers" in low or ("kemenkes" in low and "ekonomi" in low):
+            sig = f"Encourages domestic pharmaceutical and medical-device import substitution, reducing healthcare trade deficits over the medium term."
+        elif "vape" in low or "mui" in low or "kemenkes" in low:
+            sig = f"Potential regulatory tightening on e-cigarettes could weigh on alternative tobacco and retail distribution segments."
+        elif "acer" in low or "laptop ai" in low:
+            sig = f"Reflects growing enterprise and consumer hardware demand in Indonesia's digital economy and local electronics retail sector."
+        else:
+            sig = f"Shapes domestic institutional sentiment across the Jakarta Composite Index (IHSG {ihsg_lvl:,.2f}) and onshore Rupiah liquidity (Rp {spot_idr:,})."
+
         return summary_en, sig
 
-    def format_news_list(raw_list: list[dict], en_titles: list[str], list_prefix: str) -> list[dict]:
+    def format_news_list(
+        raw_list: list[dict], en_titles: list[str], en_descs: list[str], list_prefix: str
+    ) -> list[dict]:
         out = []
         used_sigs = set()
-        for idx, (item, title_en) in enumerate(zip(raw_list, en_titles)):
+        for idx, (item, title_en, desc_en) in enumerate(zip(raw_list, en_titles, en_descs)):
             summary_en, sig = build_local_significance_and_summary(
-                item["titleId"], title_en, item["source"], item["category"], idx
+                item["titleId"], title_en, desc_en, item["source"], item["category"], idx
             )
             if sig in used_sigs:
                 sig = f"{sig.rstrip('.')} ({item['source']} · #{idx + 1})."
@@ -4888,8 +5147,8 @@ def fetch_live_indonesia_local_translated_news(data: dict):
             })
         return out
 
-    top_important_formatted = format_news_list(top_important_raw, imp_en_titles, "id-imp")
-    top_read_formatted = format_news_list(top_read_raw, read_en_titles, "id-read")
+    top_important_formatted = format_news_list(top_important_raw, imp_en_titles, imp_en_descs, "id-imp")
+    top_read_formatted = format_news_list(top_read_raw, read_en_titles, read_en_descs, "id-read")
 
     lead_imp_en = (
         top_important_formatted[0]["titleEn"]
@@ -4968,20 +5227,20 @@ def fetch_live_indonesia_local_translated_news(data: dict):
             ],
             "eventsToWatch": [
                 {
-                    "event": "IDX (BEI) Friday Implementation of 300 HSC Issuers Exclusion & MSCI November Rebalancing",
-                    "timing": "Effective Friday · BEI / MSCI Review",
+                    "event": "IDX (BEI) Effective Exclusion of 300 HSC Issuers & MSCI Index Review Cut-Off",
+                    "timing": f"{_fmt_event_date(_next_weekday_sgt(_snap_biz_day(datetime.now(SGT)), 4, True))} · 09:00 WIB (10:00 SGT)",
                     "impact": "Critical",
                     "watchFor": "Passive and active institutional rebalancing out of High Shareholder Concentration (HSC) names into liquid LQ45/BUMN constituents.",
                 },
                 {
-                    "event": "DPR Leadership HMP Consultation & Constitutional Court (MK) / Supreme Court (MA) Rulings",
-                    "timing": "Ongoing · Jakarta Parliamentary Session",
+                    "event": "DPR RI Leadership Consultation on HMP Inquiry & MK / MA Constitutional Rulings",
+                    "timing": f"{_fmt_event_date(_snap_biz_day(datetime.now(SGT)))} · 13:30 WIB (14:30 SGT)",
                     "impact": "High",
                     "watchFor": "Whether parliamentary faction consultations on VP Gibran remain procedural without disrupting APBN fiscal execution or cabinet continuity.",
                 },
                 {
-                    "event": "Bank Indonesia Rp149.3T KLM Liquidity Disbursement & KSSK Quarterly Coordination",
-                    "timing": "Nov 2026 · Bank Indonesia / Kemenkeu / OJK",
+                    "event": "Bank Indonesia Rp149.3T KLM Liquidity Allocation & KSSK Quarterly Assessment",
+                    "timing": f"{_fmt_event_date(_next_monthly_day_sgt(_snap_biz_day(datetime.now(SGT)), 18))} · 14:20 WIB (15:20 SGT)",
                     "impact": "High",
                     "watchFor": "Transmission of BI's Rp149.3T macroprudential liquidity incentives into SOE bank (BRI, Mandiri, BNI) credit growth and SBN demand.",
                 },

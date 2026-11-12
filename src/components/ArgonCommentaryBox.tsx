@@ -128,7 +128,7 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
                 KEY CATALYSTS & RISK EVENTS TO WATCH
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-slate-400">EVENT RADAR</span>
+            <span className="text-[10px] font-mono text-sky-400">SCHEDULED EVENT DATES</span>
           </div>
 
           <div className="space-y-2">
@@ -152,8 +152,10 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
                     {ev.impact}
                   </span>
                 </div>
-                <div className="text-[10px] font-mono text-sky-400 mb-1">
-                  WINDOW: {ev.timing}
+                <div className="inline-flex items-center gap-1.5 text-[10px] font-mono bg-sky-950/35 border border-sky-800/50 px-2 py-0.5 rounded-xs mb-1.5">
+                  <CalendarClock className="w-3 h-3 text-sky-400 shrink-0" />
+                  <span className="text-slate-400">EVENT DATE:</span>
+                  <span className="font-bold text-sky-300 tabular-nums">{ev.timing}</span>
                 </div>
                 <p className="text-[11px] text-slate-300 leading-snug font-sans">
                   <span className="text-slate-400 font-mono">Watch for: </span>

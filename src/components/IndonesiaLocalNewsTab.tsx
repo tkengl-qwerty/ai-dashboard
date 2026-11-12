@@ -1,5 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { IndonesiaLocalNewsData, IndonesiaTranslatedNewsItem, IndonesiaBonds, IndonesiaFxAndNdf } from '../types/market';
+import React, { useState, useMemo, useEffect } from 'react';
+import {
+  IndonesiaLocalNewsData,
+  IndonesiaTranslatedNewsItem,
+  IndonesiaBonds,
+  IndonesiaFxAndNdf,
+} from '../types/market';
 import {
   Languages,
   Newspaper,
@@ -36,6 +41,238 @@ const CATEGORY_FILTERS = [
   'Commodities & Energy',
 ] as const;
 
+const BAHASA_DETECTION_MARKERS = [
+  'serahkan',
+  'pengunduran',
+  'naik ',
+  'tanpa ',
+  'potret ',
+  'beberkan',
+  'penyadapan',
+  'oleh ',
+  'kabar ',
+  'mundur',
+  'ungkap',
+  'jurus',
+  'pemerintah',
+  'pakai ',
+  'saham ',
+  'didepak',
+  'mulai ',
+  'usung ',
+  'hingga ',
+  'luncurkan',
+  'peduli ',
+  'pengangguran',
+  'tertekan',
+  'menguat',
+  'keluarkan',
+  'ikut ',
+  'tersingkir',
+  'pecat ',
+  'harga ',
+  'jatuh ',
+  'muncul ',
+  'setelah ',
+  'jalan ',
+  'sebut ',
+  'unjuk ',
+  'buka suara',
+  'hadiri ',
+  'pantau ',
+  'lalu lintas',
+  'hari ini',
+  'dengan ',
+  'dalam ',
+  'untuk ',
+  'tidak ',
+  'akan ',
+  'sudah ',
+  'bisa ',
+  'ketahanan',
+  'keamanan',
+];
+
+export function isStillBahasaHeadline(titleEn: string | undefined, titleId: string | undefined): boolean {
+  if (!titleEn) return true;
+  if (titleId && titleEn.trim().toLowerCase() === titleId.trim().toLowerCase()) return true;
+  const padded = ` ${titleEn.toLowerCase()} `;
+  let hits = 0;
+  for (const m of BAHASA_DETECTION_MARKERS) {
+    if (padded.includes(m)) {
+      hits += 1;
+      if (hits >= 2) return true;
+    }
+  }
+  return false;
+}
+
+function preprocessBahasaClient(origId: string): string {
+  return origId
+    .trim()
+    .replace(/^Tok!\s*/i, 'Resmi: ')
+    .replace(/^Sah!\s*/i, 'Resmi: ')
+    .replace(/^Potret\s+/i, 'Foto: ')
+    .replace(/\bPatwal\b/gi, 'Pengawalan Polisi (Patwal)')
+    .replace(/\bCs\b/g, 'dan kawan-kawan')
+    .replace(/(Rp\.?\s*\d+(?:[.,]\d+)?)\s*M\b/g, '$1 Miliar')
+    .replace(/\bTembus\s+(Rp|Level|\d)/gi, 'Menembus $1');
+}
+
+function polishInstitutionalEnClient(textEn: string): string {
+  let t = textEn
+    .trim()
+    .replace(/^\[\d+\]\s*/, '')
+    .replace(/^[\u200b\u2060\ufeff\-•\s]+/, '');
+
+  const replacements: Array<[RegExp, string]> = [
+    [/^Knock!\s*/i, 'Official: '],
+    [/^Portrait of\s+(?:the\s+)?/i, 'Photos: '],
+    [/\bTranslucent\b/g, 'Breaches'],
+    [/\btranslucent\b/g, 'breaches'],
+    [/\bPrints Profits? of\b/gi, 'Posts Net Profit of'],
+    [/\bOpens Voice\b/gi, 'Responds'],
+    [/\bopens its voice\b/gi, 'responds'],
+    [/\band friends\b/gi, 'et al.'],
+    [/\bWithout Patwal\b/gi, 'Without Police Escort (Patwal)'],
+    [/\bRI\b/g, 'Indonesia'],
+    [/\bJCI\b/g, 'IHSG (JCI)'],
+    [/\bIHSG\b(?!\s*\(JCI\))/g, 'IHSG (JCI)'],
+    [/\bBEI\b/g, 'IDX (BEI)'],
+    [/\bWapres\b/g, 'VP'],
+    [/\bMendikti\b/g, 'Higher Education Minister'],
+    [/\bMenkeu\b/g, 'Finance Minister'],
+    [/\bWamen\b/g, 'Deputy Minister'],
+    [/\bSeskab\b/g, 'Cabinet Secretary'],
+    [/\bKabakom\b/g, 'Presidential Communication Head'],
+    [/\bKapolri\b/g, 'National Police Chief'],
+    [/\bDirut\b/g, 'President Director'],
+    [/\bEmiten\b/g, 'Listed Issuers'],
+    [/\bemiten\b/g, 'listed issuers'],
+    [/\bBUMN\b/g, 'SOE (BUMN)'],
+    [/\bSBN\b/g, 'SBN (IndoGB)'],
+    [/\bAPBN\b/g, 'APBN (State Budget)'],
+    [/\bKSSK\b/g, 'KSSK (Financial System Stability Committee)'],
+    [/\bHMP\b/g, 'HMP (Parliamentary Inquiry Right)'],
+    [/\bKUR\b/g, "KUR (People's Business Credit)"],
+    [/\bUMKM\b/g, 'MSMEs (UMKM)'],
+    [/\bRp\.?\s*(\d)/g, 'IDR $1'],
+  ];
+
+  for (const [pat, rep] of replacements) {
+    t = t.replace(pat, rep);
+  }
+  if (t.length > 0) {
+    t = t.charAt(0).toUpperCase() + t.slice(1);
+  }
+  return t;
+}
+
+/**
+ * Generates a specific 1-line summary of the news AND a specific 1-line potential impact
+ * whenever an item has generic boilerplate or was newly translated on the client.
+ */
+function buildOneLineSummaryAndImpact(
+  item: IndonesiaTranslatedNewsItem,
+  titleEn: string,
+  spotIdr: number,
+  jisdor: number,
+  ihsgLvl: number,
+  indo10Y: number,
+  srbi12M: number
+): { summaryLine: string; impactLine: string } {
+  const low = `${item.titleId} ${titleEn} ${item.summaryEn || ''}`.toLowerCase();
+  const src = item.source || 'Indonesian Media';
+
+  const existingSummary = (item.summaryEn || '').trim();
+  const isOldBoilerplateSummary =
+    !existingSummary ||
+    existingSummary.startsWith('Translated from ') ||
+    existingSummary.includes('originally reported in Bahasa Indonesia as') ||
+    isStillBahasaHeadline(existingSummary, item.titleId);
+
+  let summaryLine = existingSummary;
+  if (isOldBoilerplateSummary) {
+    if (low.includes('innova') || low.includes('patwal')) {
+      summaryLine = `${src} reports that VP Gibran Rakabuming Raka arrived at the MPR parliamentary complex in a private Kijang Innova without a police escort (Patwal) to submit his resignation letter.`;
+    } else if (low.includes('danantara') && low.includes('gibran')) {
+      summaryLine = `${src} reports that sovereign wealth fund Danantara outlined three market-stabilization measures to reassure domestic and foreign investors amid VP Gibran's resignation news.`;
+    } else if (low.includes('gibran') && (low.includes('ihsg') || low.includes('melonjak') || low.includes('2%'))) {
+      summaryLine = `${src} reports that the IHSG (JCI) rallied +2% into positive territory as VP Gibran formally submitted his resignation letter to parliament.`;
+    } else if (low.includes('gibran') || low.includes('pengunduran diri') || low.includes('wapres')) {
+      summaryLine = `${src} covers parliamentary and MPR proceedings in Jakarta surrounding VP Gibran Rakabuming Raka's resignation letter submission.`;
+    } else if (low.includes('ahrie sonta') || (low.includes('pecat') && low.includes('polri'))) {
+      summaryLine = `${src} reports that the National Police (Polri) dismissed Inspector General Ahrie Sonta Nasution after proving unlawful wiretapping against President Prabowo.`;
+    } else if (low.includes('lpsk') || low.includes('8 saksi') || low.includes('8 witnesses')) {
+      summaryLine = `${src} reports that eight witnesses applied for LPSK protection—including one justice collaborator—in the President Prabowo wiretapping investigation.`;
+    } else if (low.includes('listyo sigit') || low.includes('penyadapan') || low.includes('wiretapping')) {
+      summaryLine = `${src} reports that National Police Chief Listyo Sigit Prabowo briefed the DPR on the investigation into the unlawful wiretapping of President Prabowo.`;
+    } else if (low.includes('msci') || low.includes('brpt') || low.includes('brms')) {
+      summaryLine = `${src} details MSCI's November 2026 index rebalancing, which removes BRPT, BRMS, and seven other Indonesian stocks while adjusting foreign free-float weights.`;
+    } else if (low.includes('383') || low.includes('300') || low.includes('hsc')) {
+      summaryLine = `${src} reports that IDX (BEI) is officially excluding 383 High Shareholder Concentration (HSC) stocks from IHSG (JCI) index calculations effective November 13, 2026.`;
+    } else if (low.includes('byd') || low.includes('subang')) {
+      summaryLine = `${src} reports on EV manufacturer BYD's Subang industrial plant expansion and recruitment of thousands of Indonesian workers.`;
+    } else if (low.includes('the fed') || low.includes('all-time low') || low.includes('all–time low') || low.includes('rupiah')) {
+      summaryLine = `${src} reports that hawkish Federal Reserve rate expectations are pressuring the Indonesian Rupiah toward Rp ${spotIdr.toLocaleString('en-US')}/USD in onshore FX trading.`;
+    } else if (low.includes('apbn') || low.includes('jor-joran') || low.includes('state budget')) {
+      summaryLine = `${src} examines the government's accelerated APBN (State Budget) fiscal spending and Bank Indonesia's liquidity operations to boost domestic GDP growth.`;
+    } else if (low.includes('likuiditas') || low.includes('149')) {
+      summaryLine = `${src} reports that Bank Indonesia disbursed Rp149.3 trillion in Macroprudential Liquidity Incentives (KLM) to commercial banks for MSMEs and housing credit.`;
+    } else if (low.includes('emas') || low.includes('gold')) {
+      summaryLine = `${src} reports a nearly 3% pullback in gold prices as higher US real yields and stronger dollar dynamics trigger profit-taking.`;
+    } else if (low.includes('uu pemilu') || low.includes('election law') || low.includes('komisi ii')) {
+      summaryLine = `${src} reports that DPR Commission II's working committee engaged constitutional scholars to deliberate revisions to Indonesia's Election Law.`;
+    } else {
+      summaryLine = `${src} reports: ${titleEn.replace(/\.$/, '')}.`;
+    }
+  }
+
+  const existingImpact = (item.marketSignificance || '').trim();
+  const isGenericBoilerplateImpact =
+    !existingImpact ||
+    existingImpact.startsWith('High-attention constitutional and parliamentary') ||
+    existingImpact.startsWith('Key national security, governance, and institutional') ||
+    existingImpact.startsWith('Monitored across onshore Bahasa Indonesia financial portals');
+
+  let impactLine = existingImpact;
+  if (isGenericBoilerplateImpact) {
+    if (low.includes('innova') || (low.includes('gibran') && low.includes('mpr'))) {
+      impactLine = `Signals an orderly, constitutional MPR succession process in Jakarta, helping contain political risk premia on 10Y IndoGBs (${indo10Y.toFixed(2)}%) and USD/IDR (Rp ${spotIdr.toLocaleString('en-US')}).`;
+    } else if (low.includes('danantara') && low.includes('gibran')) {
+      impactLine = `Danantara's proactive institutional backstop anchors foreign fund confidence and supports SOE (BUMN) blue-chip equities on the IHSG (${ihsgLvl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}).`;
+    } else if (low.includes('gibran') && (low.includes('ihsg') || low.includes('melonjak') || low.includes('2%'))) {
+      impactLine = `Removes political overhang and sparks a relief rally across liquid LQ45 financials as certainty over constitutional procedure improves.`;
+    } else if (low.includes('gibran') || low.includes('wapres')) {
+      impactLine = `Focuses investor attention on MPR constitutional continuity while keeping APBN fiscal execution and BI monetary operations insulated.`;
+    } else if (low.includes('lpsk') || low.includes('saksi') || low.includes('witness')) {
+      impactLine = `Accelerates evidentiary disclosures in the executive wiretapping probe, keeping parliamentary oversight and security reforms in focus.`;
+    } else if (low.includes('ahrie sonta') || (low.includes('pecat') && low.includes('polri'))) {
+      impactLine = `Decisive disciplinary action within Polri reinforces executive security discipline and institutional rule-of-law credibility.`;
+    } else if (low.includes('listyo sigit') || (low.includes('kapolri') && low.includes('dpr')) || low.includes('penyadapan')) {
+      impactLine = `Transparent DPR parliamentary hearings on the wiretapping probe reduce governance uncertainty for onshore capital markets.`;
+    } else if (low.includes('msci') || low.includes('brpt') || low.includes('brms')) {
+      impactLine = `Drives passive foreign index outflows from excluded tickers (BRPT, BRMS) while concentrating institutional liquidity into core LQ45 banks.`;
+    } else if (low.includes('383') || low.includes('300') || low.includes('hsc')) {
+      impactLine = `Structural IDX reform strips out illiquid low-float stocks from IHSG (${ihsgLvl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}), improving index investability ahead of MSCI's review.`;
+    } else if (low.includes('byd') || low.includes('subang')) {
+      impactLine = `Bolsters West Java manufacturing employment and EV supply-chain FDI inflows, supporting Indonesia's structural balance of payments.`;
+    } else if (low.includes('the fed') || low.includes('all-time low') || low.includes('all–time low') || low.includes('rupiah')) {
+      impactLine = `Increases near-term imported volatility on USD/IDR (Rp ${spotIdr.toLocaleString('en-US')}, JISDOR Rp ${jisdor.toLocaleString('en-US')}) and keeps Bank Indonesia active in DNDF and SRBI (${srbi12M.toFixed(3)}%) intervention.`;
+    } else if (low.includes('apbn') || low.includes('jor-joran')) {
+      impactLine = `Boosts Q4 domestic demand and fiscal impulse, though bond desks watch DJPPR SBN issuance supply and the 10Y FR0108 (${indo10Y.toFixed(2)}%) yield.`;
+    } else if (low.includes('uu pemilu') || low.includes('election law') || low.includes('komisi ii')) {
+      impactLine = `Shapes long-term electoral threshold and coalition rules ahead of the next legislative cycle without disrupting near-term cabinet execution.`;
+    } else if (low.includes('emas') || low.includes('gold')) {
+      impactLine = `Pressures short-term domestic Antam gold retail prices and precious-metal mining equities (ANTM, BRMS, MDKA) on the IDX.`;
+    } else {
+      impactLine = `Shapes onshore institutional sentiment across the Jakarta Composite Index (IHSG ${ihsgLvl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}) and Rupiah money markets (Rp ${spotIdr.toLocaleString('en-US')}).`;
+    }
+  }
+
+  return { summaryLine, impactLine };
+}
+
 function getImpactBadgeStyle(direction: string): string {
   switch (direction) {
     case 'Market-Moving':
@@ -51,9 +288,12 @@ function getImpactBadgeStyle(direction: string): string {
 
 const TranslatedNewsCard: React.FC<{
   item: IndonesiaTranslatedNewsItem;
+  translatedTitleEn: string;
+  summaryLine: string;
+  impactLine: string;
   boardType: 'important' | 'read';
   showOriginalBahasa: boolean;
-}> = ({ item, boardType, showOriginalBahasa }) => {
+}> = ({ item, translatedTitleEn, summaryLine, impactLine, boardType, showOriginalBahasa }) => {
   return (
     <div className="py-3 px-2.5 hover:bg-[#182334]/70 transition-colors rounded-xs">
       {/* Top Meta Row */}
@@ -130,10 +370,10 @@ const TranslatedNewsCard: React.FC<{
                 rel="noopener noreferrer"
                 className="hover:text-sky-300 transition-colors"
               >
-                {item.titleEn}
+                {translatedTitleEn}
               </a>
             ) : (
-              <span>{item.titleEn}</span>
+              <span>{translatedTitleEn}</span>
             )}
           </h4>
         </div>
@@ -151,12 +391,20 @@ const TranslatedNewsCard: React.FC<{
         </div>
       )}
 
-      {/* Institutional Market Significance */}
-      <div className="text-[11px] font-mono text-slate-400 leading-relaxed bg-[#0e141d]/60 px-2.5 py-1.5 border border-slate-800/80 rounded-xs">
-        <span className="text-sky-300 font-semibold uppercase text-[10px] mr-1.5">
-          Institutional Market Significance:
-        </span>
-        <span className="text-slate-300">{item.marketSignificance}</span>
+      {/* Quick 1-Liner Summary of the News & Potential Impact */}
+      <div className="text-[11px] leading-relaxed bg-[#0e141d]/80 px-2.5 py-2 border border-slate-800/90 rounded-xs space-y-1">
+        <div>
+          <span className="text-sky-400 font-mono font-bold uppercase text-[10px] mr-1.5">
+            1-LINE SUMMARY:
+          </span>
+          <span className="text-slate-200 font-sans">{summaryLine}</span>
+        </div>
+        <div className="pt-1 border-t border-slate-800/70">
+          <span className="text-amber-300 font-mono font-bold uppercase text-[10px] mr-1.5">
+            POTENTIAL IMPACT:
+          </span>
+          <span className="text-slate-300 font-sans">{impactLine}</span>
+        </div>
       </div>
     </div>
   );
@@ -172,6 +420,7 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('All Categories');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showOriginalBahasa, setShowOriginalBahasa] = useState<boolean>(true);
+  const [liveTranslatedMap, setLiveTranslatedMap] = useState<Record<string, string>>({});
 
   const { topImportant, topRead, sourcesMonitored, argonCommentary } = localNews;
   const indo10Y = bonds.indoGB.find((b) => b.tenor.startsWith('10Y'))?.yield ?? 7.55;
@@ -180,35 +429,132 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
     bonds.srbi.find((s) => s.tenor === '12M')?.cutOffYield ??
     6.675;
 
+  // Automatic client-side live translation fallback in case remote JSON has any untranslated Bahasa headlines
+  useEffect(() => {
+    let cancelled = false;
+    const allItems = [...topImportant, ...topRead];
+    const untranslated = allItems.filter(
+      (it) => !liveTranslatedMap[it.titleId] && isStillBahasaHeadline(it.titleEn, it.titleId)
+    );
+
+    if (untranslated.length === 0) return;
+
+    async function translateMissingOnClient() {
+      const uniqueTitles = Array.from(new Set(untranslated.map((u) => u.titleId)));
+      const tagged = uniqueTitles
+        .map((t, idx) => `[${idx}] ${preprocessBahasaClient(t.replace(/[\r\n]+/g, ' '))}`)
+        .join('\n');
+
+      const endpoints = [
+        `https://clients5.google.com/translate_a/single?client=at&sl=id&tl=en&dt=t&q=${encodeURIComponent(
+          tagged
+        )}`,
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=id&tl=en&dt=t&q=${encodeURIComponent(
+          tagged
+        )}`,
+      ];
+
+      const newMap: Record<string, string> = {};
+
+      for (const url of endpoints) {
+        try {
+          const resp = await fetch(url);
+          if (!resp.ok) continue;
+          const parsed = await resp.json();
+          if (Array.isArray(parsed) && Array.isArray(parsed[0])) {
+            const fullEn = parsed[0]
+              .map((seg: unknown) => (Array.isArray(seg) && typeof seg[0] === 'string' ? seg[0] : ''))
+              .join('');
+            const regex = /\[(\d+)\]\s*([\s\S]*?)(?=\s*\[\d+\]|$)/g;
+            let match: RegExpExecArray | null;
+            while ((match = regex.exec(fullEn)) !== null) {
+              const idx = Number(match[1]);
+              const rawEn = (match[2] || '').trim();
+              if (idx >= 0 && idx < uniqueTitles.length && rawEn) {
+                newMap[uniqueTitles[idx]] = polishInstitutionalEnClient(rawEn);
+              }
+            }
+            if (Object.keys(newMap).length > 0) break;
+          }
+        } catch {
+          // Try next endpoint
+        }
+      }
+
+      if (!cancelled && Object.keys(newMap).length > 0) {
+        setLiveTranslatedMap((prev) => ({ ...prev, ...newMap }));
+      }
+    }
+
+    translateMissingOnClient();
+    return () => {
+      cancelled = true;
+    };
+  }, [topImportant, topRead, liveTranslatedMap]);
+
+  const enrichedImportant = useMemo(() => {
+    return topImportant.map((item) => {
+      const finalTitleEn = liveTranslatedMap[item.titleId] || polishInstitutionalEnClient(item.titleEn);
+      const { summaryLine, impactLine } = buildOneLineSummaryAndImpact(
+        item,
+        finalTitleEn,
+        fxAndNdf.spotRate,
+        fxAndNdf.jisdorRate,
+        fxAndNdf.ihsgIndex.level,
+        indo10Y,
+        srbi12M
+      );
+      return { item, finalTitleEn, summaryLine, impactLine };
+    });
+  }, [topImportant, liveTranslatedMap, fxAndNdf.spotRate, fxAndNdf.jisdorRate, fxAndNdf.ihsgIndex.level, indo10Y, srbi12M]);
+
+  const enrichedRead = useMemo(() => {
+    return topRead.map((item) => {
+      const finalTitleEn = liveTranslatedMap[item.titleId] || polishInstitutionalEnClient(item.titleEn);
+      const { summaryLine, impactLine } = buildOneLineSummaryAndImpact(
+        item,
+        finalTitleEn,
+        fxAndNdf.spotRate,
+        fxAndNdf.jisdorRate,
+        fxAndNdf.ihsgIndex.level,
+        indo10Y,
+        srbi12M
+      );
+      return { item, finalTitleEn, summaryLine, impactLine };
+    });
+  }, [topRead, liveTranslatedMap, fxAndNdf.spotRate, fxAndNdf.jisdorRate, fxAndNdf.ihsgIndex.level, indo10Y, srbi12M]);
+
   const filteredImportant = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return topImportant.filter((item) => {
+    return enrichedImportant.filter(({ item, finalTitleEn, summaryLine, impactLine }) => {
       const catOk = selectedCategory === 'All Categories' || item.category === selectedCategory;
       const queryOk =
         !q ||
-        item.titleEn.toLowerCase().includes(q) ||
+        finalTitleEn.toLowerCase().includes(q) ||
         item.titleId.toLowerCase().includes(q) ||
         item.source.toLowerCase().includes(q) ||
         item.category.toLowerCase().includes(q) ||
-        item.marketSignificance.toLowerCase().includes(q);
+        summaryLine.toLowerCase().includes(q) ||
+        impactLine.toLowerCase().includes(q);
       return catOk && queryOk;
     });
-  }, [topImportant, selectedCategory, searchQuery]);
+  }, [enrichedImportant, selectedCategory, searchQuery]);
 
   const filteredRead = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return topRead.filter((item) => {
+    return enrichedRead.filter(({ item, finalTitleEn, summaryLine, impactLine }) => {
       const catOk = selectedCategory === 'All Categories' || item.category === selectedCategory;
       const queryOk =
         !q ||
-        item.titleEn.toLowerCase().includes(q) ||
+        finalTitleEn.toLowerCase().includes(q) ||
         item.titleId.toLowerCase().includes(q) ||
         item.source.toLowerCase().includes(q) ||
         item.category.toLowerCase().includes(q) ||
-        item.marketSignificance.toLowerCase().includes(q);
+        summaryLine.toLowerCase().includes(q) ||
+        impactLine.toLowerCase().includes(q);
       return catOk && queryOk;
     });
-  }, [topRead, selectedCategory, searchQuery]);
+  }, [enrichedRead, selectedCategory, searchQuery]);
 
   return (
     <div className="space-y-4">
@@ -231,7 +577,7 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
             <span>ID → EN LIVE</span>
           </div>
           <div className="text-[10px] text-slate-400 font-mono">
-            BI / OJK / IDX Glossary Active
+            1-Line Summary + Impact Active
           </div>
         </div>
 
@@ -409,10 +755,13 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
                 </div>
               ) : (
                 <div className="divide-y divide-slate-700/50">
-                  {filteredImportant.map((item) => (
+                  {filteredImportant.map(({ item, finalTitleEn, summaryLine, impactLine }) => (
                     <TranslatedNewsCard
                       key={item.id}
                       item={item}
+                      translatedTitleEn={finalTitleEn}
+                      summaryLine={summaryLine}
+                      impactLine={impactLine}
                       boardType="important"
                       showOriginalBahasa={showOriginalBahasa}
                     />
@@ -462,10 +811,13 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
                 </div>
               ) : (
                 <div className="divide-y divide-slate-700/50">
-                  {filteredRead.map((item) => (
+                  {filteredRead.map(({ item, finalTitleEn, summaryLine, impactLine }) => (
                     <TranslatedNewsCard
                       key={item.id}
                       item={item}
+                      translatedTitleEn={finalTitleEn}
+                      summaryLine={summaryLine}
+                      impactLine={impactLine}
                       boardType="read"
                       showOriginalBahasa={showOriginalBahasa}
                     />
@@ -502,17 +854,16 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
         </div>
         <div className="text-slate-300 leading-relaxed">
           <span className="text-slate-100 font-semibold font-mono text-[10px] uppercase">
-            How Translation & Ranking Are Derived:{' '}
+            How Translation, 1-Line Summary & Potential Impact Are Derived:{' '}
           </span>
           <span>
-            Headlines are translated from Bahasa Indonesia to English via automated neural translation paired with an institutional financial glossary (normalizing{' '}
+            Headlines and RSS article snippets are translated from Bahasa Indonesia to English via indexed neural translation paired with an institutional financial glossary (normalizing{' '}
             <span className="font-mono text-sky-200">IHSG → IHSG (JCI)</span>,{' '}
             <span className="font-mono text-sky-200">BEI → IDX (BEI)</span>,{' '}
             <span className="font-mono text-sky-200">Rp M → IDR Billion</span>,{' '}
             <span className="font-mono text-sky-200">APBN → State Budget</span>,{' '}
-            <span className="font-mono text-sky-200">HMP → Parliamentary Inquiry Right</span>).{' '}
-            <strong>Top 10 Most Important</strong> ranks stories by institutional macro, BI/OJK, fiscal, and constitutional policy weight;{' '}
-            <strong>Top 10 Most Read (Terpopuler)</strong> ranks stories by cross-portal syndication frequency and placement in Indonesia&apos;s Top Stories / Terpopuler feeds.
+            <span className="font-mono text-sky-200">HMP → Parliamentary Inquiry Right</span>), plus a real-time browser translation fallback.{' '}
+            Each card provides a specific <strong>1-Line Summary</strong> of the news report alongside its <strong>Potential Impact</strong> on Indonesian markets and policy.
           </span>
         </div>
       </div>

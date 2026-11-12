@@ -12,7 +12,7 @@ import { Header } from './components/Header';
 import { NavigationTabs } from './components/NavigationTabs';
 import { GlobalMacroTab } from './components/GlobalMacroTab';
 import { IndonesiaTab } from './components/IndonesiaTab';
-import { IndonesiaLocalNewsTab } from './components/IndonesiaLocalNewsTab';
+import { IndonesiaLocalNewsTab, isStillBahasaHeadline } from './components/IndonesiaLocalNewsTab';
 import { ChinaTab } from './components/ChinaTab';
 import { KoreaTab } from './components/KoreaTab';
 import { IndiaTab } from './components/IndiaTab';
@@ -2196,8 +2196,15 @@ export default function App() {
               noteworthyHeadlines: localJson.equities.noteworthyHeadlines,
             };
           }
+          const countTranslatedEn = (
+            list: Array<{ titleEn?: string; titleId?: string }> | undefined
+          ) =>
+            (list || []).filter((it) => !isStillBahasaHeadline(it.titleEn, it.titleId)).length;
+
           if (
             (!remoteJson.indonesiaLocalNews?.topImportant?.length ||
+              countTranslatedEn(localJson.indonesiaLocalNews?.topImportant) >
+                countTranslatedEn(remoteJson.indonesiaLocalNews?.topImportant) ||
               countSub24h(localJson.indonesiaLocalNews?.topImportant) >
                 countSub24h(remoteJson.indonesiaLocalNews?.topImportant)) &&
             localJson.indonesiaLocalNews?.topImportant?.length
