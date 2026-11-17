@@ -438,6 +438,8 @@ export interface ArgonCommentary {
   title: string;
   regimeBadge: string;
   updatedAtSGT?: string;
+  dominantRegime?: string;
+  aiGenerated?: boolean;
   conviction: string;
   synthesis: string;
   positioningTakeaway: string;

@@ -26,6 +26,10 @@ import {
   buildKoreaArgonCommentary,
   buildIndiaArgonCommentary,
   buildUsEquitiesArgonCommentary,
+  buildIndonesiaMarketBriefing,
+  buildChinaMarketBriefing,
+  buildKoreaMarketBriefing,
+  buildIndiaMarketBriefing,
 } from './utils/argonSynthesis';
 
 const DEFAULT_CHINA_DATA: ChinaMacroData = {
@@ -2061,6 +2065,7 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     },
     indonesia: {
       ...withNormalizedBondsAndHeadlines.indonesia,
+      commentary: buildIndonesiaMarketBriefing(withNormalizedBondsAndHeadlines),
       argonCommentary: buildIndonesiaArgonCommentary(withNormalizedBondsAndHeadlines),
     },
     indonesiaLocalNews: {
@@ -2069,14 +2074,17 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
     },
     china: {
       ...chinaData,
+      commentary: buildChinaMarketBriefing(withNormalizedBondsAndHeadlines),
       argonCommentary: buildChinaArgonCommentary(withNormalizedBondsAndHeadlines),
     },
     korea: {
       ...koreaData,
+      commentary: buildKoreaMarketBriefing(withNormalizedBondsAndHeadlines),
       argonCommentary: buildKoreaArgonCommentary(withNormalizedBondsAndHeadlines),
     },
     india: {
       ...indiaData,
+      commentary: buildIndiaMarketBriefing(withNormalizedBondsAndHeadlines),
       argonCommentary: buildIndiaArgonCommentary(withNormalizedBondsAndHeadlines),
     },
     equities: {

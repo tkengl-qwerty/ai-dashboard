@@ -3211,10 +3211,243 @@ def _fmt_event_date(dt: datetime) -> str:
     return dt.strftime("%a, %d %b %Y")
 
 
+THEME_LABELS_PY = {
+    "POLITICAL_GOVERNANCE": "Political, Constitutional & Governance Risk",
+    "MONETARY_LIQUIDITY": "Central Bank Rate Calibration & Liquidity Operations",
+    "TRADE_TARIFF_TECH": "Trade Tariffs, Tech Curbs & Geopolitical Supply Chains",
+    "MARKET_REFORM_EQUITY": "Capital Market Reform, Index Rebalancing & Earnings Dispersion",
+    "FISCAL_SUPPLY": "Sovereign Debt Supply, Fiscal Execution & Primary Auctions",
+    "FX_EXTERNAL_BALANCE": "FX Intervention, Reserve Buffers & External Balance",
+    "INFLATION_COMMODITY": "Inflation Pipeline, Energy & Commodity Pass-Through",
+}
+
+
+def _classify_headline_theme_py(title: str, category: str = "", sig: str = "") -> str:
+    text = f"{title} {category} {sig}".lower()
+    if re.search(
+        r"\b(dpr|mpr|gibran|prabowo|constitutional|mk\b|mahkamah|resign|impeach|parliament|kpk|bribery|corruption|wiretap|police|kapolri|election|midterm|cabinet|minister|president|geopolit|ukraine|iran|putin|war|security|bssn|cyber)\b",
+        text,
+    ):
+        return "POLITICAL_GOVERNANCE"
+    if re.search(
+        r"\b(tariff|trade|chip|semiconductor|nvidia|export control|curb|apec|sanction|supply chain|fdi|bilateral|customs|import|export)\b",
+        text,
+    ):
+        return "TRADE_TARIFF_TECH"
+    if re.search(
+        r"\b(msci|free-float|hsc|idx|bei\b|ojk|manipulation|rogue|ipo|buyback|dividend|p/e|fcf|earnings|eps|value-up|kospi|sensex|nifty|s&p 500|blue-chip|lq45|equity|stock|shares)\b",
+        text,
+    ):
+        return "MARKET_REFORM_EQUITY"
+    if re.search(
+        r"\b(cpi|inflation|pce|ppi|food price|oil|crude|wti|brent|gold|antam|commodity|energy|disinflation|price pressure)\b",
+        text,
+    ):
+        return "INFLATION_COMMODITY"
+    if re.search(
+        r"\b(fx|rupiah|yuan|renminbi|won\b|rupee|dollar|dxy|jisdor|ndf|dndf|fixing|parity|reserve|wss|dhe|capital flow|currency)\b",
+        text,
+    ):
+        return "FX_EXTERNAL_BALANCE"
+    if re.search(
+        r"\b(fiscal|apbn|budget|deficit|auction|refunding|issuance|sbn|indogb|cgb|ktb|g-sec|t-bill|treasury|djppr|kemenkeu|pppk|debt)\b",
+        text,
+    ):
+        return "FISCAL_SUPPLY"
+    return "MONETARY_LIQUIDITY"
+
+
+def _analyze_news_catalysts_py(items: list[dict], fallback_title: str) -> dict:
+    clean_items = [it for it in (items or []) if it and str(it.get("title") or it.get("headline") or "").strip()]
+    if not clean_items:
+        clean_items = [{"title": fallback_title, "source": "Institutional Desk", "timeAgo": "Live"}]
+
+    scores = {k: 0 for k in THEME_LABELS_PY}
+    counts = {k: 0 for k in THEME_LABELS_PY}
+    classified = []
+
+    for idx, it in enumerate(clean_items[:10]):
+        title = str(it.get("title") or it.get("headline") or "").strip()
+        src = str(it.get("source") or "Desk").strip()
+        t_ago = str(it.get("timeAgo") or "Live").strip()
+        cat = str(it.get("category") or "")
+        sig = str(it.get("significance") or it.get("macroTakeaway") or "")
+        theme = _classify_headline_theme_py(title, cat, sig)
+
+        t_low = t_ago.lower()
+        if t_low.endswith("m ago"):
+            rec_bonus = 30
+        elif t_low.endswith("h ago"):
+            try:
+                hrs = int(t_low.split("h")[0].strip())
+            except Exception:
+                hrs = 4
+            rec_bonus = max(12, 28 - hrs)
+        else:
+            rec_bonus = 10
+
+        weight = max(10, 100 - idx * 8 + rec_bonus)
+        scores[theme] += weight
+        counts[theme] += 1
+        classified.append(
+            {
+                "title": title,
+                "source": src,
+                "timeAgo": t_ago,
+                "theme": theme,
+                "themeLabel": THEME_LABELS_PY[theme],
+                "weight": weight,
+            }
+        )
+
+    sorted_themes = sorted(scores.keys(), key=lambda k: scores[k], reverse=True)
+    primary = sorted_themes[0] if sorted_themes else "MONETARY_LIQUIDITY"
+    secondary = next(
+        (t for t in sorted_themes if t != primary and scores[t] > 0),
+        "FISCAL_SUPPLY" if primary == "MONETARY_LIQUIDITY" else "MONETARY_LIQUIDITY",
+    )
+
+    digest_parts = []
+    for idx, c in enumerate(classified[:4]):
+        short_t = c["title"][:82] + ("…" if len(c["title"]) > 82 else "")
+        short_lbl = c["themeLabel"].split(",")[0]
+        digest_parts.append(f"(#{idx + 1} {short_lbl}) \"{short_t}\" [{c['source']} · {c['timeAgo']}]")
+
+    return {
+        "primaryTheme": primary,
+        "secondaryTheme": secondary,
+        "primaryLabel": THEME_LABELS_PY[primary],
+        "secondaryLabel": THEME_LABELS_PY[secondary],
+        "classified": classified,
+        "themeCounts": counts,
+        "leadItem": classified[0],
+        "secondItem": classified[1] if len(classified) > 1 else classified[0],
+        "thirdItem": classified[2] if len(classified) > 2 else classified[0],
+        "distinctThemesDigest": "; ".join(digest_parts),
+    }
+
+
+def _try_gemini_api_synthesis(data: dict, updated_sgt_str: str):
+    """
+    Optional hybrid Gemini API pass when GEMINI_API_KEY is available in the environment.
+    Calls gemini-4-hydrogen with structured JSON output to refine conviction, synthesis,
+    and positioningTakeaway across tabs based on the live 5-10 headlines and 1D telemetry.
+    """
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        return
+
+    try:
+        payload_summary = {
+            "sessionTimestampSGT": updated_sgt_str,
+            "globalMacro": {
+                "yieldCurve": data["globalMacro"]["yieldCurve"],
+                "futures": data["globalMacro"].get("futures", []),
+                "topNews": [
+                    {"headline": n.get("headline"), "source": n.get("source"), "timeAgo": n.get("timeAgo")}
+                    for n in data["globalMacro"].get("topNews", [])[:6]
+                ],
+            },
+            "indonesia": {
+                "biRate": data["indonesia"]["bonds"].get("biRate"),
+                "indoGB": data["indonesia"]["bonds"].get("indoGB", [])[:4],
+                "fxAndNdf": {
+                    "spotRate": data["indonesia"]["fxAndNdf"].get("spotRate"),
+                    "jisdorRate": data["indonesia"]["fxAndNdf"].get("jisdorRate"),
+                    "ndfSpread1M": data["indonesia"]["fxAndNdf"].get("ndfSpread1M"),
+                },
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data["indonesia"]["commentary"].get("noteworthyHeadlines", [])[:5]
+                ],
+            },
+            "china": {
+                "ccdcCgb": data.get("china", {}).get("bonds", {}).get("ccdcCgb", [])[:5],
+                "fx": data.get("china", {}).get("fxAndEquities", {}),
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("china", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:5]
+                ],
+            },
+            "korea": {
+                "kofiaKtb": data.get("korea", {}).get("bonds", {}).get("kofiaKtb", [])[:5],
+                "fx": data.get("korea", {}).get("fxAndEquities", {}),
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("korea", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:5]
+                ],
+            },
+            "india": {
+                "gsecCurve": data.get("india", {}).get("bonds", {}).get("gsecCurve", [])[:5],
+                "fx": data.get("india", {}).get("fxAndEquities", {}),
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("india", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:5]
+                ],
+            },
+            "equities": {
+                "indexSummary": data.get("equities", {}).get("indexSummary", {}),
+                "topForwardPe": data.get("equities", {}).get("topForwardPe", [])[:3],
+                "topFcfToEv": data.get("equities", {}).get("topFcfToEv", [])[:3],
+                "topDividendYield": data.get("equities", {}).get("topDividendYield", [])[:3],
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("equities", {}).get("noteworthyHeadlines", [])[:5]
+                ],
+            },
+        }
+
+        prompt = (
+            "You are Gemini 4 Argon, a chief institutional macro, sovereign fixed-income, FX, and equity strategist. "
+            "Carefully read all the provided news headlines and 1D market changes for each tab (globalMacro, indonesia, china, korea, india, equities). "
+            "For each tab, return a JSON object with keys: globalMacro, indonesia, china, korea, india, equities. "
+            "Each tab object must contain: "
+            "1) 'conviction': a sharp, specific tactical trade call headline (12-20 words) that directly reflects today's news developments and 1D yield/FX/equity shifts (never generic). "
+            "2) 'synthesis': a 3-4 sentence institutional desk synthesis that weaves together at least 3 of the specific news headlines for that tab with the exact 1D yield, FX, and equity numbers. "
+            "3) 'positioningTakeaway': a concrete 2-3 sentence tactical trade recommendation explaining how to position across rates, FX, and equities given today's news catalysts.\n\n"
+            f"Telemetry & News JSON:\n{json.dumps(payload_summary, ensure_ascii=False)}"
+        )
+
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-4-hydrogen:generateContent?key={api_key}"
+        req_body = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"responseMimeType": "application/json"},
+        }
+        resp = requests.post(
+            url,
+            headers={"Content-Type": "application/json", "User-Agent": "aistudio-build"},
+            json=req_body,
+            timeout=25,
+        )
+        if resp.status_code == 200:
+            res_json = resp.json()
+            text_out = (
+                res_json.get("candidates", [{}])[0]
+                .get("content", {})
+                .get("parts", [{}])[0]
+                .get("text", "")
+            )
+            if text_out:
+                parsed = json.loads(text_out)
+                for tab_key in ["globalMacro", "indonesia", "china", "korea", "india", "equities"]:
+                    if tab_key in parsed and tab_key in data and "argonCommentary" in data[tab_key]:
+                        tab_ai = parsed[tab_key]
+                        if tab_ai.get("conviction") and tab_ai.get("synthesis") and tab_ai.get("positioningTakeaway"):
+                            data[tab_key]["argonCommentary"]["conviction"] = str(tab_ai["conviction"])
+                            data[tab_key]["argonCommentary"]["synthesis"] = str(tab_ai["synthesis"])
+                            data[tab_key]["argonCommentary"]["positioningTakeaway"] = str(tab_ai["positioningTakeaway"])
+                            data[tab_key]["argonCommentary"]["aiGenerated"] = True
+                print("[INFO] Gemini API synthesis applied successfully across tabs.")
+    except Exception as exc:
+        print(f"[WARN] Optional Gemini API synthesis skipped ({exc}); using Multi-Regime Catalyst Engine.")
+
+
 def build_argon_commentaries(data: dict):
     """
     Dynamically synthesize Gemini 4 Argon commentary, critical support/resistance levels,
-    and key upcoming risk catalysts with concrete calendar dates across all tabs.
+    key upcoming risk catalysts with concrete calendar dates, and Country Executive Market
+    Briefings across all tabs using the Multi-Regime Catalyst & News-Scoring Engine
+    (plus optional Gemini API enrichment when GEMINI_API_KEY is present).
     """
     now_sgt = datetime.now(SGT)
     updated_sgt_str = data.get("metadata", {}).get("lastUpdatedSGT") or now_sgt.strftime("%d %b %Y, %I:%M %p SGT")
@@ -3257,74 +3490,90 @@ def build_argon_commentaries(data: dict):
     gold_pct = float(comm.get("GC=F", {}).get("changePct", 0.25))
     jpy_rate = float(fx_map.get("USD/JPY", {}).get("rate", 158.95))
 
-    g_news = data["globalMacro"].get("topNews", [])
-    top_global_headline = (
-        g_news[0].get("headline") if len(g_news) > 0 else None
-    ) or "Cross-asset positioning adjusts to US Treasury curve steepening and FOMC rate guidance"
-    top_global_meta = (
-        f"{g_news[0].get('source', 'Wire')} · {g_news[0].get('timeAgo', 'Live')}" if len(g_news) > 0 else "Live Desk Feed"
+    g_prof = _analyze_news_catalysts_py(
+        data["globalMacro"].get("topNews", []),
+        "US Treasury curve reprices term premium as FOMC and fiscal supply headlines dominate cross-asset flows",
     )
-    second_global_headline = (
-        g_news[1].get("headline") if len(g_news) > 1 else None
-    ) or "Primary dealer duration supply and G10 FX rate differentials drive sovereign bond flows"
-    second_global_meta = (
-        f"{g_news[1].get('source', 'Wire')} · {g_news[1].get('timeAgo', 'Live')}" if len(g_news) > 1 else "Wire Feed"
-    )
+    g_lead = g_prof["leadItem"]
+    g_sec = g_prof["secondItem"]
 
-    rate_dir_label = (
-        f"Defensive Belly Duration (2Y–5Y {y2:.2f}%–{y5:.2f}%) Amid {y10_chg:+.1f} bps 10Y Backup"
-        if y10_chg >= 3.0
-        else f"Extend Belly-to-10Y Duration ({y10:.2f}%, {y10_chg:+.1f} bps) on Bull Flattening"
-        if y10_chg <= -3.0
-        else f"2Y–5Y Belly Carry ({y2:.2f}%–{y5:.2f}%) vs {y30:.2f}% 30Y Supply"
-    )
-    eq_dir_label = (
-        f"Constructive SPX ({spx_pct:+.2f}%) Cyclical & Quality Tilt"
-        if spx_pct >= 0.15
-        else f"Quality Cash-Flow Hedge as ES=F Trades {spx_pct:+.2f}%"
-        if spx_pct <= -0.15
-        else f"Balanced SPX ({spx_price:,.0f}) Value/Quality Barbell"
-    )
+    is_bear_steep = y10_chg >= 3.0 and y10_chg >= y2_chg
+    is_bull_rally = y10_chg <= -3.0
+    is_risk_off_news = g_prof["primaryTheme"] in ("POLITICAL_GOVERNANCE", "TRADE_TARIFF_TECH")
+
+    if is_bear_steep and g_prof["primaryTheme"] == "FISCAL_SUPPLY":
+        g_conv = f"Short/Underweight 30Y Bond ({y30:.2f}%, {y30_chg:+.1f} bps) · Hold 2Y–5Y Belly ({y2:.2f}%–{y5:.2f}%) & Quality Value Over High-Multiple Tech"
+        g_open = (
+            f"[{session_date_str} · Fiscal Supply & Bear-Steepening Regime] Long-end US Treasury term premia are repricing higher today "
+            f"(10Y at {y10:.2f}% [{y10_chg:+.1f} bps], 30Y at {y30:.2f}% [{y30_chg:+.1f} bps], steepening 2s10s to {two_ten:+.1f} bps) as fiscal and debt-supply headlines dominate institutional desk flows."
+        )
+        g_takeaway = (
+            f"[Tactical Call — Curve Steepener & Short-Duration Quality] Avoid unhedged 10Y–30Y Treasury duration while \"{g_lead['title'][:70]}\" pressures long-end term premia ({y30:.2f}%). "
+            f"Concentrate fixed-income carry in 2Y–5Y notes ({y2:.2f}%–{y5:.2f}%), maintain long DXY ({dxy_price:.2f}, {dxy_pct:+.2f}%) / Gold (${gold_price:,.0f}/oz) tail hedges, and tilt equity exposure toward low-duration cash-flow compounders."
+        )
+    elif is_risk_off_news:
+        g_conv = f"Geopolitical & Trade Hedge: Long Gold (${gold_price:,.0f}/oz, {gold_pct:+.2f}%) + 2Y–5Y UST Belly ({y2:.2f}%) · Selective SPX ({spx_pct:+.2f}%) Dispersion"
+        g_open = (
+            f"[{session_date_str} · {g_prof['primaryLabel']} Regime] Cross-asset pricing reflects heightened sensitivity to geopolitical, policy, and trade headlines "
+            f"even as S&P 500 E-minis trade at {spx_price:,.2f} ({spx_pct:+.2f}%) and Nasdaq 100 at {ndx_price:,.2f} ({ndx_pct:+.2f}%)."
+        )
+        g_takeaway = (
+            f"[Tactical Call — Event-Risk Barbell] With desk flow anchored by \"{g_lead['title'][:68]}\" ({g_lead['source']}) and \"{g_sec['title'][:65]}\" ({g_sec['source']}), "
+            f"pair 2Y–5Y US Treasury duration ({y2:.2f}%–{y5:.2f}%) and Gold (${gold_price:,.0f}/oz, {gold_pct:+.2f}%) with selective US large-cap quality. Trim high-beta cyclicals if 10Y UST ({y10:.2f}%, {y10_chg:+.1f} bps) breaks above {y10 + 0.15:.2f}%."
+        )
+    elif is_bull_rally:
+        g_conv = f"Extend 5Y–10Y UST Duration ({y5:.2f}%–{y10:.2f}%, {y10_chg:+.1f} bps) · Long Nasdaq/Growth ({ndx_pct:+.2f}%) & EM FX Carry"
+        g_open = (
+            f"[{session_date_str} · Duration Receiving & Disinflation Regime] Sovereign bonds are catching a broad institutional bid across the curve "
+            f"(2Y at {y2:.2f}% [{y2_chg:+.1f} bps], 10Y at {y10:.2f}% [{y10_chg:+.1f} bps], 30Y at {y30:.2f}% [{y30_chg:+.1f} bps]), easing financial conditions for global risk assets."
+        )
+        g_takeaway = (
+            f"[Tactical Call — Duration Extension & Growth Beta] Lock in 5Y–10Y Treasury yields ({y5:.2f}%–{y10:.2f}%) as front-end and belly rates compress on \"{g_lead['title'][:70]}\". "
+            f"Lower real-rate pressure supports long Nasdaq 100 ({ndx_price:,.0f}, {ndx_pct:+.2f}%) and high-carry EM sovereign debt while DXY ({dxy_price:.2f}) remains capped below {dxy_price + 1.15:.2f}."
+        )
+    else:
+        g_conv = f"2Y–5Y Belly Carry ({y2:.2f}%–{y5:.2f}%) vs 30Y ({y30:.2f}%) · Constructive S&P 500 ({spx_pct:+.2f}%) & Quality Barbell"
+        g_open = (
+            f"[{session_date_str} · {g_prof['primaryLabel']} Regime] US Treasury yields are pricing a {two_ten:+.1f} bps 2s10s slope "
+            f"(2Y at {y2:.2f}% [{y2_chg:+.1f} bps], 5Y at {y5:.2f}%, 10Y at {y10:.2f}% [{y10_chg:+.1f} bps], 30Y at {y30:.2f}% [{y30_chg:+.1f} bps]; 5s10s {five_ten:+.1f} bps) "
+            f"alongside S&P 500 E-minis at {spx_price:,.2f} ({spx_pct:+.2f}%), DXY at {dxy_price:.2f} ({dxy_pct:+.2f}%), and Gold at ${gold_price:,.2f}/oz ({gold_pct:+.2f}%)."
+        )
+        g_takeaway = (
+            f"[Tactical Call — Belly Carry & Equity Quality Tilt] Across today's news slate led by \"{g_lead['title'][:66]}\" ({g_lead['source']}) and \"{g_sec['title'][:64]}\" ({g_sec['source']}), "
+            f"capture rolldown in 2Y–5Y Treasuries ({y2:.2f}%–{y5:.2f}%) while avoiding unhedged 30Y duration ({y30:.2f}%). Maintain constructive S&P 500 ({spx_pct:+.2f}%) positioning with a hedge trigger if US10Y breaches {y10 + 0.16:.2f}%."
+        )
 
     data["globalMacro"]["argonCommentary"] = {
         "modelLabel": "GEMINI 4 ARGON",
         "title": "GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST",
-        "regimeBadge": (
-            f"UST 2s10s +{two_ten:.1f} BPS · 10Y {y10:.2f}% ({y10_chg:+.1f} bps)"
-            if two_ten >= 0
-            else f"INVERTED 2s10s ({two_ten:.1f} BPS) · 10Y {y10:.2f}% ({y10_chg:+.1f} bps)"
-        ),
+        "regimeBadge": f"{g_prof['primaryTheme'].replace('_', ' ')} · UST 2s10s {two_ten:+.1f} BPS · 10Y {y10:.2f}% ({y10_chg:+.1f} bps)",
+        "dominantRegime": g_prof["primaryLabel"],
         "updatedAtSGT": updated_sgt_str,
-        "conviction": f"{rate_dir_label} · {eq_dir_label}",
+        "conviction": g_conv,
         "synthesis": (
-            f"[{session_date_str} Session] US Treasury yields are pricing a {two_ten:+.1f} bps 2s10s slope with the 2Y at {y2:.2f}% ({y2_chg:+.1f} bps 1D), "
-            f"5Y at {y5:.2f}%, 10Y benchmark at {y10:.2f}% ({y10_chg:+.1f} bps 1D), and 30Y long bond at {y30:.2f}% ({y30_chg:+.1f} bps 1D; 5s10s at {five_ten:+.1f} bps). "
-            f"Across cross-asset futures, S&P 500 E-minis trade at {spx_price:,.2f} ({spx_pct:+.2f}%) and Nasdaq 100 at {ndx_price:,.2f} ({ndx_pct:+.2f}%), "
-            f"while the US Dollar Index sits at {dxy_price:.2f} ({dxy_pct:+.2f}%), WTI Crude at ${wti_price:.2f}/bbl ({wti_pct:+.2f}%), and Gold at ${gold_price:,.2f}/oz ({gold_pct:+.2f}%). "
-            f"Top desk catalysts: (1) \"{top_global_headline}\" ({top_global_meta}); and (2) \"{second_global_headline}\" ({second_global_meta})."
+            f"{g_open} Argon's multi-update review across {len(g_prof['classified'])} live global wires highlights: {g_prof['distinctThemesDigest']}. "
+            f"Net cross-asset read-through: with 10Y UST moving {y10_chg:+.1f} bps to {y10:.2f}%, USD/JPY at ¥{jpy_rate:.2f}, and WTI at ${wti_price:.2f}/bbl ({wti_pct:+.2f}%), "
+            f"institutional desks are balancing \"{g_lead['title'][:75]}\" against front-end Fed rate expectations ({y2:.2f}% 2Y) and long-end refunding supply."
         ),
-        "positioningTakeaway": (
-            f"With 10Y UST at {y10:.2f}% ({y10_chg:+.1f} bps today) and 2s10s at {two_ten:+.1f} bps, favor 2Y–5Y belly duration ({y2:.2f}%–{y5:.2f}%) over unhedged 30Y exposure ({y30:.2f}%). "
-            f"In equities and FX, watch {y10 + 0.15:.2f}% on US10Y and {dxy_price:.2f} on DXY ({dxy_pct:+.2f}%) as institutional desks digest \"{top_global_headline[:72]}\"."
-        ),
+        "positioningTakeaway": g_takeaway,
         "criticalLevels": [
             {
                 "asset": "US 10Y Treasury Yield",
-                "current": f"{y10:.2f}%",
+                "current": f"{y10:.2f}% ({y10_chg:+.1f} bps)",
                 "support": f"{y10 - 0.14:.2f}%",
                 "resistance": f"{y10 + 0.16:.2f}%",
                 "implication": f"Break above {y10 + 0.16:.2f}% pressures equity multiples & EM FX; move below {y10 - 0.14:.2f}% fuels duration rally.",
             },
             {
                 "asset": "S&P 500 E-mini (ES=F)",
-                "current": f"{spx_price:,.2f}",
+                "current": f"{spx_price:,.2f} ({spx_pct:+.2f}%)",
                 "support": f"{round(spx_price * 0.985):,}",
                 "resistance": f"{round(spx_price * 1.015):,}",
                 "implication": f"Holding above {round(spx_price * 0.985):,} keeps institutional dip-buying intact across financials and AI capex leaders.",
             },
             {
                 "asset": "US Dollar Index (DXY)",
-                "current": f"{dxy_price:.2f}",
+                "current": f"{dxy_price:.2f} ({dxy_pct:+.2f}%)",
                 "support": f"{dxy_price - 1.15:.2f}",
                 "resistance": f"{dxy_price + 1.25:.2f}",
                 "implication": f"Reclaiming {dxy_price + 1.25:.2f} tightens global USD funding; sub-{dxy_price - 1.15:.2f} accelerates flows into Gold & Asian FX.",
@@ -3342,13 +3591,13 @@ def build_argon_commentaries(data: dict):
                 "event": "US BLS Consumer Price Index (CPI) Print & Fed Front-End Rate Cut Pricing",
                 "timing": f"{_fmt_event_date(cpi_date)} · 21:30 SGT (08:30 ET)",
                 "impact": "Critical",
-                "watchFor": f"Core services stickiness vs softer energy (${wti_price:.2f}/bbl WTI) and whether US 2Y ({y2:.2f}%) breaks {y2 + 0.12:.2f}% or flattens the 2Y/10Y spread ({two_ten:+.1f} bps).",
+                "watchFor": f"Core services stickiness vs softer energy (${wti_price:.2f}/bbl WTI) and whether US 2Y ({y2:.2f}%) breaks {y2 + 0.12:.2f}% following \"{g_lead['title'][:78]}\".",
             },
             {
                 "event": "US Treasury 10Y / 30Y Refunding Auction Settlement & Primary Dealer Takedown",
                 "timing": f"{_fmt_event_date(today_biz)} · 13:00 ET (02:00 SGT +1)",
                 "impact": "High",
-                "watchFor": f"Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near {y30 + 0.12:.2f}%.",
+                "watchFor": f"Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near {y30 + 0.12:.2f}% amid \"{g_sec['title'][:75]}\".",
             },
             {
                 "event": "US Retail Sales, PPI Inflation & FOMC Governors Policy Remarks",
@@ -3359,7 +3608,7 @@ def build_argon_commentaries(data: dict):
         ],
     }
 
-    # Indonesia Gemini 4 Argon Commentary
+    # Indonesia Gemini 4 Argon Commentary & Dynamic Country Market Briefing
     bonds = data["indonesia"]["bonds"]
     fx_ndf = data["indonesia"]["fxAndNdf"]
     bi_rate = float(bonds.get("biRate", 5.75))
@@ -3368,6 +3617,8 @@ def build_argon_commentaries(data: dict):
     indo_5y_chg = next((float(b.get("changeBps", 0.0)) for b in bonds["indoGB"] if b["tenor"].startswith("5Y")), 0.0)
     indo_10y = next((float(b["yield"]) for b in bonds["indoGB"] if b["tenor"].startswith("10Y")), 7.69)
     indo_10y_chg = next((float(b.get("changeBps", 0.0)) for b in bonds["indoGB"] if b["tenor"].startswith("10Y")), 0.0)
+    indo_15y = next((float(b["yield"]) for b in bonds["indoGB"] if b["tenor"].startswith("15Y")), 7.82)
+    indo_20y = next((float(b["yield"]) for b in bonds["indoGB"] if b["tenor"].startswith("20Y")), 7.89)
     spread_10y = int(bonds.get("sovereignSpread10Y", round((indo_10y - y10) * 100)))
 
     srbi_6m = next((float(s["weightedAvgYield"]) for s in bonds["srbi"] if s["tenor"] == "6M"), 6.566)
@@ -3381,7 +3632,6 @@ def build_argon_commentaries(data: dict):
     spot_chg = int(fx_ndf.get("spotChange", 0))
     spot_pct = float(fx_ndf.get("spotChangePct", 0.0))
     jisdor = int(fx_ndf.get("jisdorRate", 18130))
-    jisdor_chg = int(fx_ndf.get("jisdorChange", 0))
     ndf1m = int(fx_ndf.get("ndf1M", 18116))
     ndf_spread = int(fx_ndf.get("ndfSpread1M", 36))
     ihsg = float(fx_ndf.get("ihsgIndex", {}).get("level", 5050.43))
@@ -3389,47 +3639,120 @@ def build_argon_commentaries(data: dict):
     real_buffer = round(bi_rate - cpi_yoy, 2)
 
     id_heads = data["indonesia"]["commentary"].get("noteworthyHeadlines", [])
-    lead_indo_news = (
-        id_heads[0].get("title") if len(id_heads) > 0 else None
-    ) or "Bank Indonesia reports US$146.8B FX reserves and prepares 100% Rupiah conversion for resource export earnings"
-    lead_indo_meta = (
-        f"{id_heads[0].get('source', 'Jakarta Desk')} · {id_heads[0].get('timeAgo', 'Live')}" if len(id_heads) > 0 else "Jakarta Desk"
-    )
-    second_indo_news = (
-        id_heads[1].get("title") if len(id_heads) > 1 else None
-    ) or "KSSK and Ministry of Finance anchor SBN issuance discipline and onshore Rupiah liquidity"
-    second_indo_meta = (
-        f"{id_heads[1].get('source', 'Jakarta Feed')} · {id_heads[1].get('timeAgo', 'Live')}" if len(id_heads) > 1 else "Jakarta Feed"
-    )
+    id_combined_news = list(id_heads)
+    for loc_it in data.get("indonesiaLocalNews", {}).get("topImportant", [])[:3]:
+        id_combined_news.append(
+            {
+                "title": loc_it.get("titleEn"),
+                "source": loc_it.get("source"),
+                "timeAgo": loc_it.get("timeAgo"),
+                "category": loc_it.get("category"),
+                "significance": loc_it.get("marketSignificance"),
+            }
+        )
 
-    fx_regime_note = (
-        f"Onshore USD/IDR trades at Rp {spot:,} ({spot_chg:+d} IDR / {spot_pct:+.2f}% 1D) alongside BI JISDOR at Rp {jisdor:,} ({jisdor_chg:+d} IDR) and 1M NDF at Rp {ndf1m:,} (+{ndf_spread} IDR basis), keeping Bank Indonesia active across spot, DNDF, and secondary SBN triple-intervention"
-        if (spot >= 18100 or spot_chg > 25)
-        else f"Onshore USD/IDR spot trades at Rp {spot:,} ({spot_pct:+.2f}% 1D) with BI JISDOR at Rp {jisdor:,} and 1M NDFs at Rp {ndf1m:,} (+{ndf_spread} IDR basis)"
+    id_prof = _analyze_news_catalysts_py(
+        id_combined_news,
+        "Bank Indonesia and Ministry of Finance coordinate SBN curve stability and onshore Rupiah liquidity",
     )
+    id_lead = id_prof["leadItem"]
+    id_sec = id_prof["secondItem"]
+    id_third = id_prof["thirdItem"]
 
-    indo_conviction = (
-        f"Defensive 12M SRBI ({srbi_12m:.3f}%) & 5Y FR0109 ({indo_5y:.2f}%) Carry · NDF-Hedged Duration (USD/IDR {spot:,})"
-        if (spot >= 18150 or indo_10y_chg >= 3.0)
-        else f"Overweight 5Y–10Y IndoGB ({indo_5y:.2f}%–{indo_10y:.2f}%, +{spread_10y} bps vs UST) & 12M SRBI ({srbi_12m:.3f}%)"
+    if id_prof["primaryTheme"] == "POLITICAL_GOVERNANCE":
+        id_conv = f"Political & Governance Risk Hedge: Front-End 12M SRBI ({srbi_12m:.3f}%) + 5Y FR0109 ({indo_5y:.2f}%) · NDF-Hedged vs 10Y–20Y Duration"
+        id_open = (
+            f"[{session_date_str} · Jakarta Political & Governance Watch] Onshore institutional desks are closely weighing domestic political and constitutional headlines "
+            f"against Indonesia's +{real_buffer:.2f}% real policy buffer (BI-Rate {bi_rate:.2f}% vs CPI {cpi_yoy:.2f}%) and +{spread_10y} bps 10Y sovereign spread over USTs "
+            f"(FR0108 at {indo_10y:.2f}%, {indo_10y_chg:+.1f} bps 1D; 5Y FR0109 at {indo_5y:.2f}%, {indo_5y_chg:+.1f} bps 1D)."
+        )
+        id_takeaway = (
+            f"[Tactical Call — Shorten Duration into 12M SRBI & 5Y FR0109, Hedge FX Tail] While domestic headlines focus on \"{id_lead['title'][:68]}\" ({id_lead['source']}) "
+            f"and \"{id_sec['title'][:65]}\" ({id_sec['source']}), avoid extending unhedged duration into 15Y–20Y IndoGBs ({indo_15y:.2f}%). Capture {srbi_12m:.3f}% carry in 12M BI SRBI and 5Y FR0109 ({indo_5y:.2f}%), "
+            f"and maintain 1M NDF hedges (Rp {ndf1m:,}, +{ndf_spread} IDR basis) whenever USD/IDR (Rp {spot:,}) trades above Rp 18,050."
+        )
+    elif id_prof["primaryTheme"] == "MARKET_REFORM_EQUITY":
+        id_conv = f"IDX/MSCI Reform Rotation: Long Liquid LQ45 Banks + 5Y–10Y IndoGB (FR0109 {indo_5y:.2f}% / FR0108 {indo_10y:.2f}%)"
+        id_open = (
+            f"[{session_date_str} · Capital Market Reform & Index Rebalancing Regime] Structural Indonesia Stock Exchange (IDX/OJK) governance and MSCI index investability catalysts "
+            f"are driving onshore institutional allocation today, with IHSG at {ihsg:,.2f} ({ihsg_pct:+.2f}%), USD/IDR at Rp {spot:,} (JISDOR Rp {jisdor:,}), and 10Y FR0108 yielding {indo_10y:.2f}% ({indo_10y_chg:+.1f} bps 1D)."
+        )
+        id_takeaway = (
+            f"[Tactical Call — High-Liquidity LQ45 + Belly SBN Carry] Driven by \"{id_lead['title'][:70]}\" ({id_lead['source']}) and \"{id_sec['title'][:65]}\", "
+            f"rotate equity exposure strictly out of concentrated low-float issuers into high-free-float LQ45 banks (BBCA, BMRI, BBRI), while pairing with 5Y FR0109 ({indo_5y:.2f}%) and 10Y FR0108 ({indo_10y:.2f}%, +{spread_10y} bps over US10Y)."
+        )
+    elif spot >= 18150 or spot_chg >= 35 or id_prof["primaryTheme"] == "FX_EXTERNAL_BALANCE":
+        id_conv = f"FX Defense & Front-End Carry: Overweight 12M SRBI ({srbi_12m:.3f}% WAR) · Underweight Unhedged 10Y FR0108 ({indo_10y:.2f}%)"
+        id_open = (
+            f"[{session_date_str} · FX Defense & Triple-Intervention Regime] With onshore USD/IDR trading at Rp {spot:,} ({spot_pct:+.2f}% 1D; JISDOR Rp {jisdor:,}, 1M NDF Rp {ndf1m:,} [+{ndf_spread} IDR basis]), "
+            f"Bank Indonesia's FX stabilization toolkit and external reserve buffer are the primary anchors for Jakarta fixed income and currency desks."
+        )
+        id_takeaway = (
+            f"[Tactical Call — Front-End SRBI Over Long SBN Duration] Synthesizing \"{id_lead['title'][:68]}\" and \"{id_sec['title'][:64]}\", favor 6M–12M BI SRBI ({srbi_6m:.3f}%–{srbi_12m:.3f}% WAR) "
+            f"where BI explicitly prices yields to defend the Rupiah, and wait for USD/IDR to stabilize below Rp {spot - 75:,} before adding unhedged 10Y duration."
+        )
+    else:
+        id_conv = f"Receive 5Y–10Y IndoGB (FR0109 {indo_5y:.2f}% / FR0108 {indo_10y:.2f}%, +{spread_10y} bps vs UST) + 12M SRBI ({srbi_12m:.3f}%)"
+        id_open = (
+            f"[{session_date_str} · {id_prof['primaryLabel']} Regime] Indonesia's sovereign fixed-income market offers a +{real_buffer:.2f}% real policy buffer (BI-Rate {bi_rate:.2f}% vs CPI {cpi_yoy:.2f}% YoY) "
+            f"and a +{spread_10y} bps 10Y yield pickup over US Treasuries (FR0108 at {indo_10y:.2f}% [{indo_10y_chg:+.1f} bps 1D], 5Y FR0109 at {indo_5y:.2f}% [{indo_5y_chg:+.1f} bps 1D]), "
+            f"while USD/IDR trades at Rp {spot:,} ({spot_pct:+.2f}%) and IHSG sits at {ihsg:,.2f} ({ihsg_pct:+.2f}%)."
+        )
+        id_takeaway = (
+            f"[Tactical Call — Constructive 5Y–10Y SBN & SRBI Barbell] Supported by \"{id_lead['title'][:68]}\" ({id_lead['source']}) and \"{id_sec['title'][:65]}\" ({id_sec['source']}), "
+            f"accumulate 5Y FR0109 ({indo_5y:.2f}%) and 10Y FR0108 ({indo_10y:.2f}%) on auction dips alongside 12M SRBI ({srbi_12m:.3f}% WAR), using 1M NDFs (+{ndf_spread} IDR spread) as an early-warning barometer."
+        )
+
+    data["indonesia"]["commentary"].update(
+        {
+            "title": f"Bank Indonesia & DJPPR Sovereign Fixed Income Briefing · {id_prof['primaryLabel'].split(',')[0]}",
+            "date": session_date_str,
+            "biPolicyPosture": f"BI-Rate {bi_rate:.2f}% (Real Buffer +{real_buffer:.2f}%) · 12M SRBI {srbi_12m:.3f}% WAR · {id_prof['primaryTheme'].replace('_', ' ')}",
+            "executiveSummary": (
+                f"[{session_date_str} Executive Synthesis] Across today's Jakarta session, dominant news flow centers on {id_prof['primaryLabel'].lower()} — "
+                f"led by \"{id_lead['title'][:78]}\" ({id_lead['source']} · {id_lead['timeAgo']}) and \"{id_sec['title'][:74]}\" ({id_sec['source']} · {id_sec['timeAgo']}). "
+                f"Bank Indonesia maintains its {bi_rate:.2f}% policy anchor (+{real_buffer:.2f}% real buffer over {cpi_yoy:.2f}% YoY CPI), anchoring 5Y FR0109 at {indo_5y:.2f}% ({indo_5y_chg:+.1f} bps 1D) "
+                f"and 10Y FR0108 at {indo_10y:.2f}% ({indo_10y_chg:+.1f} bps 1D; +{spread_10y} bps over 10Y UST), while onshore USD/IDR trades at Rp {spot:,} ({spot_pct:+.2f}%; JISDOR Rp {jisdor:,}) and IHSG prints {ihsg:,.2f} ({ihsg_pct:+.2f}%)."
+            ),
+            "macroPillars": [
+                {
+                    "heading": f"1. DJPPR 2026 Seri Benchmark SUN Curve & Fiscal Transmission ({session_date_str})",
+                    "analysis": (
+                        f"Official DJPPR Kemenkeu 2026 benchmarks price 5Y FR0109 at {indo_5y:.2f}% ({indo_5y_chg:+.1f} bps), 10Y FR0108 at {indo_10y:.2f}% ({indo_10y_chg:+.1f} bps, +{spread_10y} bps vs US10Y), "
+                        f"15Y FR0106 at {indo_15y:.2f}%, and 20Y FR0107 at {indo_20y:.2f}%. Onshore institutional duration demand is actively weighing \"{id_lead['title'][:72]}\" ({id_lead['source']}) against domestic bank and pension reinvestment flows."
+                    ),
+                },
+                {
+                    "heading": f"2. BI SRBI Open Market Operations ({srbi_dt}) & Rupiah Liquidity Corridor",
+                    "analysis": (
+                        f"Bank Indonesia's SRBI curve clears at {srbi_6m:.3f}% (6M), {srbi_9m:.3f}% (9M), and {srbi_12m:.3f}% (12M WAR, IDR 7.50 T awarded from IDR 36.90 T total bids), "
+                        f"preserving a +{round((srbi_12m - y10) * 100)} bps short-end yield pickup over US 10Y Treasuries while desks digest \"{id_sec['title'][:72]}\" ({id_sec['source']})."
+                    ),
+                },
+                {
+                    "heading": f"3. JISDOR (Rp {jisdor:,}), Offshore NDF Basis (+{ndf_spread} IDR) & IHSG ({ihsg:,.2f})",
+                    "analysis": (
+                        f"Spot USD/IDR trades at Rp {spot:,} ({spot_pct:+.2f}%) alongside 1M NDFs at Rp {ndf1m:,} (+{ndf_spread} IDR implied basis) and IHSG at {ihsg:,.2f} ({ihsg_pct:+.2f}%), "
+                        f"with \"{id_third['title'][:72]}\" shaping foreign institutional equity and bond positioning."
+                    ),
+                },
+            ],
+        }
     )
 
     data["indonesia"]["argonCommentary"] = {
         "modelLabel": "GEMINI 4 ARGON",
         "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
-        "regimeBadge": f"BI-RATE {bi_rate:.2f}% · REAL BUFFER +{real_buffer:.2f}% · SPREAD +{spread_10y} BPS",
+        "regimeBadge": f"{id_prof['primaryTheme'].replace('_', ' ')} · BI {bi_rate:.2f}% · FR0108 {indo_10y:.2f}% (+{spread_10y} BPS)",
+        "dominantRegime": id_prof["primaryLabel"],
         "updatedAtSGT": updated_sgt_str,
-        "conviction": indo_conviction,
+        "conviction": id_conv,
         "synthesis": (
-            f"[{session_date_str} Jakarta Desk] Indonesia's sovereign curve prices 10Y benchmark FR0108 at {indo_10y:.2f}% ({indo_10y_chg:+.1f} bps 1D; +{spread_10y} bps over US 10Y at {y10:.2f}%) "
-            f"and 5Y benchmark FR0109 at {indo_5y:.2f}% ({indo_5y_chg:+.1f} bps 1D), backed by a +{real_buffer:.2f}% real policy buffer (BI-Rate {bi_rate:.2f}% vs Headline CPI {cpi_yoy:.2f}% YoY) and 12M SRBI clearing at {srbi_12m:.3f}% WAR ({srbi_dt} tender: IDR 7.50 T awarded from IDR 36.90 T total bids). "
-            f"{fx_regime_note}, while the IDX Composite (IHSG) trades at {ihsg:,.2f} ({ihsg_pct:+.2f}%). "
-            f"Key Indonesia catalysts: (1) \"{lead_indo_news}\" ({lead_indo_meta}); and (2) \"{second_indo_news}\" ({second_indo_meta})."
+            f"{id_open} Argon's synthesis of today's {len(id_prof['classified'])} Jakarta macro, regulatory, and political updates highlights: {id_prof['distinctThemesDigest']}. "
+            f"Combined with Bank Indonesia's {srbi_dt} SRBI clearing rates (6M {srbi_6m:.3f}%, 12M {srbi_12m:.3f}% WAR; {srbi_awarded} awarded from {srbi_bids} bids), "
+            f"the interplay between \"{id_lead['title'][:70]}\" and onshore liquidity dictates near-term foreign SBN and equity flows."
         ),
-        "positioningTakeaway": (
-            f"As of {session_date_str}, with 10Y FR0108 at {indo_10y:.2f}% ({indo_10y_chg:+.1f} bps 1D) and USD/IDR at Rp {spot:,} (1M NDF spread +{ndf_spread} IDR), "
-            f"pair front-end 12M SRBI ({srbi_12m:.3f}% WAR) with 5Y–10Y DJPPR benchmarks ({indo_5y:.2f}%–{indo_10y:.2f}%) on dips while hedging offshore USD tail risk ahead of the {_fmt_event_date(next_fri)} SRBI tender and \"{lead_indo_news[:68]}\"."
-        ),
+        "positioningTakeaway": id_takeaway,
         "criticalLevels": [
             {
                 "asset": "USD/IDR Spot & JISDOR",
@@ -3454,7 +3777,7 @@ def build_argon_commentaries(data: dict):
             },
             {
                 "asset": "IDX Composite (IHSG)",
-                "current": f"{ihsg:,.2f}",
+                "current": f"{ihsg:,.2f} ({ihsg_pct:+.2f}%)",
                 "support": f"{round(ihsg * 0.98):,}",
                 "resistance": f"{round(ihsg * 1.02):,}",
                 "implication": f"Reclaiming {round(ihsg * 1.02):,} confirms foreign institutional rotation back into big-cap Jakarta banks and infrastructure.",
@@ -3465,13 +3788,13 @@ def build_argon_commentaries(data: dict):
                 "event": f"Bank Indonesia Weekly SRBI (6M / 9M / 12M) Open Market Tender (Post-{srbi_dt} Cycle)",
                 "timing": f"{_fmt_event_date(next_fri)} · 10:00–14:00 WIB (11:00–15:00 SGT)",
                 "impact": "Critical",
-                "watchFor": f"Following Friday {srbi_dt}'s issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at {srbi_12m:.3f}%), watch secondary market turnover and whether 12M WAR holds near {srbi_12m:.3f}%.",
+                "watchFor": f"Following Friday {srbi_dt}'s issuance (12M WAR at {srbi_12m:.3f}%), watch secondary market turnover and clearing yields amid \"{id_lead['title'][:75]}\".",
             },
             {
                 "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction (FR0109 / FR0108 / FR0106)",
                 "timing": f"{_fmt_event_date(next_tue)} · 10:00–12:00 WIB (11:00–13:00 SGT)",
                 "impact": "High",
-                "watchFor": f"Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, {indo_5y:.2f}%), FR0108 (10Y, {indo_10y:.2f}%), FR0106 (15Y), and FR0107 (20Y).",
+                "watchFor": f"Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, {indo_5y:.2f}%) and FR0108 (10Y, {indo_10y:.2f}%) following \"{id_sec['title'][:75]}\".",
             },
             {
                 "event": "Bank Indonesia Board of Governors (RDG) Rate Decision & JISDOR / DHE FX Review",
@@ -3482,7 +3805,106 @@ def build_argon_commentaries(data: dict):
         ],
     }
 
-    # China (CCDC) Gemini 4 Argon Commentary
+    # Indonesia Local News (ID -> EN) Multi-Regime Gemini 4 Argon Commentary
+    if "indonesiaLocalNews" in data:
+        id_loc = data["indonesiaLocalNews"]
+        id_loc["asOfDate"] = updated_sgt_str
+        imp_list = id_loc.get("topImportant", [])
+        read_list = id_loc.get("topRead", [])
+        imp_1 = imp_list[0] if len(imp_list) > 0 else {}
+        imp_2 = imp_list[1] if len(imp_list) > 1 else {}
+        imp_3 = imp_list[2] if len(imp_list) > 2 else {}
+        read_1 = read_list[0] if len(read_list) > 0 else {}
+        read_2 = read_list[1] if len(read_list) > 1 else {}
+
+        loc_items_for_prof = [
+            {
+                "title": x.get("titleEn") or x.get("titleId") or "",
+                "source": x.get("source", "CNBC Indonesia"),
+                "timeAgo": x.get("timeAgo", "1h ago"),
+                "category": x.get("category", ""),
+                "significance": x.get("marketSignificance", ""),
+            }
+            for x in (imp_list[:6] + read_list[:4])
+        ]
+        loc_prof = _analyze_news_catalysts_py(
+            loc_items_for_prof,
+            "Onshore Bahasa Indonesia media highlights Bank Indonesia liquidity, APBN fiscal execution, and DPR constitutional developments",
+        )
+        pol_count = loc_prof["themeCounts"].get("POLITICAL_GOVERNANCE", 0)
+        mkt_count = loc_prof["themeCounts"].get("MARKET_REFORM_EQUITY", 0)
+        imp_summary = " · ".join(
+            [
+                f"#{idx + 1} \"{item.get('titleEn', '')}\" ({item.get('source', '')}, {item.get('timeAgo', '')}, Score {item.get('impactScore', 95)}/100)"
+                for idx, item in enumerate([x for x in [imp_1, imp_2, imp_3] if x])
+            ]
+        ) or "\"Bank Indonesia & KSSK Macro-Financial Coordination\" (Kontan)"
+        read_summary = " · ".join(
+            [
+                f"#{idx + 1} \"{item.get('titleEn', '')}\" ({item.get('source', '')}, {item.get('timeAgo', '')})"
+                for idx, item in enumerate([x for x in [read_1, read_2] if x])
+            ]
+        ) or "\"National Political & Parliamentary Headlines\" (CNBC Indonesia)"
+
+        if pol_count >= 3:
+            loc_conv = f"Fade Domestic Political Virality ({pol_count} DPR/MPR Stories) · Stay Overweight Liquid LQ45 Banks & 5Y–10Y FR0108 ({indo_10y:.2f}%)"
+            loc_takeaway = (
+                f"[Tactical Call — Separate Political Virality from Sovereign & LQ45 Fundamentals] Across the 20 translated Bahasa stories, {pol_count} headlines focus on parliamentary/executive politics "
+                f"({read_1.get('source', 'CNBC Indonesia')}: \"{read_1.get('titleEn', '')[:68]}\"), yet onshore USD/IDR (Rp {spot:,}) and JISDOR (Rp {jisdor:,}) remain orderly. "
+                f"Do not chase political-noise sell-offs; accumulate liquid LQ45 banks (BBCA, BMRI, BBRI) and 5Y–10Y IndoGBs ({indo_5y:.2f}%–{indo_10y:.2f}%) while keeping 1M NDF hedges ({ndf1m:,}) in place."
+            )
+        elif mkt_count >= 2:
+            loc_conv = f"Rotate Out of Excluded HSC / MSCI Tickers Into Core LQ45 Free-Float Leaders & 12M SRBI ({srbi_12m:.3f}%)"
+            loc_takeaway = (
+                f"[Tactical Call — Quality Free-Float Equity Rotation + Front-End SRBI Carry] Onshore Bahasa portals highlight structural IDX/MSCI index rebalancing "
+                f"(\"{imp_1.get('titleEn', '')[:68]}\"). Avoid low-float conglomerate tickers facing index exclusion and concentrate Jakarta equity exposure in high-free-float LQ45 banks alongside 12M SRBI ({srbi_12m:.3f}% WAR)."
+            )
+        else:
+            loc_conv = f"Position for {loc_prof['primaryLabel'].split(',')[0]} Catalyst · Long 5Y–10Y IndoGB ({indo_10y:.2f}%) & Core LQ45"
+            loc_takeaway = (
+                f"[Tactical Call — Align With Onshore Policy & Liquidity Impulse] Synthesizing #1 Important \"{imp_1.get('titleEn', '')[:65]}\" ({imp_1.get('source', 'Kontan')}) and #1 Most Read \"{read_1.get('titleEn', '')[:62]}\" ({read_1.get('source', 'Detik')}), "
+                f"maintain core duration in 5Y–10Y IndoGBs ({indo_5y:.2f}%–{indo_10y:.2f}%) and liquid SOE banks benefiting from Bank Indonesia's Rp149.3T KLM liquidity incentives."
+            )
+
+        id_loc["argonCommentary"] = {
+            "modelLabel": "GEMINI 4 ARGON",
+            "updatedAtSGT": updated_sgt_str,
+            "title": "GEMINI 4 ARGON · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS",
+            "regimeBadge": f"{loc_prof['primaryTheme'].replace('_', ' ')} · 10 BAHASA PORTALS · USD/IDR {spot:,} · IHSG {ihsg:,.2f}",
+            "dominantRegime": loc_prof["primaryLabel"],
+            "conviction": loc_conv,
+            "synthesis": (
+                f"[{session_date_str} · {loc_prof['primaryLabel']} Media Regime] Neural ID→EN synthesis across 20 top stories from 10 Bahasa Indonesia portals "
+                f"(CNBC Indonesia, Kontan, Bisnis, Kompas, Detik, Tempo, ANTARA) identifies {loc_prof['primaryLabel'].lower()} as today's primary onshore narrative. "
+                f"On the Top 10 Most Important macro-policy board, coverage is led by {imp_summary}. "
+                f"Simultaneously, the Top 10 Most Read (Terpopuler) national board is dominated by {read_summary} — "
+                f"while onshore USD/IDR trades at Rp {spot:,} (JISDOR Rp {jisdor:,}), 10Y FR0108 yields {indo_10y:.2f}%, and IHSG prints {ihsg:,.2f} ({ihsg_pct:+.2f}%)."
+            ),
+            "positioningTakeaway": loc_takeaway,
+            "criticalLevels": id_loc.get("argonCommentary", {}).get("criticalLevels", []),
+            "eventsToWatch": [
+                {
+                    "event": "IDX (BEI) Effective Exclusion of 383 HSC Issuers & MSCI Index Review Cut-Off",
+                    "timing": f"{_fmt_event_date(next_fri)} · 09:00 WIB (10:00 SGT)",
+                    "impact": "Critical",
+                    "watchFor": "Passive and active institutional rebalancing out of High Shareholder Concentration (HSC) names into liquid LQ45/BUMN constituents.",
+                },
+                {
+                    "event": "DPR RI Parliamentary Consultation & Constitutional Governance Watch",
+                    "timing": f"{_fmt_event_date(today_biz)} · 13:30 WIB (14:30 SGT)",
+                    "impact": "High",
+                    "watchFor": f"Whether viral domestic political headlines (\"{read_1.get('titleEn', '')[:68]}\") remain procedural without disrupting APBN fiscal execution.",
+                },
+                {
+                    "event": "Bank Indonesia Rp149.3T KLM Liquidity Allocation & KSSK Quarterly Assessment",
+                    "timing": f"{_fmt_event_date(bi_rdg_date)} · 14:20 WIB (15:20 SGT)",
+                    "impact": "High",
+                    "watchFor": "Transmission of BI's Rp149.3T macroprudential liquidity incentives into SOE bank (BRI, Mandiri, BNI) credit growth and SBN demand.",
+                },
+            ],
+        }
+
+    # China (CCDC) Gemini 4 Argon Commentary & Dynamic Country Market Briefing
     if "china" in data:
         cn_bonds = data["china"]["bonds"]
         cn_fx = data["china"]["fxAndEquities"]
@@ -3495,6 +3917,7 @@ def build_argon_commentaries(data: dict):
         cgb_30y_chg = next((float(b.get("changeBps", -1.5)) for b in cn_bonds["ccdcCgb"] if b["tenor"].startswith("30Y")), -1.5)
         lpr1 = float(cn_bonds.get("lpr1Y", 3.00))
         lpr5 = float(cn_bonds.get("lpr5Y", 3.50))
+        cn_cpi = float(cn_bonds.get("cpiInflationYoY", 0.60))
         cn_spread = round((cgb_10y - y10) * 100)
         slope_10s30s = round((cgb_30y - cgb_10y) * 100)
         cny = float(cn_fx.get("cnySpot", 6.6760))
@@ -3505,43 +3928,102 @@ def build_argon_commentaries(data: dict):
         ssec_pct = float(cn_fx.get("shanghaiComposite", {}).get("changePct", 0.31))
         csi = float(cn_fx.get("csi300Index", {}).get("level", 4054.28))
         csi_pct = float(cn_fx.get("csi300Index", {}).get("changePct", -1.44))
-        cn_heads = data["china"]["commentary"].get("noteworthyHeadlines", [])
-        lead_cn = (
-            cn_heads[0].get("title") if len(cn_heads) > 0 else None
-        ) or "CCDC ChinaBond 10-Year CGB Yield Fixes Near 1.5868% Amid Accommodative PBoC Liquidity"
-        lead_cn_meta = f"{cn_heads[0].get('source', 'Beijing Desk')} · {cn_heads[0].get('timeAgo', 'Live')}" if len(cn_heads) > 0 else "Beijing Desk"
-        second_cn = (
-            cn_heads[1].get("title") if len(cn_heads) > 1 else None
-        ) or "Ministry of Finance special sovereign bond issuance and Northbound Bond Connect allocations shape CGB curve"
-        second_cn_meta = f"{cn_heads[1].get('source', 'Wire')} · {cn_heads[1].get('timeAgo', 'Live')}" if len(cn_heads) > 1 else "Wire"
+        cn_curve_dt = cn_bonds.get("curveDate", "2026-11-11")
 
-        cn_conviction = (
-            f"Barbell 3Y–5Y CCDC CGB ({cgb_5y:.3f}%) + Domestic A-Share Momentum (SSEC {ssec_pct:+.2f}%) · FX-Hedged"
-            if ssec_pct >= 0.5
-            else f"Receive 3Y–5Y CCDC CGB Belly ({cgb_5y:.3f}%, {cgb_5y_chg:+.1f} bps) · FX-Hedged Carry vs SSEC ({ssec_pct:+.2f}%)"
+        cn_prof = _analyze_news_catalysts_py(
+            data["china"]["commentary"].get("noteworthyHeadlines", []),
+            "PBoC maintains accommodative DR007 liquidity and daily RMB parity fixing as CCDC 10Y CGB trades near 1.59%",
         )
+        cn_lead = cn_prof["leadItem"]
+        cn_sec = cn_prof["secondItem"]
+        cn_third = cn_prof["thirdItem"]
+
+        if cn_prof["primaryTheme"] == "TRADE_TARIFF_TECH":
+            cn_conv = f"Trade & Tech Curbs Hedge: Long 5Y–10Y CCDC CGB ({cgb_5y:.3f}%–{cgb_10y:.3f}%) · Defensive USD/CNH ({cnh:.4f}) Collar vs CSI 300"
+            cn_open = (
+                f"[{session_date_str} · External Trade & Tech Supply-Chain Regime] External tariff, semiconductor export-control, and cross-border trade headlines "
+                f"are driving onshore Chinese asset allocation today, keeping safe-haven demand firm for CCDC ChinaBond CGBs (5Y at {cgb_5y:.3f}% [{cgb_5y_chg:+.1f} bps], "
+                f"10Y at {cgb_10y:.3f}% [{cgb_10y_chg:+.1f} bps], 30Y at {cgb_30y:.3f}% [{cgb_30y_chg:+.1f} bps]) while PBoC anchors the daily fixing at {fix:.4f} (CNY {cny:.4f}, CNH {cnh:.4f})."
+            )
+            cn_takeaway = (
+                f"[Tactical Call — Long CGB Belly Duration & FX-Hedged Positioning] With external headlines led by \"{cn_lead['title'][:68]}\" ({cn_lead['source']}) and \"{cn_sec['title'][:65]}\" ({cn_sec['source']}), "
+                f"overweight 5Y–10Y CCDC CGBs ({cgb_5y:.3f}%–{cgb_10y:.3f}%) as domestic liquidity (7D OMO 1.50%) cushions external trade headwinds. Hedge offshore CNH exposure ({cnh:.4f}) and favor domestic SOE dividend leaders over export-sensitive CSI 300 ({csi_pct:+.2f}%) beta."
+            )
+        elif cn_prof["primaryTheme"] == "MARKET_REFORM_EQUITY" or ssec_pct >= 0.45 or csi_pct >= 0.45:
+            cn_conv = f"Equity-Bond Rotation Watch: Shorten CGB Duration to 1Y–3Y ({cgb_1y:.3f}%) · Capture A-Share / Tech IPO Momentum (SSEC {ssec_pct:+.2f}%)"
+            cn_open = (
+                f"[{session_date_str} · Onshore Equity & Capital-Market Catalyst Regime] Domestic capital-market and corporate tech catalysts are lifting risk appetite across Shanghai Composite ({ssec:,.2f}, {ssec_pct:+.2f}%) "
+                f"and CSI 300 ({csi:,.2f}, {csi_pct:+.2f}%), prompting modest steepening pressure along the CCDC CGB curve ({cn_curve_dt}: 10Y at {cgb_10y:.3f}% [{cgb_10y_chg:+.1f} bps], 30Y at {cgb_30y:.3f}% [{cgb_30y_chg:+.1f} bps])."
+            )
+            cn_takeaway = (
+                f"[Tactical Call — Trim 30Y Ultra-Long CGBs, Barbell Short CGBs + Onshore Equities] As desks digest \"{cn_lead['title'][:68]}\" ({cn_lead['source']}) and \"{cn_sec['title'][:64]}\", "
+                f"take profits on unhedged 10Y–30Y CGB duration ({cgb_10y:.3f}%–{cgb_30y:.3f}%) near 1.55%–2.00% and park fixed-income carry in 1Y–5Y CGBs ({cgb_1y:.3f}%–{cgb_5y:.3f}%) alongside selective A-share tech and domestic consumption exposure."
+            )
+        else:
+            cn_conv = f"Receive 3Y–7Y CCDC CGB Belly ({cgb_5y:.3f}%, {cgb_5y_chg:+.1f} bps) on PBoC OMO Support (1.50%) · Watch 30Y Supply ({cgb_30y:.3f}%)"
+            cn_open = (
+                f"[{session_date_str} · {cn_prof['primaryLabel']} Regime] Official CCDC ChinaBond CGB fixings ({cn_curve_dt}) price 1Y at {cgb_1y:.3f}%, 5Y at {cgb_5y:.3f}% ({cgb_5y_chg:+.1f} bps 1D), "
+                f"10Y at {cgb_10y:.3f}% ({cgb_10y_chg:+.1f} bps 1D), and 30Y at {cgb_30y:.3f}% ({cgb_30y_chg:+.1f} bps 1D; 10s30s +{slope_10s30s} bps), supported by PBoC's 1.50% 7D Reverse Repo anchor."
+            )
+            cn_takeaway = (
+                f"[Tactical Call — Bull-Steepener in 3Y–5Y CGBs vs 30Y Special Issuance] Synthesizing \"{cn_lead['title'][:68]}\" ({cn_lead['source']}) and \"{cn_sec['title'][:65]}\" ({cn_sec['source']}), "
+                f"stay overweight 3Y–5Y CCDC CGBs ({cgb_5y:.3f}%) where DR007 repo funding carry is positive, and avoid chasing 30Y ultra-long CGBs ({cgb_30y:.3f}%) below 2.00% ahead of MoF special bond supply."
+            )
+
+        data["china"]["commentary"].update(
+            {
+                "title": f"PBoC & CCDC ChinaBond Sovereign Briefing · {cn_prof['primaryLabel'].split(',')[0]}",
+                "date": session_date_str,
+                "policyPosture": f"7D OMO 1.50% · 1Y/5Y LPR {lpr1:.2f}%/{lpr5:.2f}% · {cn_prof['primaryTheme'].replace('_', ' ')}",
+                "executiveSummary": (
+                    f"[{session_date_str} Executive Synthesis] China macro and fixed-income flows today are shaped by {cn_prof['primaryLabel'].lower()} — "
+                    f"specifically \"{cn_lead['title'][:78]}\" ({cn_lead['source']} · {cn_lead['timeAgo']}) and \"{cn_sec['title'][:74]}\" ({cn_sec['source']} · {cn_sec['timeAgo']}). "
+                    f"Per official CCDC ChinaBond fixings ({cn_curve_dt}), 1Y CGB clears at {cgb_1y:.3f}%, 5Y benchmark at {cgb_5y:.3f}% ({cgb_5y_chg:+.1f} bps 1D), "
+                    f"10Y benchmark at {cgb_10y:.3f}% ({cgb_10y_chg:+.1f} bps 1D; {cn_spread} bps vs 10Y UST), and 30Y ultra-long CGB at {cgb_30y:.3f}% ({cgb_30y_chg:+.1f} bps 1D), "
+                    f"while PBoC sets the RMB parity fixing at {fix:.4f} (CNY {cny:.4f}, CNH {cnh:.4f}) and SSEC trades at {ssec:,.2f} ({ssec_pct:+.2f}%)."
+                ),
+                "macroPillars": [
+                    {
+                        "heading": f"1. CCDC ChinaBond CGB Yield Curve ({cn_curve_dt}) & Duration Positioning",
+                        "analysis": (
+                            f"CCDC ChinaBond benchmarks trade at {cgb_1y:.3f}% (1Y), {cgb_5y:.3f}% (5Y, {cgb_5y_chg:+.1f} bps), {cgb_10y:.3f}% (10Y, {cgb_10y_chg:+.1f} bps), and {cgb_30y:.3f}% (30Y, {cgb_30y_chg:+.1f} bps), "
+                            f"keeping the 10s30s slope at +{slope_10s30s} bps as commercial bank desks weigh \"{cn_lead['title'][:72]}\" ({cn_lead['source']})."
+                        ),
+                    },
+                    {
+                        "heading": "2. PBoC 7D OMO (1.50%), DR007 Repo & LPR Policy Transmission",
+                        "analysis": (
+                            f"With 7D Reverse Repo at 1.50%, 1Y/5Y LPR at {lpr1:.2f}%/{lpr5:.2f}%, and Headline CPI at {cn_cpi:.2f}% YoY, "
+                            f"PBoC liquidity injections keep DR007 repo funding stable while institutions assess \"{cn_sec['title'][:72]}\" ({cn_sec['source']})."
+                        ),
+                    },
+                    {
+                        "heading": f"3. CFETS RMB Fixing ({fix:.4f}), CNH/CNY Basis & Onshore Equities",
+                        "analysis": (
+                            f"Onshore USD/CNY ({cny:.4f}, {cny_pct:+.2f}%) and offshore USD/CNH ({cnh:.4f}) remain anchored near the {fix:.4f} parity fixing, "
+                            f"while Shanghai Composite ({ssec:,.2f}, {ssec_pct:+.2f}%) and CSI 300 ({csi:,.2f}, {csi_pct:+.2f}%) digest \"{cn_third['title'][:70]}\"."
+                        ),
+                    },
+                ],
+            }
+        )
+
         data["china"]["argonCommentary"] = {
             "modelLabel": "GEMINI 4 ARGON",
             "title": "GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS",
-            "regimeBadge": f"7D OMO 1.50% · CCDC 10Y {cgb_10y:.3f}% ({cgb_10y_chg:+.1f} bps) · US-CN {cn_spread} BPS",
+            "regimeBadge": f"{cn_prof['primaryTheme'].replace('_', ' ')} · CCDC 10Y {cgb_10y:.3f}% ({cgb_10y_chg:+.1f} bps) · FIX {fix:.4f}",
+            "dominantRegime": cn_prof["primaryLabel"],
             "updatedAtSGT": updated_sgt_str,
-            "conviction": cn_conviction,
+            "conviction": cn_conv,
             "synthesis": (
-                f"[{session_date_str} Beijing/Shanghai Desk] Official CCDC ChinaBond CGB fixings ({cn_bonds.get('curveDate', '2026-11-06')}) "
-                f"price 1Y CGB at {cgb_1y:.3f}%, 5Y benchmark at {cgb_5y:.3f}% ({cgb_5y_chg:+.1f} bps 1D), 10Y benchmark at {cgb_10y:.3f}% ({cgb_10y_chg:+.1f} bps 1D), "
-                f"and 30Y ultra-long CGB at {cgb_30y:.3f}% ({cgb_30y_chg:+.1f} bps 1D; 10s30s slope +{slope_10s30s} bps, {cn_spread} bps vs 10Y UST). "
-                f"With PBoC 7D Reverse Repo at 1.50% and 1Y/5Y LPR at {lpr1:.2f}%/{lpr5:.2f}%, onshore USD/CNY trades at {cny:.4f} ({cny_pct:+.2f}%) and offshore USD/CNH at {cnh:.4f} around the {fix:.4f} PBoC parity fixing, "
-                f"while Shanghai Composite sits at {ssec:,.2f} ({ssec_pct:+.2f}%) and CSI 300 at {csi:,.2f} ({csi_pct:+.2f}%). "
-                f"Top China catalysts: (1) \"{lead_cn}\" ({lead_cn_meta}); and (2) \"{second_cn}\" ({second_cn_meta})."
+                f"{cn_open} Argon's multi-update scan across {len(cn_prof['classified'])} China macro, CCDC, and geopolitical stories highlights: {cn_prof['distinctThemesDigest']}. "
+                f"With 1Y/5Y LPR at {lpr1:.2f}%/{lpr5:.2f}% and SSEC at {ssec:,.2f} ({ssec_pct:+.2f}%), institutional positioning hinges on how \"{cn_lead['title'][:72]}\" transmits into PBoC liquidity injections and CFETS FX fixings."
             ),
-            "positioningTakeaway": (
-                f"As of {session_date_str}, express constructive China rates positioning via 3Y–5Y CCDC CGB benchmarks ({cgb_5y:.3f}%, {cgb_5y_chg:+.1f} bps 1D) where DR007 repo funding carry remains positive, "
-                f"while taking profits on 10Y CGB ({cgb_10y:.3f}%) approaches toward 1.500% and monitoring \"{lead_cn[:70]}\" for PBoC fixing ({fix:.4f}) and CSI 300 ({csi_pct:+.2f}%) spillover."
-            ),
+            "positioningTakeaway": cn_takeaway,
             "criticalLevels": [
                 {
                     "asset": "CCDC 10Y ChinaBond CGB",
-                    "current": f"{cgb_10y:.3f}%",
+                    "current": f"{cgb_10y:.3f}% ({cgb_10y_chg:+.1f} bps)",
                     "support": "1.500%",
                     "resistance": "1.720%",
                     "implication": "Yields approaching 1.500% risk PBoC secondary bond sales; backup toward 1.720% triggers domestic bank buying.",
@@ -3562,7 +4044,7 @@ def build_argon_commentaries(data: dict):
                 },
                 {
                     "asset": "Shanghai Composite (SSEC)",
-                    "current": f"{ssec:,.2f}",
+                    "current": f"{ssec:,.2f} ({ssec_pct:+.2f}%)",
                     "support": f"{round(ssec * 0.965):,}",
                     "resistance": f"{round(ssec * 1.035):,}",
                     "implication": f"Break above {round(ssec * 1.035):,} drives equity-bond rotation and steepens the CCDC 2s10s CGB curve.",
@@ -3573,13 +4055,13 @@ def build_argon_commentaries(data: dict):
                     "event": "PBoC 7D Reverse Repo OMO, MLF Operation & NBS Activity Print (IP / Retail Sales)",
                     "timing": f"{_fmt_event_date(next_fri)} · 09:15 & 10:00 CST (SGT)",
                     "impact": "Critical",
-                    "watchFor": "Net liquidity injection/drain via 7D OMO (1.50%) and whether DR007 repo stays anchored below 1.70% as CCDC publishes end-of-day CGB yields.",
+                    "watchFor": f"Net liquidity injection via 7D OMO (1.50%) and whether DR007 repo stays anchored below 1.70% amid \"{cn_lead['title'][:75]}\".",
                 },
                 {
                     "event": "Ministry of Finance (MoF) 30-Year Ultra-Long Special CGB Issuance Tender",
                     "timing": f"{_fmt_event_date(next_wed)} · 10:35 CST (SGT)",
                     "impact": "High",
-                    "watchFor": f"Primary auction bid-to-cover on 10Y ({cgb_10y:.3f}%) and 30Y ({cgb_30y:.3f}%) CGBs and commercial bank wealth-management duration absorption.",
+                    "watchFor": f"Primary auction bid-to-cover on 10Y ({cgb_10y:.3f}%) and 30Y ({cgb_30y:.3f}%) CGBs following \"{cn_sec['title'][:75]}\".",
                 },
                 {
                     "event": "PBoC Monthly 1-Year & 5-Year Loan Prime Rate (LPR) Quotation Fixing",
@@ -3590,18 +4072,20 @@ def build_argon_commentaries(data: dict):
             ],
         }
 
-    # Korea (SOFIA / KOFIA) Gemini 4 Argon Commentary
+    # Korea (SOFIA / KOFIA) Gemini 4 Argon Commentary & Dynamic Country Market Briefing
     if "korea" in data:
         kr_bonds = data["korea"]["bonds"]
         kr_fx = data["korea"]["fxAndEquities"]
         ktb_3y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("3Y")), 3.622)
         ktb_3y_chg = next((float(b.get("changeBps", -4.9)) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("3Y")), -4.9)
+        ktb_5y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("5Y")), 3.716)
         ktb_10y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("10Y")), 3.852)
         ktb_10y_chg = next((float(b.get("changeBps", -4.0)) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("10Y")), -4.0)
         ktb_30y = next((float(b["yield"]) for b in kr_bonds["kofiaKtb"] if b["tenor"].startswith("30Y")), 3.975)
         bok_rate = float(kr_bonds.get("bokBaseRate", 3.00))
         kofr_val = float(kr_bonds.get("kofrOvernightRate", 3.045))
         cd_val = float(kr_bonds.get("cd91dRate", 3.34))
+        kr_cpi = float(kr_bonds.get("cpiInflationYoY", 2.10))
         kr_spread = round((ktb_10y - y10) * 100)
         slope_3s10s = round((ktb_10y - ktb_3y) * 100)
         krw = float(kr_fx.get("krwSpot", 1363.27))
@@ -3611,38 +4095,99 @@ def build_argon_commentaries(data: dict):
         kospi_pct = float(kr_fx.get("kospiIndex", {}).get("changePct", -6.02))
         kosdaq = float(kr_fx.get("kosdaqIndex", {}).get("level", 644.27))
         kosdaq_pct = float(kr_fx.get("kosdaqIndex", {}).get("changePct", -5.03))
-        kr_heads = data["korea"]["commentary"].get("noteworthyHeadlines", [])
-        lead_kr = (
-            kr_heads[0].get("title") if len(kr_heads) > 0 else None
-        ) or "KOFIA / SOFIA Korea Treasury Bond yields rally as foreign WGBI inflows support 3Y and 10Y KTB benchmarks"
-        lead_kr_meta = f"{kr_heads[0].get('source', 'Seoul Desk')} · {kr_heads[0].get('timeAgo', 'Live')}" if len(kr_heads) > 0 else "Seoul Desk"
-        second_kr = (
-            kr_heads[1].get("title") if len(kr_heads) > 1 else None
-        ) or "Bank of Korea monitors USD/KRW FX stability and semiconductor export momentum"
-        second_kr_meta = f"{kr_heads[1].get('source', 'Seoul Feed')} · {kr_heads[1].get('timeAgo', 'Live')}" if len(kr_heads) > 1 else "Seoul Feed"
+        kr_quote_dt = kr_bonds.get("quotationDate", "11 Nov 2026")
 
-        kr_conviction = (
-            f"Long Semiconductor Equity Recovery (KOSPI {kospi_pct:+.2f}%) & 3Y–10Y KTB ({ktb_3y:.3f}%/{ktb_10y:.3f}%) WGBI Carry"
-            if kospi_pct >= 1.0
-            else f"Overweight 3Y–10Y KOFIA KTB ({ktb_3y:.3f}%/{ktb_10y:.3f}%, {ktb_10y_chg:+.1f} bps) on Safe-Haven & WGBI Inflows · Watch ₩{round(krw + 20):,}"
+        kr_prof = _analyze_news_catalysts_py(
+            data["korea"]["commentary"].get("noteworthyHeadlines", []),
+            "KOFIA / SOFIA Korea Treasury Bond curve and BOK KOFR repo funding anchor Seoul fixed-income flows",
         )
+        kr_lead = kr_prof["leadItem"]
+        kr_sec = kr_prof["secondItem"]
+        kr_third = kr_prof["thirdItem"]
+
+        if ktb_3y_chg >= 5.0 or ktb_10y_chg >= 5.0 or kr_prof["primaryTheme"] == "INFLATION_COMMODITY":
+            kr_conv = f"Hawkish KTB Backup ({ktb_3y_chg:+.1f} bps 3Y): Fade Sell-Off via 3Y KTB ({ktb_3y:.3f}%) & KOFR Repo ({kofr_val:.3f}%) · Long Chip Exporters (KOSPI {kospi_pct:+.2f}%)"
+            kr_open = (
+                f"[{session_date_str} · Sticky CPI & KTB Yield Backup Regime] KOFIA OTC Treasury yields backed up sharply in the latest session "
+                f"({kr_quote_dt}: 3Y KTB at {ktb_3y:.3f}% [{ktb_3y_chg:+.1f} bps], 5Y at {ktb_5y:.3f}%, 10Y at {ktb_10y:.3f}% [{ktb_10y_chg:+.1f} bps; {kr_spread} bps vs UST]) "
+                f"as sticky inflation and BOK policy calibration headlines temper near-term rate-cut pricing."
+            )
+            kr_takeaway = (
+                f"[Tactical Call — Scale Into 3Y KTB Above 3.70% & Ride Semiconductor Equity Beta] Synthesizing \"{kr_lead['title'][:68]}\" ({kr_lead['source']}) and \"{kr_sec['title'][:65]}\" ({kr_sec['source']}), "
+                f"use the {ktb_3y_chg:+.1f} bps KTB yield backup to scale into 3Y KTB benchmarks ({ktb_3y:.3f}%, +{ktb_3y - bok_rate:.2f}% over the {bok_rate:.2f}% BOK Base Rate) "
+                f"while keeping equity exposure overweight Korean memory chip exporters driving KOSPI ({kospi:,.0f}, {kospi_pct:+.2f}%)."
+            )
+        elif kospi_pct <= -1.5:
+            kr_conv = f"Equity Risk-Off Flight (KOSPI {kospi_pct:+.2f}%): Overweight 3Y–10Y KOFIA KTB ({ktb_3y:.3f}%–{ktb_10y:.3f}%) & Hedge USD/KRW (₩{krw:.0f})"
+            kr_open = (
+                f"[{session_date_str} · Equity Drawdown & Safe-Haven KTB Bid Regime] Sharp equity volatility in KOSPI ({kospi:,.2f}, {kospi_pct:+.2f}%) "
+                f"and KOSDAQ ({kosdaq:,.2f}, {kosdaq_pct:+.2f}%) is accelerating domestic institutional rotation into KOFIA Korea Treasury Bonds (3Y at {ktb_3y:.3f}% [{ktb_3y_chg:+.1f} bps], 10Y at {ktb_10y:.3f}% [{ktb_10y_chg:+.1f} bps])."
+            )
+            kr_takeaway = (
+                f"[Tactical Call — Long 3Y–10Y KTB Duration + Long USD/KRW NDF Protection] With Seoul flows reacting to \"{kr_lead['title'][:68]}\" ({kr_lead['source']}) and \"{kr_sec['title'][:64]}\", "
+                f"hold 3Y–10Y KTB duration ({ktb_3y:.3f}%–{ktb_10y:.3f}%) funded at KOFR ({kofr_val:.3f}%) and maintain 1M USD/KRW NDF protection (₩{ndf_krw:.2f})."
+            )
+        else:
+            kr_conv = f"Semiconductor & Export Boom: Overweight KOSPI Chip Leaders ({kospi_pct:+.2f}%) + WGBI-Backed 10Y KTB ({ktb_10y:.3f}%) · Constructive KRW"
+            kr_open = (
+                f"[{session_date_str} · Semiconductor Export & WGBI Inflow Regime] Strong Korean semiconductor export momentum and Corporate Value-Up catalysts "
+                f"are propelling KOSPI ({kospi:,.2f}, {kospi_pct:+.2f}%) alongside USD/KRW at ₩{krw:.2f} ({krw_pct:+.2f}%), while KOFIA 3Y and 10Y KTB benchmarks trade at {ktb_3y:.3f}% ({ktb_3y_chg:+.1f} bps) and {ktb_10y:.3f}% ({ktb_10y_chg:+.1f} bps; 3s10s +{slope_3s10s} bps)."
+            )
+            kr_takeaway = (
+                f"[Tactical Call — Dual Semiconductor Equity + WGBI 10Y KTB Allocation] Backed by \"{kr_lead['title'][:68]}\" ({kr_lead['source']}) and \"{kr_sec['title'][:65]}\" ({kr_sec['source']}), "
+                f"pair long KOSPI semiconductor exporters with unhedged 10Y KTB ({ktb_10y:.3f}%) to capture both FTSE WGBI passive inflows and exporter USD selling near ₩{round(krw + 15):,}."
+            )
+
+        data["korea"]["commentary"].update(
+            {
+                "title": f"Bank of Korea & KOFIA / SOFIA Fixed Income Briefing · {kr_prof['primaryLabel'].split(',')[0]}",
+                "date": session_date_str,
+                "policyPosture": f"BOK Base {bok_rate:.2f}% · KOFR {kofr_val:.3f}% · CD 91D {cd_val:.2f}% · {kr_prof['primaryTheme'].replace('_', ' ')}",
+                "executiveSummary": (
+                    f"[{session_date_str} Executive Synthesis] Seoul fixed-income and equity markets are driven today by {kr_prof['primaryLabel'].lower()} — "
+                    f"led by \"{kr_lead['title'][:78]}\" ({kr_lead['source']} · {kr_lead['timeAgo']}) and \"{kr_sec['title'][:74]}\" ({kr_sec['source']} · {kr_sec['timeAgo']}). "
+                    f"Across KOFIA / SOFIA OTC bond fixings ({kr_quote_dt}), 3Y benchmark KTB trades at {ktb_3y:.3f}% ({ktb_3y_chg:+.1f} bps 1D), 5Y KTB at {ktb_5y:.3f}%, "
+                    f"10Y benchmark KTB at {ktb_10y:.3f}% ({ktb_10y_chg:+.1f} bps 1D; {kr_spread} bps vs 10Y UST), and 30Y KTB at {ktb_30y:.3f}%, "
+                    f"while USD/KRW sits at ₩{krw:.2f} ({krw_pct:+.2f}%) and KOSPI prints {kospi:,.2f} ({kospi_pct:+.2f}%)."
+                ),
+                "macroPillars": [
+                    {
+                        "heading": f"1. KOFIA / SOFIA KTB Curve ({kr_quote_dt}) & WGBI Institutional Flows",
+                        "analysis": (
+                            f"KOFIA OTC yields price 3Y KTB at {ktb_3y:.3f}% ({ktb_3y_chg:+.1f} bps), 5Y at {ktb_5y:.3f}%, 10Y at {ktb_10y:.3f}% ({ktb_10y_chg:+.1f} bps), and 30Y at {ktb_30y:.3f}% (+{slope_3s10s} bps 3s10s slope) "
+                            f"as domestic and WGBI accounts react to \"{kr_lead['title'][:72]}\" ({kr_lead['source']})."
+                        ),
+                    },
+                    {
+                        "heading": f"2. BOK Base Rate ({bok_rate:.2f}%), KOFR Repo ({kofr_val:.3f}%) & 91D CD ({cd_val:.2f}%)",
+                        "analysis": (
+                            f"With Headline CPI at {kr_cpi:.2f}% YoY (+{bok_rate - kr_cpi:.2f}% real buffer), overnight KOFR/SOFIA repo fixes at {kofr_val:.3f}% and 91-day KOFIA CD at {cd_val:.2f}%, "
+                            f"framing money-market carry alongside \"{kr_sec['title'][:72]}\" ({kr_sec['source']})."
+                        ),
+                    },
+                    {
+                        "heading": f"3. USD/KRW (₩{krw:.2f}), Semiconductor Exports & KOSPI ({kospi:,.2f})",
+                        "analysis": (
+                            f"Onshore USD/KRW trades at ₩{krw:.2f} (1M NDF ₩{ndf_krw:.2f}) while KOSPI ({kospi:,.2f}, {kospi_pct:+.2f}%) and KOSDAQ ({kosdaq:,.2f}, {kosdaq_pct:+.2f}%) "
+                            f"reflect \"{kr_third['title'][:70]}\"."
+                        ),
+                    },
+                ],
+            }
+        )
+
         data["korea"]["argonCommentary"] = {
             "modelLabel": "GEMINI 4 ARGON",
             "title": "GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS",
-            "regimeBadge": f"BOK BASE {bok_rate:.2f}% · KOFR/SOFIA {kofr_val:.3f}% · 10Y KTB {ktb_10y:.3f}% ({ktb_10y_chg:+.1f} bps)",
+            "regimeBadge": f"{kr_prof['primaryTheme'].replace('_', ' ')} · KOFR {kofr_val:.3f}% · 10Y KTB {ktb_10y:.3f}% ({ktb_10y_chg:+.1f} bps)",
+            "dominantRegime": kr_prof["primaryLabel"],
             "updatedAtSGT": updated_sgt_str,
-            "conviction": kr_conviction,
+            "conviction": kr_conv,
             "synthesis": (
-                f"[{session_date_str} Seoul Desk] Korea Financial Investment Association (KOFIA / SOFIA) OTC bond fixings ({kr_bonds.get('quotationDate', '06 Nov 2026')}) "
-                f"place 3Y KTB at {ktb_3y:.3f}% ({ktb_3y_chg:+.1f} bps 1D), 10Y KTB at {ktb_10y:.3f}% ({ktb_10y_chg:+.1f} bps 1D; 3s10s slope +{slope_3s10s} bps, {kr_spread} bps vs 10Y UST), and 30Y KTB at {ktb_30y:.3f}%. "
-                f"With the BOK Base Rate at {bok_rate:.2f}% (CPI 2.10% YoY, real buffer +{bok_rate - 2.10:.2f}%), SOFIA/KOFR overnight repo fixes at {kofr_val:.3f}% and 91D CD at {cd_val:.2f}%. "
-                f"In Seoul FX and equities, USD/KRW trades at ₩{krw:,.2f} ({krw_pct:+.2f}%; 1M NDF ₩{ndf_krw:,.2f}), while KOSPI is at {kospi:,.2f} ({kospi_pct:+.2f}%) and KOSDAQ at {kosdaq:,.2f} ({kosdaq_pct:+.2f}%). "
-                f"Key Korea catalysts: (1) \"{lead_kr}\" ({lead_kr_meta}); and (2) \"{second_kr}\" ({second_kr_meta})."
+                f"{kr_open} Argon's synthesis across {len(kr_prof['classified'])} Seoul macro, BOK, and export headlines highlights: {kr_prof['distinctThemesDigest']}. "
+                f"With Headline CPI at {kr_cpi:.2f}% YoY (+{bok_rate - kr_cpi:.2f}% real buffer) and 91D CD at {cd_val:.2f}%, institutional desks are calibrating KTB duration against \"{kr_lead['title'][:72]}\" and semiconductor trade flows."
             ),
-            "positioningTakeaway": (
-                f"As of {session_date_str}, accumulate 3Y ({ktb_3y:.3f}%, {ktb_3y_chg:+.1f} bps) and 10Y ({ktb_10y:.3f}%, {ktb_10y_chg:+.1f} bps) KTB benchmarks as FTSE WGBI passive inflows and anchored KOFR repo funding ({kofr_val:.3f}%) support duration, "
-                f"while tracking KOSPI ({kospi_pct:+.2f}%) and USD/KRW (₩{krw:.2f}) reaction to \"{lead_kr[:70]}\"."
-            ),
+            "positioningTakeaway": kr_takeaway,
             "criticalLevels": [
                 {
                     "asset": "KOFIA 3Y & 10Y KTB Yield",
@@ -3667,7 +4212,7 @@ def build_argon_commentaries(data: dict):
                 },
                 {
                     "asset": "KOSPI Composite Index",
-                    "current": f"{kospi:,.2f}",
+                    "current": f"{kospi:,.2f} ({kospi_pct:+.2f}%)",
                     "support": f"{round(kospi * 0.97):,}",
                     "resistance": f"{round(kospi * 1.035):,}",
                     "implication": "Memory semiconductor export cycle and Corporate Value-Up disclosures dictate foreign net equity flows.",
@@ -3678,13 +4223,13 @@ def build_argon_commentaries(data: dict):
                     "event": "KOFIA 16:00 KST Final OTC KTB Yield Quotation & KTB Futures Settlement",
                     "timing": f"{_fmt_event_date(today_biz)} · 16:00 KST (15:00 SGT)",
                     "impact": "Critical",
-                    "watchFor": f"Foreign institutional net buying in 3Y ({ktb_3y:.3f}%) and 10Y ({ktb_10y:.3f}%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads.",
+                    "watchFor": f"Foreign institutional net buying in 3Y ({ktb_3y:.3f}%) and 10Y ({ktb_10y:.3f}%) KTB futures following \"{kr_lead['title'][:75]}\".",
                 },
                 {
                     "event": "MOEF 10-Year Korea Treasury Bond (KTB) Competitive Primary Auction & WGBI Flows",
                     "timing": f"{_fmt_event_date(next_mon)} · 10:40 KST (09:40 SGT)",
                     "impact": "High",
-                    "watchFor": f"Competitive auction takedown on 10Y ({ktb_10y:.3f}%) and 30Y ({ktb_30y:.3f}%) KTB supply and Euroclear/Clearstream omnibus inflows.",
+                    "watchFor": f"Competitive auction takedown on 10Y ({ktb_10y:.3f}%) and 30Y ({ktb_30y:.3f}%) KTB supply amid \"{kr_sec['title'][:75]}\".",
                 },
                 {
                     "event": "Bank of Korea (BOK) Monetary Policy Board Base Rate Decision & MSB Tender",
@@ -3695,7 +4240,7 @@ def build_argon_commentaries(data: dict):
             ],
         }
 
-    # India (RBI / CCIL) Gemini 4 Argon Commentary
+    # India (RBI / CCIL) Gemini 4 Argon Commentary & Dynamic Country Market Briefing
     if "india" in data:
         in_bonds = data["india"]["bonds"]
         in_fx = data["india"]["fxAndEquities"]
@@ -3710,6 +4255,7 @@ def build_argon_commentaries(data: dict):
         msf_rate = float(in_bonds.get("msfRate", 5.75))
         tb91 = float(in_bonds.get("tbill91dRate", 5.897))
         tb364 = float(in_bonds.get("tbill364dRate", 6.649))
+        in_cpi = float(in_bonds.get("cpiInflationYoY", 4.85))
         in_spread = round((gsec_10y - y10) * 100)
         slope_5s10s = round((gsec_10y - gsec_5y) * 100)
         inr_val = float(in_fx.get("inrSpot", 93.895))
@@ -3720,34 +4266,99 @@ def build_argon_commentaries(data: dict):
         nifty_pct = float(in_fx.get("nifty50Index", {}).get("changePct", -0.18))
         sensex = float(in_fx.get("sensexIndex", {}).get("level", 80999.40))
         sensex_pct = float(in_fx.get("sensexIndex", {}).get("changePct", -0.04))
-        in_heads = data["india"]["commentary"].get("noteworthyHeadlines", [])
-        lead_in = (
-            in_heads[0].get("title") if len(in_heads) > 0 else None
-        ) or "RBI conducts LAF Variable Rate Repo operations as 10Y G-Sec benchmark 6.94% GS 2036 trades near 7.162%"
-        lead_in_meta = f"{in_heads[0].get('source', 'Mumbai Desk')} · {in_heads[0].get('timeAgo', 'Live')}" if len(in_heads) > 0 else "Mumbai Desk"
-        second_in = (
-            in_heads[1].get("title") if len(in_heads) > 1 else None
-        ) or "Foreign FAR index inflows and RBI FX reserves support Indian sovereign bond curve stability"
-        second_in_meta = f"{in_heads[1].get('source', 'Mumbai Feed')} · {in_heads[1].get('timeAgo', 'Live')}" if len(in_heads) > 1 else "Mumbai Feed"
+        in_quote_dt = in_bonds.get("quotationDate", "11 Nov 2026")
+
+        in_prof = _analyze_news_catalysts_py(
+            data["india"]["commentary"].get("noteworthyHeadlines", []),
+            "RBI manages banking liquidity within the 5.25%-5.75% LAF corridor as 10Y G-Sec trades near 7.16%",
+        )
+        in_lead = in_prof["leadItem"]
+        in_sec = in_prof["secondItem"]
+        in_third = in_prof["thirdItem"]
+
+        if gsec_10y_chg >= 3.5 or in_prof["primaryTheme"] == "FISCAL_SUPPLY":
+            in_conv = f"G-Sec Supply & Valuation Shift ({gsec_10y_chg:+.1f} bps 10Y): Favor 91D–364D T-Bills ({tb91:.2f}%–{tb364:.2f}%) & 3Y–5Y G-Sec ({gsec_3y:.3f}%–{gsec_5y:.3f}%)"
+            in_open = (
+                f"[{session_date_str} · G-Sec Portfolio Valuation & Supply Regime] Indian sovereign yields backed up across the belly and long end "
+                f"({in_quote_dt}: 5Y G-Sec at {gsec_5y:.3f}% [{gsec_5y_chg:+.1f} bps], 10Y 6.94% GS 2036 at {gsec_10y:.3f}% [{gsec_10y_chg:+.1f} bps], 30Y at {gsec_30y:.3f}%) "
+                f"as commercial bank bond-valuation rules and primary auction supply shape PSU bank SLR demand."
+            )
+            in_takeaway = (
+                f"[Tactical Call — Shorten G-Sec Duration to 3Y–5Y & Wait for 7.22%+ on 10Y] With Mumbai desks focused on \"{in_lead['title'][:68]}\" ({in_lead['source']}) and \"{in_sec['title'][:65]}\" ({in_sec['source']}), "
+                f"keep duration concentrated in 364D T-Bills ({tb364:.3f}%) and 3Y–5Y G-Secs ({gsec_3y:.3f}%–{gsec_5y:.3f}%) rather than chasing 10Y–30Y G-Secs until Friday's ₹36,000 Cr auction clears."
+            )
+        elif in_prof["primaryTheme"] in ("TRADE_TARIFF_TECH", "FX_EXTERNAL_BALANCE"):
+            in_conv = f"Reserve-Backed INR Carry (${fx_res:.0f}B FX Reserves): Long 5Y–10Y FAR G-Secs ({gsec_5y:.3f}%–{gsec_10y:.3f}%, +{in_spread} bps vs UST)"
+            in_open = (
+                f"[{session_date_str} · External Trade & RBI FX Reserve Buffer Regime] Bilateral trade diplomacy and external balance dynamics are driving USD/INR sentiment today "
+                f"(spot at ₹{inr_val:.4f} [{inr_pct:+.2f}%], FBIL Ref ₹{rbi_ref:.4f}), backed by RBI's US${fx_res:.2f}B foreign exchange reserve war chest and a +{in_spread} bps 10Y G-Sec pickup over US Treasuries."
+            )
+            in_takeaway = (
+                f"[Tactical Call — Unhedged / Partially Hedged FAR 5Y–10Y G-Sec Carry] Synthesizing \"{in_lead['title'][:68]}\" ({in_lead['source']}) and \"{in_sec['title'][:65]}\" ({in_sec['source']}), "
+                f"RBI's US${fx_res:.0f}B reserve buffer caps USD/INR upside near ₹{inr_val + 0.65:.2f}, making Fully Accessible Route (FAR) 5Y–10Y G-Secs ({gsec_5y:.3f}%–{gsec_10y:.3f}%) one of Asia's highest risk-adjusted carry trades."
+            )
+        else:
+            in_conv = f"LAF Corridor Carry (Repo {repo_rate:.2f}%): Overweight 5Y–10Y FAR G-Secs ({gsec_5y:.3f}% / {gsec_10y:.3f}%) & Domestic Equity SIP Leaders"
+            in_open = (
+                f"[{session_date_str} · {in_prof['primaryLabel']} Regime] Official RBI and CCIL/NDS-OM fixings ({in_quote_dt}) place 3Y G-Sec at {gsec_3y:.3f}%, "
+                f"5Y at {gsec_5y:.3f}% ({gsec_5y_chg:+.1f} bps 1D), 10Y at {gsec_10y:.3f}% ({gsec_10y_chg:+.1f} bps 1D; 5s10s +{slope_5s10s} bps), and 30Y at {gsec_30y:.3f}%, "
+                f"anchored by RBI's VRR/VRRR liquidity operations within the {sdf_rate:.2f}%–{msf_rate:.2f}% SDF/MSF corridor."
+            )
+            in_takeaway = (
+                f"[Tactical Call — Core FAR G-Sec Duration & Rupee Stability] Across \"{in_lead['title'][:68]}\" ({in_lead['source']}) and \"{in_sec['title'][:64]}\" ({in_sec['source']}), "
+                f"accumulate 5Y–10Y FAR G-Secs ({gsec_5y:.3f}%–{gsec_10y:.3f}%) on any backup toward {gsec_10y + 0.10:.2f}% while Nifty 50 ({nifty:,.0f}, {nifty_pct:+.2f}%) and Sensex ({sensex:,.0f}, {sensex_pct:+.2f}%) consolidate."
+            )
+
+        data["india"]["commentary"].update(
+            {
+                "title": f"Reserve Bank of India (RBI) & CCIL G-Sec Briefing · {in_prof['primaryLabel'].split(',')[0]}",
+                "date": session_date_str,
+                "policyPosture": f"RBI Repo {repo_rate:.2f}% (SDF {sdf_rate:.2f}% / MSF {msf_rate:.2f}%) · {in_prof['primaryTheme'].replace('_', ' ')}",
+                "executiveSummary": (
+                    f"[{session_date_str} Executive Synthesis] Indian sovereign bond and currency markets today reflect {in_prof['primaryLabel'].lower()} — "
+                    f"led by \"{in_lead['title'][:78]}\" ({in_lead['source']} · {in_lead['timeAgo']}) and \"{in_sec['title'][:74]}\" ({in_sec['source']} · {in_sec['timeAgo']}). "
+                    f"Across official RBI / CCIL NDS-OM fixings ({in_quote_dt}), 3Y G-Sec (6.20% GS 2029) yields {gsec_3y:.3f}%, 5Y benchmark (6.53% GS 2031) trades at {gsec_5y:.3f}% ({gsec_5y_chg:+.1f} bps 1D), "
+                    f"10Y benchmark (6.94% GS 2036) yields {gsec_10y:.3f}% ({gsec_10y_chg:+.1f} bps 1D; +{in_spread} bps over 10Y UST), and 30Y G-Sec sits at {gsec_30y:.3f}%, "
+                    f"backed by US${fx_res:.2f}B in RBI FX Reserves (USD/INR ₹{inr_val:.4f} [{inr_pct:+.2f}%], Nifty 50 {nifty:,.2f} [{nifty_pct:+.2f}%])."
+                ),
+                "macroPillars": [
+                    {
+                        "heading": f"1. RBI / CCIL Sovereign G-Sec Curve ({in_quote_dt}) & Bank Portfolio Demand",
+                        "analysis": (
+                            f"On-the-run G-Secs trade at {gsec_3y:.3f}% (3Y), {gsec_5y:.3f}% (5Y, {gsec_5y_chg:+.1f} bps), {gsec_10y:.3f}% (10Y, {gsec_10y_chg:+.1f} bps), and {gsec_30y:.3f}% (30Y) "
+                            f"as PSU banks, insurers, and foreign FAR accounts evaluate \"{in_lead['title'][:72]}\" ({in_lead['source']})."
+                        ),
+                    },
+                    {
+                        "heading": f"2. RBI LAF Corridor ({sdf_rate:.2f}%–{msf_rate:.2f}%), VRR/VRRR & T-Bill Cut-Offs",
+                        "analysis": (
+                            f"RBI keeps overnight Call Money ({in_bonds.get('callRateRange', '4.30% - 5.75%')}) aligned with the {repo_rate:.2f}% Repo rate via VRR/VRRR operations "
+                            f"while 91D/364D T-Bills yield {tb91:.3f}%/{tb364:.3f}% amid \"{in_sec['title'][:72]}\" ({in_sec['source']})."
+                        ),
+                    },
+                    {
+                        "heading": f"3. USD/INR (₹{inr_val:.4f}), US${fx_res:.2f}B FX Reserves & Nifty 50 / Sensex",
+                        "analysis": (
+                            f"Spot USD/INR at ₹{inr_val:.4f} (FBIL Ref ₹{rbi_ref:.4f}) is cushioned by US${fx_res:.2f}B in RBI reserves, "
+                            f"while Nifty 50 ({nifty:,.2f}, {nifty_pct:+.2f}%) and Sensex ({sensex:,.2f}, {sensex_pct:+.2f}%) digest \"{in_third['title'][:70]}\"."
+                        ),
+                    },
+                ],
+            }
+        )
 
         data["india"]["argonCommentary"] = {
             "modelLabel": "GEMINI 4 ARGON",
             "title": "GEMINI 4 ARGON · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS",
-            "regimeBadge": f"RBI REPO {repo_rate:.2f}% · 10Y G-SEC {gsec_10y:.3f}% ({gsec_10y_chg:+.1f} bps) · SPREAD +{in_spread} BPS",
+            "regimeBadge": f"{in_prof['primaryTheme'].replace('_', ' ')} · REPO {repo_rate:.2f}% · 10Y G-SEC {gsec_10y:.3f}% ({gsec_10y_chg:+.1f} bps)",
+            "dominantRegime": in_prof["primaryLabel"],
             "updatedAtSGT": updated_sgt_str,
-            "conviction": f"Long 5Y–10Y FAR G-Secs ({gsec_5y:.3f}% / {gsec_10y:.3f}%, +{in_spread} bps vs UST) · USD/INR ₹{inr_val:.2f} ({inr_pct:+.2f}%) Backed by ${fx_res:.0f}B Reserves",
+            "conviction": in_conv,
             "synthesis": (
-                f"[{session_date_str} Mumbai Desk] Reserve Bank of India (RBI) and CCIL/NDS-OM sovereign fixings ({in_bonds.get('quotationDate', '06 Nov 2026')}) "
-                f"place 3Y G-Sec (6.20% GS 2029) at {gsec_3y:.3f}%, 5Y benchmark (6.53% GS 2031) at {gsec_5y:.3f}% ({gsec_5y_chg:+.1f} bps 1D), "
-                f"10Y benchmark (6.94% GS 2036) at {gsec_10y:.3f}% ({gsec_10y_chg:+.1f} bps 1D; +{in_spread} bps over 10Y UST, 5s10s +{slope_5s10s} bps), and 30Y G-Sec at {gsec_30y:.3f}%. "
-                f"With the RBI Policy Repo Rate anchored at {repo_rate:.2f}% (SDF {sdf_rate:.2f}% / MSF {msf_rate:.2f}%; 91D/364D T-Bills at {tb91:.3f}%/{tb364:.3f}%) and US${fx_res:.2f}B in FX Reserves, "
-                f"spot USD/INR trades at ₹{inr_val:.4f} ({inr_pct:+.2f}% 1D; FBIL Ref ₹{rbi_ref:.4f}), while Nifty 50 sits at {nifty:,.2f} ({nifty_pct:+.2f}%) and Sensex at {sensex:,.2f} ({sensex_pct:+.2f}%). "
-                f"Key India catalysts: (1) \"{lead_in}\" ({lead_in_meta}); and (2) \"{second_in}\" ({second_in_meta})."
+                f"{in_open} Argon's multi-update synthesis of {len(in_prof['classified'])} Mumbai market disclosures and RBI press releases highlights: {in_prof['distinctThemesDigest']}. "
+                f"With 91D/364D T-Bills clearing at {tb91:.3f}%/{tb364:.3f}% and CPI at {in_cpi:.2f}% YoY, institutional desks are positioning around \"{in_lead['title'][:72]}\" and RBI's active LAF liquidity fine-tuning."
             ),
-            "positioningTakeaway": (
-                f"As of {session_date_str}, overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs ({gsec_5y:.3f}%–{gsec_10y:.3f}%, {gsec_10y_chg:+.1f} bps 1D) for +{in_spread} bps carry over USTs "
-                f"and RBI reserve-backed INR stability (₹{inr_val:.2f}); watch RBI VRR/VRRR LAF operations ({in_bonds.get('callRateRange', '4.30% - 5.75%')}) and domestic bank/equity flows amid \"{lead_in[:70]}\"."
-            ),
+            "positioningTakeaway": in_takeaway,
             "criticalLevels": [
                 {
                     "asset": "10Y G-Sec (6.94% GS 2036)",
@@ -3772,7 +4383,7 @@ def build_argon_commentaries(data: dict):
                 },
                 {
                     "asset": "NIFTY 50 & BSE SENSEX",
-                    "current": f"{nifty:,.0f}",
+                    "current": f"{nifty:,.0f} ({nifty_pct:+.2f}%)",
                     "support": f"{round(nifty * 0.975):,}",
                     "resistance": f"{round(nifty * 1.025):,}",
                     "implication": "Domestic SIP inflows and banking earnings offset foreign equity rotation and support INR capital account stability.",
@@ -3783,7 +4394,7 @@ def build_argon_commentaries(data: dict):
                     "event": "India MoSPI Consumer Price Index (CPI) Print & RBI LAF VRR/VRRR Operations",
                     "timing": f"{_fmt_event_date(cpi_date)} · 16:00 IST (18:30 SGT)",
                     "impact": "Critical",
-                    "watchFor": f"Food-price trajectory relative to RBI's 4.0% (±2%) target band and overnight call money alignment with the {repo_rate:.2f}% Repo rate.",
+                    "watchFor": f"Food-price trajectory relative to RBI's 4.0% (±2%) target band and overnight call money alignment amid \"{in_lead['title'][:75]}\".",
                 },
                 {
                     "event": "RBI Weekly ₹36,000 Cr Government Stock (G-Sec) Auction & WSS Forex Reserves Print",
@@ -3795,7 +4406,7 @@ def build_argon_commentaries(data: dict):
                     "event": "RBI Monetary Policy Committee (MPC) Repo Rate Decision & SDF/MSF Corridor Review",
                     "timing": f"{_fmt_event_date(rbi_mpc_date)} · 10:00 IST (12:30 SGT)",
                     "impact": "High",
-                    "watchFor": f"MPC forward guidance on the {repo_rate:.2f}% Repo rate (SDF {sdf_rate:.2f}% / MSF {msf_rate:.2f}%), FAR G-Sec foreign inflows, and USD/INR stability.",
+                    "watchFor": f"MPC forward guidance on the {repo_rate:.2f}% Repo rate, FAR G-Sec foreign inflows, and USD/INR stability following \"{in_sec['title'][:75]}\".",
                 },
             ],
         }
@@ -3809,13 +4420,13 @@ def build_argon_commentaries(data: dict):
         fwd_pe_idx = float(idx_q.get("spxForwardPe", 21.8))
         ey_idx = float(idx_q.get("spxEarningsYieldPct", round(100.0 / fwd_pe_idx, 2)))
         erp_bps = int(idx_q.get("equityRiskPremiumBps", round((ey_idx - y10) * 100)))
-        div_idx = float(idx_q.get("spxDividendYieldPct", 1.24))
 
         best_pe = eq.get("topForwardPe", [{}])[0]
         second_pe = eq.get("topForwardPe", [{}, {}])[1] if len(eq.get("topForwardPe", [])) > 1 else {}
         best_fcf = eq.get("topFcfToEv", [{}])[0]
         second_fcf = eq.get("topFcfToEv", [{}, {}])[1] if len(eq.get("topFcfToEv", [])) > 1 else {}
         best_div = eq.get("topDividendYield", [{}])[0]
+        second_div = eq.get("topDividendYield", [{}, {}])[1] if len(eq.get("topDividendYield", [])) > 1 else {}
 
         pe_tkr = best_pe.get("ticker", "GM")
         pe_val = float(best_pe.get("forwardPe", 6.73))
@@ -3825,43 +4436,68 @@ def build_argon_commentaries(data: dict):
 
         fcf_tkr = best_fcf.get("ticker", "APA")
         fcf_val = float(best_fcf.get("fcfToEvPct", 12.69))
-        fcf_bn = float(best_fcf.get("fcfTtmBn", 2.78))
         fcf2_tkr = second_fcf.get("ticker", "DVN")
         fcf2_val = float(second_fcf.get("fcfToEvPct", 11.75))
 
         div_tkr = best_div.get("ticker", "PFG")
         div_val = float(best_div.get("dividendYieldPct", 6.15))
-        div_dps = float(best_div.get("annualDividendPerShare", 3.04))
+        div2_tkr = second_div.get("ticker", "CAG")
+        div2_val = float(second_div.get("dividendYieldPct", 5.80))
 
-        eq_heads = eq.get("noteworthyHeadlines", [])
-        lead_eq = (
-            eq_heads[0].get("title") if len(eq_heads) > 0 else None
-        ) or "S&P 500 valuation dispersion widens between mega-cap growth and deep-value free cash flow compounders"
-        lead_eq_meta = f"{eq_heads[0].get('source', 'NY Equity Desk')} · {eq_heads[0].get('timeAgo', 'Live')}" if len(eq_heads) > 0 else "NY Equity Desk"
-        second_eq = (
-            eq_heads[1].get("title") if len(eq_heads) > 1 else None
-        ) or "Corporate share buyback authorizations and NTM EPS revisions support S&P 500 value and cash-flow leaders"
-        second_eq_meta = f"{eq_heads[1].get('source', 'US Markets')} · {eq_heads[1].get('timeAgo', 'Live')}" if len(eq_heads) > 1 else "US Markets"
+        eq_prof = _analyze_news_catalysts_py(
+            eq.get("noteworthyHeadlines", []),
+            "S&P 500 valuation dispersion widens between mega-cap growth and deep-value free cash flow compounders",
+        )
+        eq_lead = eq_prof["leadItem"]
+        eq_sec = eq_prof["secondItem"]
         erp_str = f"+{erp_bps} bps" if erp_bps >= 0 else f"{erp_bps} bps"
+
+        if y10_chg >= 3.0 or erp_bps <= -35:
+            eq_conv = f"Negative ERP ({erp_str} vs {y10:.2f}% 10Y UST): Rotate From {fwd_pe_idx:.1f}x Index Beta Into Top FCF/EV ({fcf_tkr} {fcf_val:.1f}%) & Low Fwd P/E ({pe_tkr} {pe_val:.1f}x)"
+            eq_open = (
+                f"[{session_date_str} · Rate-Driven ERP Compression & Value Dispersion Regime] With 10Y US Treasury yields moving {y10_chg:+.1f} bps to {y10:.2f}% "
+                f"against the S&P 500's {fwd_pe_idx:.1f}x NTM Forward P/E ({ey_idx:.2f}% implied earnings yield, compressing the Equity Risk Premium to {erp_str}), "
+                f"rate-sensitive multiple discipline is dominating US equity factor flows even as the cash index trades at {spx_lvl:,.2f} ({spx_pct:+.2f}%)."
+            )
+            eq_takeaway = (
+                f"[Tactical Call — Long Unlevered FCF/EV & Low-P/E Compounders Over Cap-Weighted Index] Synthesizing \"{eq_lead['title'][:68]}\" ({eq_lead['source']}) and \"{eq_sec['title'][:64]}\" ({eq_sec['source']}), "
+                f"underweight long-duration mega-cap multiples and reallocate into the Top 10 FCF/EV basket led by {fcf_tkr} ({fcf_val:.2f}% FCF/EV) and {fcf2_tkr} ({fcf2_val:.2f}%), "
+                f"alongside Top Forward P/E names {pe_tkr} ({pe_val:.2f}x) and {pe2_tkr} ({pe2_val:.2f}x) generating +700 to +1,100 bps of earnings/cash yield pickup over 10Y Treasuries."
+            )
+        elif spx_pct <= -0.5 or eq_prof["primaryTheme"] in ("POLITICAL_GOVERNANCE", "TRADE_TARIFF_TECH"):
+            eq_conv = f"Defensive Cash-Flow & Dividend Shield: Overweight FCF-Covered Dividend Leaders ({div_tkr} {div_val:.1f}%, {div2_tkr} {div2_val:.1f}%) + Low-Debt FCF/EV"
+            eq_open = (
+                f"[{session_date_str} · Defensive Factor Rotation & Policy Headline Regime] Amid \"{eq_lead['title'][:70]}\" ({eq_lead['source']}) and S&P 500 trading at {spx_lvl:,.2f} ({spx_pct:+.2f}%), "
+                f"institutional desks are rotating toward self-funded balance sheets with high dividend and free-cash-flow coverage."
+            )
+            eq_takeaway = (
+                f"[Tactical Call — Defensive Dividend + FCF/EV Barbell] Anchor US equity books in FCF-covered dividend payers led by {div_tkr} ({div_val:.2f}% Div/Price) and {div2_tkr} ({div2_val:.2f}%), "
+                f"paired with unlevered cash generators {fcf_tkr} ({fcf_val:.2f}% FCF/EV), insulating portfolios from policy/tariff volatility and {y10:.2f}% 10Y Treasury yields."
+            )
+        else:
+            eq_conv = f"Cyclical Value & Buyback Compounders: Long Top Fwd P/E ({pe_tkr} {pe_val:.1f}x, {pe2_tkr} {pe2_val:.1f}x) + FCF/EV Leaders ({fcf_tkr} {fcf_val:.1f}%)"
+            eq_open = (
+                f"[{session_date_str} · Broad Equity Breadth & Cash-Return Regime] As the S&P 500 advances to {spx_lvl:,.2f} ({spx_pct:+.2f}% 1D) on a {fwd_pe_idx:.1f}x NTM Forward P/E "
+                f"({ey_idx:.2f}% E/P vs {y10:.2f}% 10Y UST; ERP {erp_str}), breadth expansion and share buyback execution are rewarding deep-value and high-FCF/EV constituents."
+            )
+            eq_takeaway = (
+                f"[Tactical Call — Capture Factor Dispersion Across All 3 Valuation Screens] Reviewing \"{eq_lead['title'][:68]}\" ({eq_lead['source']}) and \"{eq_sec['title'][:64]}\" ({eq_sec['source']}), "
+                f"overweight a 3-factor sleeve combining Top Forward P/E ({pe_tkr} at {pe_val:.2f}x / {pe_ey:.1f}% E/P), Top FCF/EV ({fcf_tkr} at {fcf_val:.2f}%), and Top Dividend Yield ({div_tkr} at {div_val:.2f}%) to outperform the {fwd_pe_idx:.1f}x cap-weighted benchmark."
+            )
 
         data["equities"]["argonCommentary"] = {
             "modelLabel": "GEMINI 4 ARGON",
             "title": "GEMINI 4 ARGON · US S&P 500 (SPX500) VALUATION, CASH FLOW & DIVIDEND FACTOR SYNTHESIS",
-            "regimeBadge": f"SPX {spx_lvl:,.2f} ({spx_pct:+.2f}%) · FWD P/E {fwd_pe_idx:.1f}x · ERP {erp_str} VS 10Y UST",
+            "regimeBadge": f"{eq_prof['primaryTheme'].replace('_', ' ')} · SPX {spx_lvl:,.2f} ({spx_pct:+.2f}%) · ERP {erp_str}",
+            "dominantRegime": eq_prof["primaryLabel"],
             "updatedAtSGT": updated_sgt_str,
-            "conviction": f"Overweight Top FCF/EV ({fcf_tkr} {fcf_val:.1f}%, {fcf2_tkr} {fcf2_val:.1f}%) & Low Fwd P/E ({pe_tkr} {pe_val:.1f}x) vs {fwd_pe_idx:.1f}x Index",
+            "conviction": eq_conv,
             "synthesis": (
-                f"[{session_date_str} NY Equity Desk] The S&P 500 (SPX500) trades at {spx_lvl:,.2f} ({spx_pct:+.2f}% 1D) on a cap-weighted consensus Next-12-Month (NTM) Forward P/E of {fwd_pe_idx:.1f}x "
-                f"(implied Forward Earnings Yield of {ey_idx:.2f}% vs the {y10:.2f}% 10Y US Treasury yield [{y10_chg:+.1f} bps 1D], placing the Equity Risk Premium at {erp_str}). "
-                f"With index-level ERP compressed and dividend yield at {div_idx:.2f}%, cross-sectional dispersion across the S&P 500 creates compelling factor alpha in cash-return leaders: "
-                f"the Top 10 Forward P/E screen is led by {pe_tkr} at {pe_val:.2f}x ({pe_ey:.2f}% E/P) and {pe2_tkr} ({pe2_val:.2f}x), the Top 10 Enterprise FCF Yield (FCF/EV) screen is led by {fcf_tkr} at {fcf_val:.2f}% (${fcf_bn:.2f}B TTM FCF) and {fcf2_tkr} ({fcf2_val:.2f}%), "
-                f"and the Top 10 FCF-covered Dividend/Price screen is led by {div_tkr} at {div_val:.2f}% (${div_dps:.2f}/sh annual dividend). "
-                f"Key US equity catalysts: (1) \"{lead_eq}\" ({lead_eq_meta}); and (2) \"{second_eq}\" ({second_eq_meta})."
+                f"{eq_open} Argon's multi-update analysis of {len(eq_prof['classified'])} US equity and valuation stories highlights: {eq_prof['distinctThemesDigest']}. "
+                f"Cross-referencing the live S&P 500 screens: Forward P/E is led by {pe_tkr} ({pe_val:.2f}x, {pe_ey:.1f}% E/P) and {pe2_tkr} ({pe2_val:.2f}x); "
+                f"Enterprise Cash Yield is led by {fcf_tkr} ({fcf_val:.2f}% FCF/EV) and {fcf2_tkr} ({fcf2_val:.2f}%); and Dividend Yield is led by {div_tkr} ({div_val:.2f}% Div/Price)."
             ),
-            "positioningTakeaway": (
-                f"As of {session_date_str}, with 10Y UST at {y10:.2f}% ({y10_chg:+.1f} bps 1D) and cap-weighted S&P 500 ERP at {erp_str}, rotate marginal equity risk toward the Top 10 FCF/EV ({fcf_val:.1f}% lead cash yield) "
-                f"and Top 10 Forward P/E ({pe_val:.2f}x lead NTM multiple) baskets—capturing +450 to +900 bps of cash-flow carry over Treasuries amid \"{lead_eq[:68]}\"."
-            ),
+            "positioningTakeaway": eq_takeaway,
             "criticalLevels": [
                 {
                     "asset": "S&P 500 Cash Index (SPX)",
@@ -3879,8 +4515,8 @@ def build_argon_commentaries(data: dict):
                 },
                 {
                     "asset": "Top 10 Fwd P/E Value Basket",
-                    "current": f"6.7x – 9.0x (Led by {pe_tkr} {pe_val:.2f}x)",
-                    "support": "6.2x Floor",
+                    "current": f"5.8x – 9.0x (Led by {pe_tkr} {pe_val:.2f}x)",
+                    "support": "5.5x Floor",
                     "resistance": "10.5x Re-Rating",
                     "implication": "Consensus NTM EPS upward revisions and share count reductions drive multiple expansion toward 10.5x.",
                 },
@@ -3903,16 +4539,20 @@ def build_argon_commentaries(data: dict):
                     "event": "S&P 500 FactSet Weekly NTM Consensus EPS Revision Cut-Off & Margin Update",
                     "timing": f"{_fmt_event_date(next_fri)} · 16:00 ET (Sat 05:00 SGT)",
                     "impact": "High",
-                    "watchFor": f"Whether bottom-up S&P 500 NTM operating EPS (~$338/sh) expands fast enough to compress the index Forward P/E below 21.0x from {fwd_pe_idx:.1f}x.",
+                    "watchFor": f"Whether bottom-up S&P 500 NTM operating EPS expands fast enough to compress the index Forward P/E below 21.0x from {fwd_pe_idx:.1f}x.",
                 },
                 {
                     "event": "S&P 500 Monthly Options Expiration (OpEx), Buyback Execution & Ex-Dividend Date",
                     "timing": f"{_fmt_event_date(lpr_date)} · 09:30–16:00 ET (NY Cash Close)",
                     "impact": "High",
-                    "watchFor": f"Execution of authorized buybacks across Energy/Auto/Tech FCF leaders ({fcf_tkr}, DVN, HPQ, {pe_tkr}) and dividend capture in {div_tkr} ({div_val:.2f}% Div/Price).",
+                    "watchFor": f"Execution of authorized buybacks across Energy/Auto/Tech FCF leaders ({fcf_tkr}, {fcf2_tkr}, {pe_tkr}) and dividend capture in {div_tkr} ({div_val:.2f}% Div/Price).",
                 },
             ],
         }
+
+    # Optional hybrid Gemini API enrichment pass when GEMINI_API_KEY is configured
+    _try_gemini_api_synthesis(data, updated_sgt_str)
+
 
 
 def fetch_live_us_equities_spx500(data: dict):

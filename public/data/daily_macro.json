@@ -333,29 +333,30 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST",
-      "regimeBadge": "UST 2s10s +22.0 BPS · 10Y 4.99% (+11.0 bps)",
+      "regimeBadge": "FISCAL SUPPLY · UST 2s10s +22.0 BPS · 10Y 4.99% (+11.0 bps)",
+      "dominantRegime": "Sovereign Debt Supply, Fiscal Execution & Primary Auctions",
       "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
-      "conviction": "Defensive Belly Duration (2Y–5Y 4.77%–4.83%) Amid +11.0 bps 10Y Backup · Constructive SPX (+0.83%) Cyclical & Quality Tilt",
-      "synthesis": "[Fri, 13 Nov 2026 Session] US Treasury yields are pricing a +22.0 bps 2s10s slope with the 2Y at 4.77% (+4.2 bps 1D), 5Y at 4.83%, 10Y benchmark at 4.99% (+11.0 bps 1D), and 30Y long bond at 5.33% (-2.0 bps 1D; 5s10s at +16.0 bps). Across cross-asset futures, S&P 500 E-minis trade at 7,606.75 (+0.83%) and Nasdaq 100 at 28,213.00 (+1.36%), while the US Dollar Index sits at 102.84 (+0.60%), WTI Crude at $86.28/bbl (+0.28%), and Gold at $3,983.90/oz (-1.15%). Top desk catalysts: (1) \"Analysis: Is Nvidia too big to fail? Its AI financing web raises the stakes\" (CNBC · 1h ago); and (2) \"Stocks end higher as CoreWeave results ease AI spending worries\" (Reuters · 2h ago).",
-      "positioningTakeaway": "With 10Y UST at 4.99% (+11.0 bps today) and 2s10s at +22.0 bps, favor 2Y–5Y belly duration (4.77%–4.83%) over unhedged 30Y exposure (5.33%). In equities and FX, watch 5.14% on US10Y and 102.84 on DXY (+0.60%) as institutional desks digest \"Analysis: Is Nvidia too big to fail? Its AI financing web raises the sta\".",
+      "conviction": "Short/Underweight 30Y Bond (5.33%, -2.0 bps) · Hold 2Y–5Y Belly (4.77%–4.83%) & Quality Value Over High-Multiple Tech",
+      "synthesis": "[Tue, 17 Nov 2026 · Fiscal Supply & Bear-Steepening Regime] Long-end US Treasury term premia are repricing higher today (10Y at 4.99% [+11.0 bps], 30Y at 5.33% [-2.0 bps], steepening 2s10s to +22.0 bps) as fiscal and debt-supply headlines dominate institutional desk flows. Argon's multi-update review across 10 live global wires highlights: (#1 Trade Tariffs) \"Analysis: Is Nvidia too big to fail? Its AI financing web raises the stakes\" [CNBC · 1h ago]; (#2 Sovereign Debt Supply) \"Stocks end higher as CoreWeave results ease AI spending worries\" [Reuters · 2h ago]; (#3 Political) \"Oil Gains After Two-Day Drop With Focus on US-Iran War Outlook\" [Bloomberg · 3h ago]; (#4 Sovereign Debt Supply) \"Prediction markets tied to clinical trials and drug approvals draw lawmakers' ire\" [CNBC · 4h ago]. Net cross-asset read-through: with 10Y UST moving +11.0 bps to 4.99%, USD/JPY at ¥159.62, and WTI at $86.28/bbl (+0.28%), institutional desks are balancing \"Analysis: Is Nvidia too big to fail? Its AI financing web raises the stakes\" against front-end Fed rate expectations (4.77% 2Y) and long-end refunding supply.",
+      "positioningTakeaway": "[Tactical Call — Curve Steepener & Short-Duration Quality] Avoid unhedged 10Y–30Y Treasury duration while \"Analysis: Is Nvidia too big to fail? Its AI financing web raises the s\" pressures long-end term premia (5.33%). Concentrate fixed-income carry in 2Y–5Y notes (4.77%–4.83%), maintain long DXY (102.84, +0.60%) / Gold ($3,984/oz) tail hedges, and tilt equity exposure toward low-duration cash-flow compounders.",
       "criticalLevels": [
         {
           "asset": "US 10Y Treasury Yield",
-          "current": "4.99%",
+          "current": "4.99% (+11.0 bps)",
           "support": "4.85%",
           "resistance": "5.15%",
           "implication": "Break above 5.15% pressures equity multiples & EM FX; move below 4.85% fuels duration rally."
         },
         {
           "asset": "S&P 500 E-mini (ES=F)",
-          "current": "7,606.75",
+          "current": "7,606.75 (+0.83%)",
           "support": "7,493",
           "resistance": "7,721",
           "implication": "Holding above 7,493 keeps institutional dip-buying intact across financials and AI capex leaders."
         },
         {
           "asset": "US Dollar Index (DXY)",
-          "current": "102.84",
+          "current": "102.84 (+0.60%)",
           "support": "101.69",
           "resistance": "104.09",
           "implication": "Reclaiming 104.09 tightens global USD funding; sub-101.69 accelerates flows into Gold & Asian FX."
@@ -373,17 +374,17 @@
           "event": "US BLS Consumer Price Index (CPI) Print & Fed Front-End Rate Cut Pricing",
           "timing": "Mon, 14 Dec 2026 · 21:30 SGT (08:30 ET)",
           "impact": "Critical",
-          "watchFor": "Core services stickiness vs softer energy ($86.28/bbl WTI) and whether US 2Y (4.77%) breaks 4.89% or flattens the 2Y/10Y spread (+22.0 bps)."
+          "watchFor": "Core services stickiness vs softer energy ($86.28/bbl WTI) and whether US 2Y (4.77%) breaks 4.89% following \"Analysis: Is Nvidia too big to fail? Its AI financing web raises the stakes\"."
         },
         {
           "event": "US Treasury 10Y / 30Y Refunding Auction Settlement & Primary Dealer Takedown",
-          "timing": "Fri, 13 Nov 2026 · 13:00 ET (02:00 SGT +1)",
+          "timing": "Tue, 17 Nov 2026 · 13:00 ET (02:00 SGT +1)",
           "impact": "High",
-          "watchFor": "Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near 5.45%."
+          "watchFor": "Primary dealer takedown and foreign indirect bids; a >2 bps tail would test 30Y resistance near 5.45% amid \"Stocks end higher as CoreWeave results ease AI spending worries\"."
         },
         {
           "event": "US Retail Sales, PPI Inflation & FOMC Governors Policy Remarks",
-          "timing": "Fri, 13 Nov 2026 · 21:30 SGT (08:30 ET)",
+          "timing": "Fri, 20 Nov 2026 · 21:30 SGT (08:30 ET)",
           "impact": "High",
           "watchFor": "Real consumption resilience and PPI pipeline pass-through dictating DXY (102.84) direction and Gold ($3,984/oz) momentum."
         }
@@ -392,24 +393,24 @@
   },
   "indonesia": {
     "commentary": {
-      "title": "Bank Indonesia Macro Commentary & Fixed Income Outlook",
-      "date": "12 Nov 2026",
-      "executiveSummary": "Bank Indonesia maintains its stability-oriented monetary stance with the BI-Rate at 5.75% (Headline CPI at 3.28% YoY), supported by official JISDOR fixing at Rp 18,154 (11 November 2026) and spot USD/IDR at 18,140. In the 23 Oct 2026 SRBI auction on bi.go.id, 12M SRBI cleared at a 6.601% weighted average winner rate (WAR) on IDR 41.81 T nominal bids, while 5Y benchmark FR0109 trades at 7.39% and 10Y benchmark FR0108 yields 7.55% (+256 bps over 10Y UST).",
+      "title": "Bank Indonesia & DJPPR Sovereign Fixed Income Briefing · Political",
+      "date": "Tue, 17 Nov 2026",
+      "executiveSummary": "[Tue, 17 Nov 2026 Executive Synthesis] Across today's Jakarta session, dominant news flow centers on political, constitutional & governance risk — led by \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\" (ANTARA News · 9h ago) and \"Minister: Gibran Impeachment Issue Shouldn't Affect Investment\" (Tempo.co English · 9h ago). Bank Indonesia maintains its 5.75% policy anchor (+2.47% real buffer over 3.28% YoY CPI), anchoring 5Y FR0109 at 7.39% (+7.1 bps 1D) and 10Y FR0108 at 7.55% (+0.0 bps 1D; +256 bps over 10Y UST), while onshore USD/IDR trades at Rp 18,140 (+0.00%; JISDOR Rp 18,154) and IHSG prints 5,125.73 (+1.02%).",
       "macroPillars": [
         {
-          "heading": "Monetary & Liquidity Operations (23 Oct 2026 SRBI Auction on bi.go.id)",
-          "analysis": "Bank Indonesia continues pro-market open market operations via SRBI auctions with the policy BI-Rate at 5.75%. Per Bank Indonesia's official Operasi Moneter release (23 Oct 2026), weighted average winner rates (WAR) cleared at 6.491% for 6M, 6.530% for 9M, and 6.601% for 12M (IDR 41.81 T nominal 12M bids), preserving an orderly carry buffer above US front-end rates."
+          "heading": "1. DJPPR 2026 Seri Benchmark SUN Curve & Fiscal Transmission (Tue, 17 Nov 2026)",
+          "analysis": "Official DJPPR Kemenkeu 2026 benchmarks price 5Y FR0109 at 7.39% (+7.1 bps), 10Y FR0108 at 7.55% (+0.0 bps, +256 bps vs US10Y), 15Y FR0106 at 7.62%, and 20Y FR0107 at 7.74%. Onshore institutional duration demand is actively weighing \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\" (ANTARA News) against domestic bank and pension reinvestment flows."
         },
         {
-          "heading": "Sovereign Debt Curve (DJPPR 2026 Benchmark SUN: FR0109 & FR0108)",
-          "analysis": "IndoGB yields reflect active secondary market repricing across DJPPR's official 2026 benchmark series. The 5Y benchmark (FR0109, 5.875% due Mar 2031) trades at 7.39% while the 10Y benchmark (FR0108, 6.500% due Apr 2036) trades at 7.55%, establishing a +256 bps sovereign spread over 10Y US Treasuries."
+          "heading": "2. BI SRBI Open Market Operations (06 Nov 2026) & Rupiah Liquidity Corridor",
+          "analysis": "Bank Indonesia's SRBI curve clears at 6.566% (6M), 6.655% (9M), and 6.675% (12M WAR, IDR 7.50 T awarded from IDR 36.90 T total bids), preserving a +168 bps short-end yield pickup over US 10Y Treasuries while desks digest \"Minister: Gibran Impeachment Issue Shouldn't Affect Investment\" (Tempo.co English)."
         },
         {
-          "heading": "Currency Dynamics (JISDOR Rp 18,154 & Offshore NDF)",
-          "analysis": "Bank Indonesia's official JISDOR reference rate fixed at Rp 18,154 per USD on 11 November 2026 (following Rp 18,059 on 10 November 2026). Offshore 1-Month NDFs trade at 18,174 (+34 IDR spread / 2.25% p.a. basis), while IDX Composite (IHSG) closed at 5,125.73 (+1.02%)."
+          "heading": "3. JISDOR (Rp 18,154), Offshore NDF Basis (+35 IDR) & IHSG (5,125.73)",
+          "analysis": "Spot USD/IDR trades at Rp 18,140 (+0.00%) alongside 1M NDFs at Rp 18,175 (+35 IDR implied basis) and IHSG at 5,125.73 (+1.02%), with \"Indonesia encourages MotoGP as a creative economy development platform\" shaping foreign institutional equity and bond positioning."
         }
       ],
-      "biPolicyPosture": "Vigilant FX Stabilization (BI-Rate 5.75% · Headline CPI 3.28% YoY)",
+      "biPolicyPosture": "BI-Rate 5.75% (Real Buffer +2.47%) · 12M SRBI 6.675% WAR · POLITICAL GOVERNANCE",
       "noteworthyHeadlines": [
         {
           "title": "Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary",
@@ -573,11 +574,12 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS",
-      "regimeBadge": "BI-RATE 5.75% · REAL BUFFER +2.47% · SPREAD +256 BPS",
+      "regimeBadge": "POLITICAL GOVERNANCE · BI 5.75% · FR0108 7.55% (+256 BPS)",
+      "dominantRegime": "Political, Constitutional & Governance Risk",
       "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
-      "conviction": "Overweight 5Y–10Y IndoGB (7.39%–7.55%, +256 bps vs UST) & 12M SRBI (6.675%)",
-      "synthesis": "[Fri, 13 Nov 2026 Jakarta Desk] Indonesia's sovereign curve prices 10Y benchmark FR0108 at 7.55% (+0.0 bps 1D; +256 bps over US 10Y at 4.99%) and 5Y benchmark FR0109 at 7.39% (+7.1 bps 1D), backed by a +2.47% real policy buffer (BI-Rate 5.75% vs Headline CPI 3.28% YoY) and 12M SRBI clearing at 6.675% WAR (06 Nov 2026 tender: IDR 7.50 T awarded from IDR 36.90 T total bids). Onshore USD/IDR trades at Rp 18,140 (+0 IDR / +0.00% 1D) alongside BI JISDOR at Rp 18,154 (+95 IDR) and 1M NDF at Rp 18,175 (+35 IDR basis), keeping Bank Indonesia active across spot, DNDF, and secondary SBN triple-intervention, while the IDX Composite (IHSG) trades at 5,125.73 (+1.02%). Key Indonesia catalysts: (1) \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\" (ANTARA News · 9h ago); and (2) \"Minister: Gibran Impeachment Issue Shouldn't Affect Investment\" (Tempo.co English · 9h ago).",
-      "positioningTakeaway": "As of Fri, 13 Nov 2026, with 10Y FR0108 at 7.55% (+0.0 bps 1D) and USD/IDR at Rp 18,140 (1M NDF spread +35 IDR), pair front-end 12M SRBI (6.675% WAR) with 5Y–10Y DJPPR benchmarks (7.39%–7.55%) on dips while hedging offshore USD tail risk ahead of the Fri, 13 Nov 2026 SRBI tender and \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\".",
+      "conviction": "Political & Governance Risk Hedge: Front-End 12M SRBI (6.675%) + 5Y FR0109 (7.39%) · NDF-Hedged vs 10Y–20Y Duration",
+      "synthesis": "[Tue, 17 Nov 2026 · Jakarta Political & Governance Watch] Onshore institutional desks are closely weighing domestic political and constitutional headlines against Indonesia's +2.47% real policy buffer (BI-Rate 5.75% vs CPI 3.28%) and +256 bps 10Y sovereign spread over USTs (FR0108 at 7.55%, +0.0 bps 1D; 5Y FR0109 at 7.39%, +7.1 bps 1D). Argon's synthesis of today's 8 Jakarta macro, regulatory, and political updates highlights: (#1 Political) \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\" [ANTARA News · 9h ago]; (#2 Political) \"Minister: Gibran Impeachment Issue Shouldn't Affect Investment\" [Tempo.co English · 9h ago]; (#3 Central Bank Rate Calibration & Liquidity Operations) \"Indonesia encourages MotoGP as a creative economy development platform\" [ANTARA News · 11h ago]; (#4 FX Intervention) \"Indonesia opens convention to link research with economic development\" [ANTARA News · 11h ago]. Combined with Bank Indonesia's 06 Nov 2026 SRBI clearing rates (6M 6.566%, 12M 6.675% WAR; IDR 3.00 T awarded from IDR 19.20 T bids), the interplay between \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\" and onshore liquidity dictates near-term foreign SBN and equity flows.",
+      "positioningTakeaway": "[Tactical Call — Shorten Duration into 12M SRBI & 5Y FR0109, Hedge FX Tail] While domestic headlines focus on \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\" (ANTARA News) and \"Minister: Gibran Impeachment Issue Shouldn't Affect Investment\" (Tempo.co English), avoid extending unhedged duration into 15Y–20Y IndoGBs (7.62%). Capture 6.675% carry in 12M BI SRBI and 5Y FR0109 (7.39%), and maintain 1M NDF hedges (Rp 18,175, +35 IDR basis) whenever USD/IDR (Rp 18,140) trades above Rp 18,050.",
       "criticalLevels": [
         {
           "asset": "USD/IDR Spot & JISDOR",
@@ -602,7 +604,7 @@
         },
         {
           "asset": "IDX Composite (IHSG)",
-          "current": "5,125.73",
+          "current": "5,125.73 (+1.02%)",
           "support": "5,023",
           "resistance": "5,228",
           "implication": "Reclaiming 5,228 confirms foreign institutional rotation back into big-cap Jakarta banks and infrastructure."
@@ -611,15 +613,15 @@
       "eventsToWatch": [
         {
           "event": "Bank Indonesia Weekly SRBI (6M / 9M / 12M) Open Market Tender (Post-06 Nov 2026 Cycle)",
-          "timing": "Fri, 13 Nov 2026 · 10:00–14:00 WIB (11:00–15:00 SGT)",
+          "timing": "Fri, 20 Nov 2026 · 10:00–14:00 WIB (11:00–15:00 SGT)",
           "impact": "Critical",
-          "watchFor": "Following Friday 06 Nov 2026's issuance (IDR 7.50 T total awarded from IDR 36.90 T bids; 12M WAR at 6.675%), watch secondary market turnover and whether 12M WAR holds near 6.675%."
+          "watchFor": "Following Friday 06 Nov 2026's issuance (12M WAR at 6.675%), watch secondary market turnover and clearing yields amid \"Prabowo jokes about being \"wiretapped\" at NasDem Party's anniversary\"."
         },
         {
           "event": "DJPPR Conventional SUN (IndoGB) Primary Debt Auction (FR0109 / FR0108 / FR0106)",
-          "timing": "Tue, 17 Nov 2026 · 10:00–12:00 WIB (11:00–13:00 SGT)",
+          "timing": "Tue, 24 Nov 2026 · 10:00–12:00 WIB (11:00–13:00 SGT)",
           "impact": "High",
-          "watchFor": "Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, 7.39%), FR0108 (10Y, 7.55%), FR0106 (15Y), and FR0107 (20Y)."
+          "watchFor": "Bid-to-cover ratio on 2026 benchmarks FR0109 (5Y, 7.39%) and FR0108 (10Y, 7.55%) following \"Minister: Gibran Impeachment Issue Shouldn't Affect Investment\"."
         },
         {
           "event": "Bank Indonesia Board of Governors (RDG) Rate Decision & JISDOR / DHE FX Review",
@@ -632,24 +634,24 @@
   },
   "china": {
     "commentary": {
-      "title": "PBoC & CCDC ChinaBond Sovereign Fixed Income Outlook",
-      "date": "12 Nov 2026",
-      "executiveSummary": "People's Bank of China (PBoC) maintains an accommodative monetary posture with the 7-Day Reverse Repo rate at 1.50%, 1Y LPR at 3.00%, and 5Y LPR at 3.50% (Headline CPI at 0.60% YoY). Per official China Central Depository & Clearing Co., Ltd. (CCDC · yield.chinabond.com.cn) ChinaBond Government Bond Yield Curve (YTM) fixings on 2026-11-11, 1Y CGB cleared at 1.1813% (+0.4 bps), 5Y benchmark at 1.3287% (+1.9 bps), 10Y benchmark at 1.6039% (+0.7 bps), and 30Y ultra-long CGB at 2.0520% (+1.6 bps), establishing a -339 bps 10Y spread vs US Treasuries.",
+      "title": "PBoC & CCDC ChinaBond Sovereign Briefing · FX Intervention",
+      "date": "Tue, 17 Nov 2026",
+      "executiveSummary": "[Tue, 17 Nov 2026 Executive Synthesis] China macro and fixed-income flows today are shaped by fx intervention, reserve buffers & external balance — specifically \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scandal\" (Reuters · 3h ago) and \"PBOC Says Bond Market Facility Won’t Bail Out Individual Firms\" (Caixin Global · 5h ago). Per official CCDC ChinaBond fixings (2026-11-11), 1Y CGB clears at 1.181%, 5Y benchmark at 1.329% (+1.9 bps 1D), 10Y benchmark at 1.604% (+0.7 bps 1D; -339 bps vs 10Y UST), and 30Y ultra-long CGB at 2.052% (+1.6 bps 1D), while PBoC sets the RMB parity fixing at 6.6678 (CNY 6.6703, CNH 6.6717) and SSEC trades at 3,663.72 (+0.08%).",
       "macroPillars": [
         {
-          "heading": "CCDC ChinaBond CGB Yield Curve (yield.chinabond.com.cn · 2026-11-11)",
-          "analysis": "Official CCDC ChinaBond CGB yields compressed across all maturities on 2026-11-11: 1Y at 1.1813%, 3Y at 1.2386%, 5Y at 1.3287%, 10Y at 1.6039%, and 30Y at 2.0520%, keeping the 2s10s slope at +38 bps."
+          "heading": "1. CCDC ChinaBond CGB Yield Curve (2026-11-11) & Duration Positioning",
+          "analysis": "CCDC ChinaBond benchmarks trade at 1.181% (1Y), 1.329% (5Y, +1.9 bps), 1.604% (10Y, +0.7 bps), and 2.052% (30Y, +1.6 bps), keeping the 10s30s slope at +45 bps as commercial bank desks weigh \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scanda\" (Reuters)."
         },
         {
-          "heading": "PBoC Open Market Operations, DR007 Repo & CCDC CDB Policy Bank Curve",
-          "analysis": "With the 7-Day Reverse Repo policy anchor at 1.50%, 1Y/5Y LPR at 3.00%/3.50%, and CCDC depository-institution 7-day repo (DR007) trading near 1.620%, interbank funding remains ample, supporting commercial bank carry positioning in 3Y–7Y CGBs and official CCDC 10Y China Development Bank (CDB) policy bank bonds (1.788%, +18.4 bps over 10Y CGB)."
+          "heading": "2. PBoC 7D OMO (1.50%), DR007 Repo & LPR Policy Transmission",
+          "analysis": "With 7D Reverse Repo at 1.50%, 1Y/5Y LPR at 3.00%/3.50%, and Headline CPI at 0.60% YoY, PBoC liquidity injections keep DR007 repo funding stable while institutions assess \"PBOC Says Bond Market Facility Won’t Bail Out Individual Firms\" (Caixin Global)."
         },
         {
-          "heading": "Renminbi Central Parity Fixing (CFETS), SSEC & CSI 300 Positioning",
-          "analysis": "Onshore USD/CNY trades at 6.6703 (+0.00%) alongside offshore USD/CNH at 6.6717 and the PBoC daily central parity fixing at 6.6678, while the Shanghai Composite sits at 3,663.72 (+0.08%) and CSI 300 at 4,054.28 (-1.44%)."
+          "heading": "3. CFETS RMB Fixing (6.6678), CNH/CNY Basis & Onshore Equities",
+          "analysis": "Onshore USD/CNY (6.6703, +0.00%) and offshore USD/CNH (6.6717) remain anchored near the 6.6678 parity fixing, while Shanghai Composite (3,663.72, +0.08%) and CSI 300 (4,054.28, -1.44%) digest \"Can China help ‘neither war nor peace’ deadlock in Iran before Xi-Trum\"."
         }
       ],
-      "policyPosture": "Supportive Monetary Easing (7D OMO 1.50% · 1Y LPR 3.00% · 5Y LPR 3.50%)",
+      "policyPosture": "7D OMO 1.50% · 1Y/5Y LPR 3.00%/3.50% · FX EXTERNAL BALANCE",
       "noteworthyHeadlines": [
         {
           "title": "How Nvidia CEO Jensen Huang got entangled in a China chip and spy scandal",
@@ -837,15 +839,16 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS",
-      "regimeBadge": "7D OMO 1.50% · CCDC 10Y 1.604% (+0.7 bps) · US-CN -339 BPS",
+      "regimeBadge": "FX EXTERNAL BALANCE · CCDC 10Y 1.604% (+0.7 bps) · FIX 6.6678",
+      "dominantRegime": "FX Intervention, Reserve Buffers & External Balance",
       "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
-      "conviction": "Receive 3Y–5Y CCDC CGB Belly (1.329%, +1.9 bps) · FX-Hedged Carry vs SSEC (+0.08%)",
-      "synthesis": "[Fri, 13 Nov 2026 Beijing/Shanghai Desk] Official CCDC ChinaBond CGB fixings (2026-11-11) price 1Y CGB at 1.181%, 5Y benchmark at 1.329% (+1.9 bps 1D), 10Y benchmark at 1.604% (+0.7 bps 1D), and 30Y ultra-long CGB at 2.052% (+1.6 bps 1D; 10s30s slope +45 bps, -339 bps vs 10Y UST). With PBoC 7D Reverse Repo at 1.50% and 1Y/5Y LPR at 3.00%/3.50%, onshore USD/CNY trades at 6.6703 (+0.00%) and offshore USD/CNH at 6.6717 around the 6.6678 PBoC parity fixing, while Shanghai Composite sits at 3,663.72 (+0.08%) and CSI 300 at 4,054.28 (-1.44%). Top China catalysts: (1) \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scandal\" (Reuters · 3h ago); and (2) \"PBOC Says Bond Market Facility Won’t Bail Out Individual Firms\" (Caixin Global · 5h ago).",
-      "positioningTakeaway": "As of Fri, 13 Nov 2026, express constructive China rates positioning via 3Y–5Y CCDC CGB benchmarks (1.329%, +1.9 bps 1D) where DR007 repo funding carry remains positive, while taking profits on 10Y CGB (1.604%) approaches toward 1.500% and monitoring \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scan\" for PBoC fixing (6.6678) and CSI 300 (-1.44%) spillover.",
+      "conviction": "Receive 3Y–7Y CCDC CGB Belly (1.329%, +1.9 bps) on PBoC OMO Support (1.50%) · Watch 30Y Supply (2.052%)",
+      "synthesis": "[Tue, 17 Nov 2026 · FX Intervention, Reserve Buffers & External Balance Regime] Official CCDC ChinaBond CGB fixings (2026-11-11) price 1Y at 1.181%, 5Y at 1.329% (+1.9 bps 1D), 10Y at 1.604% (+0.7 bps 1D), and 30Y at 2.052% (+1.6 bps 1D; 10s30s +45 bps), supported by PBoC's 1.50% 7D Reverse Repo anchor. Argon's multi-update scan across 5 China macro, CCDC, and geopolitical stories highlights: (#1 Trade Tariffs) \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scandal\" [Reuters · 3h ago]; (#2 FX Intervention) \"PBOC Says Bond Market Facility Won’t Bail Out Individual Firms\" [Caixin Global · 5h ago]; (#3 Political) \"Can China help ‘neither war nor peace’ deadlock in Iran before Xi-Trump summit?\" [South China Morning Post · 11h ago]; (#4 Sovereign Debt Supply) \"China's central bank vows to step up policy support for the economy\" [Reuters · 12h ago]. With 1Y/5Y LPR at 3.00%/3.50% and SSEC at 3,663.72 (+0.08%), institutional positioning hinges on how \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scanda\" transmits into PBoC liquidity injections and CFETS FX fixings.",
+      "positioningTakeaway": "[Tactical Call — Bull-Steepener in 3Y–5Y CGBs vs 30Y Special Issuance] Synthesizing \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy sc\" (Reuters) and \"PBOC Says Bond Market Facility Won’t Bail Out Individual Firms\" (Caixin Global), stay overweight 3Y–5Y CCDC CGBs (1.329%) where DR007 repo funding carry is positive, and avoid chasing 30Y ultra-long CGBs (2.052%) below 2.00% ahead of MoF special bond supply.",
       "criticalLevels": [
         {
           "asset": "CCDC 10Y ChinaBond CGB",
-          "current": "1.604%",
+          "current": "1.604% (+0.7 bps)",
           "support": "1.500%",
           "resistance": "1.720%",
           "implication": "Yields approaching 1.500% risk PBoC secondary bond sales; backup toward 1.720% triggers domestic bank buying."
@@ -866,7 +869,7 @@
         },
         {
           "asset": "Shanghai Composite (SSEC)",
-          "current": "3,663.72",
+          "current": "3,663.72 (+0.08%)",
           "support": "3,535",
           "resistance": "3,792",
           "implication": "Break above 3,792 drives equity-bond rotation and steepens the CCDC 2s10s CGB curve."
@@ -875,15 +878,15 @@
       "eventsToWatch": [
         {
           "event": "PBoC 7D Reverse Repo OMO, MLF Operation & NBS Activity Print (IP / Retail Sales)",
-          "timing": "Fri, 13 Nov 2026 · 09:15 & 10:00 CST (SGT)",
+          "timing": "Fri, 20 Nov 2026 · 09:15 & 10:00 CST (SGT)",
           "impact": "Critical",
-          "watchFor": "Net liquidity injection/drain via 7D OMO (1.50%) and whether DR007 repo stays anchored below 1.70% as CCDC publishes end-of-day CGB yields."
+          "watchFor": "Net liquidity injection via 7D OMO (1.50%) and whether DR007 repo stays anchored below 1.70% amid \"How Nvidia CEO Jensen Huang got entangled in a China chip and spy scandal\"."
         },
         {
           "event": "Ministry of Finance (MoF) 30-Year Ultra-Long Special CGB Issuance Tender",
           "timing": "Wed, 18 Nov 2026 · 10:35 CST (SGT)",
           "impact": "High",
-          "watchFor": "Primary auction bid-to-cover on 10Y (1.604%) and 30Y (2.052%) CGBs and commercial bank wealth-management duration absorption."
+          "watchFor": "Primary auction bid-to-cover on 10Y (1.604%) and 30Y (2.052%) CGBs following \"PBOC Says Bond Market Facility Won’t Bail Out Individual Firms\"."
         },
         {
           "event": "PBoC Monthly 1-Year & 5-Year Loan Prime Rate (LPR) Quotation Fixing",
@@ -896,24 +899,24 @@
   },
   "korea": {
     "commentary": {
-      "title": "Bank of Korea & KOFIA / SOFIA Fixed Income Outlook",
-      "date": "12 Nov 2026",
-      "executiveSummary": "The Bank of Korea (BOK) maintains its Base Rate at 3.00% (Headline CPI at 2.10% YoY, +0.90% real policy buffer) while Korea Overnight Financing Repo (KOFR / SOFIA) fixes at 3.049% (+0.8 bps), 1-day BOK Call Rate trades at 2.949%, and 91-day KOFIA CD rates sit at 3.370%. Across the Korea Financial Investment Association (KOFIA / SOFIA · kofiabond.or.kr) OTC Korea Treasury Bond (KTB) curve (11 Nov 2026), the benchmark 3Y KTB trades at 3.733% (+10.7 bps), 5Y KTB at 3.810% (+9.4 bps), 10Y KTB at 3.952% (+10.1 bps, -104 bps vs 10Y UST), and 30Y KTB at 4.017% (+5.6 bps).",
+      "title": "Bank of Korea & KOFIA / SOFIA Fixed Income Briefing · Sovereign Debt Supply",
+      "date": "Tue, 17 Nov 2026",
+      "executiveSummary": "[Tue, 17 Nov 2026 Executive Synthesis] Seoul fixed-income and equity markets are driven today by sovereign debt supply, fiscal execution & primary auctions — led by \"KOSPI outlook rises as gains concentrate in semiconductors and surprises fade\" (Chosunbiz · 26m ago) and \"[INTERVIEW] Deutsche Bank urges Korean financial markets to match its comp\" (The Korea Times · 2h ago). Across KOFIA / SOFIA OTC bond fixings (11 Nov 2026), 3Y benchmark KTB trades at 3.733% (+10.7 bps 1D), 5Y KTB at 3.810%, 10Y benchmark KTB at 3.952% (+10.1 bps 1D; -104 bps vs 10Y UST), and 30Y KTB at 4.017%, while USD/KRW sits at ₩1332.30 (-0.48%) and KOSPI prints 5,239.13 (+4.39%).",
       "macroPillars": [
         {
-          "heading": "KOFIA / SOFIA KTB Yield Curve & WGBI Inclusion Flows (kofiabond.or.kr · 11 Nov 2026)",
-          "analysis": "Korean Treasury Bonds rallied across the curve on strong institutional receiving: 1Y KTB at 3.633%, 2Y KTB at 3.729%, 3Y benchmark KTB at 3.733%, 5Y KTB at 3.810%, 10Y benchmark KTB at 3.952%, and 30Y KTB at 4.017%, supported by passive FTSE World Government Bond Index (WGBI) allocations."
+          "heading": "1. KOFIA / SOFIA KTB Curve (11 Nov 2026) & WGBI Institutional Flows",
+          "analysis": "KOFIA OTC yields price 3Y KTB at 3.733% (+10.7 bps), 5Y at 3.810%, 10Y at 3.952% (+10.1 bps), and 30Y at 4.017% (+22 bps 3s10s slope) as domestic and WGBI accounts react to \"KOSPI outlook rises as gains concentrate in semiconductors and surprises\" (Chosunbiz)."
         },
         {
-          "heading": "SOFIA / KOFR Overnight Repo, KOFIA CD 91D, Call Rate & AA- Corporate Spreads",
-          "analysis": "Short-term money markets remain well-anchored with KOFR / SOFIA overnight repo at 3.049% (+0.8 bps) and 1-day Call Rate at 2.949% against the 3.00% BOK Base Rate, while KOFIA 91-day CD final quotation sits at 3.370%, 1Y BOK Monetary Stabilization Bonds (MSB) at 3.581%, and 3Y AA- corporate bonds at 4.327% (+59.4 bps over 3Y KTB)."
+          "heading": "2. BOK Base Rate (3.00%), KOFR Repo (3.049%) & 91D CD (3.37%)",
+          "analysis": "With Headline CPI at 2.10% YoY (+0.90% real buffer), overnight KOFR/SOFIA repo fixes at 3.049% and 91-day KOFIA CD at 3.37%, framing money-market carry alongside \"[INTERVIEW] Deutsche Bank urges Korean financial markets to match its co\" (The Korea Times)."
         },
         {
-          "heading": "USD/KRW FX Dynamics, Semiconductor Cycle & KOSPI Positioning",
-          "analysis": "Onshore USD/KRW trades at ₩1,332.30 (-0.48%) with 1M offshore NDFs at ₩1,330.06, while KOSPI closed at 5,239.13 (+4.39%) and KOSDAQ at 667.61 (+4.48%)."
+          "heading": "3. USD/KRW (₩1332.30), Semiconductor Exports & KOSPI (5,239.13)",
+          "analysis": "Onshore USD/KRW trades at ₩1332.30 (1M NDF ₩1330.06) while KOSPI (5,239.13, +4.39%) and KOSDAQ (667.61, +4.48%) reflect \"South Korea Inflation Remained Above Target in October\"."
         }
       ],
-      "policyPosture": "Measured Calibration (BOK Base Rate 3.00% · KOFR/SOFIA 3.049% · CD 91D 3.37%)",
+      "policyPosture": "BOK Base 3.00% · KOFR 3.049% · CD 91D 3.37% · FISCAL SUPPLY",
       "noteworthyHeadlines": [
         {
           "title": "KOSPI outlook rises as gains concentrate in semiconductors and surprises fade",
@@ -1088,11 +1091,12 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS",
-      "regimeBadge": "BOK BASE 3.00% · KOFR/SOFIA 3.049% · 10Y KTB 3.952% (+10.1 bps)",
+      "regimeBadge": "FISCAL SUPPLY · KOFR 3.049% · 10Y KTB 3.952% (+10.1 bps)",
+      "dominantRegime": "Sovereign Debt Supply, Fiscal Execution & Primary Auctions",
       "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
-      "conviction": "Long Semiconductor Equity Recovery (KOSPI +4.39%) & 3Y–10Y KTB (3.733%/3.952%) WGBI Carry",
-      "synthesis": "[Fri, 13 Nov 2026 Seoul Desk] Korea Financial Investment Association (KOFIA / SOFIA) OTC bond fixings (11 Nov 2026) place 3Y KTB at 3.733% (+10.7 bps 1D), 10Y KTB at 3.952% (+10.1 bps 1D; 3s10s slope +22 bps, -104 bps vs 10Y UST), and 30Y KTB at 4.017%. With the BOK Base Rate at 3.00% (CPI 2.10% YoY, real buffer +0.90%), SOFIA/KOFR overnight repo fixes at 3.049% and 91D CD at 3.37%. In Seoul FX and equities, USD/KRW trades at ₩1,332.30 (-0.48%; 1M NDF ₩1,330.06), while KOSPI is at 5,239.13 (+4.39%) and KOSDAQ at 667.61 (+4.48%). Key Korea catalysts: (1) \"KOSPI outlook rises as gains concentrate in semiconductors and surprises fade\" (Chosunbiz · 26m ago); and (2) \"[INTERVIEW] Deutsche Bank urges Korean financial markets to match its companies' global reach\" (The Korea Times · 2h ago).",
-      "positioningTakeaway": "As of Fri, 13 Nov 2026, accumulate 3Y (3.733%, +10.7 bps) and 10Y (3.952%, +10.1 bps) KTB benchmarks as FTSE WGBI passive inflows and anchored KOFR repo funding (3.049%) support duration, while tracking KOSPI (+4.39%) and USD/KRW (₩1332.30) reaction to \"KOSPI outlook rises as gains concentrate in semiconductors and surpris\".",
+      "conviction": "Hawkish KTB Backup (+10.7 bps 3Y): Fade Sell-Off via 3Y KTB (3.733%) & KOFR Repo (3.049%) · Long Chip Exporters (KOSPI +4.39%)",
+      "synthesis": "[Tue, 17 Nov 2026 · Sticky CPI & KTB Yield Backup Regime] KOFIA OTC Treasury yields backed up sharply in the latest session (11 Nov 2026: 3Y KTB at 3.733% [+10.7 bps], 5Y at 3.810%, 10Y at 3.952% [+10.1 bps; -104 bps vs UST]) as sticky inflation and BOK policy calibration headlines temper near-term rate-cut pricing. Argon's synthesis across 5 Seoul macro, BOK, and export headlines highlights: (#1 Capital Market Reform) \"KOSPI outlook rises as gains concentrate in semiconductors and surprises fade\" [Chosunbiz · 26m ago]; (#2 Sovereign Debt Supply) \"[INTERVIEW] Deutsche Bank urges Korean financial markets to match its companies' g…\" [The Korea Times · 2h ago]; (#3 Inflation Pipeline) \"South Korea Inflation Remained Above Target in October\" [WSJ · 2h ago]; (#4 Trade Tariffs) \"South Korea’s exports surge towards USD1T\" [Borneo Bulletin · 2h ago]. With Headline CPI at 2.10% YoY (+0.90% real buffer) and 91D CD at 3.37%, institutional desks are calibrating KTB duration against \"KOSPI outlook rises as gains concentrate in semiconductors and surprises\" and semiconductor trade flows.",
+      "positioningTakeaway": "[Tactical Call — Scale Into 3Y KTB Above 3.70% & Ride Semiconductor Equity Beta] Synthesizing \"KOSPI outlook rises as gains concentrate in semiconductors and surpr\" (Chosunbiz) and \"[INTERVIEW] Deutsche Bank urges Korean financial markets to match\" (The Korea Times), use the +10.7 bps KTB yield backup to scale into 3Y KTB benchmarks (3.733%, +0.73% over the 3.00% BOK Base Rate) while keeping equity exposure overweight Korean memory chip exporters driving KOSPI (5,239, +4.39%).",
       "criticalLevels": [
         {
           "asset": "KOFIA 3Y & 10Y KTB Yield",
@@ -1117,7 +1121,7 @@
         },
         {
           "asset": "KOSPI Composite Index",
-          "current": "5,239.13",
+          "current": "5,239.13 (+4.39%)",
           "support": "5,082",
           "resistance": "5,422",
           "implication": "Memory semiconductor export cycle and Corporate Value-Up disclosures dictate foreign net equity flows."
@@ -1126,15 +1130,15 @@
       "eventsToWatch": [
         {
           "event": "KOFIA 16:00 KST Final OTC KTB Yield Quotation & KTB Futures Settlement",
-          "timing": "Fri, 13 Nov 2026 · 16:00 KST (15:00 SGT)",
+          "timing": "Tue, 17 Nov 2026 · 16:00 KST (15:00 SGT)",
           "impact": "Critical",
-          "watchFor": "Foreign institutional net buying in 3Y (3.733%) and 10Y (3.952%) KTB futures alongside KOFIA AA- 3Y corporate credit spreads."
+          "watchFor": "Foreign institutional net buying in 3Y (3.733%) and 10Y (3.952%) KTB futures following \"KOSPI outlook rises as gains concentrate in semiconductors and surprises fa\"."
         },
         {
           "event": "MOEF 10-Year Korea Treasury Bond (KTB) Competitive Primary Auction & WGBI Flows",
-          "timing": "Mon, 16 Nov 2026 · 10:40 KST (09:40 SGT)",
+          "timing": "Mon, 23 Nov 2026 · 10:40 KST (09:40 SGT)",
           "impact": "High",
-          "watchFor": "Competitive auction takedown on 10Y (3.952%) and 30Y (4.017%) KTB supply and Euroclear/Clearstream omnibus inflows."
+          "watchFor": "Competitive auction takedown on 10Y (3.952%) and 30Y (4.017%) KTB supply amid \"[INTERVIEW] Deutsche Bank urges Korean financial markets to match its compa\"."
         },
         {
           "event": "Bank of Korea (BOK) Monetary Policy Board Base Rate Decision & MSB Tender",
@@ -1147,24 +1151,24 @@
   },
   "india": {
     "commentary": {
-      "title": "Reserve Bank of India (RBI) & CCIL Sovereign G-Sec Outlook",
-      "date": "12 Nov 2026",
-      "executiveSummary": "The Reserve Bank of India (RBI · rbi.org.in) Monetary Policy Committee maintains the Policy Repo Rate at 5.50% (Standing Deposit Facility floor at 5.25%, Marginal Standing Facility & Bank Rate at 5.75%, CRR at 3.00%, SLR at 18.00%). Across official RBI / CCIL NDS-OM on-the-run Government of India Dated Securities (G-Sec), the 3Y benchmark (6.20% GS 2029 (RBI)) yields 6.852%, 5Y benchmark (6.53% GS 2031 (RBI)) trades at 6.966%, 10Y benchmark (6.94% GS 2036 (RBI)) yields 7.167% (+218 bps over 10Y UST), and 30Y benchmark (7.63% GS 2056 (RBI)) closes at 7.710%. Per RBI's Weekly Statistical Supplement, India's Foreign Exchange Reserves stand at US$717.06B, anchoring spot USD/INR at ₹93.9250 (FBIL Reference Rate ₹93.8075).",
+      "title": "Reserve Bank of India (RBI) & CCIL G-Sec Briefing · Sovereign Debt Supply",
+      "date": "Tue, 17 Nov 2026",
+      "executiveSummary": "[Tue, 17 Nov 2026 Executive Synthesis] Indian sovereign bond and currency markets today reflect sovereign debt supply, fiscal execution & primary auctions — led by \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-India trade \" (CNBC · 14m ago) and \"RBI consolidates money transfer rules, allows ₹50,000 cash NEFT transfers\" (Business Standard · 8h ago). Across official RBI / CCIL NDS-OM fixings (11 Nov 2026), 3Y G-Sec (6.20% GS 2029) yields 6.852%, 5Y benchmark (6.53% GS 2031) trades at 6.966% (+2.3 bps 1D), 10Y benchmark (6.94% GS 2036) yields 7.167% (+6.0 bps 1D; +218 bps over 10Y UST), and 30Y G-Sec sits at 7.710%, backed by US$717.06B in RBI FX Reserves (USD/INR ₹93.9250 [-0.02%], Nifty 50 25,044.65 [+0.06%]).",
       "macroPillars": [
         {
-          "heading": "RBI / CCIL Sovereign G-Sec Curve & Friday ₹36,000 Cr Primary Auction (rbi.org.in · 11 Nov 2026)",
-          "analysis": "Official RBI/CCIL G-Sec benchmarks remain well-bid across the curve: 1Y at 6.423%, 2Y at 6.803%, 3Y (6.20% GS 2029 (RBI)) at 6.852%, 5Y (6.53% GS 2031 (RBI)) at 6.966%, 10Y (6.94% GS 2036 (RBI)) at 7.167%, 15Y (7.06% GS 2041 (RBI)) at 7.343%, and 30Y (7.63% GS 2056 (RBI)) at 7.710%. 06 Nov 2026 (PR #63936): 7.06% GS 2041 (₹23,000 Cr) cut-off at ₹97.07 / 7.3881%; 7.43% GS 2076 (₹13,000 Cr) cut-off at ₹95.70 / 7.7708% · PD Devolvement: NIL."
+          "heading": "1. RBI / CCIL Sovereign G-Sec Curve (11 Nov 2026) & Bank Portfolio Demand",
+          "analysis": "On-the-run G-Secs trade at 6.852% (3Y), 6.966% (5Y, +2.3 bps), 7.167% (10Y, +6.0 bps), and 7.710% (30Y) as PSU banks, insurers, and foreign FAR accounts evaluate \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-India \" (CNBC)."
         },
         {
-          "heading": "RBI LAF Corridor (Repo 5.50% / SDF 5.25% / MSF 5.75%), VRR/VRRR & T-Bill Cut-Offs",
-          "analysis": "RBI actively manages banking system liquidity via fine-tuning Variable Rate Repo (4-day VRR) and Variable Rate Reverse Repo (3-day VRRR) operations, keeping interbank Call Money within 4.30% - 5.75%. Meanwhile, 91-Day, 182-Day, and 364-Day Treasury Bills yield 5.868%, 6.518%, and 6.639% ahead of RBI's ₹23,000 Cr weekly T-Bill tender."
+          "heading": "2. RBI LAF Corridor (5.25%–5.75%), VRR/VRRR & T-Bill Cut-Offs",
+          "analysis": "RBI keeps overnight Call Money (4.30% - 5.75%) aligned with the 5.50% Repo rate via VRR/VRRR operations while 91D/364D T-Bills yield 5.868%/6.639% amid \"RBI consolidates money transfer rules, allows ₹50,000 cash NEFT transfer\" (Business Standard)."
         },
         {
-          "heading": "Indian Rupee (FBIL Reference ₹93.8075), US$717.06B FX Reserves & Nifty 50 / Sensex",
-          "analysis": "Onshore USD/INR spot trades at ₹93.9250 (-0.02%) alongside the official RBI/FBIL Reference Rate at ₹93.8075, backed by US$717.06B in total RBI Forex Reserves. In equities, Nifty 50 stands at 25,044.65 (+0.06%) and S&P BSE Sensex at 81,106.65 (+0.10%)."
+          "heading": "3. USD/INR (₹93.9250), US$717.06B FX Reserves & Nifty 50 / Sensex",
+          "analysis": "Spot USD/INR at ₹93.9250 (FBIL Ref ₹93.8075) is cushioned by US$717.06B in RBI reserves, while Nifty 50 (25,044.65, +0.06%) and Sensex (81,106.65, +0.10%) digest \"India's Q2 GDP growth likely at 7.8%, above RBI estimate of 7.2%: SBI \"."
         }
       ],
-      "policyPosture": "Neutral Calibration (RBI Repo 5.50% · SDF 5.25% · MSF 5.75% · CRR 3.00%)",
+      "policyPosture": "RBI Repo 5.50% (SDF 5.25% / MSF 5.75%) · FISCAL SUPPLY",
       "noteworthyHeadlines": [
         {
           "title": "Inside India newsletter: Trump's poll setback fuels hope for U.S.-India trade deal by year end",
@@ -1401,11 +1405,12 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS",
-      "regimeBadge": "RBI REPO 5.50% · 10Y G-SEC 7.167% (+6.0 bps) · SPREAD +218 BPS",
+      "regimeBadge": "FISCAL SUPPLY · REPO 5.50% · 10Y G-SEC 7.167% (+6.0 bps)",
+      "dominantRegime": "Sovereign Debt Supply, Fiscal Execution & Primary Auctions",
       "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
-      "conviction": "Long 5Y–10Y FAR G-Secs (6.966% / 7.167%, +218 bps vs UST) · USD/INR ₹93.92 (-0.02%) Backed by $717B Reserves",
-      "synthesis": "[Fri, 13 Nov 2026 Mumbai Desk] Reserve Bank of India (RBI) and CCIL/NDS-OM sovereign fixings (11 Nov 2026) place 3Y G-Sec (6.20% GS 2029) at 6.852%, 5Y benchmark (6.53% GS 2031) at 6.966% (+2.3 bps 1D), 10Y benchmark (6.94% GS 2036) at 7.167% (+6.0 bps 1D; +218 bps over 10Y UST, 5s10s +20 bps), and 30Y G-Sec at 7.710%. With the RBI Policy Repo Rate anchored at 5.50% (SDF 5.25% / MSF 5.75%; 91D/364D T-Bills at 5.868%/6.639%) and US$717.06B in FX Reserves, spot USD/INR trades at ₹93.9250 (-0.02% 1D; FBIL Ref ₹93.8075), while Nifty 50 sits at 25,044.65 (+0.06%) and Sensex at 81,106.65 (+0.10%). Key India catalysts: (1) \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-India trade deal by year end\" (CNBC · 14m ago); and (2) \"RBI consolidates money transfer rules, allows ₹50,000 cash NEFT transfers\" (Business Standard · 8h ago).",
-      "positioningTakeaway": "As of Fri, 13 Nov 2026, overweight Fully Accessible Route (FAR) 5Y–10Y Indian G-Secs (6.966%–7.167%, +6.0 bps 1D) for +218 bps carry over USTs and RBI reserve-backed INR stability (₹93.92); watch RBI VRR/VRRR LAF operations (4.30% - 5.75%) and domestic bank/equity flows amid \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-Indi\".",
+      "conviction": "G-Sec Supply & Valuation Shift (+6.0 bps 10Y): Favor 91D–364D T-Bills (5.87%–6.64%) & 3Y–5Y G-Sec (6.852%–6.966%)",
+      "synthesis": "[Tue, 17 Nov 2026 · G-Sec Portfolio Valuation & Supply Regime] Indian sovereign yields backed up across the belly and long end (11 Nov 2026: 5Y G-Sec at 6.966% [+2.3 bps], 10Y 6.94% GS 2036 at 7.167% [+6.0 bps], 30Y at 7.710%) as commercial bank bond-valuation rules and primary auction supply shape PSU bank SLR demand. Argon's multi-update synthesis of 5 Mumbai market disclosures and RBI press releases highlights: (#1 Trade Tariffs) \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-India trade deal…\" [CNBC · 14m ago]; (#2 Sovereign Debt Supply) \"RBI consolidates money transfer rules, allows ₹50,000 cash NEFT transfers\" [Business Standard · 8h ago]; (#3 Sovereign Debt Supply) \"India's Q2 GDP growth likely at 7.8%, above RBI estimate of 7.2%: SBI Research\" [Moneycontrol.com · 8h ago]; (#4 Trade Tariffs) \"Rupee outperforms most Asian peers as foreign inflows boost sentiment\" [Business Standard · 10h ago]. With 91D/364D T-Bills clearing at 5.868%/6.639% and CPI at 4.85% YoY, institutional desks are positioning around \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-India \" and RBI's active LAF liquidity fine-tuning.",
+      "positioningTakeaway": "[Tactical Call — Shorten G-Sec Duration to 3Y–5Y & Wait for 7.22%+ on 10Y] With Mumbai desks focused on \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-In\" (CNBC) and \"RBI consolidates money transfer rules, allows ₹50,000 cash NEFT t\" (Business Standard), keep duration concentrated in 364D T-Bills (6.639%) and 3Y–5Y G-Secs (6.852%–6.966%) rather than chasing 10Y–30Y G-Secs until Friday's ₹36,000 Cr auction clears.",
       "criticalLevels": [
         {
           "asset": "10Y G-Sec (6.94% GS 2036)",
@@ -1430,7 +1435,7 @@
         },
         {
           "asset": "NIFTY 50 & BSE SENSEX",
-          "current": "25,045",
+          "current": "25,045 (+0.06%)",
           "support": "24,419",
           "resistance": "25,671",
           "implication": "Domestic SIP inflows and banking earnings offset foreign equity rotation and support INR capital account stability."
@@ -1441,11 +1446,11 @@
           "event": "India MoSPI Consumer Price Index (CPI) Print & RBI LAF VRR/VRRR Operations",
           "timing": "Mon, 14 Dec 2026 · 16:00 IST (18:30 SGT)",
           "impact": "Critical",
-          "watchFor": "Food-price trajectory relative to RBI's 4.0% (±2%) target band and overnight call money alignment with the 5.50% Repo rate."
+          "watchFor": "Food-price trajectory relative to RBI's 4.0% (±2%) target band and overnight call money alignment amid \"Inside India newsletter: Trump's poll setback fuels hope for U.S.-India tra\"."
         },
         {
           "event": "RBI Weekly ₹36,000 Cr Government Stock (G-Sec) Auction & WSS Forex Reserves Print",
-          "timing": "Fri, 13 Nov 2026 · 14:30 & 17:00 IST (17:00 & 19:30 SGT)",
+          "timing": "Fri, 20 Nov 2026 · 14:30 & 17:00 IST (17:00 & 19:30 SGT)",
           "impact": "High",
           "watchFor": "Cut-off yields on 5Y (6.966%) and 10Y (7.167%) G-Secs with NIL PD devolvement, plus weekly variation in RBI's US$717.06B FX Reserves."
         },
@@ -1453,7 +1458,7 @@
           "event": "RBI Monetary Policy Committee (MPC) Repo Rate Decision & SDF/MSF Corridor Review",
           "timing": "Fri, 04 Dec 2026 · 10:00 IST (12:30 SGT)",
           "impact": "High",
-          "watchFor": "MPC forward guidance on the 5.50% Repo rate (SDF 5.25% / MSF 5.75%), FAR G-Sec foreign inflows, and USD/INR stability."
+          "watchFor": "MPC forward guidance on the 5.50% Repo rate, FAR G-Sec foreign inflows, and USD/INR stability following \"RBI consolidates money transfer rules, allows ₹50,000 cash NEFT transfers\"."
         }
       ]
     }
@@ -1910,11 +1915,12 @@
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
       "title": "GEMINI 4 ARGON · US S&P 500 (SPX500) VALUATION, CASH FLOW & DIVIDEND FACTOR SYNTHESIS",
-      "regimeBadge": "SPX 7,619.38 (+1.31%) · FWD P/E 22.5x · ERP -55 bps VS 10Y UST",
+      "regimeBadge": "MARKET REFORM EQUITY · SPX 7,619.38 (+1.31%) · ERP -55 bps",
+      "dominantRegime": "Capital Market Reform, Index Rebalancing & Earnings Dispersion",
       "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
-      "conviction": "Overweight Top FCF/EV (APA 12.2%, DVN 11.2%) & Low Fwd P/E (CAG 5.8x) vs 22.5x Index",
-      "synthesis": "[Fri, 13 Nov 2026 NY Equity Desk] The S&P 500 (SPX500) trades at 7,619.38 (+1.31% 1D) on a cap-weighted consensus Next-12-Month (NTM) Forward P/E of 22.5x (implied Forward Earnings Yield of 4.44% vs the 4.99% 10Y US Treasury yield [+11.0 bps 1D], placing the Equity Risk Premium at -55 bps). With index-level ERP compressed and dividend yield at 1.24%, cross-sectional dispersion across the S&P 500 creates compelling factor alpha in cash-return leaders: the Top 10 Forward P/E screen is led by CAG at 5.82x (17.19% E/P) and GM (6.95x), the Top 10 Enterprise FCF Yield (FCF/EV) screen is led by APA at 12.25% ($2.78B TTM FCF) and DVN (11.20%), and the Top 10 FCF-covered Dividend/Price screen is led by CAG at 9.44% ($1.40/sh annual dividend). Key US equity catalysts: (1) \"U.S. Stocks Leap Despite Nvidia Slide\" (WSJ · 1h ago); and (2) \"Nasdaq Jumps After CoreWeave Re-Energizes AI Trade\" (WSJ · 4h ago).",
-      "positioningTakeaway": "As of Fri, 13 Nov 2026, with 10Y UST at 4.99% (+11.0 bps 1D) and cap-weighted S&P 500 ERP at -55 bps, rotate marginal equity risk toward the Top 10 FCF/EV (12.2% lead cash yield) and Top 10 Forward P/E (5.82x lead NTM multiple) baskets—capturing +450 to +900 bps of cash-flow carry over Treasuries amid \"U.S. Stocks Leap Despite Nvidia Slide\".",
+      "conviction": "Negative ERP (-55 bps vs 4.99% 10Y UST): Rotate From 22.5x Index Beta Into Top FCF/EV (APA 12.2%) & Low Fwd P/E (CAG 5.8x)",
+      "synthesis": "[Tue, 17 Nov 2026 · Rate-Driven ERP Compression & Value Dispersion Regime] With 10Y US Treasury yields moving +11.0 bps to 4.99% against the S&P 500's 22.5x NTM Forward P/E (4.44% implied earnings yield, compressing the Equity Risk Premium to -55 bps), rate-sensitive multiple discipline is dominating US equity factor flows even as the cash index trades at 7,619.38 (+1.31%). Argon's multi-update analysis of 5 US equity and valuation stories highlights: (#1 Trade Tariffs) \"U.S. Stocks Leap Despite Nvidia Slide\" [WSJ · 1h ago]; (#2 Trade Tariffs) \"Nasdaq Jumps After CoreWeave Re-Energizes AI Trade\" [WSJ · 4h ago]; (#3 Capital Market Reform) \"Prediction markets tied to clinical trials and drug approvals draw lawmakers' ire\" [CNBC · 4h ago]; (#4 Capital Market Reform) \"Fed's Goolsbee calls inflation report 'borderline disturbing' as central bank weig…\" [CNBC · 7h ago]. Cross-referencing the live S&P 500 screens: Forward P/E is led by CAG (5.82x, 17.2% E/P) and GM (6.95x); Enterprise Cash Yield is led by APA (12.25% FCF/EV) and DVN (11.20%); and Dividend Yield is led by CAG (9.44% Div/Price).",
+      "positioningTakeaway": "[Tactical Call — Long Unlevered FCF/EV & Low-P/E Compounders Over Cap-Weighted Index] Synthesizing \"U.S. Stocks Leap Despite Nvidia Slide\" (WSJ) and \"Nasdaq Jumps After CoreWeave Re-Energizes AI Trade\" (WSJ), underweight long-duration mega-cap multiples and reallocate into the Top 10 FCF/EV basket led by APA (12.25% FCF/EV) and DVN (11.20%), alongside Top Forward P/E names CAG (5.82x) and GM (6.95x) generating +700 to +1,100 bps of earnings/cash yield pickup over 10Y Treasuries.",
       "criticalLevels": [
         {
           "asset": "S&P 500 Cash Index (SPX)",
@@ -1932,8 +1938,8 @@
         },
         {
           "asset": "Top 10 Fwd P/E Value Basket",
-          "current": "6.7x – 9.0x (Led by CAG 5.82x)",
-          "support": "6.2x Floor",
+          "current": "5.8x – 9.0x (Led by CAG 5.82x)",
+          "support": "5.5x Floor",
           "resistance": "10.5x Re-Rating",
           "implication": "Consensus NTM EPS upward revisions and share count reductions drive multiple expansion toward 10.5x."
         },
@@ -1954,15 +1960,15 @@
         },
         {
           "event": "S&P 500 FactSet Weekly NTM Consensus EPS Revision Cut-Off & Margin Update",
-          "timing": "Fri, 13 Nov 2026 · 16:00 ET (Sat 05:00 SGT)",
+          "timing": "Fri, 20 Nov 2026 · 16:00 ET (Sat 05:00 SGT)",
           "impact": "High",
-          "watchFor": "Whether bottom-up S&P 500 NTM operating EPS (~$338/sh) expands fast enough to compress the index Forward P/E below 21.0x from 22.5x."
+          "watchFor": "Whether bottom-up S&P 500 NTM operating EPS expands fast enough to compress the index Forward P/E below 21.0x from 22.5x."
         },
         {
           "event": "S&P 500 Monthly Options Expiration (OpEx), Buyback Execution & Ex-Dividend Date",
           "timing": "Fri, 20 Nov 2026 · 09:30–16:00 ET (NY Cash Close)",
           "impact": "High",
-          "watchFor": "Execution of authorized buybacks across Energy/Auto/Tech FCF leaders (APA, DVN, HPQ, CAG) and dividend capture in CAG (9.44% Div/Price)."
+          "watchFor": "Execution of authorized buybacks across Energy/Auto/Tech FCF leaders (APA, DVN, CAG) and dividend capture in CAG (9.44% Div/Price)."
         }
       ]
     }
@@ -2308,11 +2314,13 @@
     ],
     "argonCommentary": {
       "modelLabel": "GEMINI 4 ARGON",
+      "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT",
       "title": "GEMINI 4 ARGON · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS",
-      "regimeBadge": "10 BAHASA PORTALS TRANSLATED · USD/IDR 18,140 · IHSG 5,125.73",
-      "conviction": "Track #1 Executive & Politics Catalyst · Separate DPR/Political Virality from 10Y FR0108 (7.55%) & LQ45 Fundamentals",
-      "synthesis": "[Fri, 13 Nov 2026 Live ID→EN Media Synthesis] Real-time Bahasa Indonesia aggregation and neural English translation across 10 onshore portals (CNBC Indonesia, Kontan, Bisnis, Kompas, Detik, Tempo, ANTARA) highlights key institutional catalysts alongside high-velocity domestic political readership. On the Top 10 Most Important macro-policy board, onshore institutional coverage is led by #1 \"Breaking! Gibran resigns, replacement vice president no later than 60 days\" (CNBC Indonesia, 4m ago, Score 99/100) · #2 \"MSCI Rebalancing Results: 1 Indonesia Share Downgraded, 8 Shares Expelled\" (CNBC Indonesia, 34m ago, Score 99/100) · #3 \"IDX (BEI) releases list of 383 HSC shares, including mining and banking issuers\" (CNBC Indonesia, 44m ago, Score 99/100). On the Top 10 Most Read (Terpopuler) national board, viral domestic readership centers on #1 \"IHSG (JCI) Closes Down 0.21%, Foreigners Even Buy These 10 Shares\" (CNBC Indonesia, 4h ago) · #2 \"Yogyakarta: The demonstration ended in chaos, UGM condemned the violence by the authorities\" (BBC, 57m ago) — while onshore USD/IDR trades at Rp 18,140 (JISDOR Rp 18,154), 10Y FR0108 IndoGB yields 7.55%, and IHSG prints 5,125.73.",
-      "positioningTakeaway": "[Fri, 13 Nov 2026 Tactical Desk Stance] Use the translated Bahasa Indonesia news feed to separate viral political headline noise (CNBC Indonesia: \"IHSG (JCI) Closes Down 0.21%, Foreigners Even Buy These 10 Shares\") from actionable macro/regulatory catalysts led by CNBC Indonesia (\"Breaking! Gibran resigns, replacement vice president no later than 60 da...\"). Maintain core positioning in liquid LQ45 banks (BBCA, BMRI, BBRI) and 5Y–10Y IndoGBs (7.55%) while hedging offshore FX tail risk whenever USD/IDR (Rp 18,140) trades above Rp 18,000.",
+      "regimeBadge": "MARKET REFORM EQUITY · 10 BAHASA PORTALS · USD/IDR 18,140 · IHSG 5,125.73",
+      "dominantRegime": "Capital Market Reform, Index Rebalancing & Earnings Dispersion",
+      "conviction": "Fade Domestic Political Virality (4 DPR/MPR Stories) · Stay Overweight Liquid LQ45 Banks & 5Y–10Y FR0108 (7.55%)",
+      "synthesis": "[Tue, 17 Nov 2026 · Capital Market Reform, Index Rebalancing & Earnings Dispersion Media Regime] Neural ID→EN synthesis across 20 top stories from 10 Bahasa Indonesia portals (CNBC Indonesia, Kontan, Bisnis, Kompas, Detik, Tempo, ANTARA) identifies capital market reform, index rebalancing & earnings dispersion as today's primary onshore narrative. On the Top 10 Most Important macro-policy board, coverage is led by #1 \"Breaking! Gibran resigns, replacement vice president no later than 60 days\" (CNBC Indonesia, 4m ago, Score 99/100) · #2 \"MSCI Rebalancing Results: 1 Indonesia Share Downgraded, 8 Shares Expelled\" (CNBC Indonesia, 34m ago, Score 99/100) · #3 \"IDX (BEI) releases list of 383 HSC shares, including mining and banking issuers\" (CNBC Indonesia, 44m ago, Score 99/100). Simultaneously, the Top 10 Most Read (Terpopuler) national board is dominated by #1 \"IHSG (JCI) Closes Down 0.21%, Foreigners Even Buy These 10 Shares\" (CNBC Indonesia, 4h ago) · #2 \"Yogyakarta: The demonstration ended in chaos, UGM condemned the violence by the authorities\" (BBC, 57m ago) — while onshore USD/IDR trades at Rp 18,140 (JISDOR Rp 18,154), 10Y FR0108 yields 7.55%, and IHSG prints 5,125.73 (+1.02%).",
+      "positioningTakeaway": "[Tactical Call — Separate Political Virality from Sovereign & LQ45 Fundamentals] Across the 20 translated Bahasa stories, 4 headlines focus on parliamentary/executive politics (CNBC Indonesia: \"IHSG (JCI) Closes Down 0.21%, Foreigners Even Buy These 10 Shares\"), yet onshore USD/IDR (Rp 18,140) and JISDOR (Rp 18,154) remain orderly. Do not chase political-noise sell-offs; accumulate liquid LQ45 banks (BBCA, BMRI, BBRI) and 5Y–10Y IndoGBs (7.39%–7.55%) while keeping 1M NDF hedges (18,175) in place.",
       "criticalLevels": [
         {
           "asset": "IHSG (JCI) & LQ45 Free-Float",
@@ -2345,16 +2353,16 @@
       ],
       "eventsToWatch": [
         {
-          "event": "IDX (BEI) Effective Exclusion of 300 HSC Issuers & MSCI Index Review Cut-Off",
-          "timing": "Fri, 13 Nov 2026 · 09:00 WIB (10:00 SGT)",
+          "event": "IDX (BEI) Effective Exclusion of 383 HSC Issuers & MSCI Index Review Cut-Off",
+          "timing": "Fri, 20 Nov 2026 · 09:00 WIB (10:00 SGT)",
           "impact": "Critical",
           "watchFor": "Passive and active institutional rebalancing out of High Shareholder Concentration (HSC) names into liquid LQ45/BUMN constituents."
         },
         {
-          "event": "DPR RI Leadership Consultation on HMP Inquiry & MK / MA Constitutional Rulings",
-          "timing": "Thu, 12 Nov 2026 · 13:30 WIB (14:30 SGT)",
+          "event": "DPR RI Parliamentary Consultation & Constitutional Governance Watch",
+          "timing": "Tue, 17 Nov 2026 · 13:30 WIB (14:30 SGT)",
           "impact": "High",
-          "watchFor": "Whether parliamentary faction consultations on VP Gibran remain procedural without disrupting APBN fiscal execution or cabinet continuity."
+          "watchFor": "Whether viral domestic political headlines (\"IHSG (JCI) Closes Down 0.21%, Foreigners Even Buy These 10 Shares\") remain procedural without disrupting APBN fiscal execution."
         },
         {
           "event": "Bank Indonesia Rp149.3T KLM Liquidity Allocation & KSSK Quarterly Assessment",
@@ -2362,8 +2370,7 @@
           "impact": "High",
           "watchFor": "Transmission of BI's Rp149.3T macroprudential liquidity incentives into SOE bank (BRI, Mandiri, BNI) credit growth and SBN demand."
         }
-      ],
-      "updatedAtSGT": "13 Nov 2026, 07:25 AM SGT"
+      ]
     }
   }
 }

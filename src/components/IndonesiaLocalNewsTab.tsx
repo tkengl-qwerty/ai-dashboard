@@ -561,8 +561,10 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
     const imp1 = enrichedImportant[0];
     const imp2 = enrichedImportant[1];
     const imp3 = enrichedImportant[2];
+    const imp4 = enrichedImportant[3];
     const read1 = enrichedRead[0];
     const read2 = enrichedRead[1];
+    const read3 = enrichedRead[2];
 
     if (!imp1 && !read1) return argonCommentary;
 
@@ -570,30 +572,60 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
     const leadImpMeta = imp1 ? `${imp1.item.source} · ${imp1.item.timeAgo}` : 'Onshore Feed';
     const secondImp = imp2?.finalTitleEn || 'MSCI November 2026 Rebalancing Reshapes Foreign Index Weights Across IDX Constituents';
     const thirdImp = imp3?.finalTitleEn || 'Executive and Parliamentary Policy Coordination Anchors Fiscal and Financial Stability';
+    const fourthImp = imp4?.finalTitleEn || 'Bank Indonesia Maintains Liquidity Support Across Commercial Banks';
 
     const leadRead = read1?.finalTitleEn || 'IHSG (JCI) Consolidates as Foreign Institutional Investors Accumulate 10 Liquid Blue-Chip Shares';
     const leadReadMeta = read1 ? `${read1.item.source} · ${read1.item.timeAgo}` : 'Terpopuler Feed';
     const secondRead = read2?.finalTitleEn || 'Domestic Political, Regulatory & Industrial Developments Dominate Onshore Readership';
+    const thirdRead = read3?.finalTitleEn || 'Parliamentary & Governance Headlines Draw National Readership';
 
     const spot = fxAndNdf.spotRate;
     const spotPct = fxAndNdf.spotChangePct;
     const jisdor = fxAndNdf.jisdorRate;
     const ihsg = fxAndNdf.ihsgIndex.level;
     const ihsgPct = fxAndNdf.ihsgIndex.changePct;
+    const indo5Y = bonds.indoGB.find((b) => b.tenor.startsWith('5Y'))?.yield ?? 7.39;
     const fmtPct = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
+
+    const allTranslated = [...enrichedImportant, ...enrichedRead];
+    const polCount = allTranslated.filter(({ item, finalTitleEn }) =>
+      /\b(dpr|mpr|gibran|prabowo|constitutional|mk\b|resign|parliament|kpk|bribery|wiretap|police|politics|security|bssn|cyber)\b/i.test(
+        `${finalTitleEn} ${item.category}`
+      )
+    ).length;
+    const mktCount = allTranslated.filter(({ item, finalTitleEn }) =>
+      /\b(msci|free-float|hsc|idx|bei|ojk|ihsg|jci|lq45|shares|stocks|foreign|blue-chip)\b/i.test(
+        `${finalTitleEn} ${item.category}`
+      )
+    ).length;
+
+    let conviction: string;
+    let positioningTakeaway: string;
+
+    if (polCount >= 5) {
+      conviction = `High Onshore Political/DPR Readership (${polCount}/20 Stories): Anchor in 12M SRBI (${srbi12M.toFixed(3)}%) & 5Y FR0109 (${indo5Y.toFixed(2)}%) · Liquid LQ45 Only`;
+      positioningTakeaway =
+        `[Tactical Call — Separate Political Virality from Institutional Policy Anchors] With ${polCount} of today's 20 translated Bahasa stories centered on constitutional, DPR, or governance developments—led by "${leadImp.slice(0, 68)}" (${imp1?.item.source || 'ID Portal'}) and "${leadRead.slice(0, 65)}" (${read1?.item.source || 'ID Portal'})—keep Rupiah duration focused in 12M BI SRBI (${srbi12M.toFixed(3)}% WAR) and 5Y FR0109 (${indo5Y.toFixed(2)}%), hedge offshore USD/IDR (Rp ${spot.toLocaleString('en-US')}) via 1M NDFs, and restrict equity exposure to liquid LQ45 banks. ${imp1?.impactLine || ''}`;
+    } else if (mktCount >= 4) {
+      conviction = `IDX Free-Float & MSCI Rebalancing Catalyst (${mktCount} Stories): Rotate Out of HSC Small-Caps Into Liquid LQ45 + 10Y FR0108 (${indo10Y.toFixed(2)}%)`;
+      positioningTakeaway =
+        `[Tactical Call — Quality Free-Float Rotation & SBN Carry] Synthesizing #1 Important "${leadImp.slice(0, 68)}" (${imp1?.item.source}) alongside #2 "${secondImp.slice(0, 64)}" (${imp2?.item.source}) and #1 Most Read "${leadRead.slice(0, 64)}" (${read1?.item.source}), actively avoid High Shareholder Concentration (HSC) and low-float IDX tickers, concentrate Jakarta equity risk in top foreign-accumulated blue chips (IHSG ${ihsg.toLocaleString('en-US', { maximumFractionDigits: 2 })}, ${fmtPct(ihsgPct)}), and lock in ${indo10Y.toFixed(2)}% on 10Y FR0108. ${imp1?.impactLine || ''}`;
+    } else {
+      conviction = `Onshore Macro & Policy Focus (${imp1?.item.category || 'Monetary & Fiscal'}): Overweight 5Y–10Y IndoGB (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) & State Banks`;
+      positioningTakeaway =
+        `[Tactical Call — Constructive Onshore Rates & Core Banking Exposure] Balancing top macro-policy disclosures ("${leadImp.slice(0, 66)}" [${imp1?.item.source}] and "${secondImp.slice(0, 62)}" [${imp2?.item.source}]) against viral readership ("${leadRead.slice(0, 62)}" [${read1?.item.source}]), accumulate 5Y–10Y IndoGBs (${indo5Y.toFixed(2)}%–${indo10Y.toFixed(2)}%) and 12M SRBI (${srbi12M.toFixed(3)}%) while USD/IDR holds near Rp ${spot.toLocaleString('en-US')}. ${imp1?.impactLine || ''}`;
+    }
 
     return {
       ...argonCommentary,
       updatedAtSGT: lastUpdatedSGT || localNews.asOfDate || argonCommentary.updatedAtSGT,
-      conviction: `Focus on #1 Macro Catalyst (${imp1?.item.category || 'Capital Markets'}) & Liquid LQ45 · Fade Headline Noise via 10Y FR0108 (${indo10Y.toFixed(2)}%) & 12M SRBI (${srbi12M.toFixed(3)}%)`,
+      conviction,
       synthesis:
-        `Live Bahasa Indonesia aggregation and English translation across 10 onshore portals is led on the Top 10 Most Important board by ` +
-        `#1 "${leadImp}" (${leadImpMeta}), #2 "${secondImp}" (${imp2?.item.source || 'ID Portal'}), and #3 "${thirdImp}" (${imp3?.item.source || 'ID Portal'}). ` +
-        `Simultaneously, the Top 10 Most Read (Terpopuler) national board is topped by #1 "${leadRead}" (${leadReadMeta}) and #2 "${secondRead}" (${read2?.item.source || 'ID Portal'}). ` +
-        `Across onshore Jakarta markets, USD/IDR trades at Rp ${spot.toLocaleString('en-US')} (${fmtPct(spotPct)} 1D; JISDOR Rp ${jisdor.toLocaleString('en-US')}), IHSG sits at ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)}), and 10Y FR0108 IndoGB yields ${indo10Y.toFixed(2)}% (12M SRBI ${srbi12M.toFixed(3)}% WAR).`,
-      positioningTakeaway:
-        `Separate high-velocity domestic readership ("${leadRead.slice(0, 62)}") from institutional market drivers led by "${leadImp.slice(0, 68)}". ` +
-        `Desk impact: ${imp1?.impactLine || argonCommentary.positioningTakeaway}`,
+        `Live Bahasa Indonesia aggregation and neural English translation across 10 onshore portals reveals ${polCount} political/governance stories and ${mktCount} capital-market/MSCI stories in today's top 20. ` +
+        `On the Top 10 Most Important board, institutional impact is driven by #1 "${leadImp}" (${leadImpMeta}), #2 "${secondImp}" (${imp2?.item.source || 'ID Portal'}), #3 "${thirdImp}" (${imp3?.item.source || 'ID Portal'}), and #4 "${fourthImp}" (${imp4?.item.source || 'ID Portal'}). ` +
+        `Simultaneously, the Top 10 Most Read (Terpopuler) national board is topped by #1 "${leadRead}" (${leadReadMeta}), #2 "${secondRead}" (${read2?.item.source || 'ID Portal'}), and #3 "${thirdRead}" (${read3?.item.source || 'ID Portal'}) — ` +
+        `against an onshore backdrop where USD/IDR trades at Rp ${spot.toLocaleString('en-US')} (${fmtPct(spotPct)} 1D; JISDOR Rp ${jisdor.toLocaleString('en-US')}), IHSG prints ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)}), and 10Y FR0108 IndoGB yields ${indo10Y.toFixed(2)}% (12M SRBI ${srbi12M.toFixed(3)}% WAR).`,
+      positioningTakeaway,
     };
   }, [
     argonCommentary,
@@ -606,6 +638,7 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
     fxAndNdf.ihsgIndex.changePct,
     indo10Y,
     srbi12M,
+    bonds.indoGB,
     lastUpdatedSGT,
     localNews.asOfDate,
   ]);
