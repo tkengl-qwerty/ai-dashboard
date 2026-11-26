@@ -26,6 +26,10 @@ interface IndonesiaLocalNewsTabProps {
   bonds: IndonesiaBonds;
   fxAndNdf: IndonesiaFxAndNdf;
   lastUpdatedSGT?: string;
+  canRegenerate?: boolean;
+  isRegenerating?: boolean;
+  regenerateError?: string | null;
+  onRegenerate?: () => void;
 }
 
 type ViewMode = 'split' | 'important' | 'read';
@@ -415,6 +419,10 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
   bonds,
   fxAndNdf,
   lastUpdatedSGT,
+  canRegenerate = false,
+  isRegenerating = false,
+  regenerateError = null,
+  onRegenerate,
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [selectedCategory, setSelectedCategory] = useState<string>('All Categories');
@@ -558,6 +566,7 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
 
   const liveArgonCommentary = useMemo(() => {
     if (!argonCommentary) return undefined;
+    if (argonCommentary.aiGenerated) return argonCommentary;
     const imp1 = enrichedImportant[0];
     const imp2 = enrichedImportant[1];
     const imp3 = enrichedImportant[2];
@@ -709,11 +718,15 @@ export const IndonesiaLocalNewsTab: React.FC<IndonesiaLocalNewsTabProps> = ({
         </div>
       </div>
 
-      {/* Gemini 4 Argon · Indonesia Local-Language Media (ID→EN) & Political-Economic Synthesis */}
+      {/* Gemini 4 · Indonesia Local-Language Media (ID→EN) & Political-Economic Synthesis */}
       {liveArgonCommentary && (
         <ArgonCommentaryBox
           commentary={liveArgonCommentary}
           lastUpdatedSGT={lastUpdatedSGT || localNews.asOfDate}
+          canRegenerate={canRegenerate}
+          isRegenerating={isRegenerating}
+          regenerateError={regenerateError}
+          onRegenerate={onRegenerate}
         />
       )}
 

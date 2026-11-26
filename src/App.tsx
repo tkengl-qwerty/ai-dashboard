@@ -7,6 +7,7 @@ import {
   IndiaMacroData,
   UsEquitiesData,
   IndonesiaLocalNewsData,
+  ArgonCommentary,
 } from './types/market';
 import { Header } from './components/Header';
 import { NavigationTabs } from './components/NavigationTabs';
@@ -17,7 +18,7 @@ import { ChinaTab } from './components/ChinaTab';
 import { KoreaTab } from './components/KoreaTab';
 import { IndiaTab } from './components/IndiaTab';
 import { UsEquitiesTab } from './components/UsEquitiesTab';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, AlertTriangle } from 'lucide-react';
 import {
   buildGlobalArgonCommentary,
   buildIndonesiaArgonCommentary,
@@ -2099,11 +2100,52 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
   };
 }
 
+type CommentaryScope = MacroTabId | 'all';
+
+interface TopBoxPatch {
+  regimeBadge?: string;
+  dominantRegime?: string;
+  conviction?: string;
+  synthesis?: string;
+  positioningTakeaway?: string;
+  aiGenerated?: boolean;
+  modelLabel?: string;
+  updatedAtSGT?: string;
+}
+
+interface CountryBriefingPatch {
+  title?: string;
+  policyPosture?: string;
+  executiveSummary?: string;
+  macroPillars?: Array<{ heading: string; analysis: string }>;
+  aiGenerated?: boolean;
+  modelLabel?: string;
+  updatedAtSGT?: string;
+}
+
+function mergeTopBox(existing: ArgonCommentary | undefined, patch: TopBoxPatch | undefined): ArgonCommentary | undefined {
+  if (!existing || !patch) return existing;
+  return {
+    ...existing,
+    regimeBadge: patch.regimeBadge || existing.regimeBadge,
+    dominantRegime: patch.dominantRegime || existing.dominantRegime,
+    conviction: patch.conviction || existing.conviction,
+    synthesis: patch.synthesis || existing.synthesis,
+    positioningTakeaway: patch.positioningTakeaway || existing.positioningTakeaway,
+    aiGenerated: true,
+    modelLabel: patch.modelLabel || 'GEMINI 4 HYDROGEN',
+    updatedAtSGT: patch.updatedAtSGT || existing.updatedAtSGT,
+  };
+}
+
 export default function App() {
   const [data, setData] = useState<DailyMacroSnapshot>(() => normalizeSnapshot(DEFAULT_SNAPSHOT));
   const [activeTab, setActiveTab] = useState<MacroTabId>('global');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [aiServerAvailable, setAiServerAvailable] = useState<boolean>(false);
+  const [regeneratingScope, setRegeneratingScope] = useState<CommentaryScope | null>(null);
+  const [aiErrors, setAiErrors] = useState<Partial<Record<CommentaryScope, string>>>({});
 
   const fetchDailyData = useCallback(async () => {
     setIsLoading(true);
@@ -2241,7 +2283,214 @@ export default function App() {
     fetchDailyData();
   }, [fetchDailyData]);
 
+  // Detect live Express API server (true in AI Studio/Node server, gracefully false on static Porkbun hosting)
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/health', { cache: 'no-store' })
+      .then(async (res) => {
+        const contentType = res.headers.get('content-type') || '';
+        if (!res.ok || !contentType.includes('application/json')) return null;
+        return (await res.json()) as { ok?: boolean };
+      })
+      .then((json) => {
+        if (!cancelled && json?.ok === true) {
+          setAiServerAvailable(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setAiServerAvailable(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleRegenerateCommentary = useCallback(
+    async (scope: CommentaryScope) => {
+      if (regeneratingScope !== null) return;
+      setRegeneratingScope(scope);
+      setAiErrors((prev) => {
+        if (scope === 'all') return {};
+        const next = { ...prev };
+        delete next[scope];
+        delete next.all;
+        return next;
+      });
+
+      try {
+        const res = await fetch('/api/gemini/commentary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scope, snapshot: data }),
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('On-demand Gemini API is unavailable on this host.');
+        }
+
+        const json = (await res.json()) as {
+          ok?: boolean;
+          error?: string;
+          modelLabel?: string;
+          updatedAtSGT?: string;
+          topBoxes?: Partial<Record<MacroTabId, TopBoxPatch>>;
+          countryBriefings?: Partial<Record<'indonesia' | 'china' | 'korea' | 'india', CountryBriefingPatch>>;
+        };
+
+        if (!res.ok || !json.ok) {
+          throw new Error(json.error || `Gemini synthesis failed (HTTP ${res.status}).`);
+        }
+
+        const topBoxes = json.topBoxes || {};
+        const countryBriefings = json.countryBriefings || {};
+
+        setData((prev) => {
+          const next: DailyMacroSnapshot = { ...prev };
+
+          if (topBoxes.global) {
+            next.globalMacro = {
+              ...prev.globalMacro,
+              argonCommentary: mergeTopBox(
+                prev.globalMacro.argonCommentary ?? buildGlobalArgonCommentary(prev),
+                topBoxes.global
+              ),
+            };
+          }
+
+          if (topBoxes.indonesia || countryBriefings.indonesia) {
+            const briefing = countryBriefings.indonesia;
+            next.indonesia = {
+              ...prev.indonesia,
+              argonCommentary: topBoxes.indonesia
+                ? mergeTopBox(prev.indonesia.argonCommentary, topBoxes.indonesia)
+                : prev.indonesia.argonCommentary,
+              commentary: briefing
+                ? {
+                    ...prev.indonesia.commentary,
+                    title: briefing.title || prev.indonesia.commentary.title,
+                    biPolicyPosture: briefing.policyPosture || prev.indonesia.commentary.biPolicyPosture,
+                    executiveSummary: briefing.executiveSummary || prev.indonesia.commentary.executiveSummary,
+                    macroPillars:
+                      briefing.macroPillars && briefing.macroPillars.length > 0
+                        ? briefing.macroPillars
+                        : prev.indonesia.commentary.macroPillars,
+                    aiGenerated: true,
+                    modelLabel: briefing.modelLabel || json.modelLabel || 'GEMINI 4 HYDROGEN',
+                    updatedAtSGT: briefing.updatedAtSGT || json.updatedAtSGT,
+                  }
+                : prev.indonesia.commentary,
+            };
+          }
+
+          if (topBoxes.indonesiaNews && prev.indonesiaLocalNews) {
+            next.indonesiaLocalNews = {
+              ...prev.indonesiaLocalNews,
+              argonCommentary: mergeTopBox(
+                prev.indonesiaLocalNews.argonCommentary,
+                topBoxes.indonesiaNews
+              ),
+            };
+          }
+
+          if ((topBoxes.china || countryBriefings.china) && prev.china) {
+            const briefing = countryBriefings.china;
+            next.china = {
+              ...prev.china,
+              argonCommentary: topBoxes.china
+                ? mergeTopBox(prev.china.argonCommentary, topBoxes.china)
+                : prev.china.argonCommentary,
+              commentary: briefing
+                ? {
+                    ...prev.china.commentary,
+                    title: briefing.title || prev.china.commentary.title,
+                    policyPosture: briefing.policyPosture || prev.china.commentary.policyPosture,
+                    executiveSummary: briefing.executiveSummary || prev.china.commentary.executiveSummary,
+                    macroPillars:
+                      briefing.macroPillars && briefing.macroPillars.length > 0
+                        ? briefing.macroPillars
+                        : prev.china.commentary.macroPillars,
+                    aiGenerated: true,
+                    modelLabel: briefing.modelLabel || json.modelLabel || 'GEMINI 4 HYDROGEN',
+                    updatedAtSGT: briefing.updatedAtSGT || json.updatedAtSGT,
+                  }
+                : prev.china.commentary,
+            };
+          }
+
+          if ((topBoxes.korea || countryBriefings.korea) && prev.korea) {
+            const briefing = countryBriefings.korea;
+            next.korea = {
+              ...prev.korea,
+              argonCommentary: topBoxes.korea
+                ? mergeTopBox(prev.korea.argonCommentary, topBoxes.korea)
+                : prev.korea.argonCommentary,
+              commentary: briefing
+                ? {
+                    ...prev.korea.commentary,
+                    title: briefing.title || prev.korea.commentary.title,
+                    policyPosture: briefing.policyPosture || prev.korea.commentary.policyPosture,
+                    executiveSummary: briefing.executiveSummary || prev.korea.commentary.executiveSummary,
+                    macroPillars:
+                      briefing.macroPillars && briefing.macroPillars.length > 0
+                        ? briefing.macroPillars
+                        : prev.korea.commentary.macroPillars,
+                    aiGenerated: true,
+                    modelLabel: briefing.modelLabel || json.modelLabel || 'GEMINI 4 HYDROGEN',
+                    updatedAtSGT: briefing.updatedAtSGT || json.updatedAtSGT,
+                  }
+                : prev.korea.commentary,
+            };
+          }
+
+          if ((topBoxes.india || countryBriefings.india) && prev.india) {
+            const briefing = countryBriefings.india;
+            next.india = {
+              ...prev.india,
+              argonCommentary: topBoxes.india
+                ? mergeTopBox(prev.india.argonCommentary, topBoxes.india)
+                : prev.india.argonCommentary,
+              commentary: briefing
+                ? {
+                    ...prev.india.commentary,
+                    title: briefing.title || prev.india.commentary.title,
+                    policyPosture: briefing.policyPosture || prev.india.commentary.policyPosture,
+                    executiveSummary: briefing.executiveSummary || prev.india.commentary.executiveSummary,
+                    macroPillars:
+                      briefing.macroPillars && briefing.macroPillars.length > 0
+                        ? briefing.macroPillars
+                        : prev.india.commentary.macroPillars,
+                    aiGenerated: true,
+                    modelLabel: briefing.modelLabel || json.modelLabel || 'GEMINI 4 HYDROGEN',
+                    updatedAtSGT: briefing.updatedAtSGT || json.updatedAtSGT,
+                  }
+                : prev.india.commentary,
+            };
+          }
+
+          if (topBoxes.equities && prev.equities) {
+            next.equities = {
+              ...prev.equities,
+              argonCommentary: mergeTopBox(prev.equities.argonCommentary, topBoxes.equities),
+            };
+          }
+
+          return next;
+        });
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error ? err.message : 'Unable to reach Gemini synthesis API.';
+        setAiErrors((prev) => ({ ...prev, [scope]: message }));
+      } finally {
+        setRegeneratingScope(null);
+      }
+    },
+    [data, regeneratingScope]
+  );
+
   const us10Y = data.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
+  const isRegeneratingTab = (tab: MacroTabId) =>
+    regeneratingScope === tab || regeneratingScope === 'all';
 
   return (
     <div className="min-h-screen bg-[#0e141d] text-slate-100 flex flex-col font-sans selection:bg-blue-500 selection:text-white">
@@ -2250,6 +2499,9 @@ export default function App() {
         metadata={data.metadata}
         onRefresh={fetchDailyData}
         isLoading={isLoading}
+        canRegenerateAll={aiServerAvailable}
+        isRegeneratingAll={regeneratingScope === 'all'}
+        onRegenerateAll={() => handleRegenerateCommentary('all')}
       />
 
       {/* 2. Navigation Tab Switcher */}
@@ -2275,9 +2527,49 @@ export default function App() {
         </div>
       )}
 
+      {/* Global Synthesis All error banner */}
+      {aiErrors.all && (
+        <div className="bg-rose-950/40 border-b border-rose-700/60 px-4 py-2 text-xs text-rose-200 font-mono flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+            <span>Gemini Full Synthesis Error: {aiErrors.all}</span>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => handleRegenerateCommentary('all')}
+              className="text-rose-200 hover:text-white underline cursor-pointer"
+            >
+              Retry All
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setAiErrors((prev) => {
+                  const next = { ...prev };
+                  delete next.all;
+                  return next;
+                })
+              }
+              className="text-slate-400 hover:text-slate-200 cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 3. Main Body Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-4">
-        {activeTab === 'global' && <GlobalMacroTab data={data} />}
+        {activeTab === 'global' && (
+          <GlobalMacroTab
+            data={data}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('global')}
+            regenerateError={aiErrors.global || null}
+            onRegenerate={() => handleRegenerateCommentary('global')}
+          />
+        )}
         {activeTab === 'indonesia' && (
           <IndonesiaTab
             argonCommentary={data.indonesia.argonCommentary}
@@ -2286,6 +2578,10 @@ export default function App() {
             bonds={data.indonesia.bonds}
             fxAndNdf={data.indonesia.fxAndNdf}
             us10YYield={us10Y}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('indonesia')}
+            regenerateError={aiErrors.indonesia || null}
+            onRegenerate={() => handleRegenerateCommentary('indonesia')}
           />
         )}
         {activeTab === 'indonesiaNews' && data.indonesiaLocalNews && (
@@ -2294,6 +2590,10 @@ export default function App() {
             bonds={data.indonesia.bonds}
             fxAndNdf={data.indonesia.fxAndNdf}
             lastUpdatedSGT={data.metadata.lastUpdatedSGT}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('indonesiaNews')}
+            regenerateError={aiErrors.indonesiaNews || null}
+            onRegenerate={() => handleRegenerateCommentary('indonesiaNews')}
           />
         )}
         {activeTab === 'china' && data.china && (
@@ -2301,6 +2601,10 @@ export default function App() {
             china={data.china}
             lastUpdatedSGT={data.metadata.lastUpdatedSGT}
             us10YYield={us10Y}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('china')}
+            regenerateError={aiErrors.china || null}
+            onRegenerate={() => handleRegenerateCommentary('china')}
           />
         )}
         {activeTab === 'korea' && data.korea && (
@@ -2308,6 +2612,10 @@ export default function App() {
             korea={data.korea}
             lastUpdatedSGT={data.metadata.lastUpdatedSGT}
             us10YYield={us10Y}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('korea')}
+            regenerateError={aiErrors.korea || null}
+            onRegenerate={() => handleRegenerateCommentary('korea')}
           />
         )}
         {activeTab === 'india' && data.india && (
@@ -2315,6 +2623,10 @@ export default function App() {
             india={data.india}
             lastUpdatedSGT={data.metadata.lastUpdatedSGT}
             us10YYield={us10Y}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('india')}
+            regenerateError={aiErrors.india || null}
+            onRegenerate={() => handleRegenerateCommentary('india')}
           />
         )}
         {activeTab === 'equities' && data.equities && (
@@ -2322,6 +2634,10 @@ export default function App() {
             equities={data.equities}
             lastUpdatedSGT={data.metadata.lastUpdatedSGT}
             us10YYield={us10Y}
+            canRegenerate={aiServerAvailable}
+            isRegenerating={isRegeneratingTab('equities')}
+            regenerateError={aiErrors.equities || null}
+            onRegenerate={() => handleRegenerateCommentary('equities')}
           />
         )}
       </main>

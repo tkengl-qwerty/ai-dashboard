@@ -18,6 +18,10 @@ interface UsEquitiesTabProps {
   equities: UsEquitiesData;
   lastUpdatedSGT?: string;
   us10YYield: number;
+  canRegenerate?: boolean;
+  isRegenerating?: boolean;
+  regenerateError?: string | null;
+  onRegenerate?: () => void;
 }
 
 type SortMode = 'rank' | 'changePct' | 'marketCap';
@@ -75,6 +79,10 @@ export const UsEquitiesTab: React.FC<UsEquitiesTabProps> = ({
   equities,
   lastUpdatedSGT,
   us10YYield,
+  canRegenerate = false,
+  isRegenerating = false,
+  regenerateError = null,
+  onRegenerate,
 }) => {
   const [selectedSector, setSelectedSector] = useState<string>('All Sectors');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -214,11 +222,15 @@ export const UsEquitiesTab: React.FC<UsEquitiesTabProps> = ({
         </div>
       </div>
 
-      {/* Gemini 4 Argon S&P 500 Valuation, ERP & Factor Synthesis Box */}
+      {/* Gemini 4 S&P 500 Valuation, ERP & Factor Synthesis Box */}
       {argonCommentary && (
         <ArgonCommentaryBox
           commentary={argonCommentary}
           lastUpdatedSGT={lastUpdatedSGT}
+          canRegenerate={canRegenerate}
+          isRegenerating={isRegenerating}
+          regenerateError={regenerateError}
+          onRegenerate={onRegenerate}
         />
       )}
 

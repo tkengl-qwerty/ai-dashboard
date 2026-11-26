@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { MarketMetadata } from '../types/market';
-import { RefreshCw, Calendar, Lock } from 'lucide-react';
+import { RefreshCw, Calendar, Lock, Sparkles } from 'lucide-react';
 import { AdminRefreshModal } from './AdminRefreshModal';
 
 interface HeaderProps {
   metadata: MarketMetadata;
   onRefresh: () => void;
   isLoading: boolean;
+  canRegenerateAll?: boolean;
+  isRegeneratingAll?: boolean;
+  onRegenerateAll?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }) => {
+export const Header: React.FC<HeaderProps> = ({
+  metadata,
+  onRefresh,
+  isLoading,
+  canRegenerateAll = false,
+  isRegeneratingAll = false,
+  onRegenerateAll,
+}) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
 
@@ -74,17 +84,17 @@ export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }
         <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs font-mono">
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#1a2436] border border-slate-700/90 rounded-xs">
             <span className="text-slate-400 text-[10px]">SGT</span>
-            <span className="text-sky-400 font-semibold">{sgtString}</span>
+            <span className="text-sky-400 font-semibold tabular-nums">{sgtString}</span>
           </div>
 
           <div className="flex items-center gap-1.5 px-2 py-1 bg-[#151e2d] border border-slate-700/70 rounded-xs">
             <span className="text-slate-400 text-[10px]">NY / EST</span>
-            <span className="text-slate-200">{estString}</span>
+            <span className="text-slate-200 tabular-nums">{estString}</span>
           </div>
 
           <div className="flex items-center gap-1.5 px-2 py-1 bg-[#151e2d] border border-slate-700/70 rounded-xs">
             <span className="text-slate-400 text-[10px]">LDN / GMT</span>
-            <span className="text-slate-200">{londonString}</span>
+            <span className="text-slate-200 tabular-nums">{londonString}</span>
           </div>
 
           {/* Reload Snapshot Action */}
@@ -97,6 +107,23 @@ export const Header: React.FC<HeaderProps> = ({ metadata, onRefresh, isLoading }
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-sky-400' : ''}`} />
             <span>Reload</span>
           </button>
+
+          {/* On-Demand Gemini Synthesis Across All 7 Tabs + 4 Country Briefings */}
+          {canRegenerateAll && onRegenerateAll && (
+            <button
+              onClick={onRegenerateAll}
+              disabled={isRegeneratingAll}
+              title="Re-synthesize all 7 commentary boxes and 4 country briefings with Gemini 4 Hydrogen"
+              className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/60 hover:bg-emerald-900/70 active:bg-slate-900 border border-emerald-600/70 hover:border-emerald-400/80 text-emerald-200 hover:text-white disabled:opacity-60 disabled:cursor-wait transition-colors rounded-xs cursor-pointer text-xs whitespace-nowrap shrink-0"
+            >
+              {isRegeneratingAll ? (
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-300" />
+              ) : (
+                <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+              )}
+              <span>{isRegeneratingAll ? 'Synthesizing All…' : 'Synthesize All'}</span>
+            </button>
+          )}
 
           {/* Owner Password-Protected GitHub Action Refresh Trigger */}
           <button

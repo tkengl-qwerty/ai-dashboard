@@ -3408,115 +3408,274 @@ def _analyze_news_catalysts_py(items: list[dict], fallback_title: str) -> dict:
 
 def _try_gemini_api_synthesis(data: dict, updated_sgt_str: str):
     """
-    Optional hybrid Gemini API pass when GEMINI_API_KEY is available in the environment.
-    Calls gemini-4-hydrogen with structured JSON output to refine conviction, synthesis,
-    and positioningTakeaway across tabs based on the live 5-10 headlines and 1D telemetry.
+    Hybrid Gemini API pass when GEMINI_API_KEY is available in the environment.
+    Calls gemini-4-hydrogen (configurable via GEMINI_MODEL) with XHIGH thinking and
+    structured JSON output across all 7 top commentary boxes and all 4 lower country
+    Executive Market Briefings (Indonesia, China, Korea, India).
+    Falls back gracefully to the Multi-Regime Catalyst Engine when no key is configured.
     """
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not api_key:
         return
 
-    try:
-        payload_summary = {
-            "sessionTimestampSGT": updated_sgt_str,
-            "globalMacro": {
-                "yieldCurve": data["globalMacro"]["yieldCurve"],
-                "futures": data["globalMacro"].get("futures", []),
-                "topNews": [
-                    {"headline": n.get("headline"), "source": n.get("source"), "timeAgo": n.get("timeAgo")}
-                    for n in data["globalMacro"].get("topNews", [])[:6]
-                ],
-            },
-            "indonesia": {
-                "biRate": data["indonesia"]["bonds"].get("biRate"),
-                "indoGB": data["indonesia"]["bonds"].get("indoGB", [])[:4],
-                "fxAndNdf": {
-                    "spotRate": data["indonesia"]["fxAndNdf"].get("spotRate"),
-                    "jisdorRate": data["indonesia"]["fxAndNdf"].get("jisdorRate"),
-                    "ndfSpread1M": data["indonesia"]["fxAndNdf"].get("ndfSpread1M"),
-                },
-                "headlines": [
-                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
-                    for h in data["indonesia"]["commentary"].get("noteworthyHeadlines", [])[:5]
-                ],
-            },
-            "china": {
-                "ccdcCgb": data.get("china", {}).get("bonds", {}).get("ccdcCgb", [])[:5],
-                "fx": data.get("china", {}).get("fxAndEquities", {}),
-                "headlines": [
-                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
-                    for h in data.get("china", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:5]
-                ],
-            },
-            "korea": {
-                "kofiaKtb": data.get("korea", {}).get("bonds", {}).get("kofiaKtb", [])[:5],
-                "fx": data.get("korea", {}).get("fxAndEquities", {}),
-                "headlines": [
-                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
-                    for h in data.get("korea", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:5]
-                ],
-            },
-            "india": {
-                "gsecCurve": data.get("india", {}).get("bonds", {}).get("gsecCurve", [])[:5],
-                "fx": data.get("india", {}).get("fxAndEquities", {}),
-                "headlines": [
-                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
-                    for h in data.get("india", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:5]
-                ],
-            },
-            "equities": {
-                "indexSummary": data.get("equities", {}).get("indexSummary", {}),
-                "topForwardPe": data.get("equities", {}).get("topForwardPe", [])[:3],
-                "topFcfToEv": data.get("equities", {}).get("topFcfToEv", [])[:3],
-                "topDividendYield": data.get("equities", {}).get("topDividendYield", [])[:3],
-                "headlines": [
-                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
-                    for h in data.get("equities", {}).get("noteworthyHeadlines", [])[:5]
-                ],
-            },
-        }
+    model_name = (os.environ.get("GEMINI_MODEL", "gemini-4-hydrogen") or "gemini-4-hydrogen").strip()
+    model_label = model_name.upper().replace("-", " ")
 
+    def _run_batch(batch_name: str, payload_obj: dict, top_keys: list, country_keys: list) -> dict:
         prompt = (
-            "You are Gemini 4 Argon, a chief institutional macro, sovereign fixed-income, FX, and equity strategist. "
-            "Carefully read all the provided news headlines and 1D market changes for each tab (globalMacro, indonesia, china, korea, india, equities). "
-            "For each tab, return a JSON object with keys: globalMacro, indonesia, china, korea, india, equities. "
-            "Each tab object must contain: "
-            "1) 'conviction': a sharp, specific tactical trade call headline (12-20 words) that directly reflects today's news developments and 1D yield/FX/equity shifts (never generic). "
-            "2) 'synthesis': a 3-4 sentence institutional desk synthesis that weaves together at least 3 of the specific news headlines for that tab with the exact 1D yield, FX, and equity numbers. "
-            "3) 'positioningTakeaway': a concrete 2-3 sentence tactical trade recommendation explaining how to position across rates, FX, and equities given today's news catalysts.\n\n"
-            f"Telemetry & News JSON:\n{json.dumps(payload_summary, ensure_ascii=False)}"
+            "You are the Chief Institutional Macro, Sovereign Fixed-Income, FX & Equities Strategist powering an Asian & Global Macro Desk Terminal. "
+            "Synthesize every provided news headline alongside exact live sovereign bond yields, 1D bps moves, central bank rates, "
+            "BI SRBI auctions, PHEI IndoGB benchmarks, CCDC CGBs, KOFIA KTBs, RBI G-Secs, FX/NDF spreads, and equity levels. "
+            f"Return a valid JSON object with two top-level keys: 'topBoxes' (keys: {', '.join(top_keys)})"
+            + (f" and 'countryBriefings' (keys: {', '.join(country_keys)})." if country_keys else ".")
+            + " Each entry in 'topBoxes' MUST contain: "
+            "'regimeBadge' (compact uppercase badge <=75 chars citing active regime + key yield/FX metric), "
+            "'dominantRegime' (3-7 word regime label), "
+            "'conviction' (sharp 12-22 word tactical trade call headline reflecting today's news + 1D moves), "
+            "'synthesis' (3-4 dense institutional sentences weaving at least 3 specific headlines with exact numbers from the JSON), and "
+            "'positioningTakeaway' (concrete 2-3 sentence actionable positioning call with explicit levels). "
+            + (
+                "Each entry in 'countryBriefings' MUST contain: "
+                "'title' (institutional briefing title), "
+                "'policyPosture' (compact policy summary citing exact current policy rate + liquidity anchor), "
+                "'executiveSummary' (3-4 sentence briefing tying top 2-3 headlines to exact curve, FX, and equity figures), and "
+                "'macroPillars' (array of EXACTLY 3 objects with 'heading' and 'analysis' covering: "
+                "1. Sovereign Curve & Auctions, 2. Central Bank Policy & Liquidity/SRBI/OMO/KOFR/LAF, 3. FX, Flows & Equities). "
+                if country_keys
+                else ""
+            )
+            + "Plain text only inside strings (no markdown asterisks). Never invent numbers that contradict the JSON.\n\n"
+            f"Live Market Telemetry & News JSON ({batch_name}):\n{json.dumps(payload_obj, ensure_ascii=False)}"
         )
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-4-hydrogen:generateContent?key={api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
         req_body = {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"responseMimeType": "application/json"},
+            "generationConfig": {
+                "responseMimeType": "application/json",
+                "thinkingConfig": {"thinkingLevel": "XHIGH"},
+            },
         }
         resp = requests.post(
             url,
             headers={"Content-Type": "application/json", "User-Agent": "aistudio-build"},
             json=req_body,
-            timeout=25,
+            timeout=65,
         )
-        if resp.status_code == 200:
-            res_json = resp.json()
-            text_out = (
-                res_json.get("candidates", [{}])[0]
-                .get("content", {})
-                .get("parts", [{}])[0]
-                .get("text", "")
-            )
-            if text_out:
-                parsed = json.loads(text_out)
-                for tab_key in ["globalMacro", "indonesia", "china", "korea", "india", "equities"]:
-                    if tab_key in parsed and tab_key in data and "argonCommentary" in data[tab_key]:
-                        tab_ai = parsed[tab_key]
-                        if tab_ai.get("conviction") and tab_ai.get("synthesis") and tab_ai.get("positioningTakeaway"):
-                            data[tab_key]["argonCommentary"]["conviction"] = str(tab_ai["conviction"])
-                            data[tab_key]["argonCommentary"]["synthesis"] = str(tab_ai["synthesis"])
-                            data[tab_key]["argonCommentary"]["positioningTakeaway"] = str(tab_ai["positioningTakeaway"])
-                            data[tab_key]["argonCommentary"]["aiGenerated"] = True
-                print("[INFO] Gemini API synthesis applied successfully across tabs.")
+        if resp.status_code != 200:
+            raise RuntimeError(f"HTTP {resp.status_code}: {resp.text[:220]}")
+        res_json = resp.json()
+        parts = res_json.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+        text_out = "".join(p.get("text", "") for p in parts if isinstance(p, dict) and not p.get("thought"))
+        if not text_out.strip():
+            raise RuntimeError("Empty Gemini JSON output")
+        return json.loads(text_out)
+
+    try:
+        ust10y = next(
+            (t.get("yield") for t in data["globalMacro"]["yieldCurve"].get("tenors", []) if t.get("label") == "10Y"),
+            None,
+        )
+
+        batch_a_payload = {
+            "sessionTimestampSGT": updated_sgt_str,
+            "globalMacro": {
+                "yieldCurve": data["globalMacro"]["yieldCurve"],
+                "futures": data["globalMacro"].get("futures", []),
+                "fxRates": data["globalMacro"].get("fxRates", [])[:5],
+                "commodities": data["globalMacro"].get("commodities", [])[:4],
+                "topNews": [
+                    {"headline": n.get("headline"), "source": n.get("source"), "timeAgo": n.get("timeAgo"), "category": n.get("category")}
+                    for n in data["globalMacro"].get("topNews", [])[:8]
+                ],
+            },
+            "indonesia": {
+                "us10YYield": ust10y,
+                "biRate": data["indonesia"]["bonds"].get("biRate"),
+                "cpiInflationYoY": data["indonesia"]["bonds"].get("cpiInflationYoY"),
+                "sovereignSpread10Y": data["indonesia"]["bonds"].get("sovereignSpread10Y"),
+                "valuationDate": data["indonesia"]["bonds"].get("valuationDate"),
+                "yieldSource": data["indonesia"]["bonds"].get("yieldSource"),
+                "indoGB": data["indonesia"]["bonds"].get("indoGB", [])[:6],
+                "srbi": data["indonesia"]["bonds"].get("srbi", [])[:4],
+                "fxAndNdf": {
+                    "spotRate": data["indonesia"]["fxAndNdf"].get("spotRate"),
+                    "spotChange": data["indonesia"]["fxAndNdf"].get("spotChange"),
+                    "spotChangePct": data["indonesia"]["fxAndNdf"].get("spotChangePct"),
+                    "jisdorRate": data["indonesia"]["fxAndNdf"].get("jisdorRate"),
+                    "jisdorChange": data["indonesia"]["fxAndNdf"].get("jisdorChange"),
+                    "ndf1M": data["indonesia"]["fxAndNdf"].get("ndf1M"),
+                    "ndfSpread1M": data["indonesia"]["fxAndNdf"].get("ndfSpread1M"),
+                    "ihsgIndex": data["indonesia"]["fxAndNdf"].get("ihsgIndex"),
+                },
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data["indonesia"]["commentary"].get("noteworthyHeadlines", [])[:6]
+                ],
+            },
+            "indonesiaLocalNews": {
+                "spotRate": data["indonesia"]["fxAndNdf"].get("spotRate"),
+                "jisdorRate": data["indonesia"]["fxAndNdf"].get("jisdorRate"),
+                "ihsgIndex": data["indonesia"]["fxAndNdf"].get("ihsgIndex"),
+                "biRate": data["indonesia"]["bonds"].get("biRate"),
+                "indoGB10Y": next(
+                    (b.get("yield") for b in data["indonesia"]["bonds"].get("indoGB", []) if str(b.get("tenor", "")).startswith("10Y")),
+                    None,
+                ),
+                "srbi12M": next(
+                    (s for s in data["indonesia"]["bonds"].get("srbi", []) if s.get("tenor") == "12M"),
+                    None,
+                ),
+                "topImportant": [
+                    {"rank": it.get("rank"), "titleEn": it.get("titleEn"), "source": it.get("source"), "category": it.get("category"), "timeAgo": it.get("timeAgo")}
+                    for it in data.get("indonesiaLocalNews", {}).get("topImportant", [])[:10]
+                ],
+                "topRead": [
+                    {"rank": it.get("rank"), "titleEn": it.get("titleEn"), "source": it.get("source"), "category": it.get("category"), "timeAgo": it.get("timeAgo")}
+                    for it in data.get("indonesiaLocalNews", {}).get("topRead", [])[:10]
+                ],
+            },
+            "equities": {
+                "us10YYield": ust10y,
+                "indexSummary": data.get("equities", {}).get("indexSummary", {}),
+                "topForwardPe": data.get("equities", {}).get("topForwardPe", [])[:5],
+                "topFcfToEv": data.get("equities", {}).get("topFcfToEv", [])[:5],
+                "topDividendYield": data.get("equities", {}).get("topDividendYield", [])[:5],
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("equities", {}).get("noteworthyHeadlines", [])[:6]
+                ],
+            },
+        }
+
+        batch_b_payload = {
+            "sessionTimestampSGT": updated_sgt_str,
+            "us10YYield": ust10y,
+            "china": {
+                "curveDate": data.get("china", {}).get("bonds", {}).get("curveDate"),
+                "pbocOmo7dRate": data.get("china", {}).get("bonds", {}).get("pbocOmo7dRate"),
+                "lpr1Y": data.get("china", {}).get("bonds", {}).get("lpr1Y"),
+                "lpr5Y": data.get("china", {}).get("bonds", {}).get("lpr5Y"),
+                "ccdcCgb": data.get("china", {}).get("bonds", {}).get("ccdcCgb", [])[:9],
+                "fxAndEquities": data.get("china", {}).get("fxAndEquities", {}),
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("china", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:6]
+                ],
+            },
+            "korea": {
+                "quotationDate": data.get("korea", {}).get("bonds", {}).get("quotationDate"),
+                "bokBaseRate": data.get("korea", {}).get("bonds", {}).get("bokBaseRate"),
+                "kofrOvernightRate": data.get("korea", {}).get("bonds", {}).get("kofrOvernightRate"),
+                "cd91dRate": data.get("korea", {}).get("bonds", {}).get("cd91dRate"),
+                "kofiaKtb": data.get("korea", {}).get("bonds", {}).get("kofiaKtb", [])[:7],
+                "fxAndEquities": data.get("korea", {}).get("fxAndEquities", {}),
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("korea", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:6]
+                ],
+            },
+            "india": {
+                "quotationDate": data.get("india", {}).get("bonds", {}).get("quotationDate"),
+                "rbiRepoRate": data.get("india", {}).get("bonds", {}).get("rbiRepoRate"),
+                "sdfRate": data.get("india", {}).get("bonds", {}).get("sdfRate"),
+                "msfRate": data.get("india", {}).get("bonds", {}).get("msfRate"),
+                "latestGsecAuctionSummary": data.get("india", {}).get("bonds", {}).get("latestGsecAuctionSummary"),
+                "gsecCurve": data.get("india", {}).get("bonds", {}).get("gsecCurve", [])[:8],
+                "fxAndEquities": data.get("india", {}).get("fxAndEquities", {}),
+                "headlines": [
+                    {"title": h.get("title"), "source": h.get("source"), "timeAgo": h.get("timeAgo")}
+                    for h in data.get("india", {}).get("commentary", {}).get("noteworthyHeadlines", [])[:6]
+                ],
+                "rbiOfficialReleases": [
+                    {"title": r.get("title"), "category": r.get("category"), "pubDate": r.get("pubDate")}
+                    for r in data.get("india", {}).get("commentary", {}).get("rbiOfficialReleases", [])[:4]
+                ],
+            },
+        }
+
+        parsed_a = _run_batch(
+            "Batch A",
+            batch_a_payload,
+            ["globalMacro", "indonesia", "indonesiaLocalNews", "equities"],
+            ["indonesia"],
+        )
+        parsed_b = _run_batch(
+            "Batch B",
+            batch_b_payload,
+            ["china", "korea", "india"],
+            ["china", "korea", "india"],
+        )
+
+        merged_top = {}
+        merged_top.update(parsed_a.get("topBoxes", {}))
+        merged_top.update(parsed_b.get("topBoxes", {}))
+
+        merged_briefings = {}
+        merged_briefings.update(parsed_a.get("countryBriefings", {}))
+        merged_briefings.update(parsed_b.get("countryBriefings", {}))
+
+        applied_top = 0
+        for tab_key in ["globalMacro", "indonesia", "indonesiaLocalNews", "china", "korea", "india", "equities"]:
+            tab_ai = merged_top.get(tab_key)
+            if (
+                isinstance(tab_ai, dict)
+                and tab_key in data
+                and isinstance(data[tab_key], dict)
+                and "argonCommentary" in data[tab_key]
+                and tab_ai.get("conviction")
+                and tab_ai.get("synthesis")
+                and tab_ai.get("positioningTakeaway")
+            ):
+                target = data[tab_key]["argonCommentary"]
+                target["conviction"] = str(tab_ai["conviction"]).strip()
+                target["synthesis"] = str(tab_ai["synthesis"]).strip()
+                target["positioningTakeaway"] = str(tab_ai["positioningTakeaway"]).strip()
+                if tab_ai.get("regimeBadge"):
+                    target["regimeBadge"] = str(tab_ai["regimeBadge"]).strip()
+                if tab_ai.get("dominantRegime"):
+                    target["dominantRegime"] = str(tab_ai["dominantRegime"]).strip()
+                target["aiGenerated"] = True
+                target["modelLabel"] = model_label
+                target["updatedAtSGT"] = updated_sgt_str
+                applied_top += 1
+
+        applied_briefings = 0
+        for c_key in ["indonesia", "china", "korea", "india"]:
+            br_ai = merged_briefings.get(c_key)
+            if (
+                isinstance(br_ai, dict)
+                and c_key in data
+                and isinstance(data[c_key], dict)
+                and "commentary" in data[c_key]
+                and br_ai.get("executiveSummary")
+                and isinstance(br_ai.get("macroPillars"), list)
+                and len(br_ai["macroPillars"]) >= 2
+            ):
+                comm = data[c_key]["commentary"]
+                if br_ai.get("title"):
+                    comm["title"] = str(br_ai["title"]).strip()
+                comm["executiveSummary"] = str(br_ai["executiveSummary"]).strip()
+                comm["macroPillars"] = [
+                    {
+                        "heading": str(p.get("heading", f"Pillar {i + 1}")).strip(),
+                        "analysis": str(p.get("analysis", "")).strip(),
+                    }
+                    for i, p in enumerate(br_ai["macroPillars"][:3])
+                    if isinstance(p, dict)
+                ]
+                if br_ai.get("policyPosture"):
+                    posture_field = "biPolicyPosture" if c_key == "indonesia" else "policyPosture"
+                    comm[posture_field] = str(br_ai["policyPosture"]).strip()
+                comm["aiGenerated"] = True
+                comm["modelLabel"] = model_label
+                comm["updatedAtSGT"] = updated_sgt_str
+                applied_briefings += 1
+
+        print(
+            f"[INFO] {model_label} synthesis applied successfully "
+            f"({applied_top}/7 top commentary boxes, {applied_briefings}/4 lower country briefings)."
+        )
     except Exception as exc:
         print(f"[WARN] Optional Gemini API synthesis skipped ({exc}); using Multi-Regime Catalyst Engine.")
 

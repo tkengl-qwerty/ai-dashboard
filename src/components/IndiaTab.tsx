@@ -1,18 +1,26 @@
 import React from 'react';
 import { IndiaMacroData } from '../types/market';
-import { Landmark, ArrowUpRight, ArrowDownRight, Newspaper, DollarSign, Layers, ExternalLink, FileText } from 'lucide-react';
+import { Landmark, ArrowUpRight, ArrowDownRight, Newspaper, DollarSign, Layers, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { ArgonCommentaryBox } from './ArgonCommentaryBox';
 
 interface IndiaTabProps {
   india: IndiaMacroData;
   lastUpdatedSGT?: string;
   us10YYield: number;
+  canRegenerate?: boolean;
+  isRegenerating?: boolean;
+  regenerateError?: string | null;
+  onRegenerate?: () => void;
 }
 
 export const IndiaTab: React.FC<IndiaTabProps> = ({
   india,
   lastUpdatedSGT,
   us10YYield,
+  canRegenerate = false,
+  isRegenerating = false,
+  regenerateError = null,
+  onRegenerate,
 }) => {
   const { commentary, bonds, fxAndEquities, argonCommentary } = india;
   const gsec5Y = bonds.gsecCurve.find((b) => b.tenor.startsWith('5Y'));
@@ -126,11 +134,15 @@ export const IndiaTab: React.FC<IndiaTabProps> = ({
         </div>
       </div>
 
-      {/* Gemini 4 Argon India Sovereign (RBI / CCIL G-Sec), LAF & INR Synthesis */}
+      {/* Gemini 4 India Sovereign (RBI / CCIL G-Sec), LAF & INR Synthesis */}
       {argonCommentary && (
         <ArgonCommentaryBox
           commentary={argonCommentary}
           lastUpdatedSGT={lastUpdatedSGT}
+          canRegenerate={canRegenerate}
+          isRegenerating={isRegenerating}
+          regenerateError={regenerateError}
+          onRegenerate={onRegenerate}
         />
       )}
 
@@ -140,16 +152,24 @@ export const IndiaTab: React.FC<IndiaTabProps> = ({
         <div className="lg:col-span-7 space-y-4">
           {/* Executive Market Briefing */}
           <div className="bg-[#131b27] border border-slate-700/80 rounded-xs p-4 shadow-sm">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-700/80 mb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-700/80 mb-3">
               <div className="flex items-center gap-2">
-                <Landmark className="w-4 h-4 text-blue-400" />
+                <Landmark className="w-4 h-4 text-blue-400 shrink-0" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100 font-display">
                   {commentary.title}
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-sky-300 bg-[#0e141d] px-2 py-0.5 border border-sky-800/60 rounded-xs">
-                UPDATED: {lastUpdatedSGT || commentary.date}
-              </span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {commentary.aiGenerated && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-300 bg-emerald-950/60 border border-emerald-500/40 px-2 py-0.5 rounded-xs uppercase">
+                    <Sparkles className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                    <span>{commentary.modelLabel || 'GEMINI 4 HYDROGEN'}</span>
+                  </span>
+                )}
+                <span className="text-[10px] font-mono text-sky-300 bg-[#0e141d] px-2 py-0.5 border border-sky-800/60 rounded-xs tabular-nums">
+                  UPDATED: {commentary.updatedAtSGT || lastUpdatedSGT || commentary.date}
+                </span>
+              </div>
             </div>
 
             {/* Policy Badge & Headline */}
@@ -165,30 +185,52 @@ export const IndiaTab: React.FC<IndiaTabProps> = ({
               </span>
             </div>
 
-            {/* Executive Summary */}
-            <p className="text-xs text-slate-300 leading-relaxed font-sans mb-4 bg-[#0e141d]/80 p-3 rounded-xs border border-slate-800">
-              {commentary.executiveSummary}
-            </p>
-
-            {/* Macro Pillars */}
-            <div className="space-y-2.5">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 font-display">
-                KEY INDIA MACRO, RBI LAF & CCIL G-SEC TRANSMISSION PILLARS
-              </div>
-              {commentary.macroPillars.map((pillar, idx) => (
-                <div key={idx} className="bg-[#0e141d] border border-slate-800 p-3 rounded-xs">
-                  <div className="text-xs font-semibold text-sky-300 font-sans mb-1 flex items-center gap-1.5">
-                    <span className="text-[10px] font-mono text-blue-400 bg-blue-950/60 px-1.5 py-0.2 rounded-xs border border-blue-800/60">
-                      0{idx + 1}
-                    </span>
-                    {pillar.heading}
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                    {pillar.analysis}
-                  </p>
+            {isRegenerating ? (
+              <div className="space-y-4 animate-pulse" aria-busy="true">
+                <div className="bg-[#0e141d]/80 p-3 rounded-xs border border-slate-800 space-y-2">
+                  <div className="h-3 bg-slate-700/70 rounded-xs w-full" />
+                  <div className="h-3 bg-slate-700/60 rounded-xs w-11/12" />
+                  <div className="h-3 bg-slate-700/50 rounded-xs w-4/5" />
                 </div>
-              ))}
-            </div>
+                <div className="space-y-2.5">
+                  <div className="h-3 bg-slate-700/60 rounded-xs w-56" />
+                  {[0, 1, 2].map((idx) => (
+                    <div key={idx} className="bg-[#0e141d] border border-slate-800 p-3 rounded-xs space-y-2">
+                      <div className="h-3 bg-slate-700/70 rounded-xs w-3/5" />
+                      <div className="h-3 bg-slate-700/50 rounded-xs w-full" />
+                      <div className="h-3 bg-slate-700/40 rounded-xs w-5/6" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Executive Summary */}
+                <p className="text-xs text-slate-300 leading-relaxed font-sans mb-4 bg-[#0e141d]/80 p-3 rounded-xs border border-slate-800">
+                  {commentary.executiveSummary}
+                </p>
+
+                {/* Macro Pillars */}
+                <div className="space-y-2.5">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 font-display">
+                    KEY INDIA MACRO, RBI LAF & CCIL G-SEC TRANSMISSION PILLARS
+                  </div>
+                  {commentary.macroPillars.map((pillar, idx) => (
+                    <div key={idx} className="bg-[#0e141d] border border-slate-800 p-3 rounded-xs">
+                      <div className="text-xs font-semibold text-sky-300 font-sans mb-1 flex items-center gap-1.5">
+                        <span className="text-[10px] font-mono text-blue-400 bg-blue-950/60 px-1.5 py-0.2 rounded-xs border border-blue-800/60">
+                          0{idx + 1}
+                        </span>
+                        {pillar.heading}
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                        {pillar.analysis}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Noteworthy India Macro, RBI & G-Sec Market News (Live RSS Feed) */}

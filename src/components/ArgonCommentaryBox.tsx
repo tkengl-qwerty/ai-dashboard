@@ -1,25 +1,54 @@
 import React from 'react';
 import { ArgonCommentary } from '../types/market';
-import { Cpu, Crosshair, CalendarClock, TrendingUp, ShieldAlert, Clock } from 'lucide-react';
+import {
+  Cpu,
+  Crosshair,
+  CalendarClock,
+  TrendingUp,
+  ShieldAlert,
+  Clock,
+  Sparkles,
+  AlertTriangle,
+  RefreshCw,
+} from 'lucide-react';
 
 interface ArgonCommentaryBoxProps {
   commentary: ArgonCommentary;
   lastUpdatedSGT?: string;
+  canRegenerate?: boolean;
+  isRegenerating?: boolean;
+  regenerateError?: string | null;
+  onRegenerate?: () => void;
 }
 
 export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
   commentary,
   lastUpdatedSGT,
+  canRegenerate = false,
+  isRegenerating = false,
+  regenerateError = null,
+  onRegenerate,
 }) => {
   const effectiveTimestamp = commentary.updatedAtSGT || lastUpdatedSGT;
+  const isAi = Boolean(commentary.aiGenerated);
 
   return (
     <section className="bg-gradient-to-b from-[#152030] to-[#111926] border border-blue-500/40 rounded-xs p-4 shadow-md">
       {/* Top Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-700/80">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 bg-blue-600/20 border border-blue-400/50 text-sky-300 text-[10px] font-mono font-bold px-2 py-0.5 rounded-xs uppercase tracking-wider">
-            <Cpu className="w-3 h-3 text-sky-400" />
+          <span
+            className={`inline-flex items-center gap-1.5 text-[10px] font-mono font-bold px-2 py-0.5 rounded-xs uppercase tracking-wider border ${
+              isAi
+                ? 'bg-emerald-950/60 border-emerald-500/50 text-emerald-300'
+                : 'bg-blue-600/20 border-blue-400/50 text-sky-300'
+            }`}
+          >
+            {isAi ? (
+              <Sparkles className="w-3 h-3 text-emerald-400 shrink-0" />
+            ) : (
+              <Cpu className="w-3 h-3 text-sky-400 shrink-0" />
+            )}
             <span>{commentary.modelLabel}</span>
           </span>
           <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-100 font-display">
@@ -28,16 +57,52 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-mono font-semibold text-sky-300 bg-[#0e141d] border border-sky-700/60 px-2 py-0.5 rounded-xs">
+          <span className="text-[10px] font-mono font-semibold text-sky-300 bg-[#0e141d] border border-sky-700/60 px-2 py-0.5 rounded-xs tabular-nums">
             {commentary.regimeBadge}
           </span>
           {effectiveTimestamp && (
-            <span className="text-[10px] font-mono text-slate-400 bg-[#0e141d] border border-slate-800 px-2 py-0.5 rounded-xs">
+            <span className="text-[10px] font-mono text-slate-400 bg-[#0e141d] border border-slate-800 px-2 py-0.5 rounded-xs tabular-nums">
               SYNC: {effectiveTimestamp}
             </span>
           )}
+          {canRegenerate && onRegenerate && (
+            <button
+              type="button"
+              onClick={onRegenerate}
+              disabled={isRegenerating}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider rounded-xs border border-blue-500/70 bg-blue-950/70 hover:bg-blue-900/80 text-sky-200 hover:text-white disabled:opacity-60 disabled:cursor-wait cursor-pointer transition-colors whitespace-nowrap shrink-0"
+              title="Re-synthesize this tab's commentary on demand with Gemini 4 Hydrogen (XHIGH reasoning)"
+            >
+              {isRegenerating ? (
+                <RefreshCw className="w-3 h-3 animate-spin text-sky-300 shrink-0" />
+              ) : (
+                <Sparkles className="w-3 h-3 text-sky-300 shrink-0" />
+              )}
+              <span>{isRegenerating ? 'Synthesizing…' : 'Regenerate with Gemini'}</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Inline On-Demand Error Banner (never masks upstream errors with fake output) */}
+      {regenerateError && (
+        <div className="mt-3 p-2.5 bg-rose-950/40 border border-rose-700/60 rounded-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-rose-200">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+            <span>{regenerateError}</span>
+          </div>
+          {canRegenerate && onRegenerate && (
+            <button
+              type="button"
+              onClick={onRegenerate}
+              disabled={isRegenerating}
+              className="text-rose-200 hover:text-white underline cursor-pointer whitespace-nowrap shrink-0 self-end sm:self-auto"
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Executive Synthesis & Positioning Callout */}
       <div className="mt-3 grid grid-cols-1 lg:grid-cols-12 gap-3">
@@ -47,7 +112,7 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
               EXECUTIVE DESK SYNTHESIS ({commentary.modelLabel})
             </span>
             {effectiveTimestamp ? (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2 py-0.5 rounded-xs">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2 py-0.5 rounded-xs tabular-nums">
                 <Clock className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
                 <span>UPDATED: {effectiveTimestamp}</span>
               </span>
@@ -57,9 +122,18 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-200 leading-relaxed font-sans">
-            {commentary.synthesis}
-          </p>
+          {isRegenerating ? (
+            <div className="space-y-2 py-1 animate-pulse" aria-label="Synthesizing desk commentary">
+              <div className="h-3 bg-slate-800 rounded-xs w-full" />
+              <div className="h-3 bg-slate-800 rounded-xs w-11/12" />
+              <div className="h-3 bg-slate-800 rounded-xs w-10/12" />
+              <div className="h-3 bg-slate-800 rounded-xs w-8/12" />
+            </div>
+          ) : (
+            <p className="text-xs text-slate-200 leading-relaxed font-sans">
+              {commentary.synthesis}
+            </p>
+          )}
         </div>
 
         <div className="lg:col-span-4 bg-blue-950/30 border border-blue-800/50 p-3 rounded-xs flex flex-col justify-between">
@@ -70,18 +144,28 @@ export const ArgonCommentaryBox: React.FC<ArgonCommentaryBoxProps> = ({
                 <span>TACTICAL STANCE & POSITIONING</span>
               </div>
               {effectiveTimestamp && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-sky-300 bg-sky-950/60 border border-sky-700/60 px-2 py-0.5 rounded-xs">
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-sky-300 bg-sky-950/60 border border-sky-700/60 px-2 py-0.5 rounded-xs tabular-nums">
                   <Clock className="w-2.5 h-2.5 text-sky-400 shrink-0" />
                   <span>UPDATED: {effectiveTimestamp}</span>
                 </span>
               )}
             </div>
-            <div className="text-xs font-semibold text-sky-200 font-mono mb-1.5">
-              {commentary.conviction}
-            </div>
-            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
-              {commentary.positioningTakeaway}
-            </p>
+            {isRegenerating ? (
+              <div className="space-y-2 py-1 animate-pulse" aria-label="Synthesizing tactical stance">
+                <div className="h-3.5 bg-blue-900/50 rounded-xs w-10/12" />
+                <div className="h-3 bg-slate-800/90 rounded-xs w-full" />
+                <div className="h-3 bg-slate-800/90 rounded-xs w-9/12" />
+              </div>
+            ) : (
+              <>
+                <div className="text-xs font-semibold text-sky-200 font-mono mb-1.5">
+                  {commentary.conviction}
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                  {commentary.positioningTakeaway}
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

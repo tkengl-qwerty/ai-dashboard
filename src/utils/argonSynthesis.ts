@@ -304,17 +304,9 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
   const nextFri = getNextWeekdaySgt(todayBiz, 5, true);
   const cpiDate = getNextMonthlyDaySgt(todayBiz, 12);
 
-  if (
-    snap.globalMacro.argonCommentary?.aiGenerated &&
-    snap.globalMacro.argonCommentary.synthesis &&
-    snap.globalMacro.topNews[0]?.headline &&
-    snap.globalMacro.argonCommentary.synthesis.includes(snap.globalMacro.topNews[0].headline.slice(0, 28))
-  ) {
-    return {
-      ...snap.globalMacro.argonCommentary,
-      updatedAtSGT,
-    };
-  }
+  const existingAi = snap.globalMacro.argonCommentary?.aiGenerated
+    ? snap.globalMacro.argonCommentary
+    : undefined;
 
   const yc = snap.globalMacro.yieldCurve;
   const t2 = yc.tenors.find((t) => t.label === '2Y');
@@ -465,9 +457,25 @@ export function buildGlobalArgonCommentary(snap: DailyMacroSnapshot): ArgonComme
     },
   ];
 
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST',
+      regimeBadge: existingAi.regimeBadge || regimeBadge,
+      dominantRegime: existingAi.dominantRegime || newsProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST',
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · GLOBAL MACRO SYNTHESIS & CRITICAL WATCHLIST',
     regimeBadge,
     dominantRegime: newsProfile.primaryLabel,
     updatedAtSGT,
@@ -488,19 +496,9 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
   const nextDjpprTue = getNextWeekdaySgt(todayBiz, 2, false);
   const biRdgDate = getNextMonthlyDaySgt(todayBiz, 18);
 
-  if (
-    snap.indonesia.argonCommentary?.aiGenerated &&
-    snap.indonesia.argonCommentary.synthesis &&
-    snap.indonesia.commentary.noteworthyHeadlines[0]?.title &&
-    snap.indonesia.argonCommentary.synthesis.includes(
-      snap.indonesia.commentary.noteworthyHeadlines[0].title.slice(0, 28)
-    )
-  ) {
-    return {
-      ...snap.indonesia.argonCommentary,
-      updatedAtSGT,
-    };
-  }
+  const existingAi = snap.indonesia.argonCommentary?.aiGenerated
+    ? snap.indonesia.argonCommentary
+    : undefined;
 
   const bonds = snap.indonesia.bonds;
   const fx = snap.indonesia.fxAndNdf;
@@ -644,9 +642,25 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
     },
   ];
 
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS',
+      regimeBadge: existingAi.regimeBadge || regimeBadge,
+      dominantRegime: existingAi.dominantRegime || newsProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS',
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · INDONESIA SOVEREIGN, FX & MONETARY SYNTHESIS',
     regimeBadge,
     dominantRegime: newsProfile.primaryLabel,
     updatedAtSGT,
@@ -667,19 +681,9 @@ export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const nextWed = getNextWeekdaySgt(todayBiz, 3, false);
   const lprDate = getNextMonthlyDaySgt(todayBiz, 20);
 
-  if (
-    snap.china?.argonCommentary?.aiGenerated &&
-    snap.china.argonCommentary.synthesis &&
-    snap.china.commentary.noteworthyHeadlines[0]?.title &&
-    snap.china.argonCommentary.synthesis.includes(
-      snap.china.commentary.noteworthyHeadlines[0].title.slice(0, 28)
-    )
-  ) {
-    return {
-      ...snap.china.argonCommentary,
-      updatedAtSGT,
-    };
-  }
+  const existingAi = snap.china?.argonCommentary?.aiGenerated
+    ? snap.china.argonCommentary
+    : undefined;
 
   const china = snap.china;
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
@@ -813,9 +817,25 @@ export function buildChinaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     },
   ];
 
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS',
+      regimeBadge: existingAi.regimeBadge || regimeBadge,
+      dominantRegime: existingAi.dominantRegime || newsProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS',
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · CHINA SOVEREIGN (CCDC), PBOC & FX SYNTHESIS',
     regimeBadge,
     dominantRegime: newsProfile.primaryLabel,
     updatedAtSGT,
@@ -835,19 +855,9 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const nextMon = getNextWeekdaySgt(todayBiz, 1, false);
   const bokMpbDate = getNextMonthlyDaySgt(todayBiz, 26);
 
-  if (
-    snap.korea?.argonCommentary?.aiGenerated &&
-    snap.korea.argonCommentary.synthesis &&
-    snap.korea.commentary.noteworthyHeadlines[0]?.title &&
-    snap.korea.argonCommentary.synthesis.includes(
-      snap.korea.commentary.noteworthyHeadlines[0].title.slice(0, 28)
-    )
-  ) {
-    return {
-      ...snap.korea.argonCommentary,
-      updatedAtSGT,
-    };
-  }
+  const existingAi = snap.korea?.argonCommentary?.aiGenerated
+    ? snap.korea.argonCommentary
+    : undefined;
 
   const korea = snap.korea;
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
@@ -983,9 +993,25 @@ export function buildKoreaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     },
   ];
 
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS',
+      regimeBadge: existingAi.regimeBadge || regimeBadge,
+      dominantRegime: existingAi.dominantRegime || newsProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS',
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · KOREA SOVEREIGN (KOFIA / SOFIA), BOK & KRW SYNTHESIS',
     regimeBadge,
     dominantRegime: newsProfile.primaryLabel,
     updatedAtSGT,
@@ -1006,19 +1032,9 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
   const nextGsecFri = getNextWeekdaySgt(todayBiz, 5, true);
   const rbiMpcDate = getNextMonthlyDaySgt(addSgtDays(todayBiz, 15), 4);
 
-  if (
-    snap.india?.argonCommentary?.aiGenerated &&
-    snap.india.argonCommentary.synthesis &&
-    snap.india.commentary.noteworthyHeadlines[0]?.title &&
-    snap.india.argonCommentary.synthesis.includes(
-      snap.india.commentary.noteworthyHeadlines[0].title.slice(0, 28)
-    )
-  ) {
-    return {
-      ...snap.india.argonCommentary,
-      updatedAtSGT,
-    };
-  }
+  const existingAi = snap.india?.argonCommentary?.aiGenerated
+    ? snap.india.argonCommentary
+    : undefined;
 
   const india = snap.india;
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
@@ -1161,9 +1177,25 @@ export function buildIndiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCommen
     },
   ];
 
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS',
+      regimeBadge: existingAi.regimeBadge || regimeBadge,
+      dominantRegime: existingAi.dominantRegime || newsProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS',
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · INDIA SOVEREIGN (RBI / CCIL G-SEC), LAF & INR SYNTHESIS',
     regimeBadge,
     dominantRegime: newsProfile.primaryLabel,
     updatedAtSGT,
@@ -1184,19 +1216,9 @@ export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonC
   const nextFri = getNextWeekdaySgt(todayBiz, 5, true);
   const opexFri = getNextMonthlyDaySgt(todayBiz, 20);
 
-  if (
-    snap.equities?.argonCommentary?.aiGenerated &&
-    snap.equities.argonCommentary.synthesis &&
-    snap.equities.noteworthyHeadlines[0]?.title &&
-    snap.equities.argonCommentary.synthesis.includes(
-      snap.equities.noteworthyHeadlines[0].title.slice(0, 28)
-    )
-  ) {
-    return {
-      ...snap.equities.argonCommentary,
-      updatedAtSGT,
-    };
-  }
+  const existingAi = snap.equities?.argonCommentary?.aiGenerated
+    ? snap.equities.argonCommentary
+    : undefined;
 
   const eq = snap.equities;
   const t10 = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y');
@@ -1310,9 +1332,25 @@ export function buildUsEquitiesArgonCommentary(snap: DailyMacroSnapshot): ArgonC
     },
   ];
 
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · US EQUITIES (S&P 500) VALUATION, ERP & FACTOR SYNTHESIS',
+      regimeBadge: existingAi.regimeBadge || regimeBadge,
+      dominantRegime: existingAi.dominantRegime || newsProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · US EQUITIES (S&P 500) VALUATION, ERP & FACTOR SYNTHESIS',
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · US EQUITIES (S&P 500) VALUATION, ERP & FACTOR SYNTHESIS',
     regimeBadge,
     dominantRegime: newsProfile.primaryLabel,
     updatedAtSGT,
@@ -1412,65 +1450,88 @@ export function buildIndonesiaLocalNewsArgonCommentary(snap: DailyMacroSnapshot)
     `Meanwhile, domestic Terpopuler readership is led by #1 "${truncateHeadline(read1?.titleEn, 74)}" (${read1?.source} · ${read1?.timeAgo}), #2 "${truncateHeadline(read2?.titleEn, 70)}" (${read2?.source}), and #3 "${truncateHeadline(read3?.titleEn, 68)}" (${read3?.source}) — ` +
     `against an onshore backdrop where USD/IDR trades at Rp ${spot.toLocaleString('en-US')} (${fmtPct(spotPct)} 1D; JISDOR Rp ${jisdor.toLocaleString('en-US')}), IHSG prints ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)}), and 10Y FR0108 yields ${indo10Y.toFixed(2)}%.`;
 
+  const criticalLevels = [
+    {
+      asset: 'IHSG (JCI) & LQ45 Liquidity',
+      current: `${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)})`,
+      support: Math.round(ihsg * 0.98).toLocaleString('en-US'),
+      resistance: Math.round(ihsg * 1.02).toLocaleString('en-US'),
+      implication: 'IDX free-float reforms and MSCI rebalancing concentrate institutional flows into liquid big-cap banks.',
+    },
+    {
+      asset: '12M SRBI & BI Policy Rate',
+      current: `${srbi12M.toFixed(3)}% WAR · ${(bonds.biRate ?? 6.0).toFixed(2)}% BI`,
+      support: `${(bonds.biRate ?? 6.0).toFixed(2)}% BI-Rate`,
+      resistance: `${(srbi12M + 0.15).toFixed(2)}% SRBI Cap`,
+      implication: `12M SRBI at ${srbi12M.toFixed(3)}% WAR and BI triple-intervention defend onshore Rupiah carry.`,
+    },
+    {
+      asset: 'USD/IDR Spot & JISDOR',
+      current: `Rp ${spot.toLocaleString('en-US')} (JISDOR ${jisdor.toLocaleString('en-US')})`,
+      support: `Rp ${(spot - 120).toLocaleString('en-US')}`,
+      resistance: `Rp ${(spot + 150).toLocaleString('en-US')}`,
+      implication: 'BI DNDF and spot intervention smooth external Fed/DXY volatility and domestic political headline noise.',
+    },
+    {
+      asset: '10Y IndoGB (FR0108)',
+      current: `${indo10Y.toFixed(2)}%`,
+      support: `${(indo10Y - 0.15).toFixed(2)}%`,
+      resistance: `${(indo10Y + 0.18).toFixed(2)}%`,
+      implication: `Domestic bank and pension demand anchors 10Y FR0108 whenever yields approach ${(indo10Y + 0.15).toFixed(2)}%.`,
+    },
+  ];
+
+  const eventsToWatch = [
+    {
+      event: 'IDX (BEI) HSC Free-Float Exclusion & MSCI Index Rebalancing Implementation',
+      timing: `${formatSgtDate(nextFri)} · 09:00 WIB (10:00 SGT)`,
+      impact: 'Critical' as const,
+      watchFor: `Passive and active institutional rotation into liquid LQ45 constituents following "${truncateHeadline(imp1?.titleEn, 78)}".`,
+    },
+    {
+      event: 'DPR RI Parliamentary Working Meetings & Executive Fiscal / Governance Updates',
+      timing: `${formatSgtDate(todayBiz)} · 13:30 WIB (14:30 SGT)`,
+      impact: 'High' as const,
+      watchFor: `Onshore market reaction to "${truncateHeadline(read1?.titleEn, 75)}" and APBN budget efficiency directives.`,
+    },
+    {
+      event: 'Bank Indonesia Board of Governors (RDG) & KSSK Financial Stability Assessment',
+      timing: `${formatSgtDate(biRdgDate)} · 14:20 WIB (15:20 SGT)`,
+      impact: 'High' as const,
+      watchFor: `BI liquidity incentives, USD/IDR JISDOR (Rp ${jisdor.toLocaleString('en-US')}) stability, and 10Y FR0108 (${indo10Y.toFixed(2)}%) auction demand.`,
+    },
+  ];
+
+  const defaultRegimeBadge = `${impProfile.primaryTheme.replace(/_/g, ' ')} · USD/IDR Rp ${spot.toLocaleString('en-US')} · IHSG ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const existingAi = loc?.argonCommentary?.aiGenerated ? loc.argonCommentary : undefined;
+
+  if (existingAi && existingAi.synthesis && existingAi.conviction && existingAi.positioningTakeaway) {
+    return {
+      modelLabel: existingAi.modelLabel || 'GEMINI 4 HYDROGEN',
+      title: 'GEMINI 4 HYDROGEN · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS',
+      regimeBadge: existingAi.regimeBadge || defaultRegimeBadge,
+      dominantRegime: existingAi.dominantRegime || impProfile.primaryLabel,
+      updatedAtSGT: existingAi.updatedAtSGT || updatedAtSGT,
+      aiGenerated: true,
+      conviction: existingAi.conviction,
+      synthesis: existingAi.synthesis,
+      positioningTakeaway: existingAi.positioningTakeaway,
+      criticalLevels,
+      eventsToWatch,
+    };
+  }
+
   return {
-    modelLabel: 'GEMINI 4 ARGON',
-    title: 'GEMINI 4 ARGON · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS',
-    regimeBadge: `${impProfile.primaryTheme.replace(/_/g, ' ')} · USD/IDR Rp ${spot.toLocaleString('en-US')} · IHSG ${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+    modelLabel: 'MULTI-REGIME ENGINE',
+    title: 'MACRO DESK · INDONESIA LOCAL-LANGUAGE MEDIA (ID→EN) & POLITICAL-ECONOMIC SYNTHESIS',
+    regimeBadge: defaultRegimeBadge,
     dominantRegime: impProfile.primaryLabel,
     updatedAtSGT,
     conviction,
     synthesis,
     positioningTakeaway,
-    criticalLevels: [
-      {
-        asset: 'IHSG (JCI) & LQ45 Liquidity',
-        current: `${ihsg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${fmtPct(ihsgPct)})`,
-        support: Math.round(ihsg * 0.98).toLocaleString('en-US'),
-        resistance: Math.round(ihsg * 1.02).toLocaleString('en-US'),
-        implication: 'IDX free-float reforms and MSCI rebalancing concentrate institutional flows into liquid big-cap banks.',
-      },
-      {
-        asset: '12M SRBI & BI Policy Rate',
-        current: `${srbi12M.toFixed(3)}% WAR · 5.75% BI`,
-        support: '5.75% BI-Rate',
-        resistance: '6.80% SRBI Cap',
-        implication: `12M SRBI at ${srbi12M.toFixed(3)}% WAR and BI triple-intervention defend onshore Rupiah carry.`,
-      },
-      {
-        asset: 'USD/IDR Spot & JISDOR',
-        current: `Rp ${spot.toLocaleString('en-US')} (JISDOR ${jisdor.toLocaleString('en-US')})`,
-        support: `Rp ${(spot - 120).toLocaleString('en-US')}`,
-        resistance: `Rp ${(spot + 150).toLocaleString('en-US')}`,
-        implication: 'BI DNDF and spot intervention smooth external Fed/DXY volatility and domestic political headline noise.',
-      },
-      {
-        asset: '10Y IndoGB (FR0108)',
-        current: `${indo10Y.toFixed(2)}%`,
-        support: `${(indo10Y - 0.15).toFixed(2)}%`,
-        resistance: `${(indo10Y + 0.18).toFixed(2)}%`,
-        implication: `Domestic bank and pension demand anchors 10Y FR0108 whenever yields approach ${(indo10Y + 0.15).toFixed(2)}%.`,
-      },
-    ],
-    eventsToWatch: [
-      {
-        event: 'IDX (BEI) HSC Free-Float Exclusion & MSCI Index Rebalancing Implementation',
-        timing: `${formatSgtDate(nextFri)} · 09:00 WIB (10:00 SGT)`,
-        impact: 'Critical',
-        watchFor: `Passive and active institutional rotation into liquid LQ45 constituents following "${truncateHeadline(imp1?.titleEn, 78)}".`,
-      },
-      {
-        event: 'DPR RI Parliamentary Working Meetings & Executive Fiscal / Governance Updates',
-        timing: `${formatSgtDate(todayBiz)} · 13:30 WIB (14:30 SGT)`,
-        impact: 'High',
-        watchFor: `Onshore market reaction to "${truncateHeadline(read1?.titleEn, 75)}" and APBN budget efficiency directives.`,
-      },
-      {
-        event: 'Bank Indonesia Board of Governors (RDG) & KSSK Financial Stability Assessment',
-        timing: `${formatSgtDate(biRdgDate)} · 14:20 WIB (15:20 SGT)`,
-        impact: 'High',
-        watchFor: `BI liquidity incentives, USD/IDR JISDOR (Rp ${jisdor.toLocaleString('en-US')}) stability, and 10Y FR0108 (${indo10Y.toFixed(2)}%) auction demand.`,
-      },
-    ],
+    criticalLevels,
+    eventsToWatch,
   };
 }
 
@@ -1483,6 +1544,20 @@ export function buildIndonesiaMarketBriefing(snap: DailyMacroSnapshot): Indonesi
   const sgtNow = getSgtReferenceDate(snap);
   const todayBiz = snapToBusinessDay(sgtNow);
   const dateStr = formatSgtDate(todayBiz);
+
+  const existingComm = snap.indonesia.commentary;
+  if (
+    existingComm?.aiGenerated &&
+    existingComm.executiveSummary &&
+    existingComm.macroPillars &&
+    existingComm.macroPillars.length >= 2
+  ) {
+    return {
+      ...existingComm,
+      date: existingComm.date || dateStr,
+      noteworthyHeadlines: existingComm.noteworthyHeadlines || [],
+    };
+  }
 
   const bonds = snap.indonesia.bonds;
   const fx = snap.indonesia.fxAndNdf;
@@ -1574,6 +1649,20 @@ export function buildChinaMarketBriefing(snap: DailyMacroSnapshot): ChinaMacroDa
   const dateStr = formatSgtDate(todayBiz);
 
   const china = snap.china;
+  const existingComm = china?.commentary;
+  if (
+    existingComm?.aiGenerated &&
+    existingComm.executiveSummary &&
+    existingComm.macroPillars &&
+    existingComm.macroPillars.length >= 2
+  ) {
+    return {
+      ...existingComm,
+      date: existingComm.date || dateStr,
+      noteworthyHeadlines: existingComm.noteworthyHeadlines || [],
+    };
+  }
+
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
   const curveDate = china?.bonds.curveDate ?? '2026-11-11';
 
@@ -1650,6 +1739,20 @@ export function buildKoreaMarketBriefing(snap: DailyMacroSnapshot): KoreaMacroDa
   const dateStr = formatSgtDate(todayBiz);
 
   const korea = snap.korea;
+  const existingComm = korea?.commentary;
+  if (
+    existingComm?.aiGenerated &&
+    existingComm.executiveSummary &&
+    existingComm.macroPillars &&
+    existingComm.macroPillars.length >= 2
+  ) {
+    return {
+      ...existingComm,
+      date: existingComm.date || dateStr,
+      noteworthyHeadlines: existingComm.noteworthyHeadlines || [],
+    };
+  }
+
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
   const quoteDate = korea?.bonds.quotationDate ?? '11 Nov 2026';
 
@@ -1724,6 +1827,21 @@ export function buildIndiaMarketBriefing(snap: DailyMacroSnapshot): IndiaMacroDa
   const dateStr = formatSgtDate(todayBiz);
 
   const india = snap.india;
+  const existingComm = india?.commentary;
+  if (
+    existingComm?.aiGenerated &&
+    existingComm.executiveSummary &&
+    existingComm.macroPillars &&
+    existingComm.macroPillars.length >= 2
+  ) {
+    return {
+      ...existingComm,
+      date: existingComm.date || dateStr,
+      noteworthyHeadlines: existingComm.noteworthyHeadlines || [],
+      rbiOfficialReleases: existingComm.rbiOfficialReleases || [],
+    };
+  }
+
   const ust10Y = snap.globalMacro.yieldCurve.tenors.find((t) => t.label === '10Y')?.yield ?? 4.86;
   const quoteDate = india?.bonds.quotationDate ?? '11 Nov 2026';
 

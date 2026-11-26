@@ -8,9 +8,19 @@ import { buildGlobalArgonCommentary } from '../utils/argonSynthesis';
 
 interface GlobalMacroTabProps {
   data: DailyMacroSnapshot;
+  canRegenerate?: boolean;
+  isRegenerating?: boolean;
+  regenerateError?: string | null;
+  onRegenerate?: () => void;
 }
 
-export const GlobalMacroTab: React.FC<GlobalMacroTabProps> = ({ data }) => {
+export const GlobalMacroTab: React.FC<GlobalMacroTabProps> = ({
+  data,
+  canRegenerate = false,
+  isRegenerating = false,
+  regenerateError = null,
+  onRegenerate,
+}) => {
   const { futures, fxRates, commodities, yieldCurve, topNews } = data.globalMacro;
   const argonCommentary = data.globalMacro.argonCommentary ?? buildGlobalArgonCommentary(data);
 
@@ -23,10 +33,14 @@ export const GlobalMacroTab: React.FC<GlobalMacroTabProps> = ({ data }) => {
         commodities={commodities}
       />
 
-      {/* 2. Gemini 4 Argon Global Macro Synthesis & Critical Watchlist */}
+      {/* 2. Gemini 4 Global Macro Synthesis & Critical Watchlist */}
       <ArgonCommentaryBox
         commentary={argonCommentary}
         lastUpdatedSGT={data.metadata.lastUpdatedSGT}
+        canRegenerate={canRegenerate}
+        isRegenerating={isRegenerating}
+        regenerateError={regenerateError}
+        onRegenerate={onRegenerate}
       />
 
       {/* 3. Main Two-Section Layout: Yield Curve & Top 10 Macro News */}

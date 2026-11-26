@@ -110,6 +110,9 @@ export interface IndonesiaCommentary {
   }>;
   biPolicyPosture: string;
   noteworthyHeadlines: RegionalDisclosureItem[];
+  aiGenerated?: boolean;
+  modelLabel?: string;
+  updatedAtSGT?: string;
 }
 
 export interface IndonesiaBonds {
@@ -172,6 +175,9 @@ export interface ChinaMacroData {
     }>;
     policyPosture: string;
     noteworthyHeadlines: RegionalDisclosureItem[];
+    aiGenerated?: boolean;
+    modelLabel?: string;
+    updatedAtSGT?: string;
   };
   bonds: {
     curveDate: string;
@@ -237,6 +243,9 @@ export interface KoreaMacroData {
     }>;
     policyPosture: string;
     noteworthyHeadlines: RegionalDisclosureItem[];
+    aiGenerated?: boolean;
+    modelLabel?: string;
+    updatedAtSGT?: string;
   };
   bonds: {
     quotationDate: string;
@@ -307,6 +316,9 @@ export interface IndiaMacroData {
     policyPosture: string;
     noteworthyHeadlines: RegionalDisclosureItem[];
     rbiOfficialReleases: RbiOfficialReleaseItem[];
+    aiGenerated?: boolean;
+    modelLabel?: string;
+    updatedAtSGT?: string;
   };
   bonds: {
     quotationDate: string;
