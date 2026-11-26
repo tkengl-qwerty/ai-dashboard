@@ -118,6 +118,8 @@ export interface IndonesiaBonds {
   sovereignSpread10Y: number;
   biRate: number;
   cpiInflationYoY: number;
+  valuationDate?: string;
+  yieldSource?: string;
 }
 
 export interface IndonesiaFxAndNdf {

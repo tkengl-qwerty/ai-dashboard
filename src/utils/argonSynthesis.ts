@@ -564,7 +564,7 @@ export function buildIndonesiaArgonCommentary(snap: DailyMacroSnapshot): ArgonCo
     synthesisOpening =
       `[${sessionDateStr} · Jakarta Political & Governance Watch] Onshore institutional desks are closely weighing domestic political and constitutional headlines against Indonesia's +${realPolicyBuffer}% real policy buffer (BI-Rate ${biRate.toFixed(2)}% vs CPI ${cpi.toFixed(2)}%) and +${spread10Y} bps 10Y sovereign spread over USTs (FR0108 at ${indo10Y.toFixed(2)}%, ${fmtBps(indo10YChg)} 1D; 5Y FR0109 at ${indo5Y.toFixed(2)}%, ${fmtBps(indo5YChg)} 1D).`;
     positioningTakeaway =
-      `[Tactical Call — Shorten Duration into 12M SRBI & 5Y FR0109, Hedge FX Tail] While domestic headlines focus on "${truncateHeadline(newsProfile.leadItem.title, 68)}" (${newsProfile.leadItem.source}) and "${truncateHeadline(newsProfile.secondItem.title, 65)}" (${newsProfile.secondItem.source}), avoid extending unhedged duration into 15Y–20Y IndoGBs (${indo15Y.toFixed(2)}%). Capture 6.675% carry in 12M BI SRBI and 5Y FR0109 (${indo5Y.toFixed(2)}%), and maintain 1M NDF hedges (Rp ${ndf1M.toLocaleString('en-US')}, +${ndfSpread} IDR basis) whenever USD/IDR (Rp ${spot.toLocaleString('en-US')}) trades above Rp 18,050.`;
+      `[Tactical Call — Shorten Duration into 12M SRBI & 5Y FR0109, Hedge FX Tail] While domestic headlines focus on "${truncateHeadline(newsProfile.leadItem.title, 68)}" (${newsProfile.leadItem.source}) and "${truncateHeadline(newsProfile.secondItem.title, 65)}" (${newsProfile.secondItem.source}), avoid extending unhedged duration into 15Y–20Y IndoGBs (${indo15Y.toFixed(2)}%). Capture ${srbi12M.toFixed(3)}% carry in 12M BI SRBI and 5Y FR0109 (${indo5Y.toFixed(2)}%), and maintain 1M NDF hedges (Rp ${ndf1M.toLocaleString('en-US')}, +${ndfSpread} IDR basis) whenever USD/IDR (Rp ${spot.toLocaleString('en-US')}) trades above Rp 18,050.`;
   } else if (newsProfile.primaryTheme === 'MARKET_REFORM_EQUITY') {
     conviction = `IDX/MSCI Reform Rotation: Long Liquid LQ45 Banks + 5Y–10Y IndoGB (FR0109 ${indo5Y.toFixed(2)}% / FR0108 ${indo10Y.toFixed(2)}%)`;
     synthesisOpening =
@@ -1544,8 +1544,19 @@ export function buildIndonesiaMarketBriefing(snap: DailyMacroSnapshot): Indonesi
       },
       {
         heading: `2. BI SRBI Open Market Operations (${srbiDate}) & Rupiah Liquidity Corridor`,
-        analysis:
-          `Bank Indonesia's SRBI curve clears at ${srbi6M.toFixed(3)}% (6M), ${srbi9M.toFixed(3)}% (9M), and ${srbi12M.toFixed(3)}% (12M WAR, IDR 7.50 T awarded from IDR 36.90 T total bids), preserving a +${Math.round((srbi12M - ust10Y) * 100)} bps short-end yield pickup over US 10Y Treasuries while desks digest "${truncateHeadline(profile.secondItem.title, 72)}" (${profile.secondItem.source}).`,
+        analysis: (() => {
+          const parseT = (v?: string) => {
+            const m = (v || '').match(/([\d.]+)/);
+            return m ? parseFloat(m[1]) : 0;
+          };
+          const totAwarded = bonds.srbi.reduce((acc, s) => acc + parseT(s.awardedVolumeIDR), 0);
+          const totBids = bonds.srbi.reduce((acc, s) => acc + parseT(s.nominalBidsIDR), 0);
+          const volStr =
+            totAwarded > 0 && totBids > 0
+              ? `IDR ${totAwarded.toFixed(2)} T awarded from IDR ${totBids.toFixed(2)} T total bids`
+              : `${bonds.srbi.find((s) => s.tenor === '12M')?.awardedVolumeIDR ?? 'active'} awarded`;
+          return `Bank Indonesia's SRBI curve clears at ${srbi6M.toFixed(3)}% (6M), ${srbi9M.toFixed(3)}% (9M), and ${srbi12M.toFixed(3)}% (12M WAR, ${volStr}), preserving a +${Math.round((srbi12M - ust10Y) * 100)} bps short-end yield pickup over US 10Y Treasuries while desks digest "${truncateHeadline(profile.secondItem.title, 72)}" (${profile.secondItem.source}).`;
+        })(),
       },
       {
         heading: `3. JISDOR (Rp ${jisdor.toLocaleString('en-US')}), Offshore NDF Basis (+${ndfSpread} IDR) & IHSG (${ihsg.toLocaleString('en-US', { maximumFractionDigits: 2 })})`,

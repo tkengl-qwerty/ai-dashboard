@@ -1269,70 +1269,72 @@ const DEFAULT_SNAPSHOT: DailyMacroSnapshot = {
     },
     bonds: {
       indoGB: [
-        { tenor: '5Y (Benchmark)', code: 'FR0109', maturity: '15 Mar 2031', yield: 7.35, changeBps: -31.2, coupon: 5.875 },
-        { tenor: '10Y (Benchmark)', code: 'FR0108', maturity: '15 Apr 2036', yield: 7.69, changeBps: -4.8, coupon: 6.500 },
-        { tenor: '15Y (Benchmark)', code: 'FR0106', maturity: '15 Aug 2040', yield: 7.69, changeBps: 0.0, coupon: 7.125 },
-        { tenor: '20Y (Benchmark)', code: 'FR0107', maturity: '15 Aug 2045', yield: 7.74, changeBps: 0.0, coupon: 7.125 },
+        { tenor: '5Y (Benchmark)', code: 'FR0109', maturity: '15 Mar 2031', yield: 7.47, changeBps: -0.5, coupon: 5.875 },
+        { tenor: '10Y (Benchmark)', code: 'FR0108', maturity: '15 Apr 2036', yield: 7.68, changeBps: -0.6, coupon: 6.500 },
+        { tenor: '15Y (Benchmark)', code: 'FR0106', maturity: '15 Aug 2040', yield: 7.73, changeBps: 0.8, coupon: 7.125 },
+        { tenor: '20Y (Benchmark)', code: 'FR0107', maturity: '15 Aug 2045', yield: 7.70, changeBps: -2.7, coupon: 7.125 },
       ],
       srbi: [
         {
           tenor: '6M',
           tenorDays: 182,
-          series: 'IDSR070527364S',
-          auctionDate: '06 Nov 2026',
-          weightedAvgYield: 6.566,
-          cutOffYield: 6.643,
-          biddingRateRange: '6.45-7.00%',
-          nominalBidsIDR: 'IDR 13.28 T',
-          awardedVolumeIDR: 'IDR 4.35 T',
-          sourceUrl: 'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx',
+          series: 'IDSR210527364S',
+          auctionDate: '20 Nov 2026',
+          weightedAvgYield: 6.678,
+          cutOffYield: 6.792,
+          biddingRateRange: '6.60% - 7.05%',
+          nominalBidsIDR: 'IDR 10.58 T',
+          awardedVolumeIDR: 'IDR 2.34 T',
+          sourceUrl: 'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-20-November-2026.aspx',
         },
         {
           tenor: '9M',
-          tenorDays: 273,
-          series: 'IDSR060827364S',
-          auctionDate: '06 Nov 2026',
-          weightedAvgYield: 6.655,
-          cutOffYield: 6.761,
-          biddingRateRange: '6.65-7.10%',
-          nominalBidsIDR: 'IDR 4.42 T',
-          awardedVolumeIDR: 'IDR 0.15 T',
-          sourceUrl: 'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx',
+          tenorDays: 280,
+          series: 'IDSR270827364S',
+          auctionDate: '20 Nov 2026',
+          weightedAvgYield: 6.790,
+          cutOffYield: 6.882,
+          biddingRateRange: '6.75% - 7.00%',
+          nominalBidsIDR: 'IDR 2.42 T',
+          awardedVolumeIDR: 'IDR 0.05 T',
+          sourceUrl: 'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-20-November-2026.aspx',
         },
         {
           tenor: '12M',
-          tenorDays: 350,
-          series: 'IDSR221027364S',
-          auctionDate: '06 Nov 2026',
-          weightedAvgYield: 6.675,
-          cutOffYield: 6.790,
-          biddingRateRange: '6.60-7.20%',
-          nominalBidsIDR: 'IDR 19.20 T',
-          awardedVolumeIDR: 'IDR 3.00 T',
-          sourceUrl: 'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx',
+          tenorDays: 364,
+          series: 'IDSR191127364S',
+          auctionDate: '20 Nov 2026',
+          weightedAvgYield: 6.845,
+          cutOffYield: 6.881,
+          biddingRateRange: '6.70% - 7.50%',
+          nominalBidsIDR: 'IDR 46.68 T',
+          awardedVolumeIDR: 'IDR 37.62 T',
+          sourceUrl: 'https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-20-November-2026.aspx',
         },
       ],
-      sovereignSpread10Y: 283,
-      biRate: 5.75,
+      sovereignSpread10Y: 269,
+      biRate: 6.00,
       cpiInflationYoY: 3.28,
+      valuationDate: '25 Nov 2026',
+      yieldSource: 'PHEI (IBPA) Official Evaluated Yield',
     },
     fxAndNdf: {
-      spotRate: 18080,
-      spotChange: 5,
-      spotChangePct: 0.03,
-      jisdorRate: 18130,
-      jisdorChange: 36,
+      spotRate: 18310,
+      spotChange: 90,
+      spotChangePct: 0.49,
+      jisdorRate: 18303,
+      jisdorChange: 99,
       jisdorHistory: [
-        { date: '6 November 2026', rate: 18130 },
-        { date: '5 November 2026', rate: 18094 },
-        { date: '4 November 2026', rate: 18140 },
-        { date: '3 November 2026', rate: 18148 },
-        { date: '2 November 2026', rate: 18161 },
+        { date: '25 November 2026', rate: 18303 },
+        { date: '24 November 2026', rate: 18204 },
+        { date: '23 November 2026', rate: 18223 },
+        { date: '20 November 2026', rate: 18278 },
+        { date: '19 November 2026', rate: 18269 },
       ],
-      ndf1M: 18116,
-      ndf3M: 18189,
-      ndfSpread1M: 36,
-      annualizedBasis1M: 2.39,
+      ndf1M: 18348,
+      ndf3M: 18422,
+      ndfSpread1M: 38,
+      annualizedBasis1M: 2.49,
       ihsgIndex: {
         level: 5050.43,
         change: 20.17,
@@ -1757,16 +1759,19 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
       : rawIndoHeadlines;
 
   const usedSigs = new Set<string>();
-  const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18130;
-  const spotRate = snap.indonesia?.fxAndNdf?.spotRate ?? 18070;
+  const jisdor = snap.indonesia?.fxAndNdf?.jisdorRate ?? 18303;
+  const spotRate = snap.indonesia?.fxAndNdf?.spotRate ?? 18310;
   const ihsg = snap.indonesia?.fxAndNdf?.ihsgIndex?.level ?? 5075.13;
+  const srbi12Item = snap.indonesia?.bonds?.srbi?.find((s) => s.tenor === '12M');
+  const srbi12RateStr = (srbi12Item?.weightedAvgYield ?? 6.845).toFixed(3) + '%';
+  const srbiAuctionDt = srbi12Item?.auctionDate ?? 'Latest';
 
   const normalizedHeadlines = headlines.map((item, idx) => {
     const rawTitle = (item.title || item.headline || 'Indonesia Market Disclosure').replace(
       /\s+-\s+[^-]+$/,
       ''
     );
-    let sig = (item.significance || '').replace(/6\.601%/g, '6.675%');
+    let sig = (item.significance || '').replace(/6\.601%/g, srbi12RateStr);
     if (!sig || usedSigs.has(sig)) {
       const low = rawTitle.toLowerCase();
       if (low.includes('gibran') || low.includes('vice president') || low.includes('resign') || low.includes('step down')) {
@@ -1781,12 +1786,12 @@ function normalizeSnapshot(snap: DailyMacroSnapshot): DailyMacroSnapshot {
         sig = `Reinforces OJK capital-market enforcement and retail/institutional investor protection across Indonesia Stock Exchange (IDX) listings.`;
       } else if (low.includes('reserve') || low.includes('146.8') || low.includes('forex') || low.includes('export')) {
         sig =
-          'Bolsters Bank Indonesia’s external reserve buffer and onshore USD supply alongside the 6 Nov SRBI issuance (12M WAR at 6.675%).';
+          `Bolsters Bank Indonesia’s external reserve buffer and onshore USD supply alongside the ${srbiAuctionDt} SRBI issuance (12M WAR at ${srbi12RateStr}).`;
       } else if (low.includes('ojk') || low.includes('bank') || low.includes('cyber') || low.includes('reform')) {
         sig =
           'Strengthens OJK prudential supervision and operational resilience across Indonesian commercial banks and domestic money markets.';
       } else if (low.includes('rupiah') || low.includes('credibility') || low.includes('dollar')) {
-        sig = `Underscores Bank Indonesia's FX stability focus with JISDOR at Rp ${jisdor.toLocaleString()} and 12M SRBI clearing at 6.675% on 6 Nov.`;
+        sig = `Underscores Bank Indonesia's FX stability focus with JISDOR at Rp ${jisdor.toLocaleString()} and 12M SRBI clearing at ${srbi12RateStr} (${srbiAuctionDt}).`;
       } else if (low.includes('gdp') || low.includes('economy') || low.includes('growth')) {
         sig = `Frames Indonesia's Q3 GDP expansion against domestic purchasing power and anchors demand for 10Y FR0108 IndoGBs.`;
       } else {

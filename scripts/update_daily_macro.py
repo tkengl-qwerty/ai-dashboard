@@ -316,11 +316,58 @@ def fetch_yfinance_quotes(existing_data: dict):
             }
 
 
+def fetch_phei_indogb_benchmarks() -> tuple[dict, str]:
+    """
+    Scrape official PHEI (PT Penilai Harga Efek Indonesia / formerly IBPA) daily evaluated
+    fair prices and yields for the DJPPR 2026 Seri Benchmark SUN (FR0109, FR0108, FR0106, FR0107)
+    from https://www.phei.co.id/Data/HPW-dan-Imbal-Hasil.
+    Returns (benchmarks_map, valuation_date_str).
+    """
+    url = "https://www.phei.co.id/Data/HPW-dan-Imbal-Hasil"
+    result = {}
+    val_date_str = ""
+    try:
+        page_html = http_get_text(url, timeout=15)
+        m_dt = re.search(r"(\d{2})/(\d{2})/(202\d)", page_html)
+        if m_dt:
+            try:
+                parsed_dt = datetime(int(m_dt.group(3)), int(m_dt.group(2)), int(m_dt.group(1)))
+                val_date_str = parsed_dt.strftime("%d %b %Y")
+            except Exception:
+                val_date_str = f"{m_dt.group(1)}/{m_dt.group(2)}/{m_dt.group(3)}"
+
+        for tr in re.findall(r"<tr[^>]*>.*?</tr>", page_html, re.S | re.I):
+            cells = [
+                re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", td))).strip()
+                for td in re.findall(r"<t[dh][^>]*>.*?</t[dh]>", tr, re.S | re.I)
+            ]
+            cells = [c for c in cells if c]
+            # Expected PHEI row: [Series, TTM(Y), Today Yield(%), Today Price(%), Yesterday Yield(%), Yesterday Price(%), Coupon(%)]
+            if len(cells) >= 6 and re.match(r"^FR0\d{3}$", cells[0]):
+                code = cells[0].strip()
+                today_yld = _parse_id_float(cells[2], 0.0)
+                yest_yld = _parse_id_float(cells[4], 0.0)
+                if 4.0 <= today_yld <= 12.0:
+                    chg_bps = round((today_yld - yest_yld) * 100.0, 1) if 4.0 <= yest_yld <= 12.0 else 0.0
+                    result[code] = {
+                        "yield": round(today_yld, 2),
+                        "exactYield": round(today_yld, 4),
+                        "priorYield": round(yest_yld, 4) if yest_yld else round(today_yld, 4),
+                        "changeBps": chg_bps,
+                    }
+    except Exception as e:
+        print(f"Warn: PHEI benchmark SUN scrape error ({e}), falling back to CNBC Refinitiv.")
+    return result, val_date_str
+
+
 def fetch_live_indogb_and_bi_indicators(existing_data: dict):
     """
-    Fetch live IndoGB 5Y, 10Y, 15Y, 20Y yields from CNBC real-time bond API
-    (ID5YT=RR, ID10YT=RR, ID15YT=RR, ID20YT=RR) and scrape official BI-Rate & CPI YoY from bi.go.id.
+    Primary: Fetch official PHEI (IBPA) daily evaluated yields for DJPPR 2026 Seri Benchmark SUN
+    (FR0109 5Y, FR0108 10Y, FR0106 15Y, FR0107 20Y) from phei.co.id.
+    Secondary: CNBC real-time Refinitiv bond API (ID5YT=RR, ID10YT=RR, ID15YT=RR, ID20YT=RR).
+    Also scrape official BI-Rate & CPI YoY from bi.go.id and live IDR= spot from CNBC.
     """
+    phei_benchmarks, phei_val_date = fetch_phei_indogb_benchmarks()
     cnbc_indo = fetch_cnbc_batch_quotes(["ID5YT=RR", "ID10YT=RR", "ID15YT=RR", "ID20YT=RR", "IDR="])
 
     # Official 2026 DJPPR Kemenkeu Seri Benchmark SUN (Surat Utang Negara):
@@ -336,8 +383,20 @@ def fetch_live_indogb_and_bi_indicators(existing_data: dict):
     ]
     existing_bonds = {b["code"]: b for b in existing_data["indonesia"]["bonds"].get("indoGB", [])}
     new_indogb = []
+    used_phei = False
     for tenor, code, maturity, sym, coupon in bond_specs:
-        if sym in cnbc_indo and 4.0 <= cnbc_indo[sym]["last"] <= 12.0:
+        if code in phei_benchmarks:
+            used_phei = True
+            p = phei_benchmarks[code]
+            new_indogb.append({
+                "tenor": tenor,
+                "code": code,
+                "maturity": maturity,
+                "yield": p["yield"],
+                "changeBps": p["changeBps"],
+                "coupon": coupon,
+            })
+        elif sym in cnbc_indo and 4.0 <= cnbc_indo[sym]["last"] <= 12.0:
             q = cnbc_indo[sym]
             yld = round(q["last"], 2)
             chg_bps = round(q["change"] * 100, 1)
@@ -356,12 +415,19 @@ def fetch_live_indogb_and_bi_indicators(existing_data: dict):
 
     if len(new_indogb) == 4:
         existing_data["indonesia"]["bonds"]["indoGB"] = new_indogb
+        if used_phei:
+            existing_data["indonesia"]["bonds"]["valuationDate"] = phei_val_date or datetime.now(SGT).strftime("%d %b %Y")
+            existing_data["indonesia"]["bonds"]["yieldSource"] = "PHEI (IBPA) Official Evaluated Yield"
+        else:
+            existing_data["indonesia"]["bonds"]["valuationDate"] = datetime.now(SGT).strftime("%d %b %Y")
+            existing_data["indonesia"]["bonds"]["yieldSource"] = "Refinitiv / CNBC Live Curve"
+        src_tag = f"PHEI Official {phei_val_date}" if used_phei else "CNBC Refinitiv Live"
         print(
-            f"Updated Live IndoGB Yields (DJPPR 2026 Benchmarks): "
-            f"5Y {new_indogb[0]['code']}={new_indogb[0]['yield']:.2f}%, "
-            f"10Y {new_indogb[1]['code']}={new_indogb[1]['yield']:.2f}%, "
-            f"15Y {new_indogb[2]['code']}={new_indogb[2]['yield']:.2f}%, "
-            f"20Y {new_indogb[3]['code']}={new_indogb[3]['yield']:.2f}%"
+            f"Updated Live IndoGB Yields ({src_tag} · DJPPR 2026 Benchmarks): "
+            f"5Y {new_indogb[0]['code']}={new_indogb[0]['yield']:.2f}% ({new_indogb[0]['changeBps']:+.1f} bps), "
+            f"10Y {new_indogb[1]['code']}={new_indogb[1]['yield']:.2f}% ({new_indogb[1]['changeBps']:+.1f} bps), "
+            f"15Y {new_indogb[2]['code']}={new_indogb[2]['yield']:.2f}% ({new_indogb[2]['changeBps']:+.1f} bps), "
+            f"20Y {new_indogb[3]['code']}={new_indogb[3]['yield']:.2f}% ({new_indogb[3]['changeBps']:+.1f} bps)"
         )
 
     # Also check CNBC IDR= live interbank spot quote
@@ -457,103 +523,156 @@ def _format_bi_date_short(raw_date: str) -> str:
     return raw_date.strip()
 
 
+def _parse_bi_srbi_detail_page(detail_html: str, detail_url: str) -> list[dict] | None:
+    """Parse Bank Indonesia's Hasil-Lelang-SRBI-*.aspx official table into 6M/9M/12M SRBI records."""
+    m_date = re.search(
+        r"Hasil\s+Lelang\s+SRBI\s+(\d{1,2}\s+[A-Za-z]+\s+202\d)",
+        detail_html,
+        re.I,
+    )
+    if not m_date:
+        return None
+    raw_date = m_date.group(1)
+    dt_label = _format_bi_date_short(raw_date)
+
+    table_rows = {}
+    for tr in re.findall(r"<tr[^>]*>.*?</tr>", detail_html, re.S | re.I):
+        cells = [
+            re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", td))).strip()
+            for td in re.findall(r"<t[dh][^>]*>.*?</t[dh]>", tr, re.S | re.I)
+        ]
+        cells = [c for c in cells if c]
+        if len(cells) >= 4:
+            key = cells[0].lower()
+            if "seri" in key and "series" in key:
+                table_rows["series"] = cells[1:4]
+            elif "jangka waktu" in key or "term" in key:
+                table_rows["term"] = cells[1:4]
+            elif "nominal penawaran" in key or "bidding amount" in key:
+                table_rows["bids_bn"] = cells[1:4]
+            elif "rate penawaran" in key or ("bidding rate" in key and "weighted" not in key):
+                table_rows["bid_range"] = cells[1:4]
+            elif "rata-rata tertimbang penawaran" in key or "weighted average bidding rate" in key:
+                table_rows["war_bids"] = cells[1:4]
+            elif "nominal pemenang" in key or "nominal awarded" in key:
+                table_rows["awarded_bn"] = cells[1:4]
+            elif "rata-rata tertimbang pemenang" in key or "weighted average winner" in key:
+                table_rows["war_winner"] = cells[1:4]
+
+    if "war_winner" not in table_rows or len(table_rows["war_winner"]) < 3:
+        return None
+
+    tenor_labels = ["6M", "9M", "12M"]
+    default_days = [182, 273, 364]
+    srbi_list = []
+
+    for i in range(3):
+        series_raw = table_rows.get("series", ["", "", ""])[i]
+        series_code = series_raw.split("(")[0].strip() if series_raw else f"SRBI-{tenor_labels[i]}"
+
+        term_raw = table_rows.get("term", ["", "", ""])[i]
+        m_days = re.search(r"\((\d+)\s*(?:Hari|days)\)", term_raw, re.I)
+        tenor_days = int(m_days.group(1)) if m_days else default_days[i]
+
+        bids_bn = _parse_id_float(table_rows.get("bids_bn", ["0", "0", "0"])[i], 0.0)
+        awarded_bn = _parse_id_float(table_rows.get("awarded_bn", ["0", "0", "0"])[i], 0.0)
+        war_win = round(_parse_id_float(table_rows["war_winner"][i], 6.60), 3)
+        war_bid = round(
+            _parse_id_float(table_rows.get("war_bids", ["0", "0", "0"])[i], war_win + 0.09),
+            3,
+        )
+        bid_range_raw = table_rows.get("bid_range", ["", "", ""])[i].replace(",", ".")
+        if bid_range_raw and "-" in bid_range_raw and "%" not in bid_range_raw:
+            lo_hi = [p.strip() for p in bid_range_raw.split("-", 1)]
+            bid_range_fmt = f"{lo_hi[0]}% - {lo_hi[1]}%"
+        elif bid_range_raw:
+            bid_range_fmt = bid_range_raw if "%" in bid_range_raw else f"{bid_range_raw}%"
+        else:
+            bid_range_fmt = None
+
+        srbi_list.append({
+            "tenor": tenor_labels[i],
+            "tenorDays": tenor_days,
+            "series": series_code,
+            "auctionDate": dt_label,
+            "weightedAvgYield": war_win,
+            "cutOffYield": war_bid,
+            "biddingRateRange": bid_range_fmt,
+            "nominalBidsIDR": f"IDR {bids_bn / 1000.0:.2f} T",
+            "awardedVolumeIDR": f"IDR {awarded_bn / 1000.0:.2f} T",
+            "sourceUrl": detail_url,
+        })
+    return srbi_list
+
+
 def fetch_ceic_srbi(existing_data: dict):
     """
     Primary: Scrape latest official SRBI auction announcement directly from Bank Indonesia's
-    Operasi Moneter portal (https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Default.aspx)
-    by following the newest `Hasil-Lelang-SRBI-*.aspx` link (e.g. Hasil-Lelang-SRBI-6-November-2026.aspx).
+    Operasi Moneter portal (bi.go.id). Because BI publishes 6+ daily FX Swap/SukBI/Repo notices
+    that push Friday's SRBI auction off Page 1 of Default.aspx within 1-2 business days, this
+    fetcher checks Page 1 first and then probes deterministic Hasil-Lelang-SRBI-{d}-{Bulan}-{yyyy}.aspx
+    URLs backwards over the last 35 days (Fridays first, then other weekdays) to guarantee the
+    newest SRBI auction is always discovered.
     Fallback: Scrape CEIC Data if bi.go.id is unreachable.
     """
     bi_index_url = "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Default.aspx"
-    try:
-        index_html = http_get_text(bi_index_url, timeout=15)
-        srbi_links = re.findall(
-            r'href=["\'](/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-[^"\']+\.aspx)["\']',
-            index_html,
-            re.I,
-        )
-        if srbi_links:
-            detail_path = srbi_links[0]
-            detail_url = f"https://www.bi.go.id{detail_path}"
-            detail_html = http_get_text(detail_url, timeout=15)
+    id_month_names = [
+        "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+    ]
 
-            m_date = re.search(
-                r"Hasil\s+Lelang\s+SRBI\s+(\d{1,2}\s+[A-Za-z]+\s+202\d)",
-                detail_html,
+    try:
+        candidate_urls = []
+        try:
+            index_html = http_get_text(bi_index_url, timeout=12)
+            srbi_links = re.findall(
+                r'href=["\'](/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-[^"\']+\.aspx)["\']',
+                index_html,
                 re.I,
             )
-            raw_date = m_date.group(1) if m_date else "6 November 2026"
-            dt_label = _format_bi_date_short(raw_date)
+            for p in srbi_links[:3]:
+                u = f"https://www.bi.go.id{p}"
+                if u not in candidate_urls:
+                    candidate_urls.append(u)
+        except Exception as idx_err:
+            print(f"Warn: BI Operasi Moneter index error ({idx_err}), probing direct SRBI URLs.")
 
-            table_rows = {}
-            for tr in re.findall(r"<tr[^>]*>.*?</tr>", detail_html, re.S | re.I):
-                cells = [
-                    re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", td))).strip()
-                    for td in re.findall(r"<td[^>]*>.*?</td>", tr, re.S | re.I)
-                ]
-                cells = [c for c in cells if c]
-                if len(cells) >= 4:
-                    key = cells[0].lower()
-                    if "seri" in key and "series" in key:
-                        table_rows["series"] = cells[1:4]
-                    elif "jangka waktu" in key or "term" in key:
-                        table_rows["term"] = cells[1:4]
-                    elif "nominal penawaran" in key or "bidding amount" in key:
-                        table_rows["bids_bn"] = cells[1:4]
-                    elif "rate penawaran" in key or ("bidding rate" in key and "weighted" not in key):
-                        table_rows["bid_range"] = cells[1:4]
-                    elif "rata-rata tertimbang penawaran" in key or "weighted average bidding rate" in key:
-                        table_rows["war_bids"] = cells[1:4]
-                    elif "nominal pemenang" in key or "nominal awarded" in key:
-                        table_rows["awarded_bn"] = cells[1:4]
-                    elif "rata-rata tertimbang pemenang" in key or "weighted average winner" in key:
-                        table_rows["war_winner"] = cells[1:4]
+        # Deterministic reverse-date discovery (Fridays first, then Wednesdays/other weekdays over past 35 days)
+        now_sgt = datetime.now(SGT).date()
+        friday_dates = []
+        other_weekdays = []
+        for delta in range(0, 36):
+            cand_dt = now_sgt - timedelta(days=delta)
+            if cand_dt.weekday() == 4:  # Friday (primary BI SRBI auction day)
+                friday_dates.append(cand_dt)
+            elif cand_dt.weekday() < 5:
+                other_weekdays.append(cand_dt)
 
-            if "war_winner" in table_rows and len(table_rows["war_winner"]) >= 3:
-                tenor_labels = ["6M", "9M", "12M"]
-                default_days = [182, 273, 350]
-                srbi_list = []
+        for cand_dt in friday_dates + other_weekdays[:14]:
+            slug = f"{cand_dt.day}-{id_month_names[cand_dt.month]}-{cand_dt.year}"
+            u = f"https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-{slug}.aspx"
+            if u not in candidate_urls:
+                candidate_urls.append(u)
 
-                for i in range(3):
-                    series_raw = table_rows.get("series", ["", "", ""])[i]
-                    series_code = series_raw.split("(")[0].strip() if series_raw else f"SRBI-{tenor_labels[i]}"
-
-                    term_raw = table_rows.get("term", ["", "", ""])[i]
-                    m_days = re.search(r"\((\d+)\s*(?:Hari|days)\)", term_raw, re.I)
-                    tenor_days = int(m_days.group(1)) if m_days else default_days[i]
-
-                    bids_bn = _parse_id_float(table_rows.get("bids_bn", ["0", "0", "0"])[i], 0.0)
-                    awarded_bn = _parse_id_float(table_rows.get("awarded_bn", ["0", "0", "0"])[i], 0.0)
-                    war_win = round(_parse_id_float(table_rows["war_winner"][i], 6.60), 3)
-                    war_bid = round(
-                        _parse_id_float(table_rows.get("war_bids", ["0", "0", "0"])[i], war_win + 0.09),
-                        3,
+        for detail_url in candidate_urls:
+            try:
+                detail_html = http_get_text(detail_url, timeout=10)
+                if "404" in detail_html[:1500] and "Hasil Lelang SRBI" not in detail_html[:4000]:
+                    continue
+                srbi_list = _parse_bi_srbi_detail_page(detail_html, detail_url)
+                if srbi_list and len(srbi_list) == 3:
+                    existing_data["indonesia"]["bonds"]["srbi"] = srbi_list
+                    print(
+                        f"Updated SRBI directly from bi.go.id ({srbi_list[0]['auctionDate']} · {detail_url}): "
+                        f"6M ({srbi_list[0]['series']})={srbi_list[0]['weightedAvgYield']:.3f}%, "
+                        f"9M ({srbi_list[1]['series']})={srbi_list[1]['weightedAvgYield']:.3f}%, "
+                        f"12M ({srbi_list[2]['series']})={srbi_list[2]['weightedAvgYield']:.3f}%"
                     )
-                    bid_range_raw = table_rows.get("bid_range", ["", "", ""])[i].replace(",", ".")
-
-                    srbi_list.append({
-                        "tenor": tenor_labels[i],
-                        "tenorDays": tenor_days,
-                        "series": series_code,
-                        "auctionDate": dt_label,
-                        "weightedAvgYield": war_win,
-                        "cutOffYield": war_bid,
-                        "biddingRateRange": f"{bid_range_raw}%" if bid_range_raw else None,
-                        "nominalBidsIDR": f"IDR {bids_bn / 1000.0:.2f} T",
-                        "awardedVolumeIDR": f"IDR {awarded_bn / 1000.0:.2f} T",
-                        "sourceUrl": detail_url,
-                    })
-
-                existing_data["indonesia"]["bonds"]["srbi"] = srbi_list
-                print(
-                    f"Updated SRBI directly from bi.go.id ({dt_label} · {detail_url}): "
-                    f"6M ({srbi_list[0]['series']})={srbi_list[0]['weightedAvgYield']:.3f}%, "
-                    f"9M ({srbi_list[1]['series']})={srbi_list[1]['weightedAvgYield']:.3f}%, "
-                    f"12M ({srbi_list[2]['series']})={srbi_list[2]['weightedAvgYield']:.3f}%"
-                )
-                return
+                    return
+            except Exception:
+                continue
     except Exception as e:
-        print(f"Warn: Direct bi.go.id SRBI scrape error ({e}), trying CEIC fallback.")
+        print(f"Warn: Direct bi.go.id SRBI discovery error ({e}), trying CEIC fallback.")
 
     # Secondary fallback: CEIC Data
     url = (
@@ -579,54 +698,13 @@ def fetch_ceic_srbi(existing_data: dict):
                     pass
 
         if "Weighted Average Accepted: 12 Months (%)" in metrics:
-            dt_label = auction_date or "06 Nov 2026"
-            if "oct" in dt_label.lower():
-                existing_data["indonesia"]["bonds"]["srbi"] = [
-                    {
-                        "tenor": "6M",
-                        "tenorDays": 182,
-                        "series": "IDSR080526182S",
-                        "auctionDate": "06 Nov 2026",
-                        "weightedAvgYield": 6.566,
-                        "cutOffYield": 6.643,
-                        "biddingRateRange": "6.53000% - 6.75000%",
-                        "nominalBidsIDR": "IDR 13.28 T",
-                        "awardedVolumeIDR": "IDR 4.35 T",
-                        "sourceUrl": "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx",
-                    },
-                    {
-                        "tenor": "9M",
-                        "tenorDays": 273,
-                        "series": "IDSR070826273S",
-                        "auctionDate": "06 Nov 2026",
-                        "weightedAvgYield": 6.655,
-                        "cutOffYield": 6.761,
-                        "biddingRateRange": "6.63000% - 6.84000%",
-                        "nominalBidsIDR": "IDR 4.42 T",
-                        "awardedVolumeIDR": "IDR 0.15 T",
-                        "sourceUrl": "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx",
-                    },
-                    {
-                        "tenor": "12M",
-                        "tenorDays": 350,
-                        "series": "IDSR231026350S",
-                        "auctionDate": "06 Nov 2026",
-                        "weightedAvgYield": 6.675,
-                        "cutOffYield": 6.790,
-                        "biddingRateRange": "6.64000% - 6.90000%",
-                        "nominalBidsIDR": "IDR 19.20 T",
-                        "awardedVolumeIDR": "IDR 3.00 T",
-                        "sourceUrl": "https://www.bi.go.id/id/publikasi/lelang/operasi-moneter/Pages/Hasil-Lelang-SRBI-6-November-2026.aspx",
-                    },
-                ]
-                print("Preserved newer 06 Nov 2026 BI SRBI auction data over older CEIC Oct snapshot.")
-                return
-            war_6m = round(metrics.get("Weighted Average Accepted: 6 Months (%)", 6.566), 3)
-            bid_6m = round(metrics.get("Weighted Average Bids: 6 Months (%)", 6.643), 3)
-            nom_6m = metrics.get("Norminal Bids: 6 Months (IDR bn)", 13280.0) / 1000.0
-            acc_6m = metrics.get("Nominal Accepted: 6 Months (IDR bn)", 4350.0) / 1000.0
+            dt_label = auction_date or datetime.now(SGT).strftime("%d %b %Y")
+            war_6m = round(metrics.get("Weighted Average Accepted: 6 Months (%)", 6.678), 3)
+            bid_6m = round(metrics.get("Weighted Average Bids: 6 Months (%)", 6.792), 3)
+            nom_6m = metrics.get("Norminal Bids: 6 Months (IDR bn)", 10582.0) / 1000.0
+            acc_6m = metrics.get("Nominal Accepted: 6 Months (IDR bn)", 2335.0) / 1000.0
 
-            war_9m = round(metrics.get("Weighted Average Accepted: 9 Months (%)", 6.655), 3)
+            war_9m = round(metrics.get("Weighted Average Accepted: 9 Months (%)", 6.790), 3)
             bid_9m = round(metrics.get("Weighted Average Bids: 9 Months (%)", 6.761), 3)
             nom_9m = metrics.get("Norminal Bids: 9 Months (IDR bn)", 4420.0) / 1000.0
             total_acc = metrics.get("Total Accepted (IDR bn)", 7500.0) / 1000.0
@@ -947,8 +1025,9 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
     spot = data["indonesia"]["fxAndNdf"].get("spotRate", 18080)
     jisdor = data["indonesia"]["fxAndNdf"].get("jisdorRate", 18130)
     ihsg = data["indonesia"]["fxAndNdf"]["ihsgIndex"].get("level", 5050.43)
-    indo_10y = next((b["yield"] for b in data["indonesia"]["bonds"]["indoGB"] if b["tenor"].startswith("10Y")), 7.69)
-    srbi_12m = next((s["weightedAvgYield"] for s in data["indonesia"]["bonds"]["srbi"] if s["tenor"] == "12M"), 6.675)
+    indo_10y = next((b["yield"] for b in data["indonesia"]["bonds"]["indoGB"] if b["tenor"].startswith("10Y")), 7.68)
+    srbi_12m = next((s["weightedAvgYield"] for s in data["indonesia"]["bonds"]["srbi"] if s["tenor"] == "12M"), 6.845)
+    srbi_dt = next((s.get("auctionDate", "Latest") for s in data["indonesia"]["bonds"]["srbi"] if s["tenor"] == "12M"), "Latest")
 
     candidates = []
     if any(k in low for k in ["gibran", "vice president", "vice-president", "resign", "step down", "steps down", "diploma"]):
@@ -973,7 +1052,7 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
         )
     if "reserve" in low or "146.8" in low or "forex" in low:
         candidates.append(
-            f"Reinforces Bank Indonesia's US$146.8B external reserve buffer to defend JISDOR (Rp {jisdor:,.0f}) alongside the 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%)."
+            f"Reinforces Bank Indonesia's external reserve buffer to defend JISDOR (Rp {jisdor:,.0f}) alongside the {srbi_dt} SRBI issuance (12M WAR at {srbi_12m:.3f}%)."
         )
     if "export" in low or "conversion" in low or "100 pct" in low or "retention" in low:
         candidates.append(
@@ -989,13 +1068,13 @@ def build_indonesia_significance(title: str, source: str, idx: int, data: dict, 
         )
     if "rupiah" in low or "credibility" in low or "jisdor" in low or "bi" in low or "srbi" in low or "dollar" in low:
         candidates.append(
-            f"Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp {jisdor:,.0f} and the 06 Nov 12M SRBI WAR clearing at {srbi_12m:.3f}%."
+            f"Supports Bank Indonesia's FX stabilization corridor with JISDOR at Rp {jisdor:,.0f} and the {srbi_dt} 12M SRBI WAR clearing at {srbi_12m:.3f}%."
         )
 
     candidates.extend([
         f"Reported by {source}; shapes onshore institutional allocation across Jakarta equities (IHSG {ihsg:,.2f}) and Rupiah money markets.",
         f"Tracked by {source}; influences foreign portfolio flows into DJPPR benchmark FR0108 bonds (10Y at {indo_10y:.2f}%) and FX hedging basis.",
-        f"Monitored by {source}; provides macro-political context following Bank Indonesia's 06 Nov SRBI issuance (12M WAR at {srbi_12m:.3f}%) and JISDOR (Rp {jisdor:,.0f}).",
+        f"Monitored by {source}; provides macro-political context following Bank Indonesia's {srbi_dt} SRBI issuance (12M WAR at {srbi_12m:.3f}%) and JISDOR (Rp {jisdor:,.0f}).",
         f"Published by {source}; underscores domestic capital market and fiscal policy transmission alongside USD/IDR spot at {spot:,.0f}.",
         f"Highlighted by {source}; reflects institutional positioning across Indonesian financials and sovereign fixed income.",
     ])
@@ -3725,7 +3804,7 @@ def build_argon_commentaries(data: dict):
                 {
                     "heading": f"2. BI SRBI Open Market Operations ({srbi_dt}) & Rupiah Liquidity Corridor",
                     "analysis": (
-                        f"Bank Indonesia's SRBI curve clears at {srbi_6m:.3f}% (6M), {srbi_9m:.3f}% (9M), and {srbi_12m:.3f}% (12M WAR, IDR 7.50 T awarded from IDR 36.90 T total bids), "
+                        f"Bank Indonesia's SRBI curve clears at {srbi_6m:.3f}% (6M), {srbi_9m:.3f}% (9M), and {srbi_12m:.3f}% (12M WAR, {srbi_awarded} awarded from {srbi_bids} 12M bids), "
                         f"preserving a +{round((srbi_12m - y10) * 100)} bps short-end yield pickup over US 10Y Treasuries while desks digest \"{id_sec['title'][:72]}\" ({id_sec['source']})."
                     ),
                 },
@@ -5978,9 +6057,9 @@ def fetch_live_indonesia_local_translated_news(data: dict):
                 {
                     "asset": "BI KLM Liquidity & 12M SRBI",
                     "current": f"Rp149.3T KLM · {srbi_12m:.3f}% WAR",
-                    "support": "5.75% BI-Rate",
-                    "resistance": "6.80% SRBI Cap",
-                    "implication": "Targeted Rp149.3T KLM incentives support bank loan growth while 12M SRBI at 6.675% defends Rupiah carry.",
+                    "support": f"{float(data.get('indonesia', {}).get('bonds', {}).get('biRate', 6.00)):.2f}% BI-Rate",
+                    "resistance": f"{srbi_12m + 0.15:.2f}% SRBI Cap",
+                    "implication": f"Targeted Rp149.3T KLM incentives support bank loan growth while 12M SRBI at {srbi_12m:.3f}% defends Rupiah carry.",
                 },
                 {
                     "asset": "USD/IDR Spot & JISDOR",

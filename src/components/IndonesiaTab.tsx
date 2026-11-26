@@ -269,24 +269,24 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="https://www.djppr.kemenkeu.go.id"
+                  href="https://www.phei.co.id/Data/HPW-dan-Imbal-Hasil"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[9px] font-mono text-sky-400 hover:text-sky-300 underline flex items-center gap-0.5"
-                  title="DJPPR Kemenkeu Official Benchmark SUN Designation (FR0109, FR0108, FR0106, FR0107)"
+                  title="Official PHEI (IBPA) Daily Evaluated Fair Price & Yield for DJPPR Benchmark SUN"
                 >
-                  <span>DJPPR</span>
+                  <span>PHEI ({bonds.valuationDate ?? 'Live'})</span>
                   <ExternalLink className="w-2.5 h-2.5" />
                 </a>
                 <span className="text-slate-600">|</span>
                 <a
-                  href="https://tradingeconomics.com/gidn5y:gov"
+                  href="https://www.djppr.kemenkeu.go.id"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[9px] font-mono text-blue-400 hover:text-blue-300 underline flex items-center gap-0.5"
-                  title="TradingEconomics / Refinitiv Live Benchmark Yield Feed (ID5YT=RR / ID10YT=RR)"
+                  title="DJPPR Kemenkeu Official Benchmark SUN Designation (FR0109, FR0108, FR0106, FR0107)"
                 >
-                  <span>Yields</span>
+                  <span>DJPPR</span>
                   <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               </div>
@@ -332,7 +332,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
               <span className="font-bold text-sky-300">+{sovereignSpread} bps</span>
             </div>
             <div className="mt-1.5 text-[10px] text-slate-400 font-mono leading-relaxed">
-              * Verified 2026 DJPPR Kemenkeu Seri Benchmark SUN: <span className="text-slate-300">FR0109</span> (5Y, 5.875% due 15 Mar 2031), <span className="text-slate-300">FR0108</span> (10Y, 6.500% due 15 Apr 2036), <span className="text-slate-300">FR0106</span> (15Y, 7.125% due 15 Aug 2040), and <span className="text-slate-300">FR0107</span> (20Y, 7.125% due 15 Aug 2045); liquid reopening <span className="text-slate-300">FR0110</span> carries a 7.250% coupon due 15 May 2032.
+              * Source: {bonds.yieldSource ?? 'PHEI (IBPA) Official Evaluated Yield'} ({bonds.valuationDate ?? 'Latest'}) · 2026 DJPPR Kemenkeu Seri Benchmark SUN: <span className="text-slate-300">FR0109</span> (5Y, 5.875% due 15 Mar 2031), <span className="text-slate-300">FR0108</span> (10Y, 6.500% due 15 Apr 2036), <span className="text-slate-300">FR0106</span> (15Y, 7.125% due 15 Aug 2040), and <span className="text-slate-300">FR0107</span> (20Y, 7.125% due 15 Aug 2045).
             </div>
           </div>
 
@@ -374,7 +374,7 @@ export const IndonesiaTab: React.FC<IndonesiaTabProps> = ({
             </div>
 
             <p className="text-[11px] text-slate-400 font-mono mb-2">
-              Bank Indonesia Open Market Operation Tender ({bonds.srbi[0]?.auctionDate ?? '06 Nov 2026'}) — Official Weighted Average Winner Rate (WAR), Weighted Avg Bid, & Awarded Volume.
+              Bank Indonesia Open Market Operation Tender ({bonds.srbi[0]?.auctionDate ?? 'Latest'}) — Official Weighted Average Winner Rate (WAR), Weighted Avg Bid, & Awarded Volume.
             </p>
 
             <div className="overflow-x-auto">
